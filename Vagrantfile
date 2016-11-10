@@ -32,7 +32,12 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.provision "shell", inline: <<-SHELL
+  config.vm.provision "shell", env: {"HTTP_PROXY" => ENV["HTTP_PROXY"] }, inline: <<-SHELL
+    if [ -n "${HTTP_PROXY}" ]; then
+      grep -q "proxy=" /etc/yum.conf || echo "proxy=${HTTP_PROXY}" >> /etc/yum.conf
+      grep -q "ip_resolve=4" /etc/yum.conf || echo "ip_resolve=4" >> /etc/yum.conf
+    fi
+
     which deltarpm || yum install -y deltarpm
     which puppet || (
       rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
