@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Increase memory for Virtualbox
-  #config.vbguest.no_install = true
+  config.vbguest.no_install = true
   config.vm.provider "virtualbox" do |vb|
     vb.gui = true
     vb.cpus = 2

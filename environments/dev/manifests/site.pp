@@ -8,6 +8,24 @@ yum::group { 'Xfce':
   ensure => present,
 }
 
+package { 'xorg*':
+  ensure => latest,
+}->
+file { '/etc/xorg.conf':
+  ensure => file,
+  content => '
+Section "ServerFlags"
+  Option "AIGLX" "false"
+EndSection
+',
+}
+
+exec { 'graphical runlevel':
+  path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+  command => 'systemctl set-default graphical.target',
+  unless  => 'systemctl get-default | grep -q graphical',
+}
+
 #yum::group { 'GNOME Desktop':
 #  ensure => latest,
 #}
@@ -19,9 +37,8 @@ package { [
     'iftop',
     'subversion',
     'wget',
-    'watch',
     'xz',
-    'pstree',
+    'psmisc',
     'randomize-lines',
     'git',
     'git-flow',
@@ -34,7 +51,6 @@ package { [
     'exif',
     'ansible',
     'firefox',
-    'transmission',
   ]: ensure => latest,
 }
 
