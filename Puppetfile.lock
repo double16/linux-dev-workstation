@@ -1,0 +1,17 @@
+FORGE
+  remote: http://forge.puppet.com
+  specs:
+    ceritsc-yum (0.9.8)
+      puppetlabs-stdlib (>= 4.2.0)
+    gini-archive (0.2.1)
+    gini-idea (0.3.0)
+      gini-archive (>= 0.1.0)
+    puppetlabs-stdlib (4.13.1)
+    stahnma-epel (1.2.2)
+      puppetlabs-stdlib (>= 3.0.0)
+
+DEPENDENCIES
+  ceritsc-yum (>= 0)
+  gini-idea (>= 0)
+  stahnma-epel (>= 0)
+
