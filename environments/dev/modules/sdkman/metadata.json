@@ -1,0 +1,15 @@
+{
+  "name": "paulosuzart-sdkman",
+  "version": "1.0.2",
+  "author": "paulosuzart",
+  "summary": "Paulo Suzart Sdkman module",
+  "license": "Apache License 2.0",
+  "source": "https://github.com/paulosuzart/sdkman",
+  "project_page": "https://github.com/paulosuzart/sdkman",
+  "issues_url": "https://github.com/paulosuzart/sdkman/issues",
+  "dependencies": [
+    {"name":"maestrodev/wget"}
+  ],
+  "data_provider": null,
+  "description": "Installs Sdkman and any package supported by it"
+}

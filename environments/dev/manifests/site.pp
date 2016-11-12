@@ -49,7 +49,42 @@ package { [
     'exiv2',
     'ansible',
     'firefox',
+    'chromium',
+    'chrome-remote-desktop',
+    'java-1.8.0-openjdk-devel',
+    'docker',
+    'unzip',
+    'mlocate',
   ]: ensure => latest,
 }
 
+Archive::Download {
+  follow_redirects => true,
+}
+
+#class { 'idea::ultimate':
+#  version => '2016.2.5',
+#}
+
+#class { 'vagrant':
+#  version => '1.8.7',
+#}
+vagrant::plugin { 'vagrant-vbguest':
+  user => 'vagrant',
+}
+vagrant::plugin { 'vagrant-cachier':
+  user => 'vagrant',
+}
+
+include virtualbox
+#include my_vim
+
+class { 'sdkman' :
+}
+
+sdkman::package { 'groovy':
+  version    => '2.4.7',
+  is_default => true,
+  ensure     => present
+}
 

@@ -38,8 +38,8 @@ Vagrant.configure("2") do |config|
       grep -q "ip_resolve=4" /etc/yum.conf || echo "ip_resolve=4" >> /etc/yum.conf
     fi
 
-    which deltarpm || yum install -y deltarpm
     which puppet || (
+      yum install -y deltarpm
       rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
       yum install -y puppet-agent
     )

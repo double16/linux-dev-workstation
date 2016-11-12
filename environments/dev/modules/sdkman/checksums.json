@@ -1,0 +1,9 @@
+{
+  "Gemfile": "714a0b00bdf59c5402fc03b051a78811",
+  "README.md": "9dd7f2b55483dd65dcae1758ebbde269",
+  "files/sdkman_config": "a8085181f3039748d1869d998864d0c7",
+  "manifests/init.pp": "5d6f715a872db538fd903d16b5b54398",
+  "manifests/package.pp": "a69c06b1ef349e43ba68075d11fa415f",
+  "manifests/packages.pp": "f1ea4a1b3af74811b525466d98b41469",
+  "metadata.json": "a649a4306bae9fd86205d43e5a19340c"
+}
