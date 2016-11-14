@@ -1,0 +1,44 @@
+{
+  "name": "zanloy-vim",
+  "version": "3.0.4",
+  "author": "zanloy",
+  "summary": "Manage VIM via puppet.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/zanloy/puppet-vim",
+  "project_page": "https://github.com/zanloy/puppet-vim",
+  "issues_url": "https://github.com/zanloy/puppet-vim/issues",
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0"},
+    {"name":"puppetlabs/concat","version_requirement":">= 1.1.2"}
+  ],
+  "description": "VIM is an advanced text editor. This module is to easily install and configure VIM. This is a fork of saz/vim.",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "ArchLinux"
+    },
+    {
+      "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "Debian"
+    },
+    {
+      "operatingsystem": "FreeBSD"
+    },
+    {
+      "operatingsystem": "Gentoo"
+    },
+    {
+      "operatingsystem": "OracleLinux"
+    },
+    {
+      "operatingsystem": "RedHat"
+    },
+    {
+      "operatingsystem": "Suse"
+    },
+    {
+      "operatingsystem": "Ubuntu"
+    }
+  ]
+}

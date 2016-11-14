@@ -66,9 +66,9 @@ Archive::Download {
 #  version => '2016.2.5',
 #}
 
-#class { 'vagrant':
-#  version => '1.8.7',
-#}
+class { 'vagrant':
+  version => '1.8.7',
+}
 vagrant::plugin { 'vagrant-vbguest':
   user => 'vagrant',
 }
@@ -77,7 +77,7 @@ vagrant::plugin { 'vagrant-cachier':
 }
 
 include virtualbox
-#include my_vim
+include my_vim
 
 class { 'sdkman' :
 }
