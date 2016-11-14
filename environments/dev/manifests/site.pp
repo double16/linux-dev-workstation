@@ -39,7 +39,7 @@ package { [
     'wget',
     'xz',
     'psmisc',
-    'git',
+    #'git',
     'gitflow',
     'sqlite',
     #'rancher-compose',
@@ -55,6 +55,8 @@ package { [
     'docker',
     'unzip',
     'mlocate',
+    'rsync',
+    'gparted',
   ]: ensure => latest,
 }
 
@@ -78,6 +80,7 @@ vagrant::plugin { 'vagrant-cachier':
 
 include virtualbox
 include my_vim
+include my_ruby
 
 class { 'sdkman' :
 }

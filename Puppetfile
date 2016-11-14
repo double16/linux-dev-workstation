@@ -10,4 +10,5 @@ mod 'danzilio-virtualbox'
 mod 'paulosuzart-sdkman'
 mod 'zanloy-vim'
 mod 'puppetlabs-vcsrepo'
+mod 'jdowning-rbenv'
 
