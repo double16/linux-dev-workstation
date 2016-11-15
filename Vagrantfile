@@ -23,6 +23,37 @@ Vagrant.configure("2") do |config|
     vb.memory = "4096"
   end
 
+  config.vm.provider "virtualbox" do |vb|
+    # Validate this should be run it once
+    if ARGV[0] == "up" && ! File.exist?("./disk1.vdi")
+      vb.customize [
+        'createhd',
+        '--filename', "./disk1.vdi",
+        '--format', 'VDI',
+        # 20GB
+        '--size', 20 * 1024
+      ]
+
+      vb.customize [
+        'storageattach', :id,
+        '--storagectl', 'SATA Controller',
+        '--port', 1, '--device', 0,
+        '--type', 'hdd', '--medium',
+#        file_to_disk
+      ]
+    end
+
+    if ARGV[0] == "up" && ! File.exist?("./disk1.vdi")
+      # Run script to map new disk
+      config.vm.provision "shell", inline: <<-SHELL
+pvcreate /dev/sdb
+vgextend VolGroup /dev/sdb
+lvextend /dev/VolGroup/lv_root /dev/sdb
+resize2fs /dev/VolGroup/lv_root
+  SHELL
+    end
+  end
+
   # Increase memory for VMware
   ["vmware_fusion", "vmware_workstation"].each do |p|
     config.vm.provider p do |v|

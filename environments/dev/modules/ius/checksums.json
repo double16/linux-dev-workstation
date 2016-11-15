@@ -1,0 +1,12 @@
+{
+  "CHANGELOG": "3b571309744557f3324633e732c15114",
+  "LICENSE": "2e573d23da996f693e45aa447a0c35d2",
+  "README.md": "e86f00cea4e85228239ad189a44a5728",
+  "files/IUS-COMMUNITY-GPG-KEY": "c1237411dfd37be229be063e8b5b4d10",
+  "manifests/init.pp": "aace4a91c7733558952708ad54261574",
+  "manifests/params.pp": "554764d7961019572b5b5d8e453b1ee9",
+  "manifests/rpm_gpg_key.pp": "6cd9870aba05a601be2309f0e3242614",
+  "metadata.json": "a0a18443c08a0129f29d69267379a240",
+  "spec/spec_helper.rb": "a55d1e6483344f8ec6963fcb2c220372",
+  "tests/init.pp": "c8fcb72008127f842a10612116c5df8d"
+}

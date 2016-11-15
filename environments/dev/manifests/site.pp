@@ -1,4 +1,9 @@
 include epel
+include ius
+
+yum::plugin { 'replace':
+  ensure => present,
+}
 
 yum::group { 'Development Tools':
   ensure => present,
@@ -39,8 +44,7 @@ package { [
     'wget',
     'xz',
     'psmisc',
-    #'git',
-    'gitflow',
+    'git2u-all',
     'sqlite',
     #'rancher-compose',
     'pandoc',
