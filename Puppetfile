@@ -1,7 +1,7 @@
 forge "https://forge.puppet.com"
 
 mod 'stahnma/epel'
-mod 'ceritsc/yum'
+mod 'puppet/yum'
 mod 'camptocamp/archive'
 mod 'unibet-vagrant'
 mod 'danzilio-virtualbox'

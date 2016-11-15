@@ -2,8 +2,6 @@ FORGE
   remote: https://forge.puppet.com
   specs:
     camptocamp-archive (0.9.0)
-    ceritsc-yum (0.9.8)
-      puppetlabs-stdlib (>= 4.2.0)
     danzilio-virtualbox (1.7.1)
       puppetlabs-apt (< 3.0.0, >= 2.1.0)
       puppetlabs-stdlib (< 5.0.0, >= 4.8.0)
@@ -16,6 +14,9 @@ FORGE
     maestrodev-wget (1.7.3)
     paulosuzart-sdkman (1.0.2)
       maestrodev-wget (>= 0.0.0)
+    puppet-yum (0.9.15)
+      puppetlabs-concat (>= 1.1.1)
+      puppetlabs-stdlib (< 5.0.0, >= 4.2.0)
     puppetlabs-apt (2.3.0)
       puppetlabs-stdlib (< 5.0.0, >= 4.5.0)
     puppetlabs-concat (2.2.0)
@@ -32,11 +33,11 @@ FORGE
 
 DEPENDENCIES
   camptocamp-archive (>= 0)
-  ceritsc-yum (>= 0)
   danzilio-virtualbox (>= 0)
   jdowning-rbenv (>= 0)
   kemra102-ius (>= 0)
   paulosuzart-sdkman (>= 0)
+  puppet-yum (>= 0)
   puppetlabs-vcsrepo (>= 0)
   stahnma-epel (>= 0)
   unibet-vagrant (>= 0)
