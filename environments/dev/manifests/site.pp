@@ -82,6 +82,7 @@ include virtualbox
 include my_vim
 include my_ruby
 include idea
+include svn
 
 class { 'sdkman' :
 }
