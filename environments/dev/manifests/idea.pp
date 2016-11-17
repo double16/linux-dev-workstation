@@ -14,6 +14,14 @@ class idea {
     follow_redirects => true,
   }
 
+  file { '/etc/sysctl.d/idea.conf':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => 'fs.inotify.max_user_watches = 524288',
+  }
+
   file { '/opt/idea':
     ensure  => link,
     target  => "/opt/idea-IU-${build}",
