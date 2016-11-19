@@ -1,6 +1,8 @@
 class idea {
   $version = '2016.2.5'
   $build = '162.2228.15'
+  $prefsdir = '/home/vagrant/.IntelliJIdea2016.2'
+  $colorsdir = "${prefsdir}/colors"
 
   archive { "idea-${version}":
     ensure           => present,
@@ -44,5 +46,32 @@ Path=
 Terminal=false
 StartupNotify=true
 '
+  }
+
+  file { $prefsdir:
+    ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }->
+  file { $colorsdir:
+    ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+
+  remote_file { "${colorsdir}/Solarized Dark.icls":
+    ensure  => present,
+    source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Dark.icls',
+    owner   => 'vagrant',
+    group   => 'vagrant',
+    require => File[$colorsdir],
+  }
+
+  remote_file { "${colorsdir}/Solarized Light.icls":
+    ensure  => present,
+    source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Light.icls',
+    owner   => 'vagrant',
+    group   => 'vagrant',
+    require => File[$colorsdir],
   }
 }
