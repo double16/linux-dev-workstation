@@ -4,6 +4,10 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.2"
 
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+
   # Bridged networks make the machine appear as another physical device on
   # your network.
   # config.vm.network "public_network"

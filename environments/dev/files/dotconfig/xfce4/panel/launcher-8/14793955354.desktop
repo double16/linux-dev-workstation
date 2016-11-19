@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=IntelliJ IDEA
+GenericName=IntelliJ IDEA
+Categories=Development
+Comment=
+Exec=/opt/idea/bin/idea.sh
+Icon=/opt/idea/bin/idea.png
+DocPath=file:///opt/idea/help/ReferenceCard.pdf
+Path=
+Terminal=false
+StartupNotify=true
+X-XFCE-Source=file:///usr/share/applications/IntelliJ%20IDEA.desktop

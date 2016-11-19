@@ -1,6 +1,9 @@
 include epel
 include ius
 
+Class['epel'] -> Package<| |>
+Class['ius'] -> Package<| |>
+
 yum::plugin { 'replace':
   ensure => present,
 }
@@ -17,7 +20,7 @@ package { 'xorg*':
   ensure => latest,
 }->
 file { '/etc/xorg.conf':
-  ensure => file,
+  ensure  => file,
   content => '
 Section "ServerFlags"
   Option "AIGLX" "false"
@@ -90,6 +93,11 @@ class { 'sdkman' :
 sdkman::package { 'groovy':
   version    => '2.4.7',
   is_default => true,
-  ensure     => present
+  ensure     => present,
 }
 
+file { '/home/vagrant/.config/xfce4':
+  ensure  => directory,
+  recurse => remote,
+  source  => 'file:///tmp/vagrant-puppet/environments/dev/files/dotconfig/xfce4',
+}

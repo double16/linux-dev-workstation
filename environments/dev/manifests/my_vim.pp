@@ -12,13 +12,7 @@ class my_vim {
     provider => git,
     source   => 'https://github.com/sgerrand/xfce4-terminal-colors-solarized',
   }->
-  file { '/home/vagrant/.config':
-    ensure => directory,
-  }-> file { '/home/vagrant/.config/xfce4':
-    ensure => directory,
-  }-> file { '/home/vagrant/.config/xfce4/terminal':
-    ensure => directory,
-  }-> file { '/home/vagrant/.config/xfce4/terminal/terminalrc':
+  file { '/home/vagrant/.config/xfce4/terminal/terminalrc':
     ensure => file,
     owner  => 'vagrant',
     group  => 'vagrant',
