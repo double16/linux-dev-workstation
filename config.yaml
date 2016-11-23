@@ -1,0 +1,10 @@
+---
+configs:
+    use: 'medium'
+    medium:
+        memory: 4096
+        cores: 2
+    large:
+        memory: 8192
+        cores: 4
+

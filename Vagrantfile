@@ -1,6 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'yaml'
+
+current_dir    = File.dirname(File.expand_path(__FILE__))
+configs        = YAML.load_file("#{current_dir}/config.yaml")
+vagrant_config = configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']]
+
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.2"
 
@@ -16,15 +22,15 @@ Vagrant.configure("2") do |config|
 
   # Increase memory for Parallels Desktop
   config.vm.provider "parallels" do |p, o|
-    p.memory = "4096"
+    p.memory = vagrant_config['memory']
   end
 
   # Increase memory for Virtualbox
   config.vbguest.no_install = true
   config.vm.provider "virtualbox" do |vb|
     vb.gui = true
-    vb.cpus = 2
-    vb.memory = "4096"
+    vb.cpus = vagrant_config['cores']
+    vb.memory = vagrant_config['memory']
   end
 
   config.vm.provider "virtualbox" do |vb|
@@ -62,8 +68,8 @@ resize2fs /dev/VolGroup/lv_root
   ["vmware_fusion", "vmware_workstation"].each do |p|
     config.vm.provider p do |v|
       v.gui = true
-      v.vmx["numvcpus"] = "2"
-      v.vmx["memsize"] = "4096"
+      v.vmx["numvcpus"] = vagrant_config['cores']
+      v.vmx["memsize"] = vagrant_config['memory']
     end
   end
 
