@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     # Validate this should be run it once
-    if ARGV[0] == "up" && ! File.exist?("./disk1.vdi")
+    if ARGV[0] == "upX" && ! File.exist?("./disk1.vdi")
       vb.customize [
         'createhd',
         '--filename', "./disk1.vdi",
@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
       ]
     end
 
-    if ARGV[0] == "up" && ! File.exist?("./disk1.vdi")
+    if ARGV[0] == "upX" && ! File.exist?("./disk1.vdi")
       # Run script to map new disk
       config.vm.provision "shell", inline: <<-SHELL
 pvcreate /dev/sdb
