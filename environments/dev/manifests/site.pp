@@ -64,6 +64,7 @@ package { [
     'mlocate',
     'rsync',
     'gparted',
+    'lsof',
   ]: ensure => latest,
 }
 
