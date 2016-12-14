@@ -91,7 +91,7 @@ resize2fs /dev/VolGroup/lv_root
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
       yum install -y deltarpm
       rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
-      yum install -y puppet-agent
+      yum install -y puppet-agent augeas ruby-augeas
     )
   SHELL
 
