@@ -11,3 +11,5 @@ mod 'puppetlabs-vcsrepo'
 mod 'jdowning-rbenv'
 mod 'kemra102-ius'
 mod 'lwf-remote_file'
+mod 'camptocamp-augeas'
+

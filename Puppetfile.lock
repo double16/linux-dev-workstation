@@ -2,6 +2,8 @@ FORGE
   remote: https://forge.puppet.com
   specs:
     camptocamp-archive (0.9.0)
+    camptocamp-augeas (1.5.1)
+      puppetlabs-stdlib (< 5.0.0, >= 3.2.0)
     danzilio-virtualbox (1.7.1)
       puppetlabs-apt (< 3.0.0, >= 2.1.0)
       puppetlabs-stdlib (< 5.0.0, >= 4.8.0)
@@ -34,6 +36,7 @@ FORGE
 
 DEPENDENCIES
   camptocamp-archive (>= 0)
+  camptocamp-augeas (>= 0)
   danzilio-virtualbox (>= 0)
   jdowning-rbenv (>= 0)
   kemra102-ius (>= 0)

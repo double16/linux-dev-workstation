@@ -1,5 +1,6 @@
 include epel
 include ius
+include augeas
 
 Class['epel'] -> Package<| |>
 Class['ius'] -> Package<| |>
@@ -73,19 +74,10 @@ Archive::Download {
   follow_redirects => true,
 }
 
-class { 'vagrant':
-  version => '1.8.7',
-}
-vagrant::plugin { 'vagrant-vbguest':
-  user => 'vagrant',
-}
-vagrant::plugin { 'vagrant-cachier':
-  user => 'vagrant',
-}
-
 include virtualbox
 include my_vim
 include my_ruby
+include my_vagrant
 include idea
 include svn
 
@@ -115,3 +107,13 @@ file { '/home/vagrant/.config/xfce4':
   recurse => remote,
   source  => 'file:///tmp/vagrant-puppet/environments/dev/files/dotconfig/xfce4',
 }
+
+file { '/home/vagrant/.config/git':
+  ensure => directory,
+}
+
+file { '/home/vagrant/.config/git/ignore':
+  ensure => file,
+  source => 'file:///tmp/vagrant-puppet/environments/dev/files/gitignore',
+}
+
