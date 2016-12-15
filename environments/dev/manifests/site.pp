@@ -17,7 +17,7 @@ yum::group { 'Xfce':
 }
 
 package { 'xorg*':
-  ensure => latest,
+  ensure => present,
 }->
 file { '/etc/xorg.conf':
   ensure  => file,
@@ -35,7 +35,7 @@ exec { 'graphical runlevel':
 }
 
 #yum::group { 'GNOME Desktop':
-#  ensure => latest,
+#  ensure => present,
 #}
 
 package { [
@@ -65,7 +65,8 @@ package { [
     'rsync',
     'gparted',
     'lsof',
-  ]: ensure => latest,
+    'nmap-ncat',
+  ]: ensure => present,
 }
 
 Archive::Download {
@@ -91,10 +92,22 @@ include svn
 class { 'sdkman' :
 }
 
+exec { 'chmod 0755 /root/.sdkman':
+  path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
+  refreshonly => true,
+  subscribe   => Class['sdkman'],
+} -> Sdkman::Package<| |>
+
+exec { 'chmod 0755 /root':
+  path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
+  refreshonly => true,
+  subscribe   => Class['sdkman'],
+} -> Sdkman::Package<| |>
+
 sdkman::package { 'groovy':
+  ensure     => present,
   version    => '2.4.7',
   is_default => true,
-  ensure     => present,
 }
 
 file { '/home/vagrant/.config/xfce4':
