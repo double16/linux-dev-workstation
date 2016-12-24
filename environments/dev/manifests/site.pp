@@ -11,6 +11,10 @@ yum::plugin { 'replace':
 
 yum::group { 'Development Tools':
   ensure => present,
+}->
+exec { 'yum replace -y git --replace-with=git2u-all':
+  unless => 'yum list installed git2u-all',
+  path   => '/bin:/sbin:/usr/bin:/usr/sbin',
 }
 
 yum::group { 'Xfce':
@@ -48,7 +52,6 @@ package { [
     'wget',
     'xz',
     'psmisc',
-    'git2u-all',
     'sqlite',
     #'rancher-compose',
     'pandoc',
