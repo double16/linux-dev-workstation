@@ -9,7 +9,7 @@ class idea {
     ensure           => present,
     url              => "http://download.jetbrains.com/idea/ideaIU-${version}.tar.gz",
     checksum         => false,
-    src_target       => '/var/tmp',
+    src_target       => '/tmp/vagrant-cache',
     target           => '/opt',
     root_dir         => "idea-IU-${build}",
     extension        => 'tar.gz',

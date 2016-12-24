@@ -79,6 +79,7 @@ include my_vim
 include my_ruby
 include my_vagrant
 include idea
+include netbeans
 include svn
 
 class { 'sdkman' :
@@ -100,6 +101,10 @@ sdkman::package { 'groovy':
   ensure     => present,
   version    => '2.4.7',
   is_default => true,
+}
+
+file { '/home/vagrant/.config':
+  ensure => directory,
 }
 
 file { '/home/vagrant/.config/xfce4':
