@@ -1,7 +1,7 @@
 class idea {
-  # https://download-cf.jetbrains.com/idea/ideaIU-2016.3.1.tar.gz
-  $version = '2016.3.1'
-  $build = '163.9166.29'
+  # https://download-cf.jetbrains.com/idea/ideaIU-2016.3.2.tar.gz
+  $version = '2016.3.2'
+  $build = '163.10154.41'
   $prefsdir = '/home/vagrant/.IntelliJIdea2016.3'
   $colorsdir = "${prefsdir}/colors"
 
