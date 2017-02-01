@@ -84,6 +84,7 @@ include my_vagrant
 include idea
 include netbeans
 include svn
+include hipchat
 
 class { 'sdkman' :
 }
