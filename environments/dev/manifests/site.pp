@@ -70,6 +70,7 @@ package { [
     'gparted',
     'lsof',
     'nmap-ncat',
+    'maven',
   ]: ensure => present,
 }
 
