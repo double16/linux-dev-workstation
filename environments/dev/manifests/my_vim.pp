@@ -12,6 +12,12 @@ class my_vim {
     provider => git,
     source   => 'https://github.com/sgerrand/xfce4-terminal-colors-solarized',
   }->
+  file { '/home/vagrant/.config/xfce4/terminal':
+    ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
+    mode   => '0755',
+  }->
   file { '/home/vagrant/.config/xfce4/terminal/terminalrc':
     ensure => file,
     owner  => 'vagrant',
@@ -31,14 +37,14 @@ class my_vim {
 
   vim::pathogen { 'vagrant': }
   my_vim::plugin { [
-     'scrooloose/syntastic',
-     'altercation/vim-colors-solarized',
-     'rodjek/vim-puppet',
-     'maksimr/vim-jsbeautify',
-     'elzr/vim-json',
-     'bronson/vim-trailing-whitespace',
-     'ervandew/matchem',
-     'jtratner/vim-flavored-markdown',
+    'scrooloose/syntastic',
+    'altercation/vim-colors-solarized',
+    'rodjek/vim-puppet',
+    'maksimr/vim-jsbeautify',
+    'elzr/vim-json',
+    'bronson/vim-trailing-whitespace',
+    'ervandew/matchem',
+    'jtratner/vim-flavored-markdown',
   ]:
   }
 

@@ -8,7 +8,7 @@ configs        = YAML.load_file("#{current_dir}/config.yaml")
 vagrant_config = configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']]
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/centos-7.2"
+  config.vm.box = "bento/centos-7.3"
 
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box

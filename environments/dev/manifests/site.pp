@@ -43,6 +43,10 @@ exec { 'graphical runlevel':
 #  ensure => present,
 #}
 
+package { 'python2-pip':
+  ensure => present,
+}->Package<| provider == 'pip' |>
+
 package { [
     'asciidoc',
     'dos2unix',
@@ -53,7 +57,7 @@ package { [
     'xz',
     'psmisc',
     'sqlite',
-    #'rancher-compose',
+    #'rancher-compose', # https://github.com/rancher/rancher-compose/releases
     'pandoc',
     'tmux',
     'jq',
@@ -72,6 +76,11 @@ package { [
     'nmap-ncat',
     'maven',
   ]: ensure => present,
+}
+
+package { 'docker-compose':
+  ensure   => present,
+  provider => 'pip',
 }
 
 Archive::Download {
@@ -104,17 +113,22 @@ exec { 'chmod 0755 /root':
 
 sdkman::package { 'groovy':
   ensure     => present,
-  version    => '2.4.7',
+  version    => '2.4.9',
   is_default => true,
 }
 
 file { '/home/vagrant/.config':
   ensure => directory,
+  owner  => 'vagrant',
+  group  => 'vagrant',
+  mode   => '0755',
 }
 
 file { '/home/vagrant/.config/xfce4':
   ensure  => directory,
   recurse => remote,
+  owner   => 'vagrant',
+  group   => 'vagrant',
   source  => 'file:///tmp/vagrant-puppet/environments/dev/files/dotconfig/xfce4',
 }
 
@@ -125,5 +139,16 @@ file { '/home/vagrant/.config/git':
 file { '/home/vagrant/.config/git/ignore':
   ensure => file,
   source => 'file:///tmp/vagrant-puppet/environments/dev/files/gitignore',
+}
+
+service { 'docker':
+  ensure => running,
+  enable => true,
+}
+exec { 'docker options':
+  path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
+  command => "sed -i \"s/OPTIONS='/OPTIONS='--group=vagrant /\" /etc/sysconfig/docker",
+  unless  => 'grep -q group=vagrant /etc/sysconfig/docker',
+  notify  => Service['docker'],
 }
 
