@@ -9,6 +9,7 @@ class my_ruby {
   rbenv::plugin { 'sstephenson/ruby-build': latest => true }
   rbenv::build { $ruby_ver: global => true }
   rbenv::build { '1.9.3-p551': }
+  rbenv::build { 'jruby-1.7.26': }
 
   Rbenv::Gem {
     ruby_version => $ruby_ver
