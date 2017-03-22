@@ -113,7 +113,13 @@ exec { 'chmod 0755 /root':
 
 sdkman::package { 'groovy':
   ensure     => present,
-  version    => '2.4.9',
+  version    => '2.4.10',
+  is_default => true,
+}
+
+sdkman::package { 'gradle':
+  ensure     => present,
+  version    => '3.4.1',
   is_default => true,
 }
 
