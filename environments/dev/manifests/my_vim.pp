@@ -1,6 +1,7 @@
 class my_vim {
   class { 'vim':
     autoupgrade    => true,
+    set_as_default => true,
     opt_syntax     => true,
     opt_bg_shading => 'light',
     opt_misc       => ['number'],
