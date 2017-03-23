@@ -96,7 +96,26 @@ include netbeans
 include svn
 include hipchat
 
+file { '/etc/profile.d/java.sh':
+  ensure  => file,
+  owner   => 0,
+  group   => 'root',
+  mode    => '0755',
+  content => 'export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0',
+}
+
 class { 'sdkman' :
+}->
+file { '/home/vagrant/.sdkman':
+  ensure  => link,
+  target  => '/root/.sdkman',
+}->
+file { '/etc/profile.d/sdkman.sh':
+  ensure  => file,
+  owner   => 0,
+  group   => 'root',
+  mode    => '0755',
+  content => '[[ -s "/root/.sdkman/bin/sdkman-init.sh" ]] && source "/root/.sdkman/bin/sdkman-init.sh"',
 }
 
 exec { 'chmod 0755 /root/.sdkman':
@@ -123,6 +142,14 @@ sdkman::package { 'gradle':
   is_default => true,
 }
 
+sdkman::package { 'grails':
+  ensure     => present,
+  version    => '2.5.6',
+  is_default => true,
+}
+
+
+
 file { '/home/vagrant/.config':
   ensure => directory,
   owner  => 'vagrant',
@@ -145,6 +172,12 @@ file { '/home/vagrant/.config/git':
 file { '/home/vagrant/.config/git/ignore':
   ensure => file,
   source => 'file:///tmp/vagrant-puppet/environments/dev/files/gitignore',
+}
+
+file { '/home/vagrant/Workspace':
+  ensure => directory,
+  owner  => 'vagrant',
+  group  => 'vagrant',
 }
 
 service { 'docker':
