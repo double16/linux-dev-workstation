@@ -26,7 +26,9 @@ Vagrant.configure("2") do |config|
   end
 
   # Increase memory for Virtualbox
-  config.vbguest.no_install = true
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.no_install = true
+  end
   config.vm.provider "virtualbox" do |vb|
     vb.gui = true
     vb.cpus = vagrant_config['cores']
