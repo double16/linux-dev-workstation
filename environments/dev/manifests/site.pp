@@ -185,9 +185,10 @@ service { 'docker':
   enable => true,
 }
 exec { 'docker options':
-  path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
-  command => "sed -i \"s/OPTIONS='/OPTIONS='--group=vagrant /\" /etc/sysconfig/docker",
-  unless  => 'grep -q group=vagrant /etc/sysconfig/docker',
-  notify  => Service['docker'],
+  path     => ['/bin','/sbin','/usr/bin','/usr/sbin'],
+  command  => "sed -i \"s/OPTIONS='/OPTIONS='--group=vagrant /\" /etc/sysconfig/docker",
+  unless   => 'grep -q group=vagrant /etc/sysconfig/docker',
+  require  => Package['docker'],
+  notify   => Service['docker'],
 }
 
