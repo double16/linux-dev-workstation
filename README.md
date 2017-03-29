@@ -1,6 +1,33 @@
 Linux Java/DevOps Workstation
 =============================
 
+This Vagrant image contains a developer workspace with the following software:
+* CentOS 7
+* Java 8
+* IntelliJ IDEA Ultimate
+* NetBeans
+* vim, gvim, various vim plugins
+* git
+* svn
+* Docker, Docker Compose
+* Python 2
+* asciidoc
+* nodenv (NodeJS environments)
+* Maven
+* Ansible
+* Puppet
+* rbenv (Ruby Environments)
+* HipChat
+* Xfce Desktop
+* Firefox
+* Chrome
+* VirtualBox
+* Vagrant
+* sdkman
+* Groovy
+* Gradle
+* Grails
+
 Configure
 ---------
 The `config.yaml` file has several machine size configurations. The default is medium, you can change that by changing the `use` entry in `config.yaml`.
@@ -28,7 +55,7 @@ Update Puppet Modules
 
 Update puppet modules from the `Puppetfile`:
 ```shell
-$ librarian-puppet install --path=environments/dev/modules --destructive
+$ librarian-puppet install --path=environments/dev/modules --destructive --strip-dot-git
 ```
 
 

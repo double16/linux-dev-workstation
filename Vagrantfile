@@ -100,6 +100,7 @@ resize2fs /dev/VolGroup/lv_root
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = "environments"
     puppet.environment = "dev"
+    puppet.hiera_config_path = "hiera.yaml"
     puppet.options = "--debug"
   end
 

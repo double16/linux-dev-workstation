@@ -24,6 +24,8 @@ FORGE
       puppetlabs-stdlib (< 5.0.0, >= 4.5.0)
     puppetlabs-concat (2.2.0)
       puppetlabs-stdlib (< 5.0.0, >= 4.2.0)
+    puppetlabs-git (0.5.0)
+      puppetlabs-stdlib (>= 3.2.0)
     puppetlabs-stdlib (4.13.1)
     puppetlabs-vcsrepo (1.4.0)
     stahnma-epel (1.2.2)
@@ -34,15 +36,24 @@ FORGE
       puppetlabs-concat (>= 1.1.2)
       puppetlabs-stdlib (>= 3.2.0)
 
+GIT
+  remote: https://github.com/jniesen/puppet-nodenv.git
+  ref: master
+  sha: c3e4938d501a177ef104e027a90ea4cf2d69bed9
+  specs:
+    jniesen-nodenv (0.0.1)
+
 DEPENDENCIES
   camptocamp-archive (>= 0)
   camptocamp-augeas (>= 0)
   danzilio-virtualbox (>= 0)
   jdowning-rbenv (>= 0)
+  jniesen-nodenv (>= 0)
   kemra102-ius (>= 0)
   lwf-remote_file (>= 0)
   paulosuzart-sdkman (>= 0)
   puppet-yum (>= 0)
+  puppetlabs-git (= 0.5.0)
   puppetlabs-vcsrepo (>= 0)
   stahnma-epel (>= 0)
   unibet-vagrant (>= 0)

@@ -90,6 +90,7 @@ Archive::Download {
 include virtualbox
 include my_vim
 include my_ruby
+include my_node
 include my_vagrant
 include idea
 include netbeans
