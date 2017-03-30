@@ -96,6 +96,7 @@ include idea
 include netbeans
 include svn
 include hipchat
+include kitematic
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
@@ -108,8 +109,8 @@ file { '/etc/profile.d/java.sh':
 class { 'sdkman' :
 }->
 file { '/home/vagrant/.sdkman':
-  ensure  => link,
-  target  => '/root/.sdkman',
+  ensure => link,
+  target => '/root/.sdkman',
 }->
 file { '/etc/profile.d/sdkman.sh':
   ensure  => file,
@@ -150,6 +151,12 @@ sdkman::package { 'grails':
 }
 
 
+file { '/usr/local/src':
+  ensure => 'directory',
+  owner  => 0,
+  group  => 'vagrant',
+  mode   => '0775',
+}
 
 file { '/home/vagrant/.config':
   ensure => directory,
@@ -186,10 +193,9 @@ service { 'docker':
   enable => true,
 }
 exec { 'docker options':
-  path     => ['/bin','/sbin','/usr/bin','/usr/sbin'],
-  command  => "sed -i \"s/OPTIONS='/OPTIONS='--group=vagrant /\" /etc/sysconfig/docker",
-  unless   => 'grep -q group=vagrant /etc/sysconfig/docker',
-  require  => Package['docker'],
-  notify   => Service['docker'],
+  path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
+  command => "sed -i \"s/OPTIONS='/OPTIONS='--group=vagrant /\" /etc/sysconfig/docker",
+  unless  => 'grep -q group=vagrant /etc/sysconfig/docker',
+  require => Package['docker'],
+  notify  => Service['docker'],
 }
-

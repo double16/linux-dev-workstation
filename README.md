@@ -9,7 +9,7 @@ This Vagrant image contains a developer workspace with the following software:
 * vim, gvim, various vim plugins
 * git
 * svn
-* Docker, Docker Compose
+* Docker, Docker Compose, Kitematic
 * Python 2
 * asciidoc
 * nodenv (NodeJS environments)
