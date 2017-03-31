@@ -1,0 +1,4 @@
+*.pp text eol=lf
+*.epp text eol=lf
+*.erb text eol=lf
+*.*sh text eol=lf
