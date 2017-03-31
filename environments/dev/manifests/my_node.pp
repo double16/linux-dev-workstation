@@ -8,6 +8,8 @@ class my_node {
   }
 
   nodenv::plugin { 'nodenv/node-build': }
+  nodenv::plugin { 'nodenv/nodenv-each': }
+  nodenv::plugin { 'nodenv/nodenv-package-json-engine': }
 
   nodenv::build { $node_lts: global => true }
   nodenv::build { $node_latest: }
