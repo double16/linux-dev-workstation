@@ -75,6 +75,7 @@ package { [
     'lsof',
     'nmap-ncat',
     'maven',
+    'freerdp',
   ]: ensure => present,
 }
 
