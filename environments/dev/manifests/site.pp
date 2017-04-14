@@ -200,3 +200,9 @@ exec { 'docker options':
   require => Package['docker'],
   notify  => Service['docker'],
 }
+file { '/usr/local/bin/docker-clean':
+  ensure => file,
+  mode   => '0755',
+  source => 'file:///tmp/vagrant-puppet/environments/dev/files/docker-clean.sh',
+}
+
