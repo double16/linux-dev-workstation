@@ -11,11 +11,14 @@ yum::plugin { 'replace':
 
 yum::group { 'Development Tools':
   ensure => present,
-}->
-exec { 'yum replace -y git --replace-with=git2u-all':
-  unless => 'yum list installed git2u-all',
-  path   => '/bin:/sbin:/usr/bin:/usr/sbin',
 }
+->exec { 'yum replace -y git --replace-with=git2u-all':
+  unless  => 'yum list installed git2u-core',
+  path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+  require => Package['git'],
+}
+->Package<| title == 'alien' |>
+->Exec<| title == 'vboxdrv' |>
 
 yum::group { 'Xfce':
   ensure => present,
@@ -23,8 +26,8 @@ yum::group { 'Xfce':
 
 package { 'xorg*':
   ensure => present,
-}->
-file { '/etc/xorg.conf':
+}
+-> file { '/etc/xorg.conf':
   ensure  => file,
   content => '
 Section "ServerFlags"
@@ -90,6 +93,9 @@ Archive::Download {
 }
 
 include virtualbox
+package { "kernel-devel-${::kernelrelease}": }
+->Exec<| title == 'vboxdrv' |>
+
 include my_vim
 include my_ruby
 include my_node
