@@ -76,6 +76,7 @@ package { [
     'nmap-ncat',
     'maven',
     'freerdp',
+    'alien',
   ]: ensure => present,
 }
 
