@@ -1,6 +1,6 @@
 class my_vagrant {
   class { 'vagrant':
-    version => '1.9.4',
+    version => '1.9.5',
   }
   vagrant::plugin { 'vagrant-vbguest':
     user => 'vagrant',
