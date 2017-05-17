@@ -20,14 +20,11 @@ yum::group { 'Development Tools':
 ->Package<| title == 'alien' |>
 ->Exec<| title == 'vboxdrv' |>
 
-yum::group { 'Xfce':
-  ensure => present,
-}
 
-package { 'xorg*':
+yum::group { 'X Window System':
   ensure => present,
 }
--> file { '/etc/xorg.conf':
+->file { '/etc/xorg.conf':
   ensure  => file,
   content => '
 Section "ServerFlags"
@@ -35,11 +32,22 @@ Section "ServerFlags"
 EndSection
 ',
 }
+->exec { 'yum-groupinstall-Xfce':
+  command => "yum -y groupinstall --skip-broken 'Xfce'",
+  unless  => "yum grouplist hidden 'Xfce' | egrep -i '^Installed.+Groups:$'",
+  timeout => undef,
+  path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+}
+# 2017-05-17 xfce4-mixer has a broken dependency, so we're using the above
+#->yum::group { 'Xfce':
+#  ensure => present,
+#}
 
 exec { 'graphical runlevel':
   path    => '/bin:/sbin:/usr/bin:/usr/sbin',
   command => 'systemctl set-default graphical.target',
   unless  => 'systemctl get-default | grep -q graphical',
+  require => Yum::Group['X Window System'],
 }
 
 #yum::group { 'GNOME Desktop':
