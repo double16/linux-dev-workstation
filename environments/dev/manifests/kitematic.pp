@@ -1,6 +1,6 @@
 class kitematic
 {
-  package { ['rpmrebuild','zsh']: }
+  package { ['rpmrebuild','zsh','libnotify']: }
   ->archive { 'Kitematic-0.17.0':
     ensure           => present,
     url              => 'https://github.com/docker/kitematic/releases/download/v0.17.0/Kitematic-0.17.0-Ubuntu.zip',
