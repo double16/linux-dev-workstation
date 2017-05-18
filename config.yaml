@@ -7,4 +7,13 @@ configs:
     large:
         memory: 8192
         cores: 4
+    proxied:
+        memory: 4096
+        cores: 2
+        # Proxy URL that will be configured in various places
+        proxy_url: http://proxy:8123
+        # Domains excluded from the proxy, comma separated list
+        proxy_excludes: .internal.net,.dmz.net
+        # Limit DNS resolution to IPV4
+        ipv4only: true
 

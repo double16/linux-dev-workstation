@@ -75,7 +75,7 @@ resize2fs /dev/VolGroup/lv_root
     end
   end
 
-  config.vm.provision "shell", env: {"HTTP_PROXY" => ENV["HTTP_PROXY"], "HTTPS_PROXY" => ENV["HTTPS_PROXY"], "NO_PROXY" => ENV["NO_PROXY"] }, inline: <<-SHELL
+  config.vm.provision "shell", env: {"HTTP_PROXY" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"], "HTTPS_PROXY" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"], "NO_PROXY" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"] }, inline: <<-SHELL
     if [ -n "${HTTP_PROXY}" ]; then
       grep -q "proxy=" /etc/yum.conf || echo "proxy=${HTTP_PROXY}" >> /etc/yum.conf
       grep -q "ip_resolve=4" /etc/yum.conf || echo "ip_resolve=4" >> /etc/yum.conf
@@ -101,7 +101,12 @@ resize2fs /dev/VolGroup/lv_root
     puppet.environment_path = "environments"
     puppet.environment = "dev"
     puppet.hiera_config_path = "hiera.yaml"
-    puppet.options = "--debug"
+    puppet.facter = {
+      "proxy_url" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"] || ENV["HTTP_PROXY"],
+      "proxy_excludes" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"],
+      "ipv4only" => vagrant_config['ipv4only'],
+    }
+#    puppet.options = "--debug"
   end
 
 end

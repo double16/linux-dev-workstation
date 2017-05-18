@@ -96,6 +96,10 @@ package { 'docker-compose':
   provider => 'pip',
 }
 
+Archive {
+  src_target => '/tmp/vagrant-cache',
+}
+
 Archive::Download {
   follow_redirects => true,
 }
@@ -113,6 +117,7 @@ include netbeans
 include svn
 include hipchat
 include kitematic
+include proxy
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
@@ -150,13 +155,13 @@ exec { 'chmod 0755 /root':
 
 sdkman::package { 'groovy':
   ensure     => present,
-  version    => '2.4.10',
+  version    => '2.4.11',
   is_default => true,
 }
 
 sdkman::package { 'gradle':
   ensure     => present,
-  version    => '3.4.1',
+  version    => '3.5',
   is_default => true,
 }
 
