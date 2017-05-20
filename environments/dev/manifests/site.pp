@@ -127,6 +127,26 @@ file { '/etc/profile.d/java.sh':
   content => 'export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0',
 }
 
+file { '/home/vagrant/.ssh':
+  ensure => directory,
+  owner  => 'vagrant',
+  group  => 'vagrant',
+  mode   => '0700',
+}
+
+file { '/home/vagrant/.ssh/config':
+  ensure => file,
+  owner  => 'vagrant',
+  group  => 'vagrant',
+  mode   => '0644',
+}
+->file_line { 'ssh user':
+  ensure => present,
+  path   => '/home/vagrant/.ssh/config',
+  line   => "User ${::host_username}",
+  match  => '^User\ ',
+}
+
 class { 'sdkman' :
 }->
 file { '/home/vagrant/.sdkman':
