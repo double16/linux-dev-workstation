@@ -5,6 +5,13 @@ include augeas
 Class['epel'] -> Package<| |>
 Class['ius'] -> Package<| |>
 
+file { '/tmp/vagrant-cache':
+  ensure => directory,
+  mode   => '0777',
+  owner  => 'vagrant',
+  group  => 'vagrant',
+}
+
 yum::plugin { 'replace':
   ensure => present,
 }
