@@ -85,7 +85,6 @@ package { [
     'chromium',
     'chrome-remote-desktop',
     'java-1.8.0-openjdk-devel',
-    'docker',
     'unzip',
     'mlocate',
     'rsync',
@@ -98,11 +97,6 @@ package { [
   ]: ensure => present,
 }
 
-package { 'docker-compose':
-  ensure   => present,
-  provider => 'pip',
-}
-
 Archive {
   src_target => '/tmp/vagrant-cache',
 }
@@ -111,9 +105,11 @@ Archive::Download {
   follow_redirects => true,
 }
 
-include virtualbox
-package { "kernel-devel-${::kernelrelease}": }
-->Exec<| title == 'vboxdrv' |>
+unless $::virtual == 'docker' {
+  include virtualbox
+  package { "kernel-devel-${::kernelrelease}": }
+  ->Exec<| title == 'vboxdrv' |>
+}
 
 include my_vim
 include my_ruby
@@ -236,17 +232,28 @@ file { '/home/vagrant/Workspace':
   group  => 'vagrant',
 }
 
-service { 'docker':
-  ensure => running,
-  enable => true,
+unless $::virtual == 'docker' {
+  package { 'docker':
+    ensure => present,
+  }
+  ->service { 'docker':
+    ensure => running,
+    enable => true,
+  }
+  exec { 'docker options':
+    path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
+    command => "sed -i \"s/OPTIONS='/OPTIONS='--group=vagrant /\" /etc/sysconfig/docker",
+    unless  => 'grep -q group=vagrant /etc/sysconfig/docker',
+    require => Package['docker'],
+    notify  => Service['docker'],
+  }
 }
-exec { 'docker options':
-  path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
-  command => "sed -i \"s/OPTIONS='/OPTIONS='--group=vagrant /\" /etc/sysconfig/docker",
-  unless  => 'grep -q group=vagrant /etc/sysconfig/docker',
-  require => Package['docker'],
-  notify  => Service['docker'],
+
+package { 'docker-compose':
+  ensure   => present,
+  provider => 'pip',
 }
+
 file { '/usr/local/bin/docker-clean':
   ensure => file,
   mode   => '0755',

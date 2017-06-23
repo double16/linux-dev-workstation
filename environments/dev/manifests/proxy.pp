@@ -14,9 +14,9 @@ net.ipv6.conf.default.disable_ipv6=1
   }
 
   file_line { 'Yum force ipv4':
-    ensure  => str2bool($::ipv4only) ? { true => present, default => absent },
-    path    => '/etc/yum.conf',
-    line    => 'ip_resolve=4',
+    ensure => str2bool($::ipv4only) ? { true => present, default => absent },
+    path   => '/etc/yum.conf',
+    line   => 'ip_resolve=4',
   }
 
   $proxy_presence = $::proxy_url ? {
@@ -30,6 +30,7 @@ net.ipv6.conf.default.disable_ipv6=1
     line              => "http_proxy=$::proxy_url",
     match             => '^http_proxy\=',
     match_for_absence => true,
+    multiple          => true,
   }
   file_line { 'https_proxy in global environment':
     ensure            => $::proxy_url ? { /^https:/ => present, default => absent},
@@ -37,6 +38,7 @@ net.ipv6.conf.default.disable_ipv6=1
     line              => "https_proxy=$::proxy_url",
     match             => '^https_proxy\=',
     match_for_absence => true,
+    multiple          => true,
   }
   file_line { 'no_proxy in global environment':
     ensure            => $proxy_presence,
@@ -44,6 +46,7 @@ net.ipv6.conf.default.disable_ipv6=1
     line              => "no_proxy=localhost,.localdomain,.local,127.0.0.1,${::proxy_excludes}",
     match             => '^no_proxy\=',
     match_for_absence => true,
+    multiple          => true,
   }
   file_line { 'Yum proxy':
     ensure            => $proxy_presence,
