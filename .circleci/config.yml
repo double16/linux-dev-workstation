@@ -1,0 +1,52 @@
+version: 2
+jobs:
+  build:
+    working_directory: /home/linux-dev-workstation
+    docker:
+      - image: pdouble16/vagrant-build-base:latest
+        user: root
+
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - restore_cache:
+          keys:
+            - v1-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}}
+            - v1-dockerimage-{{ .Branch }}-
+
+      - restore_cache:
+          keys:
+            - v1-vagrant-{{ .Branch }}
+
+      - run:
+          name: Restore Docker Public Image Cache
+          command: |
+            if [[ -e /home/linux-dev-workstation/public/image.tar ]]; then
+              docker load -i /home/linux-dev-workstation/public/image.tar
+            fi
+
+      - run:
+          name: Test Vagrant Up
+          command: |
+            vagrant up --provider docker
+
+      - run:
+          name: Build Docker Public Image Cache
+          command: |
+            set -x
+            if [ -n "$CIRCLE_BUILD_NUM" ]; then
+              mkdir -p /home/linux-dev-workstation/public
+              docker save $(docker images | grep -v 'REPOSITORY\|none' | cut -d ' ' -f 1) > /home/linux-dev-workstation/public/image.tar
+            fi
+
+      - save_cache:
+          key: v1-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}
+          paths:
+            - /home/linux-dev-workstation/public
+
+      - save_cache:
+          key: v1-vagrant-{{ .Branch }}
+          paths:
+            - /root/.vagrant.d/cache
+

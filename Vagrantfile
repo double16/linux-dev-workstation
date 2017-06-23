@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
     docker.image = "jdeathe/centos-ssh:centos-7-2.2.3"
+    docker.name = "linux-dev-workstation"
     docker.remains_running = true
     docker.has_ssh = true
     docker.env = {
@@ -28,6 +29,7 @@ Vagrant.configure("2") do |config|
     }
     # There is no newline after the existing insecure key, so the new key ends up on the same line and breaks SSH
     config.ssh.insert_key = false
+    config.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation appropriate/nc:edge linux-dev-workstation 22"
   end
 
   if Vagrant.has_plugin?("vagrant-cachier")
