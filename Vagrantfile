@@ -15,6 +15,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.3"
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
+    #override.vm.allowed_synced_folder_types = [:rsync,'rsync-auto']
     docker.image = "jdeathe/centos-ssh:centos-7-2.2.3"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
@@ -28,19 +29,13 @@ Vagrant.configure("2") do |config|
       :SSH_INHERIT_ENVIRONMENT => 'true',
     }
     # There is no newline after the existing insecure key, so the new key ends up on the same line and breaks SSH
-    config.ssh.insert_key = false
-    config.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation appropriate/nc:edge linux-dev-workstation 22"
+    override.ssh.insert_key = false
+    override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation appropriate/nc:edge linux-dev-workstation 22"
   end
 
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
   end
-
-  # Bridged networks make the machine appear as another physical device on
-  # your network.
-  # config.vm.network "public_network"
-
-  # config.vm.synced_folder "../data", "/vagrant_data"
 
   # Increase memory for Parallels Desktop
   config.vm.provider "parallels" do |p, o|
