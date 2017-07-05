@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.3"
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
-    #override.vm.allowed_synced_folder_types = [:rsync,'rsync-auto']
+    override.vm.allowed_synced_folder_types = :rsync
     docker.image = "jdeathe/centos-ssh:centos-7-2.2.3"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
@@ -126,6 +126,7 @@ resize2fs /dev/VolGroup/lv_root
   SHELL
 
   config.vm.provision "puppet" do |puppet|
+    puppet.synced_folder_type = "rsync"
     puppet.environment_path = "environments"
     puppet.environment = "dev"
     puppet.hiera_config_path = "hiera.yaml"

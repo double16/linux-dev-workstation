@@ -29,7 +29,8 @@ jobs:
       - run:
           name: Test Vagrant Up
           command: |
-            vagrant up --provider docker
+            set -x
+            vagrant up --provider docker || (sleep 3s && vagrant up --provision)
 
       - run:
           name: Build Docker Public Image Cache
