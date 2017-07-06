@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
     }
     # There is no newline after the existing insecure key, so the new key ends up on the same line and breaks SSH
     override.ssh.insert_key = false
-    override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation appropriate/nc:edge linux-dev-workstation 22"
+    override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
   end
 
   if Vagrant.has_plugin?("vagrant-cachier")

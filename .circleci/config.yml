@@ -29,8 +29,7 @@ jobs:
       - run:
           name: Test Vagrant Up
           command: |
-            set -x
-            vagrant up --provider docker || (sleep 3s && vagrant up --provision)
+            vagrant up --provider docker
 
       - run:
           name: Build Docker Public Image Cache
@@ -45,6 +44,14 @@ jobs:
           key: v1-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}
           paths:
             - /home/linux-dev-workstation/public
+
+      - run:
+          name: Copy Vagrant Cache
+          command: |
+            if [ -n "$CIRCLE_BUILD_NUM" ]; then
+              mkdir -p /root/.vagrant.d/cache
+              docker cp linux-dev-workstation:/tmp/vagrant-cache/ /root/.vagrant.d/cache/
+            fi
 
       - save_cache:
           key: v1-vagrant-{{ .Branch }}
