@@ -10,51 +10,72 @@ jobs:
       - checkout
       - setup_remote_docker
 
-      - restore_cache:
-          keys:
-            - v1-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}}
-            - v1-dockerimage-{{ .Branch }}-
+      - run:
+          name: Link Developer Workstation Cache
+          command: |
+            set -x
+            if [ -z "$CIRCLE_BUILD_NUM" ]; then
+              mkdir -p /home/linux-dev-workstation/cache/vagrant
+              ln -sf  /home/linux-dev-workstation/cache/vagrant /root/.vagrant.d/cache
+            fi
 
+      # This cache is for the docker images. Layer caching is early, we use a tarball created by
+      # `docker save` to cache our images.
       - restore_cache:
           keys:
-            - v2-vagrant-{{ .Branch }}
+            - v3-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}}
+            - v3-dockerimage-{{ .Branch }}-
+
+      # This cache is produced by the vagrant-cachier plugin. It created a synced folder named /tmp/vagrant-cache
+      # that primarily holds OS packages, but this project also keeps other large downloads there.
+      # The cache key includes the revision because any of the Vagrantfile or Puppet files can influence the cache.
+      # The second key will reuse the cache from a previous build.
+      - restore_cache:
+          keys:
+            - v3-vagrant-{{ .Branch }}-{{ .Revision }}
+            - v3-vagrant-{{ .Branch }}-
 
       - run:
           name: Restore Docker Public Image Cache
           command: |
-            if [[ -e /home/linux-dev-workstation/public/image.tar ]]; then
-              docker load -i /home/linux-dev-workstation/public/image.tar
+            set -x
+            if [[ -e /home/linux-dev-workstation/cache/image.tar ]]; then
+              docker load -i /home/linux-dev-workstation/cache/image.tar
             fi
 
+      # The 'test' here is that Vagrant can build the box. We should add more steps after this to ensure the software
+      # we installed is in working order.
       - run:
           name: Test Vagrant Up
           command: |
-            vagrant up --provider docker
+            vagrant up --provider docker --provision
 
       - run:
           name: Build Docker Public Image Cache
           command: |
             set -x
-            if [ -n "$CIRCLE_BUILD_NUM" ]; then
-              mkdir -p /home/linux-dev-workstation/public
-              docker save $(docker images | grep -v 'REPOSITORY\|none' | cut -d ' ' -f 1) > /home/linux-dev-workstation/public/image.tar
-            fi
+            mkdir -p /home/linux-dev-workstation/cache
+            docker save $(docker images | grep -v 'REPOSITORY\|none' | cut -d ' ' -f 1) > /home/linux-dev-workstation/cache/image.tar
 
       - save_cache:
-          key: v1-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}
+          key: v3-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}
           paths:
-            - /home/linux-dev-workstation/public
+            - /home/linux-dev-workstation/cache
 
+      # We must use rsync for synced folder because circleci remote docker cannot do volume mapping. We need
+      # to copy the cached files back into this container for storing in the cache. The '/root/.vagrant.d/cache'
+      # is found by watching the build logs for the rsync steps after Vagrant initially creates the container.
       - run:
           name: Copy Vagrant Cache
           command: |
-            if [ -n "$CIRCLE_BUILD_NUM" ]; then
+            set -x
+            if [[ ! -e /root/.vagrant.d/cache ]]; then
               mkdir -p /root/.vagrant.d/cache
-              docker cp linux-dev-workstation:/tmp/vagrant-cache/ /root/.vagrant.d/cache/
             fi
+            docker cp linux-dev-workstation:/tmp/vagrant-cache/ /root/.vagrant.d/cache/
 
       - save_cache:
-          key: v2-vagrant-{{ .Branch }}
+          key: v3-vagrant-{{ .Branch }}-{{ .Revision }}
           paths:
             - /root/.vagrant.d/cache
 

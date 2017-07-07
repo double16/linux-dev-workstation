@@ -2,3 +2,4 @@
 *.bak
 .librarian/
 .tmp/
+cache/
