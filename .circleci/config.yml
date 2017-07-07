@@ -17,7 +17,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-vagrant-{{ .Branch }}
+            - v2-vagrant-{{ .Branch }}
 
       - run:
           name: Restore Docker Public Image Cache
@@ -54,7 +54,7 @@ jobs:
             fi
 
       - save_cache:
-          key: v1-vagrant-{{ .Branch }}
+          key: v2-vagrant-{{ .Branch }}
           paths:
             - /root/.vagrant.d/cache
 
