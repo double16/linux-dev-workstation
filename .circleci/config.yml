@@ -23,8 +23,8 @@ jobs:
       # `docker save` to cache our images.
       - restore_cache:
           keys:
-            - v3-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}}
-            - v3-dockerimage-{{ .Branch }}-
+            - v4-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}}
+            - v4-dockerimage-{{ .Branch }}-
 
       # This cache is produced by the vagrant-cachier plugin. It created a synced folder named /tmp/vagrant-cache
       # that primarily holds OS packages, but this project also keeps other large downloads there.
@@ -39,8 +39,8 @@ jobs:
           name: Restore Docker Public Image Cache
           command: |
             set -x
-            if [[ -e /home/linux-dev-workstation/cache/image.tar ]]; then
-              docker load -i /home/linux-dev-workstation/cache/image.tar
+            if [[ -e /home/linux-dev-workstation/cache/docker/image.tar ]]; then
+              docker load -i /home/linux-dev-workstation/cache/docker/image.tar
             fi
 
       # The 'test' here is that Vagrant can build the box. We should add more steps after this to ensure the software
@@ -54,13 +54,13 @@ jobs:
           name: Build Docker Public Image Cache
           command: |
             set -x
-            mkdir -p /home/linux-dev-workstation/cache
-            docker save $(docker images | grep -v 'REPOSITORY\|none' | cut -d ' ' -f 1) > /home/linux-dev-workstation/cache/image.tar
+            mkdir -p /home/linux-dev-workstation/cache/docker
+            docker save $(docker images | grep -v 'REPOSITORY\|none' | cut -d ' ' -f 1) > /home/linux-dev-workstation/cache/docker/image.tar
 
       - save_cache:
-          key: v3-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}
+          key: v4-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}
           paths:
-            - /home/linux-dev-workstation/cache
+            - /home/linux-dev-workstation/cache/docker
 
       # We must use rsync for synced folder because circleci remote docker cannot do volume mapping. We need
       # to copy the cached files back into this container for storing in the cache. The '/root/.vagrant.d/cache'
