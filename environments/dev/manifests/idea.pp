@@ -1,8 +1,8 @@
 class idea {
-  # https://download-cf.jetbrains.com/idea/ideaIU-2017.1.5.tar.gz
-  $version = '2017.1.5'
-  $build = '171.4694.70'
-  $prefsdir = '/home/vagrant/.IntelliJIdea2017.1'
+  # https://download-cf.jetbrains.com/idea/ideaIU-2017.2.tar.gz
+  $version = '2017.2'
+  $build = '172.3317.76'
+  $prefsdir = '/home/vagrant/.IntelliJIdea2017.2'
   $colorsdir = "${prefsdir}/colors"
 
   archive { "idea-${version}":
@@ -29,8 +29,8 @@ class idea {
     ensure  => link,
     target  => "/opt/idea-IU-${build}",
     require => Archive["idea-${version}"],
-  }->
-  file { '/usr/share/applications/IntelliJ IDEA.desktop':
+  }
+  ->file { '/usr/share/applications/IntelliJ IDEA.desktop':
     ensure  => file,
     content => '
 [Desktop Entry]
@@ -53,8 +53,8 @@ StartupNotify=true
     ensure => directory,
     owner  => 'vagrant',
     group  => 'vagrant',
-  }->
-  file { $colorsdir:
+  }
+  ->file { $colorsdir:
     ensure => directory,
     owner  => 'vagrant',
     group  => 'vagrant',
