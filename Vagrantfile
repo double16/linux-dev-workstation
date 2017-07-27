@@ -126,7 +126,9 @@ resize2fs /dev/VolGroup/lv_root
   SHELL
 
   config.vm.provision "puppet" do |puppet|
-    puppet.synced_folder_type = "rsync"
+    if system('rsync --version >/dev/null 2>/dev/null')
+      puppet.synced_folder_type = "rsync"
+    end
     puppet.environment_path = "environments"
     puppet.environment = "dev"
     puppet.hiera_config_path = "hiera.yaml"
