@@ -121,6 +121,7 @@ include svn
 include hipchat
 include kitematic
 include proxy
+include clean
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
