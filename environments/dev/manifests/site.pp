@@ -1,6 +1,6 @@
-include epel
-include ius
-include augeas
+include ::epel
+include ::ius
+include ::augeas
 
 Class['epel'] -> Package<| |>
 Class['ius'] -> Package<| |>
@@ -106,22 +106,23 @@ Archive::Download {
 }
 
 unless $::virtual == 'docker' {
-  include virtualbox
+  include ::virtualbox
   package { "kernel-devel-${::kernelrelease}": }
   ->Exec<| title == 'vboxdrv' |>
 }
 
-include my_vim
-include my_ruby
-include my_node
-include my_vagrant
-include idea
-include netbeans
-include svn
-include hipchat
-include kitematic
-include proxy
-include clean
+include ::my_vim
+include ::my_ruby
+include ::my_node
+include ::my_vagrant
+include ::my_sdkman
+include ::idea
+include ::netbeans
+include ::svn
+include ::hipchat
+include ::kitematic
+include ::proxy
+include ::clean
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
@@ -150,51 +151,6 @@ file { '/home/vagrant/.ssh/config':
   line   => "User ${::host_username}",
   match  => '^User\ ',
 }
-
-class { 'sdkman' :
-}->
-file { '/home/vagrant/.sdkman':
-  ensure => link,
-  target => '/root/.sdkman',
-}->
-file { '/etc/profile.d/sdkman.sh':
-  ensure  => file,
-  owner   => 0,
-  group   => 'root',
-  mode    => '0755',
-  content => '[[ -s "/root/.sdkman/bin/sdkman-init.sh" ]] && source "/root/.sdkman/bin/sdkman-init.sh"',
-}
-
-exec { 'chmod 0755 /root/.sdkman':
-  path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
-  refreshonly => true,
-  subscribe   => Class['sdkman'],
-} -> Sdkman::Package<| |>
-
-exec { 'chmod 0755 /root':
-  path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
-  refreshonly => true,
-  subscribe   => Class['sdkman'],
-} -> Sdkman::Package<| |>
-
-sdkman::package { 'groovy':
-  ensure     => present,
-  version    => '2.4.12',
-  is_default => true,
-}
-
-sdkman::package { 'gradle':
-  ensure     => present,
-  version    => '4.0.2',
-  is_default => true,
-}
-
-sdkman::package { 'grails':
-  ensure     => present,
-  version    => '3.2.10',
-  is_default => true,
-}
-
 
 file { '/usr/local/src':
   ensure => 'directory',
