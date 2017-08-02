@@ -179,19 +179,19 @@ exec { 'chmod 0755 /root':
 
 sdkman::package { 'groovy':
   ensure     => present,
-  version    => '2.4.11',
+  version    => '2.4.12',
   is_default => true,
 }
 
 sdkman::package { 'gradle':
   ensure     => present,
-  version    => '3.5',
+  version    => '4.0.2',
   is_default => true,
 }
 
 sdkman::package { 'grails':
   ensure     => present,
-  version    => '2.5.6',
+  version    => '3.2.10',
   is_default => true,
 }
 
