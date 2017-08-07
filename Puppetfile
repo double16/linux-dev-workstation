@@ -2,6 +2,7 @@ forge "https://forge.puppet.com"
 
 mod 'stahnma/epel'
 mod 'puppet/yum'
+mod 'treydock/yum_cron', '2.0.0'
 mod 'camptocamp/archive'
 mod 'unibet-vagrant'
 mod 'puppet-virtualbox', '1.8.0'

@@ -12,6 +12,10 @@ file { '/tmp/vagrant-cache':
   group  => 'vagrant',
 }
 
+class { 'yum_cron':
+  apply_updates => true,
+}
+
 yum::plugin { 'replace':
   ensure => present,
 }
