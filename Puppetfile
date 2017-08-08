@@ -1,11 +1,11 @@
 forge "https://forge.puppet.com"
 
-mod 'stahnma/epel'
-mod 'puppet/yum'
-mod 'treydock/yum_cron', '2.0.0'
-mod 'camptocamp/archive'
+mod 'stahnma-epel'
+mod 'puppet-yum'
+mod 'treydock-yum_cron', '2.0.0'
+mod 'camptocamp-archive'
 mod 'unibet-vagrant'
-mod 'puppet-virtualbox', '1.8.0'
+mod 'puppet-virtualbox', '1.8'
 mod 'paulosuzart-sdkman'
 mod 'zanloy-vim'
 mod 'puppetlabs-vcsrepo'
@@ -14,5 +14,5 @@ mod 'kemra102-ius'
 mod 'lwf-remote_file'
 mod 'camptocamp-augeas'
 mod 'jniesen-nodenv', :git => 'https://github.com/jniesen/puppet-nodenv.git'
-mod 'puppetlabs-git', '0.5.0'
+mod 'puppetlabs-git', '0.5'
 

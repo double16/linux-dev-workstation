@@ -1,11 +1,13 @@
 class my_ruby {
   $ruby_ver = '2.1.9'
 
-  class { 'rbenv':
+  class { '::rbenv':
     install_dir => '/opt/rbenv',
     latest      => true,
+    require     => Package['git'],
   }
 
+  rbenv::plugin { 'rbenv/ruby-build': latest => true }
   rbenv::plugin { 'sstephenson/ruby-build': latest => true }
   rbenv::build { $ruby_ver: global => true }
   rbenv::build { '1.9.3-p551': }
@@ -15,7 +17,7 @@ class my_ruby {
   rbenv::build { 'jruby-9.1.8.0': }
 
   Rbenv::Gem {
-    ruby_version => $ruby_ver
+    ruby_version => $ruby_ver,
   }
 
   rbenv::gem { 'rake': }

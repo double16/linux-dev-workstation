@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-stdlib",
-  "version": "4.13.1",
+  "version": "4.17.1",
   "author": "puppetlabs",
   "summary": "Standard library of resources for Puppet modules.",
   "license": "Apache-2.0",
@@ -69,15 +69,15 @@
       "operatingsystemrelease": [
         "10.04",
         "12.04",
-        "14.04"
+        "14.04",
+        "16.04"
       ]
     },
     {
       "operatingsystem": "Solaris",
       "operatingsystemrelease": [
         "10",
-        "11",
-        "12"
+        "11"
       ]
     },
     {
@@ -105,7 +105,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">=2.7.20 <5.0.0"
+      "version_requirement": ">= 4.7.0 < 5.0.0"
     }
   ],
   "description": "Standard Library for Puppet Modules"

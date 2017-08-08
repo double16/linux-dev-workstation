@@ -12,8 +12,16 @@ file { '/tmp/vagrant-cache':
   group  => 'vagrant',
 }
 
-class { 'yum_cron':
-  apply_updates => true,
+if $::virtual == 'docker' {
+  class { '::yum_cron':
+    apply_updates  => true,
+    service_ensure => false,
+    service_enable => false,
+  }
+} else {
+  class { '::yum_cron':
+    apply_updates => true,
+  }
 }
 
 yum::plugin { 'replace':
