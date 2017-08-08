@@ -1,4 +1,5 @@
 require 'pathname'
+require 'puppet/parameter/boolean'
 
 Puppet::Type.newtype(:vcsrepo) do
   desc "A local version control repository"
@@ -52,6 +53,9 @@ Puppet::Type.newtype(:vcsrepo) do
   feature :conflict,
           "The provider supports automatic conflict resolution"
 
+  feature :include_paths,
+          "The provider supports checking out only specific paths"
+
   ensurable do
     attr_accessor :latest
 
@@ -71,23 +75,36 @@ Puppet::Type.newtype(:vcsrepo) do
         return is == :bare
       when :mirror
         return is == :mirror
+      when :absent
+        return is == :absent
       end
     end
 
     newvalue :present do
-      notice "Creating repository from present"
-      provider.create
+      if !provider.exists?
+        provider.create
+      elsif provider.class.feature?(:bare_repositories) and provider.bare_exists?
+        provider.convert_bare_to_working_copy
+      end
     end
 
     newvalue :bare, :required_features => [:bare_repositories] do
       if !provider.exists?
         provider.create
+      elsif provider.working_copy_exists?
+        provider.convert_working_copy_to_bare
+      elsif provider.mirror?
+        provider.set_no_mirror
       end
     end
 
     newvalue :mirror, :required_features => [:bare_repositories] do
       if !provider.exists?
         provider.create
+      elsif provider.working_copy_exists?
+        provider.convert_working_copy_to_bare
+      elsif !provider.mirror?
+        provider.set_mirror
       end
     end
 
@@ -97,6 +114,9 @@ Puppet::Type.newtype(:vcsrepo) do
 
     newvalue :latest, :required_features => [:reference_tracking] do
       if provider.exists? && !@resource.value(:force)
+        if provider.class.feature?(:bare_repositories) and provider.bare_exists?
+          provider.convert_bare_to_working_copy
+        end
         if provider.respond_to?(:update_references)
           provider.update_references
         end
@@ -119,7 +139,11 @@ Puppet::Type.newtype(:vcsrepo) do
         if prov.working_copy_exists?
           (@should.include?(:latest) && prov.latest?) ? :latest : :present
         elsif prov.class.feature?(:bare_repositories) and prov.bare_exists?
-          :bare
+          if prov.mirror?
+            :mirror
+          else
+            :bare
+          end
         else
           :absent
         end
@@ -141,8 +165,23 @@ Puppet::Type.newtype(:vcsrepo) do
     end
   end
 
-  newparam :source do
+  newproperty :source do
     desc "The source URI for the repository"
+    # Tolerate versions/providers that strip/add trailing slashes
+    def insync?(is)
+      # unwrap @should
+      should = @should[0]
+      return true if is == should
+      begin
+        if should[-1] == '/'
+          return true if is == should[0..-2]
+        elsif is[-1] == '/'
+          return true if is[0..-2] == should
+        end
+      rescue
+      end
+      return false
+    end
   end
 
   newparam :fstype, :required_features => [:filesystem_types] do
@@ -167,12 +206,30 @@ Puppet::Type.newtype(:vcsrepo) do
   end
 
   newparam :excludes do
-    desc "Files to be excluded from the repository"
+    desc "Local paths which shouldn't be tracked by the repository"
   end
 
-  newparam :force do
+  newproperty :includes, :required_features => [:include_paths], :array_matching => :all do
+    desc "Paths to be included from the repository"
+    def insync?(is)
+      if is.is_a?(Array) and @should.is_a?(Array)
+        is.sort == @should.sort
+      else
+        is == @should
+      end
+    end
+    validate do |path|
+      if path[0..0] == '/'
+        raise Puppet::Error, "Include path '#{path}' starts with a '/'; remove it"
+      else
+        super(path)
+      end
+    end
+  end
+
+  
+  newparam(:force, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "Force repository creation, destroying any files on the path in the process."
-    newvalues(:true, :false)
     defaultto false
   end
 
@@ -197,7 +254,7 @@ Puppet::Type.newtype(:vcsrepo) do
     desc "SSH identity file"
   end
 
-  newparam :module, :required_features => [:modules] do
+  newproperty :module, :required_features => [:modules] do
     desc "The repository module to manage"
   end
 
@@ -243,6 +300,6 @@ Puppet::Type.newtype(:vcsrepo) do
   end
 
   autorequire(:package) do
-    ['git', 'git-core', 'mercurial']
+    ['git', 'git-core', 'mercurial', 'subversion']
   end
 end

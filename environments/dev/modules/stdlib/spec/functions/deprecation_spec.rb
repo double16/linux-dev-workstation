@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-if Puppet.version.to_f >= 4.0
+if Puppet::Util::Package.versioncmp(Puppet.version, '4.5.0') >= 0
   describe 'deprecation' do
     before(:each) {
       # this is to reset the strict variable to default
@@ -40,12 +40,15 @@ if Puppet.version.to_f >= 4.0
       Puppet.settings[:strict] = :warning
     }
   end
-else
+elsif Puppet.version.to_f < 4.0
+  # Puppet version < 4 will use these tests.
   describe 'deprecation' do
     after(:all) do
       ENV.delete('STDLIB_LOG_DEPRECATIONS')
     end
-    ENV['STDLIB_LOG_DEPRECATIONS'] = "true"
+    before(:all) do
+      ENV['STDLIB_LOG_DEPRECATIONS'] = "true"
+    end
     it { is_expected.not_to eq(nil) }
     it { is_expected.to run.with_params().and_raise_error(Puppet::ParseError, /wrong number of arguments/i) }
 
