@@ -39,6 +39,8 @@ class my_vim {
   vim::pathogen { 'vagrant': }
   my_vim::plugin { [
     'scrooloose/syntastic',
+    'scrooloose/nerdtree',
+    'Xuyuanp/nerdtree-git-plugin',
     'altercation/vim-colors-solarized',
     'rodjek/vim-puppet',
     'maksimr/vim-jsbeautify',
@@ -46,6 +48,16 @@ class my_vim {
     'bronson/vim-trailing-whitespace',
     'ervandew/matchem',
     'jtratner/vim-flavored-markdown',
+    'nathanaelkane/vim-indent-guides',
+    'tpope/vim-fugitive',
+    'bling/vim-airline',
+    'valloric/youcompleteme',
+    'fatih/vim-go',
+    'vim-ruby/vim-ruby',
+    'tpope/vim-endwise',
+    'othree/html5.vim',
+    'junegunn/gv.vim',
+    'tpope/vim-commentary',
   ]:
   }
 
