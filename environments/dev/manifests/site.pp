@@ -34,7 +34,7 @@ yum::group { 'Development Tools':
 ->exec { 'yum replace -y git --replace-with=git2u-all':
   unless  => 'yum list installed git2u-core',
   path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-  require => Package['git'],
+  require => [ Yum::Plugin['replace'], Package['git'] ],
 }
 ->Package<| title == 'alien' |>
 ->Exec<| title == 'vboxdrv' |>
@@ -106,6 +106,7 @@ package { [
     'maven',
     'freerdp',
     'alien',
+    'which',
   ]: ensure => present,
 }
 

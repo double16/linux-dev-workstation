@@ -1,6 +1,8 @@
 class my_sdkman {
 
-  class { '::sdkman' : }
+  class { '::sdkman' :
+    require => [ Package['which'], Package['unzip'] ],
+  }
   ->file { '/home/vagrant/.sdkman':
     ensure => link,
     target => '/root/.sdkman',
