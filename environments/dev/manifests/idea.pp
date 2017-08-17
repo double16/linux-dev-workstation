@@ -1,7 +1,7 @@
 class idea {
-  # https://download-cf.jetbrains.com/idea/ideaIU-2017.2.1.tar.gz
-  $version = '2017.2.1'
-  $build = '172.3544.35'
+  # https://download-cf.jetbrains.com/idea/ideaIU-2017.2.2.tar.gz
+  $version = '2017.2.2'
+  $build = '172.3757.52'
   $prefsdir = '/home/vagrant/.IntelliJIdea2017.2'
   $colorsdir = "${prefsdir}/colors"
 
@@ -15,7 +15,7 @@ class idea {
     timeout          => 3600,
     follow_redirects => true,
     checksum         => false,
-    digest_string    => '136674855d26fb7f07a914eecc7236b177ef8349c23aa7811b9670da43d62ae2',
+    digest_string    => 'b5f33894abbf31786a17779bc11bfbe05f46cbbcd516fc2d48590411c44be95c',
     digest_type      => 'sha256',
   }
 
