@@ -129,6 +129,7 @@ include ::my_ruby
 include ::my_node
 include ::my_vagrant
 include ::my_sdkman
+include ::my_docker
 include ::idea
 include ::netbeans
 include ::svn
@@ -200,33 +201,5 @@ file { '/home/vagrant/Workspace':
   ensure => directory,
   owner  => 'vagrant',
   group  => 'vagrant',
-}
-
-unless $::virtual == 'docker' {
-  package { 'docker':
-    ensure => present,
-  }
-  ->service { 'docker':
-    ensure => running,
-    enable => true,
-  }
-  exec { 'docker options':
-    path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
-    command => "sed -i \"s/OPTIONS='/OPTIONS='--group=vagrant /\" /etc/sysconfig/docker",
-    unless  => 'grep -q group=vagrant /etc/sysconfig/docker',
-    require => Package['docker'],
-    notify  => Service['docker'],
-  }
-}
-
-package { 'docker-compose':
-  ensure   => present,
-  provider => 'pip',
-}
-
-file { '/usr/local/bin/docker-clean':
-  ensure => file,
-  mode   => '0755',
-  source => 'file:///tmp/vagrant-puppet/environments/dev/files/docker-clean.sh',
 }
 

@@ -15,4 +15,4 @@ mod 'lwf-remote_file'
 mod 'camptocamp-augeas'
 mod 'jniesen-nodenv', :git => 'https://github.com/jniesen/puppet-nodenv.git'
 mod 'puppetlabs-git', '0.5'
-
+mod 'puppetlabs-docker_platform', '2.2.1'
