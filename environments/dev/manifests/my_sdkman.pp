@@ -35,6 +35,9 @@ class my_sdkman {
     subscribe   => Class['sdkman'],
   } -> Sdkman::Package<| |>
 
+  File['/home/vagrant/.sdkman/archives']
+  -> Sdkman::Package<| |>
+
   sdkman::package { 'groovy':
     ensure     => present,
     version    => '2.4.12',
