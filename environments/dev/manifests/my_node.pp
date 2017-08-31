@@ -1,8 +1,8 @@
 class my_node {
-  $node_lts = '6.10.1'
-  $node_latest = '7.7.4'
+  $node_lts = '6.11.2'
+  $node_latest = '8.4.0'
 
-  class { 'nodenv':
+  class { '::nodenv':
     install_dir => '/opt/nodenv',
     latest      => true,
   }

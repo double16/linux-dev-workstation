@@ -8,7 +8,8 @@ class kitematic
     follow_redirects => true,
     extension        => 'zip',
     checksum         => false,
-    #checksum_type => 'sha256',
+    digest_string    => '247c3fe68f3503a715448ee3b4742c125bf99ee643d3206b2b55d5c93a9af5fc',
+    digest_type      => 'sha256',
   }
   ->exec { 'Kitematic rpm':
     command => '/usr/bin/alien -r -k /opt/Kitematic_0.17.1_amd64.deb',
