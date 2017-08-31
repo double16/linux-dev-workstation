@@ -15,7 +15,7 @@ class idea {
     timeout          => 3600,
     follow_redirects => true,
     checksum         => false,
-    digest_string    => 'b5f33894abbf31786a17779bc11bfbe05f46cbbcd516fc2d48590411c44be95c',
+    digest_string    => 'efbdbac7e5651d59b1bc9efbbc9bc13a6f0798d40b169f891511967123da9207',
     digest_type      => 'sha256',
   }
 
@@ -48,7 +48,7 @@ DocPath=file:///opt/idea/help/ReferenceCard.pdf
 Path=
 Terminal=false
 StartupNotify=true
-'
+',
   }
 
   file { $prefsdir:
