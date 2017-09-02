@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "bento/centos-7.3"
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
-    override.vm.allowed_synced_folder_types = :rsync
+    override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
     docker.image = "jdeathe/centos-ssh:centos-7-2.2.3"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
   end
 
   if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.scope = :box
+    config.cache.scope = :machine
   end
 
   # Increase memory for Parallels Desktop
