@@ -33,8 +33,9 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
   Remote_file['/etc/yum.repos.d/mcepl-vim8-epel-7.repo']
   ->Yum::Group<| |>
 
-  exec { 'yum replace -y vim-minimal --replace-with=vim-enhanced':
-    unless  => 'yum list installed vim-minimal | grep -q 8.0',
+  # In some cases replacing vim-minimal will remove 'sudo', but instaling vim-enhanced on top of vim-minimal is allowed
+  exec { 'yum install -y vim-enhanced || yum replace -y vim-minimal --replace-with=vim-enhanced':
+    unless  => 'yum list installed vim-enhanced | grep -q 8.0',
     path    => '/bin:/sbin:/usr/bin:/usr/sbin',
     require => [ Yum::Plugin['replace'], Remote_file['/etc/yum.repos.d/mcepl-vim8-epel-7.repo'] ],
   }
