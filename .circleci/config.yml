@@ -8,6 +8,12 @@ jobs:
 
     steps:
       - checkout
+
+      - run:
+          name: Validate Vagrantfile
+          command: |
+            vagrant validate
+
       - setup_remote_docker
 
       - run:
@@ -45,6 +51,7 @@ jobs:
 
       # The 'test' here is that Vagrant can build the box. We should add more steps after this to ensure the software
       # we installed is in working order.
+      # We are adding '--provision' for testing locally and iterating
       - run:
           name: Test Vagrant Up
           command: |
