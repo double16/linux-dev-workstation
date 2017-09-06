@@ -31,11 +31,8 @@ yum::plugin { 'replace':
 yum::group { 'Development Tools':
   ensure => present,
 }
-->exec { 'yum replace -y git --replace-with=git2u-all':
-  unless  => 'yum list installed git2u-core',
-  path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-  require => [ Yum::Plugin['replace'], Package['git'] ],
-}
+->package { ['git2u-all','git2u']: ensure => purged, }
+->class { '::git_from_source': version => '2.13.5', }
 ->Package<| title == 'alien' |>
 ->Exec<| title == 'vboxdrv' |>
 

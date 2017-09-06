@@ -4,7 +4,7 @@ class my_ruby {
   class { '::rbenv':
     install_dir => '/opt/rbenv',
     latest      => true,
-    require     => Package['git'],
+    require     => Class['git_from_source'],
   }
 
   rbenv::plugin { 'rbenv/ruby-build': latest => true }
