@@ -24,4 +24,7 @@ class my_ruby {
   rbenv::gem { 'librarian-puppet': }
   rbenv::gem { 'puppet-lint': }
   rbenv::gem { 'generate-puppetfile': }
+
+  package { 'augeas-devel': }
+  ->rbenv::gem { 'ruby-augeas': }
 }
