@@ -133,6 +133,7 @@ resize2fs /dev/VolGroup/lv_root
       "proxy_url" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"] || ENV["HTTP_PROXY"],
       "proxy_excludes" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"],
       "ipv4only" => vagrant_config['ipv4only'],
+      "search_domain" => vagrant_config['search_domain'],
       "host_username" => vagrant_config['username'] || ENV['USER'] || ENV['USERNAME'] || 'vagrant',
     }
 #    puppet.options = "--debug"

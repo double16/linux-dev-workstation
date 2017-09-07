@@ -24,6 +24,14 @@ net.ipv6.conf.default.disable_ipv6=1
     default => absent,
   }
 
+  unless empty($::search_domain) {
+    file_line { 'search domain in /etc/resolve.conf':
+      path  => '/etc/resolv.conf',
+      line  => "search $::search_domain",
+      match => '^search\s+',
+    }
+  }
+
   file_line { 'http_proxy in global environment':
     ensure            => $proxy_presence,
     path              => '/etc/environment',

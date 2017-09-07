@@ -16,4 +16,6 @@ configs:
         proxy_excludes: .internal.net,.dmz.net
         # Limit DNS resolution to IPV4
         ipv4only: true
+        # Force search domain in /etc/resolv.conf
+        search_domain: company.com
 
