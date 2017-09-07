@@ -107,6 +107,13 @@ package { [
   ]: ensure => present,
 }
 
+exec { 'xml2json':
+  path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
+  command => 'pip install https://github.com/hay/xml2json/zipball/master',
+  creates => '/usr/bin/xml2json',
+  require => Package['python2-pip'],
+}
+
 Archive {
   src_target => '/tmp/vagrant-cache',
 }
