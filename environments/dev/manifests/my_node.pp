@@ -22,4 +22,8 @@ class my_node {
     package      => 'grunt',
     node_version => $node_latest,
   }
+  nodenv::package { 'typescript on latest':
+    package      => 'typescript',
+    node_version => $node_latest,
+  }
 }

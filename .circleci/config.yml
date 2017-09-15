@@ -31,6 +31,7 @@ jobs:
           keys:
             - v4-dockerimage-{{ .Branch }}-{{ checksum "Vagrantfile" }}}
             - v4-dockerimage-{{ .Branch }}-
+            - v4-dockerimage-
 
       # This cache is produced by the vagrant-cachier plugin. It created a synced folder named /tmp/vagrant-cache
       # that primarily holds OS packages, but this project also keeps other large downloads there.
@@ -40,6 +41,7 @@ jobs:
           keys:
             - v3-vagrant-{{ .Branch }}-{{ .Revision }}
             - v3-vagrant-{{ .Branch }}-
+            - v3-vagrant-
 
       - run:
           name: Restore Docker Public Image Cache

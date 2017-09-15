@@ -104,6 +104,7 @@ package { [
     'freerdp',
     'alien',
     'which',
+    'go',
   ]: ensure => present,
 }
 

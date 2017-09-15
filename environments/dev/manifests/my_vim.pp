@@ -91,13 +91,13 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     'nathanaelkane/vim-indent-guides',
     'tpope/vim-fugitive',
     'bling/vim-airline',
-    'valloric/youcompleteme',
     'fatih/vim-go',
     'vim-ruby/vim-ruby',
     'tpope/vim-endwise',
     'othree/html5.vim',
     'junegunn/gv.vim',
     'tpope/vim-commentary',
+    'ctrlpvim/ctrlp.vim',
   ]:
   }
 
@@ -105,4 +105,58 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     user    => 'vagrant',
     content => 'colorscheme solarized',
   }
+
+
+  define beautify($filetype = $title, $allfn, $rangefn) {
+    vim::config { "beautify ${filetype}":
+      user    => 'vagrant',
+      content => "autocmd FileType ${filetype} noremap <buffer>  <c-f> :call ${allfn}()<cr>",
+    }
+    vim::config { "beautify ${filetype} for range":
+      user    => 'vagrant',
+      content => "autocmd FileType ${filetype} vnoremap <buffer>  <c-f> :call ${rangefn}()<cr>",
+    }
+  }
+  my_vim::beautify { 'javascript':
+    allfn   => 'JsBeautify',
+    rangefn => 'RangeJsBeautify',
+  }
+  my_vim::beautify { 'jsx':
+    allfn   => 'JsxBeautify',
+    rangefn => 'RangeJsxBeautify',
+  }
+  my_vim::beautify { 'html':
+    allfn   => 'HtmlBeautify',
+    rangefn => 'RangeHtmlBeautify',
+  }
+  my_vim::beautify { 'css':
+    allfn   => 'CSSBeautify',
+    rangefn => 'RangeCSSBeautify',
+  }
+
+  package { 'ctags': }
+  ->my_vim::plugin { 'majutsushi/tagbar': }
+  ->vim::config { 'tagbartoggle':
+    user    => 'vagrant',
+    content => 'nmap <F8> :TagbarToggle<cr>',
+  }
+
+  my_vim::plugin { 'valloric/youcompleteme': }
+  -> exec { 'youcompleteme submodule':
+    path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin'],
+    command => 'git submodule update --init --recursive',
+    cwd     => '/home/vagrant/.vim/bundle/youcompleteme',
+    creates => '/home/vagrant/.vim/bundle/youcompleteme/third_party/ycmd/build.py',
+    user    => 'vagrant',
+  }
+  -> package { ['cmake','python-devel']: }
+  -> exec { 'compile youcompleteme':
+    path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin','/opt/nodenv/shims'],
+    command => '/home/vagrant/.vim/bundle/youcompleteme/install.py --gocode-completer --tern-completer',
+    creates => '/home/vagrant/.vim/bundle/youcompleteme/third_party/ycmd/ycm_core.so',
+    user    => 'vagrant',
+    require => [ Package['go'] ],
+  }
+  Nodenv::Package<| |>
+  -> My_vim::Plugin['valloric/youcompleteme']
 }
