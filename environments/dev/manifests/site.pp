@@ -41,23 +41,22 @@ yum::group { 'X Window System':
   ensure => present,
 }
 ->file { '/etc/xorg.conf':
-  ensure  => file,
-  content => '
-Section "ServerFlags"
-  Option "AIGLX" "false"
-EndSection
-',
+  ensure  => absent,
 }
-->exec { 'yum-groupinstall-Xfce':
-  command => "yum -y groupinstall --skip-broken 'Xfce'",
-  unless  => "yum grouplist hidden 'Xfce' | egrep -i '^Installed.+Groups:$'",
-  timeout => undef,
-  path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+->yum::group { 'Xfce':
+  ensure => present,
 }
-# 2017-05-17 xfce4-mixer has a broken dependency, so we're using the above
-#->yum::group { 'Xfce':
-#  ensure => present,
-#}
+->service { 'gdm':
+  ensure => stopped,
+  enable => false,
+}
+->package { 'lightdm':
+  ensure => present,
+}
+->service { 'lightdm':
+  ensure => running,
+  enable => true,
+}
 
 exec { 'graphical runlevel':
   path    => '/bin:/sbin:/usr/bin:/usr/sbin',

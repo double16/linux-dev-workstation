@@ -2,9 +2,9 @@ class my_docker {
   unless $::virtual == 'docker' {
 
     $docker_version = $::operatingsystem ? {
-      'Ubuntu' => "17.04.0~ce-0~ubuntu-${::lsbdistcodename}",
-      'CentOS' => '17.04.0.ce-1.el7.centos',
-      default => '17.04.0-ce',
+      'Ubuntu' => "17.05.0~ce-0~ubuntu-${::lsbdistcodename}",
+      'CentOS' => '17.05.0.ce-1.el7.centos',
+      default => '17.05.0-ce',
     }
     class { '::docker':
       manage_package => true,
