@@ -12,6 +12,11 @@ file { '/tmp/vagrant-cache':
   group  => 'vagrant',
 }
 
+$service_running = $::virtual ? {
+  /docker/ => 'stopped',
+  default  => 'running',
+}
+
 if $::virtual == 'docker' {
   class { '::yum_cron':
     apply_updates  => true,
@@ -43,8 +48,11 @@ yum::group { 'X Window System':
 ->file { '/etc/xorg.conf':
   ensure  => absent,
 }
-->yum::group { 'Xfce':
-  ensure => present,
+->exec { 'yum-groupinstall-Xfce':
+  command => "yum -y groupinstall --skip-broken 'Xfce'",
+  unless  => "yum grouplist hidden 'Xfce' | egrep -i '^Installed.+Groups:$'",
+  timeout => undef,
+  path    => '/bin:/usr/bin:/sbin:/usr/sbin',
 }
 ->service { 'gdm':
   ensure => stopped,
@@ -54,7 +62,7 @@ yum::group { 'X Window System':
   ensure => present,
 }
 ->service { 'lightdm':
-  ensure => running,
+  ensure => $service_running,
   enable => true,
 }
 
