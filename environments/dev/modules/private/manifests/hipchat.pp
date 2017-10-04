@@ -1,4 +1,4 @@
-class hipchat {
+class private::hipchat {
   file { '/etc/yum.repos.d/hipchat.repo':
     ensure  => file,
     owner   => 'root',

@@ -37,7 +37,7 @@ yum::group { 'Development Tools':
   ensure => present,
 }
 ->package { ['git2u-all','git2u']: ensure => purged, }
-->class { '::git_from_source': version => '2.13.5', }
+->class { '::private::git_from_source': version => '2.13.5', }
 ->Package<| title == 'alien' |>
 ->Exec<| title == 'vboxdrv' |>
 
@@ -130,25 +130,29 @@ Archive::Download {
   follow_redirects => true,
 }
 
+class { 'git':
+  package_manage => false,
+}
+
 unless $::virtual == 'docker' {
   include ::virtualbox
   package { "kernel-devel-${::kernelrelease}": }
   ->Exec<| title == 'vboxdrv' |>
 }
 
-include ::my_vim
-include ::my_ruby
-include ::my_node
-include ::my_vagrant
-include ::my_sdkman
-include ::my_docker
-include ::idea
-include ::netbeans
-include ::svn
-include ::hipchat
-include ::kitematic
-include ::proxy
-include ::clean
+include ::private::my_vim
+include ::private::my_ruby
+include ::private::my_node
+include ::private::my_vagrant
+include ::private::my_sdkman
+include ::private::my_docker
+include ::private::idea
+include ::private::netbeans
+include ::private::svn
+include ::private::hipchat
+include ::private::kitematic
+include ::private::proxy
+include ::private::clean
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
@@ -197,7 +201,7 @@ file { '/home/vagrant/.config/xfce4':
   recurse => remote,
   owner   => 'vagrant',
   group   => 'vagrant',
-  source  => 'file:///tmp/vagrant-puppet/environments/dev/files/dotconfig/xfce4',
+  source  => 'puppet:///modules/private/dotconfig/xfce4',
 }
 
 file { '/home/vagrant/.config/git':
@@ -206,7 +210,7 @@ file { '/home/vagrant/.config/git':
 
 file { '/home/vagrant/.config/git/ignore':
   ensure => file,
-  source => 'file:///tmp/vagrant-puppet/environments/dev/files/gitignore',
+  source => 'puppet:///modules/private/gitignore',
 }
 
 file { '/home/vagrant/Workspace':

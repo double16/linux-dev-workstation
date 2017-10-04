@@ -1,4 +1,4 @@
-class my_docker {
+class private::my_docker {
   unless $::virtual == 'docker' {
 
     $docker_version = $::operatingsystem ? {

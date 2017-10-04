@@ -1,10 +1,10 @@
-class my_ruby {
+class private::my_ruby {
   $ruby_ver = '2.1.9'
 
   class { '::rbenv':
     install_dir => '/opt/rbenv',
     latest      => true,
-    require     => Class['git_from_source'],
+    require     => Class['private::git_from_source'],
   }
 
   rbenv::plugin { 'rbenv/ruby-build': latest => true }

@@ -1,4 +1,4 @@
-class my_sdkman {
+class private::my_sdkman {
 
   class { '::sdkman' :
     require => [ Package['which'], Package['unzip'] ],

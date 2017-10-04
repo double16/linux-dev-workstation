@@ -58,4 +58,7 @@ Update puppet modules from the `Puppetfile`:
 $ librarian-puppet install --path=environments/dev/modules --destructive --strip-dot-git
 ```
 
+Credits
+-------
+The packer build is strongly based on https://github.com/boxcutter/centos.
 

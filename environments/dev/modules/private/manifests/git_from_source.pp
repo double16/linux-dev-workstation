@@ -1,5 +1,5 @@
 # Installs a specific version of git from source
-class git_from_source($version) {
+class private::git_from_source($version) {
   package { [
     'autoconf',
     'libcurl-devel',
