@@ -1,4 +1,4 @@
-class my_vagrant {
+class private::my_vagrant {
   class { 'vagrant':
     ensure  => present,
     version => '1.9.5',

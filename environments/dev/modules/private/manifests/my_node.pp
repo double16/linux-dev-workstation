@@ -1,4 +1,4 @@
-class my_node {
+class private::my_node {
   $node_lts = '6.11.2'
   $node_latest = '8.4.0'
 

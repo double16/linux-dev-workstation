@@ -1,4 +1,4 @@
-class svn {
+class private::svn {
   file { '/etc/yum.repos.d/wandisco-svn.repo':
     ensure  => file,
     owner   => 'root',

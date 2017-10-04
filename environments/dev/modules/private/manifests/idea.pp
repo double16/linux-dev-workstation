@@ -1,4 +1,4 @@
-class idea {
+class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
   $version = '2017.2.4'
   $build = '172.4155.36'

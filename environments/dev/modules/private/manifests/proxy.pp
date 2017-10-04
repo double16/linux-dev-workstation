@@ -3,7 +3,7 @@
 # $::proxy_excludes - comma separated list of domains to exclude from the proxy
 # $::ipv4only - true if network should be limited to IPV4
 #
-class proxy  {
+class private::proxy  {
 
   file { '/etc/sysctl.d/noipv6.conf':
     ensure  => str2bool($::ipv4only) ? { true => file, default => absent },

@@ -1,4 +1,4 @@
-class my_vim {
+class private::my_vim {
   yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-mcepl-vim8-epel7':
     ensure  => present,
     content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -77,7 +77,7 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
   }
 
   vim::pathogen { 'vagrant': }
-  my_vim::plugin { [
+  private::my_vim::plugin { [
     'scrooloose/syntastic',
     'scrooloose/nerdtree',
     'Xuyuanp/nerdtree-git-plugin',
@@ -117,31 +117,31 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
       content => "autocmd FileType ${filetype} vnoremap <buffer>  <c-f> :call ${rangefn}()<cr>",
     }
   }
-  my_vim::beautify { 'javascript':
+  private::my_vim::beautify { 'javascript':
     allfn   => 'JsBeautify',
     rangefn => 'RangeJsBeautify',
   }
-  my_vim::beautify { 'jsx':
+  private::my_vim::beautify { 'jsx':
     allfn   => 'JsxBeautify',
     rangefn => 'RangeJsxBeautify',
   }
-  my_vim::beautify { 'html':
+  private::my_vim::beautify { 'html':
     allfn   => 'HtmlBeautify',
     rangefn => 'RangeHtmlBeautify',
   }
-  my_vim::beautify { 'css':
+  private::my_vim::beautify { 'css':
     allfn   => 'CSSBeautify',
     rangefn => 'RangeCSSBeautify',
   }
 
   package { 'ctags': }
-  ->my_vim::plugin { 'majutsushi/tagbar': }
+  ->private::my_vim::plugin { 'majutsushi/tagbar': }
   ->vim::config { 'tagbartoggle':
     user    => 'vagrant',
     content => 'nmap <F8> :TagbarToggle<cr>',
   }
 
-  my_vim::plugin { 'valloric/youcompleteme': }
+  private::my_vim::plugin { 'valloric/youcompleteme': }
   -> exec { 'youcompleteme submodule':
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin'],
     command => 'git submodule update --init --recursive',
@@ -158,5 +158,5 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     require => [ Package['go'] ],
   }
   Nodenv::Package<| |>
-  -> My_vim::Plugin['valloric/youcompleteme']
+  -> Private::My_vim::Plugin['valloric/youcompleteme']
 }

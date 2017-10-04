@@ -1,4 +1,4 @@
-class netbeans {
+class private::netbeans {
   # http://download.netbeans.org/netbeans/8.2/final/zip/netbeans-8.2-201609300101.zip
   $version = '8.2'
   $build = '201609300101'

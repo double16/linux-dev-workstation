@@ -1,4 +1,4 @@
-class kitematic
+class private::kitematic
 {
   package { ['rpmrebuild','zsh','libnotify']: }
   ->archive { 'Kitematic-0.17.1':

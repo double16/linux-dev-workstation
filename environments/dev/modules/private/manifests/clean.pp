@@ -1,4 +1,4 @@
-class clean {
+class private::clean {
   cron { 'clean_systemd_journal':
     command => 'find /var/log/journal/ -mtime +7 -delete',
     user    => 'root',
