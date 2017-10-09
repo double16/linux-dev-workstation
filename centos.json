@@ -114,7 +114,7 @@
         "box_tag": "double16/{{user `vm_name`}}",
         "access_token": "{{user `cloud_token`}}",
         "version": "{{user `version`}}",
-        "no_release": "true",
+        "no_release": "true"
       }
     ]
   ],
