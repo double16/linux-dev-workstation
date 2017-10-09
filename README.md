@@ -8,7 +8,7 @@ This Vagrant image contains a developer workspace with the following software:
 * Java 9
 * IntelliJ IDEA Ultimate
 * NetBeans
-* vim, gvim, various vim plugins
+* vim 8, gvim, various vim plugins
 * git
 * svn
 * Docker, Docker Compose, Kitematic

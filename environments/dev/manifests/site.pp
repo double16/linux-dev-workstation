@@ -54,14 +54,6 @@ yum::group { 'X Window System':
   timeout => undef,
   path    => '/bin:/usr/bin:/sbin:/usr/sbin',
 }
-
-exec { 'graphical runlevel':
-  path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-  command => 'systemctl set-default graphical.target',
-  unless  => 'systemctl get-default | grep -q graphical',
-  require => Yum::Group['X Window System'],
-}
-Package<| package == 'gdm' |>
 ->file_line { 'gdm autologin enable':
   path  => '/etc/gdm/custom.conf',
   line  => 'AutomaticLoginEnable=true',
@@ -75,6 +67,12 @@ Package<| package == 'gdm' |>
   match => '^AutomaticLogin=.*',
 }
 
+exec { 'graphical runlevel':
+  path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+  command => 'systemctl set-default graphical.target',
+  unless  => 'systemctl get-default | grep -q graphical',
+  require => Yum::Group['X Window System'],
+}
 
 #yum::group { 'GNOME Desktop':
 #  ensure => present,
@@ -133,7 +131,7 @@ Archive::Download {
   follow_redirects => true,
 }
 
-class { 'git':
+class { '::git':
   package_manage => false,
 }
 

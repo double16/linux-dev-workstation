@@ -1,17 +1,19 @@
 class private::my_sdkman {
 
   class { '::sdkman' :
+    owner   => 'vagrant',
+    group   => 'vagrant',
     require => [ Package['which'], Package['unzip'] ],
-  }
-  ->file { '/home/vagrant/.sdkman':
-    ensure => link,
-    target => '/root/.sdkman',
   }
   ->file { '/tmp/vagrant-cache/sdkman':
     ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
   }
   ->file { '/home/vagrant/.sdkman/archives':
     ensure => link,
+    owner  => 'vagrant',
+    group  => 'vagrant',
     target => '/tmp/vagrant-cache/sdkman',
     force  => true,
   }
@@ -20,20 +22,8 @@ class private::my_sdkman {
     owner   => 0,
     group   => 'root',
     mode    => '0755',
-    content => '[[ -s "/root/.sdkman/bin/sdkman-init.sh" ]] && source "/root/.sdkman/bin/sdkman-init.sh"',
+    content => '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"',
   }
-
-  exec { 'chmod 0755 /root/.sdkman':
-    path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
-    refreshonly => true,
-    subscribe   => Class['sdkman'],
-  } -> Sdkman::Package<| |>
-
-  exec { 'chmod 0755 /root':
-    path        => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
-    refreshonly => true,
-    subscribe   => Class['sdkman'],
-  } -> Sdkman::Package<| |>
 
   File['/home/vagrant/.sdkman/archives']
   -> Sdkman::Package<| |>
@@ -62,10 +52,19 @@ class private::my_sdkman {
     is_default => true,
   }
 
-  sdkman::package { 'java':
-    ensure     => present,
-    version    => '9.0.0-zulu',
-    is_default => false,
+  sdkman::package { 'java8':
+    ensure       => present,
+    package_name => 'java',
+    version      => '8u144-zulu',
+    is_default   => true,
+  }
+
+  sdkman::package { 'java9':
+    ensure       => present,
+    package_name => 'java',
+    version      => '9.0.0-zulu',
+    is_default   => false,
   }
 
 }
+
