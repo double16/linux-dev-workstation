@@ -52,14 +52,20 @@ class private::my_sdkman {
 
   sdkman::package { 'gradle':
     ensure     => present,
-    version    => '4.0.2',
+    version    => '4.2.1',
     is_default => true,
   }
 
   sdkman::package { 'grails':
     ensure     => present,
-    version    => '3.2.10',
+    version    => '3.2.11',
     is_default => true,
+  }
+
+  sdkman::package { 'java':
+    ensure     => present,
+    version    => '9.0.0-zulu',
+    is_default => false,
   }
 
 }

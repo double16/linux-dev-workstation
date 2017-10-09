@@ -2,8 +2,10 @@ Linux Java/DevOps Workstation
 =============================
 
 This Vagrant image contains a developer workspace with the following software:
+
 * CentOS 7
 * Java 8
+* Java 9
 * IntelliJ IDEA Ultimate
 * NetBeans
 * vim, gvim, various vim plugins

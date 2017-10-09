@@ -1,7 +1,7 @@
 class private::my_vagrant {
   class { 'vagrant':
     ensure  => present,
-    version => '1.9.5',
+    version => '2.0.0',
   }
   vagrant::plugin { 'vagrant-vbguest':
     user => 'vagrant',
