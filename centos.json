@@ -113,7 +113,8 @@
         "type": "vagrant-cloud",
         "box_tag": "double16/{{user `vm_name`}}",
         "access_token": "{{user `cloud_token`}}",
-        "version": "{{user `version`}}"
+        "version": "{{user `version`}}",
+        "no_release": "true",
       }
     ]
   ],
@@ -133,6 +134,7 @@
         "no_proxy={{user `no_proxy`}}"
       ],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "expect_disconnect": true,
       "scripts": [
         "script/fix-slow-dns.sh",
         "script/sshd.sh",
@@ -178,7 +180,7 @@
   "variables": {
     "cleanup_build_tools": "false",
     "cpus": "2",
-    "desktop": "false",
+    "desktop": "true",
     "disk_size": "40000",
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "headless": "",
@@ -199,9 +201,9 @@
     "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
-    "update": "false",
+    "update": "true",
     "vagrantfile_template": "",
-    "version": "201710.1",
+    "version": "201711.1-pre",
     "virtualbox_guest_os_type": "RedHat_64",
     "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",

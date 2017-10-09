@@ -54,17 +54,6 @@ yum::group { 'X Window System':
   timeout => undef,
   path    => '/bin:/usr/bin:/sbin:/usr/sbin',
 }
-->service { 'gdm':
-  ensure => stopped,
-  enable => false,
-}
-->package { 'lightdm':
-  ensure => present,
-}
-->service { 'lightdm':
-  ensure => $service_running,
-  enable => true,
-}
 
 exec { 'graphical runlevel':
   path    => '/bin:/sbin:/usr/bin:/usr/sbin',
@@ -72,6 +61,20 @@ exec { 'graphical runlevel':
   unless  => 'systemctl get-default | grep -q graphical',
   require => Yum::Group['X Window System'],
 }
+Package<| package == 'gdm' |>
+->file_line { 'gdm autologin enable':
+  path  => '/etc/gdm/custom.conf',
+  line  => 'AutomaticLoginEnable=true',
+  after => '\[daemon\]',
+  match => '^AutomaticLoginEnable=.*',
+}
+->file_line { 'gdm autologin user':
+  path  => '/etc/gdm/custom.conf',
+  line  => 'AutomaticLogin=vagrant',
+  after => '\[daemon\]',
+  match => '^AutomaticLogin=.*',
+}
+
 
 #yum::group { 'GNOME Desktop':
 #  ensure => present,
