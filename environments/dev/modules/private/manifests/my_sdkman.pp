@@ -52,18 +52,18 @@ class private::my_sdkman {
     is_default => true,
   }
 
-  sdkman::package { 'java8':
-    ensure       => present,
-    package_name => 'java',
-    version      => '8u144-zulu',
-    is_default   => true,
-  }
-
+  # Something isn't working with the is_default parameter, so we use a dependency to get java8 to install last
   sdkman::package { 'java9':
     ensure       => present,
     package_name => 'java',
     version      => '9.0.0-zulu',
     is_default   => false,
+  }
+  ->sdkman::package { 'java8':
+    ensure       => present,
+    package_name => 'java',
+    version      => '8u144-zulu',
+    is_default   => true,
   }
 
 }
