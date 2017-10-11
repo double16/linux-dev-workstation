@@ -103,6 +103,10 @@ net.ipv6.conf.default.disable_ipv6=1
       scope  => 'system',
       before => [ Class['nodenv'], Class['rbenv'] ],
     }
+    -> Exec<| |>
+
+    Git::Config['http.proxy']
+    -> Package<| name != 'git' |>
   } else {
     # TODO: remove git proxy
   }
