@@ -66,6 +66,36 @@ net.ipv6.conf.default.disable_ipv6=1
   }
   -> Package<| provider == 'yum' |>
 
+  file { '/root/.curlrc':
+    ensure => file,
+    owner  => 0,
+    group  => 'root',
+    mode   => '0640',
+  }
+  -> file_line { 'curl proxy for root':
+    ensure            => $proxy_presence,
+    path              => '/root/.curlrc',
+    line              => "proxy = ${::proxy_url}",
+    match             => '^proxy\s*=',
+    match_for_absence => true,
+  }
+  -> Exec<| |>
+
+  file { '/home/vagrant/.curlrc':
+    ensure => file,
+    owner  => 'nobody',
+    group  => 'root',
+    mode   => '0444',
+  }
+  -> file_line { 'curl proxy for vagrant':
+    ensure            => $proxy_presence,
+    path              => '/home/vagrant/.curlrc',
+    line              => "proxy = ${::proxy_url}",
+    match             => '^proxy\s*=',
+    match_for_absence => true,
+  }
+  -> Exec<| |>
+
   unless empty($::proxy_url) { 
     git::config { 'http.proxy':
       value  => $::proxy_url,
