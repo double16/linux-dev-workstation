@@ -18,6 +18,7 @@ net.ipv6.conf.default.disable_ipv6=1
     path   => '/etc/yum.conf',
     line   => 'ip_resolve=4',
   }
+  -> Package<| provider == 'yum' |>
 
   $proxy_presence = $::proxy_url ? {
     /.+/    => present,
@@ -63,6 +64,7 @@ net.ipv6.conf.default.disable_ipv6=1
     match             => '^proxy\=',
     match_for_absence => true,
   }
+  -> Package<| provider == 'yum' |>
 
   unless empty($::proxy_url) { 
     git::config { 'http.proxy':

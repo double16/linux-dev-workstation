@@ -1,6 +1,7 @@
 include ::epel
 include ::ius
 include ::augeas
+include ::private::proxy
 
 Class['epel'] -> Package<| |>
 Class['ius'] -> Package<| |>
@@ -120,7 +121,7 @@ exec { 'xml2json':
   path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
   command => 'pip install https://github.com/hay/xml2json/zipball/master',
   creates => '/usr/bin/xml2json',
-  require => Package['python2-pip'],
+  require => [ Package['python2-pip'], Class['private::proxy'] ],
 }
 
 Archive {
@@ -152,7 +153,6 @@ include ::private::netbeans
 include ::private::svn
 include ::private::hipchat
 include ::private::kitematic
-include ::private::proxy
 include ::private::clean
 
 file { '/etc/profile.d/java.sh':
