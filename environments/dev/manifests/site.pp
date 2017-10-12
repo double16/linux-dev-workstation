@@ -81,7 +81,26 @@ exec { 'graphical runlevel':
 
 package { 'python2-pip':
   ensure => present,
-}->Package<| provider == 'pip' |>
+}
+->file { '/etc/xdg':
+  ensure => directory,
+  owner  => 0,
+  group  => 'root',
+  mode   => '0755',
+}
+->file { '/etc/xdg/pip':
+  ensure => directory,
+  owner  => 0,
+  group  => 'root',
+  mode   => '0755',
+}
+->file { '/etc/xdg/pip/pip.conf':
+  ensure => file,
+  owner  => 0,
+  group  => 'root',
+  mode   => '0644',
+}
+->Package<| provider == 'pip' |>
 
 package { [
     'asciidoc',

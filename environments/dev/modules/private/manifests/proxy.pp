@@ -28,7 +28,7 @@ net.ipv6.conf.default.disable_ipv6=1
   unless empty($::search_domain) {
     file_line { 'search domain in /etc/resolve.conf':
       path  => '/etc/resolv.conf',
-      line  => "search $::search_domain",
+      line  => "search ${::search_domain}",
       match => '^search\s+',
     }
   }
@@ -36,7 +36,7 @@ net.ipv6.conf.default.disable_ipv6=1
   file_line { 'http_proxy in global environment':
     ensure            => $proxy_presence,
     path              => '/etc/environment',
-    line              => "http_proxy=$::proxy_url",
+    line              => "http_proxy=${::proxy_url}",
     match             => '^http_proxy\=',
     match_for_absence => true,
     multiple          => true,
@@ -44,7 +44,7 @@ net.ipv6.conf.default.disable_ipv6=1
   file_line { 'https_proxy in global environment':
     ensure            => $::proxy_url ? { /^https:/ => present, default => absent},
     path              => '/etc/environment',
-    line              => "https_proxy=$::proxy_url",
+    line              => "https_proxy=${::proxy_url}",
     match             => '^https_proxy\=',
     match_for_absence => true,
     multiple          => true,
@@ -60,11 +60,21 @@ net.ipv6.conf.default.disable_ipv6=1
   file_line { 'Yum proxy':
     ensure            => $proxy_presence,
     path              => '/etc/yum.conf',
-    line              => "proxy=$::proxy_url",
+    line              => "proxy=${::proxy_url}",
     match             => '^proxy\=',
     match_for_absence => true,
   }
   -> Package<| provider == 'yum' |>
+
+  ini_setting { 'pip proxy':
+    ensure  => $proxy_presence,
+    path    => '/etc/xdg/pip/pip.conf',
+    section => 'global',
+    setting => 'proxy',
+    value   => $::proxy_url,
+    require => File['/etc/xdg/pip/pip.conf'],
+  }
+  -> Package<| provider == 'pip' or provider == 'pip2' or provider == 'pip3' |>
 
   file { '/root/.curlrc':
     ensure => file,
@@ -119,7 +129,7 @@ net.ipv6.conf.default.disable_ipv6=1
       path    => ['/bin','/sbin/','/usr/bin','/usr/sbin','/opt/nodenv/bin','/opt/nodenv/shims'],
       # nodenv each plugin isn't recognized during the first run??
       #command => "nodenv each npm config set proxy $::proxy_url",
-      command => "ls /opt/nodenv/versions/*/bin/node | xargs -L 1 -I {} npm config set proxy $::proxy_url",
+      command => "ls /opt/nodenv/versions/*/bin/node | xargs -L 1 -I {} npm config set proxy ${::proxy_url}",
     }
     ->Nodenv::Package<| |>
 
