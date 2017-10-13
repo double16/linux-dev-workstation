@@ -108,15 +108,12 @@ net.ipv6.conf.default.disable_ipv6=1
 
   unless empty($::proxy_url) { 
     git::config { 'http.proxy':
-      value  => $::proxy_url,
-      user   => 'root',
-      scope  => 'system',
-      before => [ Class['nodenv'], Class['rbenv'] ],
+      value   => $::proxy_url,
+      user    => 'root',
+      scope   => 'system',
+      before  => [ Class['nodenv'], Class['rbenv'] ],
+      require => Class['Private::Git_from_source'],
     }
-    -> Exec<| |>
-
-    Git::Config['http.proxy']
-    -> Package<| name != 'git' |>
   } else {
     # TODO: remove git proxy
   }

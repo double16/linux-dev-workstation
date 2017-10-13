@@ -154,7 +154,13 @@
       "type": "puppet-masterless",
       "manifest_file": "environments/dev/manifests/site.pp",
       "module_paths": ["environments/dev/modules"],
-      "puppet_bin_dir": "/opt/puppetlabs/bin"
+      "puppet_bin_dir": "/opt/puppetlabs/bin",
+      "facter": {
+        "proxy_url": "{{user `http_proxy`}}",
+        "http_proxy": "{{user `http_proxy`}}",
+        "https_proxy": "{{user `https_proxy`}}",
+        "proxy_excludes": "{{user `no_proxy`}}"
+      }
     },
     {
       "environment_vars": [
