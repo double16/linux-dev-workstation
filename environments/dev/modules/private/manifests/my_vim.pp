@@ -98,6 +98,7 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     'junegunn/gv.vim',
     'tpope/vim-commentary',
     'ctrlpvim/ctrlp.vim',
+    'ekalinin/dockerfile.vim',
   ]:
   }
 
