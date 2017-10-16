@@ -60,6 +60,8 @@ Update puppet modules from the `Puppetfile`:
 $ librarian-puppet install --path=environments/dev/modules --destructive --strip-dot-git
 ```
 
+If the `zanloy-vim` module is updated, the URL to vim-pathogen needs to be changed to a github.com URL to make it past some filtering proxies. Change `https://tpo.pe/pathogen.vim` to `https://raw.githubusercontent.com/tpope/vim-pathogen/v2.4/autoload/pathogen.vim` in the file `environments/dev/modules/vim/manifests/pathogen.pp`.
+
 Credits
 -------
 The packer build is strongly based on https://github.com/boxcutter/centos.
