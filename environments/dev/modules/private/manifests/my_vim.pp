@@ -143,6 +143,8 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
   }
 
   private::my_vim::plugin { 'valloric/youcompleteme': }
+  -> package { ['cmake','python-devel']: }
+  -> Git::Config<| |>
   -> exec { 'youcompleteme submodule':
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin'],
     command => 'git submodule update --init --recursive',
@@ -150,7 +152,6 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     creates => '/home/vagrant/.vim/bundle/youcompleteme/third_party/ycmd/build.py',
     user    => 'vagrant',
   }
-  -> package { ['cmake','python-devel']: }
   -> exec { 'compile youcompleteme':
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin','/opt/nodenv/shims'],
     command => '/home/vagrant/.vim/bundle/youcompleteme/install.py --gocode-completer --tern-completer',
