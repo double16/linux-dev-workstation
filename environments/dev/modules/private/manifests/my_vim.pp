@@ -142,9 +142,8 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     content => 'nmap <F8> :TagbarToggle<cr>',
   }
 
-  private::my_vim::plugin { 'valloric/youcompleteme': }
-  -> package { ['cmake','python-devel']: }
-  -> Git::Config<| |>
+  package { ['cmake','python-devel']: }
+  -> private::my_vim::plugin { 'valloric/youcompleteme': }
   -> exec { 'youcompleteme submodule':
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin'],
     command => 'git submodule update --init --recursive',
@@ -160,5 +159,7 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     require => [ Package['go'] ],
   }
   Nodenv::Package<| |>
+  -> Private::My_vim::Plugin['valloric/youcompleteme']
+  Git::Config<| |>
   -> Private::My_vim::Plugin['valloric/youcompleteme']
 }
