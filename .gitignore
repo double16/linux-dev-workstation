@@ -6,3 +6,4 @@ cache/
 .idea
 *.iml
 packer_cache/
+box
