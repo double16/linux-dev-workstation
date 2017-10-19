@@ -137,4 +137,7 @@ resize2fs /dev/VolGroup/lv_root
     }
 #    puppet.options = "--debug"
   end
+
+  config.vm.provision "import ssh keys", type: "shell", privileged: false, run: "always", path: "script/import-ssh-keys.sh"
+
 end
