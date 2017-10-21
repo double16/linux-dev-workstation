@@ -239,3 +239,5 @@ file { '/home/vagrant/Workspace':
   group  => 'vagrant',
 }
 
+ssh_keygen { 'vagrant': }
+
