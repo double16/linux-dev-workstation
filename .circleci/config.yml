@@ -72,16 +72,13 @@ jobs:
             - /home/linux-dev-workstation/cache/docker
 
       # We must use rsync for synced folder because circleci remote docker cannot do volume mapping. We need
-      # to copy the cached files back into this container for storing in the cache. The '/root/.vagrant.d/cache'
-      # is found by watching the build logs for the rsync steps after Vagrant initially creates the container.
+      # to copy the cached files back into this container for storing in the cache.
       - run:
           name: Copy Vagrant Cache
           command: |
             set -x
-            if [[ ! -e /home/linux-dev-workstation/.vagrant/machines/default/cache ]]; then
-              mkdir -p /home/linux-dev-workstation/.vagrant/machines/default/cache
-            fi
-            docker cp linux-dev-workstation:/tmp/vagrant-cache/ /home/linux-dev-workstation/.vagrant/machines/default/cache/
+            rm -rf /home/linux-dev-workstation/.vagrant/machines/default/cache
+            docker cp linux-dev-workstation:/tmp/vagrant-cache /home/linux-dev-workstation/.vagrant/machines/default/cache
 
       - save_cache:
           key: v4-vagrant-{{ .Branch }}-{{ .Revision }}
