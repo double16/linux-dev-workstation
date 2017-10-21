@@ -45,6 +45,11 @@
 #   Default: true
 #   This variable is optional.
 #
+# [$manage_profile]
+#   Toggles the option to let the module install rbenv.sh into /etc/profile.d.
+#   Default: true
+#   This variable is optional.
+#
 # === Requires
 #
 # This module requires the following modules:
@@ -70,14 +75,15 @@
 # Copyright 2013 Justin Downing
 #
 class rbenv (
-  $repo_path   = 'https://github.com/rbenv/rbenv.git',
-  $install_dir = '/usr/local/rbenv',
-  $owner       = 'root',
-  $group       = $rbenv::params::group,
-  $latest      = false,
-  $version     = undef,
-  $env         = [],
-  $manage_deps = true,
+  $repo_path      = 'https://github.com/rbenv/rbenv.git',
+  $install_dir    = '/usr/local/rbenv',
+  $owner          = 'root',
+  $group          = $rbenv::params::group,
+  $latest         = false,
+  $version        = undef,
+  $env            = [],
+  $manage_deps    = true,
+  $manage_profile = true,
 ) inherits rbenv::params {
 
   validate_array($env)
@@ -106,10 +112,12 @@ class rbenv (
     mode   => '0775',
   }
 
-  file { '/etc/profile.d/rbenv.sh':
-    ensure  => file,
-    content => template('rbenv/rbenv.sh'),
-    mode    => '0775'
+  if $manage_profile {
+    file { '/etc/profile.d/rbenv.sh':
+      ensure  => file,
+      content => template('rbenv/rbenv.sh'),
+      mode    => '0775'
+    }
   }
 
   # run `git pull` on each run if we want to keep rbenv updated
@@ -121,8 +129,8 @@ class rbenv (
       environment => $env,
       onlyif      => '/usr/bin/test $(git rev-parse --abbrev-ref HEAD) != "master"',
       require     => File[$install_dir],
-    } ->
-    exec { 'update-rbenv':
+    }
+    -> exec { 'update-rbenv':
       command     => '/usr/bin/git pull',
       cwd         => $install_dir,
       user        => $owner,
@@ -137,8 +145,8 @@ class rbenv (
       user        => $owner,
       environment => $env,
       require     => File[$install_dir],
-    } ~>
-    exec { 'update-rbenv':
+    }
+    ~> exec { 'update-rbenv':
       command     => "/usr/bin/git checkout ${version}",
       cwd         => $install_dir,
       user        => $owner,

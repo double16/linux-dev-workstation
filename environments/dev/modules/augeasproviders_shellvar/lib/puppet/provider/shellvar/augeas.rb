@@ -3,6 +3,7 @@
 # Copyright (c) 2012 Dominic Cleal
 # Licensed under the Apache License, Version 2.0
 
+raise("Missing augeasproviders_core dependency") if Puppet::Type.type(:augeasprovider).nil?
 Puppet::Type.type(:shellvar).provide(:augeas, :parent => Puppet::Type.type(:augeasprovider).provider(:default)) do
   desc "Uses Augeas API to update shell script variables"
 
@@ -189,7 +190,15 @@ Puppet::Type.type(:shellvar).provide(:augeas, :parent => Puppet::Type.type(:auge
     augopen! do |aug|
       # Prefer to create the node next to a commented out entry
       commented = aug.match("$target/#comment[.=~regexp('#{resource[:variable]}([^a-z\.].*)?')]")
-      commented_values = commented.empty? ? [] : aug.get(commented.first).split('=')[1].split(' ')
+
+      commented_values = []
+      if ! commented.empty?
+        if aug.get(commented.first).include?('=')
+          commented_values = aug.get(commented.first).split('=')[1].split(' ')
+        else
+          commented_values = aug.get(commented.first).split(' ')
+        end
+      end
       comment_ins = '$resource'
 
       if resource[:ensure] == :unset

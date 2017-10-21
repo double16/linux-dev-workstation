@@ -92,8 +92,8 @@ define rbenv::build (
         ensure  => directory,
         recurse => true,
         before  => File[$patch_file],
-      }->
-      file { $patch_file:
+      }
+      -> file { $patch_file:
         ensure => file,
         source => $patch,
       }
@@ -108,12 +108,12 @@ define rbenv::build (
     timeout     => 1800,
     environment => $environment_for_build,
     path        => [
+      "${install_dir}/bin/",
+      "${install_dir}/shims/",
       '/bin/',
       '/sbin/',
       '/usr/bin/',
-      '/usr/sbin/',
-      "${install_dir}/bin/",
-      "${install_dir}/shims/"
+      '/usr/sbin/'
     ],
   }
 
@@ -127,20 +127,20 @@ define rbenv::build (
     user    => 'root',
     unless  => "test -d ${install_dir}/versions/${title}",
     require => Class['rbenv'],
-  }->
-  exec { "git-pull-rubybuild-${title}":
+  }
+  -> exec { "git-pull-rubybuild-${title}":
     command => 'git reset --hard HEAD && git pull',
     cwd     => "${install_dir}/plugins/ruby-build",
     user    => 'root',
     unless  => "test -d ${install_dir}/versions/${title}",
     require => Rbenv::Plugin['rbenv/ruby-build'],
-  }->
-  exec { "rbenv-install-${title}":
+  }
+  -> exec { "rbenv-install-${title}":
     # patch file must be read from stdin only if supplied
     command => sprintf("rbenv install ${title}${install_options}%s", $patch ? { undef => '', false => '', default => " < ${patch_file}" }),
     creates => "${install_dir}/versions/${title}",
-  }~>
-  exec { "rbenv-ownit-${title}":
+  }
+  ~> exec { "rbenv-ownit-${title}":
     command     => "chown -R ${owner}:${group} \
                     ${install_dir}/versions/${title} && \
                     chmod -R g+w ${install_dir}/versions/${title}",
