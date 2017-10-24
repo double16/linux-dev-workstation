@@ -8,6 +8,7 @@
   "iso_checksum_type": "sha256",
   "iso_name": "CentOS-7-x86_64-DVD-1708.iso",
   "iso_url": "http://mirrors.sonic.net/centos/7.4.1708/isos/x86_64/CentOS-7-x86_64-DVD-1708.iso",
+  "aws_ami_name": "CentOS Linux 7 x86_64 HVM EBS 1708",
   "memory": "2048",
   "parallels_guest_os_type": "centos7",
   "vagrantfile_template": "tpl/vagrantfile-centos7-desktop.tpl"

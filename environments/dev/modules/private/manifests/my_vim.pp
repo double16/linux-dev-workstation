@@ -156,6 +156,7 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     command => '/home/vagrant/.vim/bundle/youcompleteme/install.py --gocode-completer --tern-completer',
     creates => '/home/vagrant/.vim/bundle/youcompleteme/third_party/ycmd/ycm_core.so',
     user    => 'vagrant',
+    timeout => 0,
     require => [ Package['go'] ],
   }
   Nodenv::Package<| |>

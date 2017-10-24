@@ -11,10 +11,10 @@ VAGRANT_INSECURE_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrt
 if [ "$INSTALL_VAGRANT_KEY" = "true" ] || [ "$INSTALL_VAGRANT_KEY" = "1" ]; then
   # Add vagrant user (if it doesn't already exist)
   if ! id -u $SSH_USER >/dev/null 2>&1; then
-      echo '==> Creating ${SSH_USER}'
+      echo "==> Creating ${SSH_USER}"
       /usr/sbin/groupadd $SSH_USER
       /usr/sbin/useradd $SSH_USER -g $SSH_USER -G wheel
-      echo '==> Giving ${SSH_USER} sudo powers'
+      echo "==> Giving ${SSH_USER} sudo powers"
       echo "${SSH_USER}"|passwd --stdin $SSH_USER
       echo "${SSH_USER}        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
   fi
@@ -26,3 +26,4 @@ if [ "$INSTALL_VAGRANT_KEY" = "true" ] || [ "$INSTALL_VAGRANT_KEY" = "1" ]; then
   chmod 0600 ${SSH_USER_HOME}/.ssh/authorized_keys
   chown -R ${SSH_USER}:${SSH_USER} ${SSH_USER_HOME}/.ssh
 fi
+

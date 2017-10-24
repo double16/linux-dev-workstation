@@ -6,6 +6,11 @@ include ::private::proxy
 Class['epel'] -> Package<| |>
 Class['ius'] -> Package<| |>
 
+# Initial setup prompts for license acceptance
+service { ['initial-setup', 'initial-setup-text', 'initial-setup-graphical']:
+  enable => false,
+}
+
 file { '/tmp/vagrant-cache':
   ensure => directory,
   mode   => '0777',
@@ -155,7 +160,7 @@ class { '::git':
   package_manage => false,
 }
 
-unless $::virtual == 'docker' {
+unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
   include ::virtualbox
   package { "kernel-devel-${::kernelrelease}": }
   ->Exec<| title == 'vboxdrv' |>
@@ -173,6 +178,7 @@ include ::private::svn
 include ::private::hipchat
 include ::private::kitematic
 include ::private::clean
+include ::private::vnc
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
