@@ -179,6 +179,7 @@ include ::private::hipchat
 include ::private::kitematic
 include ::private::clean
 include ::private::vnc
+include ::private::hashistack
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
