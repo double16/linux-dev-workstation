@@ -42,7 +42,7 @@ net.ipv6.conf.default.disable_ipv6=1
     multiple          => true,
   }
   file_line { 'https_proxy in global environment':
-    ensure            => $::proxy_url ? { /^https:/ => present, default => absent},
+    ensure            => $proxy_presence,
     path              => '/etc/environment',
     line              => "https_proxy=${::proxy_url}",
     match             => '^https_proxy\=',
