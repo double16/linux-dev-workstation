@@ -1,15 +1,14 @@
 class private::kitematic
 {
   package { ['rpmrebuild','zsh','libnotify']: }
-  ->archive { 'Kitematic-0.17.1':
-    ensure           => present,
-    url              => 'https://github.com/docker/kitematic/releases/download/v0.17.1/Kitematic-0.17.1-Ubuntu.zip',
-    target           => '/opt',
-    follow_redirects => true,
-    extension        => 'zip',
-    checksum         => false,
-    digest_string    => '247c3fe68f3503a715448ee3b4742c125bf99ee643d3206b2b55d5c93a9af5fc',
-    digest_type      => 'sha256',
+  ->archive { '/tmp/vagrant-cache/Kitematic-0.17.1.zip':
+    ensure        => present,
+    source        => 'https://github.com/docker/kitematic/releases/download/v0.17.1/Kitematic-0.17.1-Ubuntu.zip',
+    extract_path  => '/opt',
+    extract       => true,
+    checksum      => '247c3fe68f3503a715448ee3b4742c125bf99ee643d3206b2b55d5c93a9af5fc',
+    checksum_type => 'sha256',
+    creates       => '/opt/Kitematic_0.17.1_amd64.deb',
   }
   ->exec { 'Kitematic rpm':
     command => '/usr/bin/alien -r -k /opt/Kitematic_0.17.1_amd64.deb',

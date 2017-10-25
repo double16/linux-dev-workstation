@@ -157,11 +157,7 @@ exec { 'xml2json':
 }
 
 Archive {
-  src_target => '/tmp/vagrant-cache',
-}
-
-Archive::Download {
-  follow_redirects => true,
+  cleanup  => false,
 }
 
 class { '::git':

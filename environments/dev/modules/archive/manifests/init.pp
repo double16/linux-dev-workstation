@@ -1,87 +1,66 @@
-# == Definition: archive
+# Class: archive
+# ==============
 #
-# Download and extract an archive.
+# Manages archive modules dependencies.
 #
-# Parameters:
+# Parameters
+# ----------
 #
-# - *$url:
-# - *$target: Destination directory
-# - *$purge_target: Purge Destination prior to extraction. Default false
-# - *$checksum: Default value "true"
-# - *$digest_url: Default value undef
-# - *$digest_string: Default value undef
-# - *$digest_type: Default value "md5"
-# - *$src_target: Default value "/usr/src"
-# - *$root_dir: Default value undef
-# - *$extension: Default value ".tar.gz"
-# - *$timeout: Default value 120
-# - *$allow_insecure: Default value false
-# - *$follow_redirects: Default value false
-# - *$verbose: Default value true
-# - *$strip_components: Default value 0
-# - *$proxy_server: Default value undef
-# - *$user: User used to do the download and the extraction. The final directory will be used by him/her.
+# * seven_zip_name: 7zip package name.
+# * seven_zip_provider: 7zip package provider (accepts windows/chocolatey).
+# * seven_zip_source: alternative package source.
+# * aws_cli_install: install aws cli command (default: false).
 #
-# Example usage:
+# Examples
+# --------
 #
-#   archive {"apache-tomcat-6.0.26":
-#     ensure => present,
-#     url    => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
-#     target => "/opt",
-#   }
+# class { 'archive':
+#   seven_zip_name     => '7-Zip 9.20 (x64 edition)',
+#   seven_zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
+#   seven_zip_provider => 'windows',
+# }
 #
-define archive (
-  $url,
-  $target,
-  $ensure=present,
-  $checksum=true,
-  $digest_url=undef,
-  $digest_string=undef,
-  $digest_type='md5',
-  $timeout=120,
-  $root_dir=undef,
-  $extension='tar.gz',
-  $src_target='/usr/src',
-  $allow_insecure=false,
-  $follow_redirects=false,
-  $verbose=true,
-  $strip_components=0,
-  $proxy_server=undef,
-  $purge_target=false,
-  $user=undef,
-  $tar_command=undef,
-  $path = $::path,
-) {
+class archive (
+  Optional[String] $seven_zip_name     = $archive::params::seven_zip_name,
+  Optional[String] $seven_zip_provider = $archive::params::seven_zip_provider,
+  Optional[String] $seven_zip_source   = undef,
+  Boolean          $aws_cli_install    = false,
+) inherits archive::params {
 
-  archive::download {"${name}.${extension}":
-    ensure           => $ensure,
-    url              => $url,
-    checksum         => $checksum,
-    digest_url       => $digest_url,
-    digest_string    => $digest_string,
-    digest_type      => $digest_type,
-    timeout          => $timeout,
-    src_target       => $src_target,
-    allow_insecure   => $allow_insecure,
-    follow_redirects => $follow_redirects,
-    verbose          => $verbose,
-    proxy_server     => $proxy_server,
-    user             => $user,
-    path             => $path,
+  if $facts['os']['family'] == 'Windows' and !($seven_zip_provider in ['', undef]) {
+    package { '7zip':
+      ensure   => present,
+      name     => $seven_zip_name,
+      source   => $seven_zip_source,
+      provider => $seven_zip_provider,
+    }
   }
 
-  archive::extract {$name:
-    ensure           => $ensure,
-    target           => $target,
-    purge            => $purge_target,
-    src_target       => $src_target,
-    root_dir         => $root_dir,
-    extension        => $extension,
-    timeout          => $timeout,
-    strip_components => $strip_components,
-    tar_command      => $tar_command,
-    require          => Archive::Download["${name}.${extension}"],
-    user             => $user,
-    path             => $path,
+  if $aws_cli_install {
+    # TODO: Windows support.
+    if $facts['os']['family'] != 'Windows' {
+      # Using bundled install option:
+      # http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os
+
+      file { '/opt/awscli-bundle':
+        ensure => 'directory',
+      }
+
+      archive { 'awscli-bundle.zip':
+        ensure       => present,
+        path         =>  '/opt/awscli-bundle/awscli-bundle.zip',
+        source       => 'https://s3.amazonaws.com/aws-cli/awscli-bundle.zip',
+        extract      => true,
+        extract_path => '/opt',
+        creates      => '/opt/awscli-bundle/install',
+        cleanup      => true,
+      }
+
+      exec { 'install_aws_cli':
+        command     => '/opt/awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws',
+        refreshonly => true,
+        subscribe   => Archive['awscli-bundle.zip'],
+      }
+    }
   }
 }

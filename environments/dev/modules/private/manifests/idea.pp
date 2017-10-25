@@ -5,20 +5,6 @@ class private::idea {
   $prefsdir = '/home/vagrant/.IntelliJIdea2017.2'
   $colorsdir = "${prefsdir}/colors"
 
-  archive { "idea-${version}":
-    ensure           => present,
-    url              => "http://download.jetbrains.com/idea/ideaIU-${version}.tar.gz",
-    src_target       => '/tmp/vagrant-cache',
-    target           => '/opt',
-    root_dir         => "idea-IU-${build}",
-    extension        => 'tar.gz',
-    timeout          => 3600,
-    follow_redirects => true,
-    checksum         => false,
-    digest_string    => 'efbdbac7e5651d59b1bc9efbbc9bc13a6f0798d40b169f891511967123da9207',
-    digest_type      => 'sha256',
-  }
-
   file { '/etc/sysctl.d/idea.conf':
     ensure  => file,
     owner   => 'root',
@@ -27,10 +13,18 @@ class private::idea {
     content => 'fs.inotify.max_user_watches = 524288',
   }
 
-  file { '/opt/idea':
-    ensure  => link,
-    target  => "/opt/idea-IU-${build}",
-    require => Archive["idea-${version}"],
+  archive { "/tmp/vagrant-cache/idea-${version}.tar.gz":
+    ensure        => present,
+    source        => "http://download.jetbrains.com/idea/ideaIU-${version}.tar.gz",
+    extract_path  => '/opt',
+    extract       => true,
+    creates       => "/opt/idea-IU-${build}/bin/idea.sh",
+    checksum      => 'a08ff0adfad2e8008d42e92d09696e43a70566b544db6c6f872e5b4d20436d2c',
+    checksum_type => 'sha256',
+  }
+  ->file { '/opt/idea':
+    ensure => link,
+    target => "/opt/idea-IU-${build}",
   }
   ->file { '/usr/share/applications/IntelliJ IDEA.desktop':
     ensure  => file,

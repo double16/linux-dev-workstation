@@ -7,3 +7,5 @@ cache/
 *.iml
 packer_cache/
 box
+repos.yaml
+setenv.sh
