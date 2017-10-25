@@ -10,7 +10,7 @@ class private::git_from_source($version) {
     'openssl-devel',
     'perl-devel',
     'zlib-devel']: }
-  ->archive { "/tmp/vagrant-cache/git-${version}":
+  ->archive { "/tmp/vagrant-cache/git-${version}.tar.gz":
     source        => "https://github.com/git/git/archive/v${version}.tar.gz",
     extract_path  => '/usr/src',
     extract       => true,
