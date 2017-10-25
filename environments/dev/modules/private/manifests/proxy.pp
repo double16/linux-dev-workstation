@@ -89,7 +89,7 @@ net.ipv6.conf.default.disable_ipv6=1
     match             => '^proxy\s*=',
     match_for_absence => true,
   }
-  -> Exec<| |>
+  -> Exec<| stage == 'main' |>
 
   file { '/home/vagrant/.curlrc':
     ensure => file,
@@ -104,7 +104,7 @@ net.ipv6.conf.default.disable_ipv6=1
     match             => '^proxy\s*=',
     match_for_absence => true,
   }
-  -> Exec<| |>
+  -> Exec<| stage == 'main' |>
 
   unless empty($::proxy_url) { 
     git::config { 'http.proxy':

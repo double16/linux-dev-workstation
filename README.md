@@ -38,6 +38,21 @@ Any SSH public/private key pairs found in the `/vagrant` guest directory, which 
 ### CA Certificates
 CA certificates can be added to the system wide trust store by placing the files similarly to the above SSH keys. The files must be in PEM format and have an extension of `.pem`, `.crt` or `.cer`.
 
+### Source Code Repositories
+You can configure source code repositories to be checked out as part of provisioning. The puppet module at https://forge.puppet.com/puppetlabs/vcsrepo is used for checking out and it supports several versioning systems. The repo information is stored in `repos.yaml` in the root of this repo. Each repo has a name which is checked out into `/home/vagrant/Workspace`, and the keys under it specify the source URL, branch, etc.
+
+```yaml
+---
+spring-boot:
+  provider: git
+  source: https://github.com/spring-projects/spring-boot.git
+  revision: 1.5.x
+
+qgroundcontrol:
+  provider: git
+  source: https://github.com/mavlink/qgroundcontrol.git
+```
+
 ## Installation
 
 It is recommended to enable caching of OS packages using the `vagrant-cachier` plugin.

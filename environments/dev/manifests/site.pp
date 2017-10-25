@@ -1,3 +1,11 @@
+stage { 'pre':
+  before => Stage['main'],
+}
+
+class { '::private::security':
+  stage => 'pre',
+}
+
 include ::epel
 include ::ius
 include ::augeas
@@ -180,6 +188,7 @@ include ::private::kitematic
 include ::private::clean
 include ::private::vnc
 include ::private::hashistack
+include ::private::my_vcsrepos
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
