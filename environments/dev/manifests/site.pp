@@ -180,6 +180,7 @@ include ::private::idea
 include ::private::netbeans
 include ::private::svn
 include ::private::hipchat
+include ::private::slack
 include ::private::kitematic
 include ::private::clean
 include ::private::vnc

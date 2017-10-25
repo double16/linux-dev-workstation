@@ -134,6 +134,9 @@ net.ipv6.conf.default.disable_ipv6=1
       proxy_server => $::proxy_url,
       proxy_type   => $::proxy_url ? { /^https:/ => 'https', default => 'http'},
     }
+    Remote_file {
+      proxy => $::proxy_url,
+    }
 
   } else {
 
