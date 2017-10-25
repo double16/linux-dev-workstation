@@ -135,7 +135,6 @@ package { [
     'chromium',
     'chrome-remote-desktop',
     'java-1.8.0-openjdk-devel',
-    'unzip',
     'mlocate',
     'rsync',
     'gparted',
@@ -155,6 +154,9 @@ exec { 'xml2json':
   creates => '/usr/bin/xml2json',
   require => [ Package['python2-pip'], Class['private::proxy'], Ini_setting['pip proxy'] ],
 }
+
+package { 'unzip': }
+->Archive<| |>
 
 Archive {
   cleanup  => false,

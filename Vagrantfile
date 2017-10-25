@@ -12,8 +12,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox"
   config.vm.provider "vmware_fusion"
 
-  #config.vm.box = "bento/centos-7.4"
-  config.vm.box = "double16/linux-dev-workstation"
+  config.vm.box = "bento/centos-7.4"
+  #config.vm.box = "double16/linux-dev-workstation"
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')

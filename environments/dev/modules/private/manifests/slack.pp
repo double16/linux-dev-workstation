@@ -1,5 +1,5 @@
 class private::slack {
-  package { 'libappindicator': }
+  package { ['libappindicator', 'libsecret']: }
   remote_file { '/tmp/vagrant-cache/slack-2.8.2-0.1.fc21.x86_64.rpm':
     ensure        => present,
     source        => 'https://downloads.slack-edge.com/linux_releases/slack-2.8.2-0.1.fc21.x86_64.rpm',

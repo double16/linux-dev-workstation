@@ -11,7 +11,7 @@ Puppet::Type.newtype(:concat_file) do
       Concat_fragment <<| tag == 'unique_tag' |>>
 
       concat_file { '/tmp/file':
-        tag            => 'unique_tag', # Mandatory
+        tag            => 'unique_tag', # Optional. Default to undef
         path           => '/tmp/file',  # Optional. If given it overrides the resource name
         owner          => 'root',       # Optional. Default to undef
         group          => 'root',       # Optional. Default to undef
@@ -67,7 +67,12 @@ Puppet::Type.newtype(:concat_file) do
 
   newparam(:backup) do
     desc "Controls the filebucketing behavior of the final file and see File type reference for its use."
-    defaultto 'puppet'
+
+    validate do |value|
+      unless [TrueClass, FalseClass, String].include?(value.class)
+        raise ArgumentError, 'Backup must be a Boolean or String'
+      end
+    end
   end
 
   newparam(:replace, :boolean => true, :parent => Puppet::Parameter::Boolean) do
@@ -77,6 +82,12 @@ Puppet::Type.newtype(:concat_file) do
 
   newparam(:validate_cmd) do
     desc "Validates file."
+
+    validate do |value|
+      unless value.is_a?(String)
+        raise ArgumentError, 'Validate_cmd must be a String'
+      end
+    end
   end
 
   newparam(:ensure_newline, :boolean => true, :parent => Puppet::Parameter::Boolean) do
@@ -84,29 +95,66 @@ Puppet::Type.newtype(:concat_file) do
     defaultto :false
   end
 
-  # Inherit File parameters
-  newparam(:selinux_ignore_defaults) do
+  newparam(:format) do
+    desc "What data type to merge the fragments as."
+
+    newvalues(:plain, :yaml, :json, :'json-pretty')
+
+    defaultto :plain
   end
 
+  newparam(:force, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+    desc "Forcibly merge duplicate keys keeping values of the highest order."
+
+    defaultto :false
+  end
+
+  # Inherit File parameters
+  newparam(:selinux_ignore_defaults, :boolean => true, :parent => Puppet::Parameter::Boolean)
+
   newparam(:selrange) do
+    validate do |value|
+      raise ArgumentError, 'Selrange must be a String' unless value.is_a?(String)
+    end
   end
 
   newparam(:selrole) do
+    validate do |value|
+      raise ArgumentError, 'Selrole must be a String' unless value.is_a?(String)
+    end
   end
 
   newparam(:seltype) do
+    validate do |value|
+      raise ArgumentError, 'Seltype must be a String' unless value.is_a?(String)
+    end
   end
 
   newparam(:seluser) do
+    validate do |value|
+      raise ArgumentError, 'Seluser must be a String' unless value.is_a?(String)
+    end
   end
 
-  newparam(:show_diff) do
-  end
+  newparam(:show_diff, :boolean => true, :parent => Puppet::Parameter::Boolean)
   # End file parameters
 
   # Autorequire the file we are generating below
+  # Why is this necessary ?
   autorequire(:file) do
     [self[:path]]
+  end
+
+  def fragments
+    # Collect fragments that target this resource by path, title or tag.
+    @fragments ||= catalog.resources.map do |resource|
+      next unless resource.is_a?(Puppet::Type.type(:concat_fragment))
+
+      if resource[:target] == self[:path] || resource[:target] == title ||
+        (resource[:tag] && resource[:tag] == self[:tag])
+        resource
+      end
+    end.compact
   end
 
   def should_content
@@ -114,11 +162,7 @@ Puppet::Type.newtype(:concat_file) do
     @generated_content = ""
     content_fragments = []
 
-    resources = catalog.resources.select do |r|
-      r.is_a?(Puppet::Type.type(:concat_fragment)) && r[:tag] == self[:tag]
-    end
-
-    resources.each do |r|
+    fragments.each do |r|
       content_fragments << ["#{r[:order]}___#{r[:name]}", fragment_content(r)]
     end
 
@@ -137,9 +181,61 @@ Puppet::Type.newtype(:concat_file) do
       end
     end
 
-    @generated_content = sorted.map { |cf| cf[1] }.join
+    case self[:format]
+    when :plain
+      @generated_content = sorted.map { |cf| cf[1] }.join
+    when :yaml
+      content_array = sorted.map do |cf|
+        YAML.load(cf[1])
+      end
+      content_hash = content_array.reduce({}) do |memo, current|
+        nested_merge(memo, current)
+      end
+      @generated_content = content_hash.to_yaml
+    when :json
+      content_array = sorted.map do |cf|
+        JSON.parse(cf[1])
+      end
+      content_hash = content_array.reduce({}) do |memo, current|
+        nested_merge(memo, current)
+      end
+      # Convert Hash
+      @generated_content = content_hash.to_json
+    when :'json-pretty'
+      content_array = sorted.map do |cf|
+        JSON.parse(cf[1])
+      end
+      content_hash = content_array.reduce({}) do |memo, current|
+        nested_merge(memo, current)
+      end
+      @generated_content = JSON.pretty_generate(content_hash)
+    end
 
     @generated_content
+  end
+
+  def nested_merge(hash1, hash2)
+    # Deep-merge Hashes; higher order value is kept
+    hash1.merge(hash2) do |k, v1, v2|
+      if v1.is_a?(Hash) and v2.is_a?(Hash)
+        nested_merge(v1, v2)
+      elsif v1.is_a?(Array) and v2.is_a?(Array)
+        (v1+v2).uniq
+      else
+        # Fail if there are duplicate keys without force
+        unless v1 == v2
+          unless self[:force]
+            err_message = [
+              "Duplicate key '#{k}' found with values '#{v1}' and #{v2}'.",
+              'Use \'force\' attribute to merge keys.',
+            ]
+            fail(err_message.join(' '))
+          end
+          Puppet.debug("Key '#{k}': replacing '#{v2}' with '#{v1}'.")
+        end
+        v1
+      end
+    end
   end
 
   def fragment_content(r)
