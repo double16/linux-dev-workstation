@@ -11,6 +11,7 @@ class private::netbeans {
     extract_path  => '/opt',
     extract       => true,
     creates       => '/opt/netbeans/bin/netbeans',
+    require       => File['/tmp/vagrant-cache'],
   }
   ->file { '/usr/share/applications/NetBeans.desktop':
     ensure  => file,

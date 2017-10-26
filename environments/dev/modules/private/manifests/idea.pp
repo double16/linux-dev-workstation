@@ -21,6 +21,7 @@ class private::idea {
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
     checksum      => 'a08ff0adfad2e8008d42e92d09696e43a70566b544db6c6f872e5b4d20436d2c',
     checksum_type => 'sha256',
+    require       => File['/tmp/vagrant-cache'],
   }
   ->file { '/opt/idea':
     ensure => link,
