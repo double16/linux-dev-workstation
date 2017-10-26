@@ -12,8 +12,11 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox"
   config.vm.provider "vmware_fusion"
 
-  config.vm.box = "bento/centos-7.4"
-  #config.vm.box = "double16/linux-dev-workstation"
+  if ENV['VAGRANT_FROM_SCRATCH']
+    config.vm.box = "bento/centos-7.4"
+  else
+    config.vm.box = "double16/linux-dev-workstation"
+  end
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
@@ -49,6 +52,8 @@ Vagrant.configure("2") do |config|
     vb.gui = true
     vb.cpus = vagrant_config['cores']
     vb.memory = vagrant_config['memory']
+    vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
+    vb.customize ["modifyvm", :id, "--paravirtprovider", "default"]
   end
 
   config.vm.provider "virtualbox" do |vb|
@@ -88,6 +93,7 @@ resize2fs /dev/VolGroup/lv_root
       v.gui = true
       v.vmx["numvcpus"] = vagrant_config['cores']
       v.vmx["memsize"] = vagrant_config['memory']
+      v.vmx["vhv.enable"] = "TRUE"
     end
   end
 

@@ -16,6 +16,8 @@ Vagrant.configure("2") do |config|
      v.customize ["modifyvm", :id, "--rtcuseutc", "on"]
      v.customize ["modifyvm", :id, "--accelerate3d", "on"]
      v.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+     v.customize ["modifyvm", :id, "--hwvirtex", "on"]
+     v.customize ["modifyvm", :id, "--paravirtprovider", "default"]
    end
 
   ["vmware_fusion", "vmware_workstation"].each do |provider|
@@ -29,6 +31,7 @@ Vagrant.configure("2") do |config|
       v.vmx["RemoteDisplay.vnc.port"] = "5900"
       v.vmx["scsi0.virtualDev"] = "lsilogic"
       v.vmx["mks.enable3d"] = "TRUE"
+      v.vmx["vhv.enable"] = "TRUE"
     end
   end
 end
