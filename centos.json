@@ -167,7 +167,7 @@
         "box_tag": "double16/{{user `vm_name`}}",
         "access_token": "{{user `cloud_token`}}",
         "version": "{{user `version`}}",
-        "no_release": "true"
+        "no_release": "false"
       }
     ]
   ],
@@ -266,7 +266,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "",
-    "version": "201711.1-pre",
+    "version": "201710.3",
     "virtualbox_guest_os_type": "RedHat_64",
     "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",
