@@ -142,11 +142,11 @@
       },
       "instance_type": "t2.medium",
       "ssh_username": "centos",
-      "ami_name": "linux-dev-workstation {{timestamp}}",
+      "ami_name": "{{ user `vm_name`}} {{ user `version` }} {{timestamp}}",
       "launch_block_device_mappings": [
         {
           "device_name": "/dev/sda1",
-          "volume_size": 40,
+          "volume_size": "{{user `disk_size_gb` }}",
           "volume_type": "gp2",
           "delete_on_termination": true
         }
@@ -167,7 +167,7 @@
         "box_tag": "double16/{{user `vm_name`}}",
         "access_token": "{{user `cloud_token`}}",
         "version": "{{user `version`}}",
-        "no_release": "false"
+        "no_release": "true"
       }
     ]
   ],
@@ -242,6 +242,7 @@
     "cpus": "2",
     "desktop": "true",
     "disk_size": "40000",
+    "disk_size_gb": "40",
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "headless": "",
     "http_directory": "kickstart/centos7",
@@ -266,7 +267,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "",
-    "version": "201710.3",
+    "version": "201711.1-pre",
     "virtualbox_guest_os_type": "RedHat_64",
     "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",
