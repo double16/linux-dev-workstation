@@ -55,6 +55,9 @@ yum::group { 'Development Tools':
 ->Package<| title == 'alien' |>
 ->Exec<| title == 'vboxdrv' |>
 
+Exec<| title == 'yum-groupinstall-X Window System' |> {
+  timeout => 0,
+}
 
 yum::group { 'X Window System':
   ensure => present,
@@ -65,7 +68,7 @@ yum::group { 'X Window System':
 ->exec { 'yum-groupinstall-Xfce':
   command => "yum -y groupinstall --skip-broken 'Xfce'",
   unless  => "yum grouplist hidden 'Xfce' | egrep -i '^Installed.+Groups:$'",
-  timeout => undef,
+  timeout => 0,
   path    => '/bin:/usr/bin:/sbin:/usr/sbin',
 }
 ->file_line { 'gdm autologin enable':
