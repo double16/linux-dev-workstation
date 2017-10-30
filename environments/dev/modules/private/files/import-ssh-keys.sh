@@ -28,8 +28,9 @@ find /vagrant/ -iname '*.pub' \
   PRIVATE_KEY_IN_VM="${SSH_DIR}/$(sha256sum ${PRIVATE_KEY_IN_VM} | cut -d ' ' -f 1).pem"
   if [ -s "${PRIVATE_KEY}" ] && ! grep -q "IdentityFile \"${PRIVATE_KEY_IN_VM}\"" "${SSH_CONFIG}"; then
     # We can't control the permissions in /vagrant, so copy the key into the VM
-    cp ${PRIVATE_KEY} ${PRIVATE_KEY_IN_VM}
-    chmod 0600 ${PRIVATE_KEY_IN_VM}
+    cp "${PRIVATE_KEY}" "${PRIVATE_KEY_IN_VM}"
+    chown vagrant:vagrant "${PRIVATE_KEY_IN_VM}"
+    chmod 0600 "${PRIVATE_KEY_IN_VM}"
     echo "IdentityFile \"${PRIVATE_KEY_IN_VM}\"" >> "${SSH_CONFIG}"
     echo "Added ${PRIVATE_KEY} to ${SSH_CONFIG}"
   fi

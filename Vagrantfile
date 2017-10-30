@@ -113,7 +113,7 @@ resize2fs /dev/VolGroup/lv_root
       fi
     fi
 
-    yum install -y deltarpm
+    [ -x /usr/bin/makedeltarpm ] || yum install -y deltarpm
 
     locale -a | grep -qi en_US || (
         yum reinstall -y glibc-common
@@ -122,7 +122,10 @@ resize2fs /dev/VolGroup/lv_root
         echo "LANG=en_US.UTF-8" > /etc/sysconfig/i18n
     )
 
-    yum update -y
+    [ -f /var/lib/vagrant-yum-update ] || (
+      touch /var/lib/vagrant-yum-update
+      yum update -y
+    )
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
       rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
