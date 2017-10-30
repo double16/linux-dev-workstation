@@ -1,6 +1,6 @@
 class private::my_node {
-  $node_lts = '6.11.2'
-  $node_latest = '8.4.0'
+  $node_lts = '6.11.5'
+  $node_latest = '8.8.1'
 
   class { '::nodenv':
     install_dir => '/opt/nodenv',
@@ -21,6 +21,10 @@ class private::my_node {
   nodenv::package { 'grunt on latest':
     package      => 'grunt',
     node_version => $node_latest,
+  }
+  nodenv::package { 'typescript on LTS':
+    package      => 'typescript',
+    node_version => $node_lts,
   }
   nodenv::package { 'typescript on latest':
     package      => 'typescript',
