@@ -4,6 +4,8 @@ class private::idea {
   $build = '172.4343.14'
   $prefsdir = '/home/vagrant/.IntelliJIdea2017.2'
   $colorsdir = "${prefsdir}/colors"
+  $configdir = "${prefsdir}/config"
+  $plugindir = "${configdir}/plugins"
 
   file { '/etc/sysctl.d/idea.conf':
     ensure  => file,
@@ -51,10 +53,133 @@ StartupNotify=true
     owner  => 'vagrant',
     group  => 'vagrant',
   }
-  ->file { $colorsdir:
+  file { $colorsdir:
     ensure => directory,
     owner  => 'vagrant',
     group  => 'vagrant',
+  }
+  file { $configdir:
+    ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+  file { $plugindir:
+    ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+
+  file { '/tmp/vagrant-cache/idea-plugins':
+    ensure => directory,
+    mode   => '0755',
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+
+  # Find plugin at https://plugins.jetbrains.com/idea
+  # Copy direct download link
+  # To get the sha256 sum: curl -L ${url} | shasum -a 256
+  define plugin($version, $updateid, $sha256sum) {
+    archive { "/tmp/vagrant-cache/idea-plugins/${title}-${version}.zip":
+      ensure        => present,
+      extract       => true,
+      extract_path  => $::private::idea::plugindir,
+      source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
+      checksum      => $sha256sum,
+      checksum_type => 'sha256',
+      creates       => "${::private::idea::plugindir}/${title}",
+      cleanup       => false,
+    }
+  }
+
+  private::idea::plugin { 'LiveEdit':
+    version   => '172.4343.25',
+    updateid  => '39751',
+    sha256sum => '1f3afcec669cb044d65889dc6b8224f5af0b8b3f2c165fdaefb6869896c08778',
+  }
+
+  private::idea::plugin { 'AngularJS':
+    version   => '172.4155.35',
+    updateid  => '39192',
+    sha256sum => '9eaecf1eeb47d26b7bbe745b1aaa23a3a38b3e3e721705eafcef9a61a4808318',
+  }
+
+  private::idea::plugin { 'ruby':
+    version   => '2017.2.20170906',
+    updateid  => '38512',
+    sha256sum => '6544f712f9191a0bffd787f3d6a698902300bce0b960e6ac07db19ab95c691bf',
+  }
+
+  private::idea::plugin { 'puppet':
+    version   => '172.3317.76',
+    updateid  => '36968',
+    sha256sum => '2f1a0affbc9d6888aed79968106522628fbaf016100ad9223371de1a9c1aa803',
+  }
+
+  private::idea::plugin { 'NodeJS':
+    version   => '172.3757.32',
+    updateid  => '37668',
+    sha256sum => '957033172e2cbcaf69f6e74236b0ed6994acf93354b95ba0111152fe50a72c96',
+  }
+
+  private::idea::plugin { 'BashSupport':
+    version   => '1.6.12.172',
+    updateid  => '38357',
+    sha256sum => 'dd5e347ffe07f4e7c5464dab7c9128f64d970a35599e4e85b801663206bec2b9',
+  }
+
+  private::idea::plugin { 'Docker':
+    version   => '172.3968.28',
+    updateid  => '38244',
+    sha256sum => 'e6d3d3db8977fee9eb31c193843acb7cf7bd5126b499da8e0df40f1cbdbe2e7c',
+  }
+
+  private::idea::plugin { 'idea-gitignore':
+    version   => '2.3.0',
+    updateid  => '40109',
+    sha256sum => '207d45fe2c284a516fd677689bf26b7b31cf41c7e36d6bd1e4a034c125186610',
+  }
+
+  private::idea::plugin { 'ini4idea':
+    version   => '172.3317.57',
+    updateid  => '36822',
+    sha256sum => 'b96c53ed3e7d56d5b46ffe0f2301bfa2360da0cd5a1692b1b8c7dc0dabdfb90c',
+  }
+
+  private::idea::plugin { 'intellij-hcl':
+    version   => '0.6.8',
+    updateid  => '40107',
+    sha256sum => 'b09668f87b325f491190b69dbfe8da50450ddf29f0495e1bc4753358551cb573',
+  }
+
+  private::idea::plugin { 'intellij-go':
+    version   => '172.3968.45',
+    updateid  => '38446',
+    sha256sum => 'd2a64e992183399e4a5ff536691fad1a0e7b17cae7a1770f51cb676bfe3b4c9a',
+  }
+
+  private::idea::plugin { 'Jade':
+    version   => '172.2656.13',
+    updateid  => '35649',
+    sha256sum => '8e9a8bc3b4b2187f3946a98d65436c1945cad4804dc3eeecfd4eb776b4a4b5b6',
+  }
+
+  private::idea::plugin { 'asciidoctor':
+    version   => '0.19.1',
+    updateid  => '38643',
+    sha256sum => 'd5cadedc343039c8d2a6b0a6db35da55f502c68895cb3a265eeb32cca586e0f8',
+  }
+
+  private::idea::plugin { 'idea-multimarkdown':
+    version   => '2.3.8',
+    updateid  => '36922',
+    sha256sum => 'e86b356f93d8f0f5e8f49a2b72f4a9d05c7b0ef29641f31bd23259a62266e010',
+  }
+
+  private::idea::plugin { 'Kotlin':
+    version   => '1.1.51-release-IJ2017.2-1',
+    updateid  => '39169',
+    sha256sum => '55474130f14543ce3059096079659c2e843b422625548a451a0f3b7717d0b09c',
   }
 
   remote_file { "${colorsdir}/Solarized Dark.icls":
