@@ -76,6 +76,7 @@ StartupNotify=true
       cleanup       => false,
       user          => 'vagrant',
       group         => 'vagrant',
+      require       => File['/tmp/vagrant-cache/idea-plugins'],
     }
   }
 

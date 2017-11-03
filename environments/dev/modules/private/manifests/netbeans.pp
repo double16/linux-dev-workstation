@@ -2,6 +2,31 @@ class private::netbeans {
   # http://download.netbeans.org/netbeans/8.2/final/zip/netbeans-8.2-201609300101.zip
   $version = '8.2'
   $build = '201609300101'
+  $prefsrootdir = '/home/vagrant/.netbeans'
+  $prefsdir = "${prefsrootdir}/${version}"
+  $vardir = "${prefsdir}/var"
+
+  file { '/usr/local/bin/netbeans-modules-update.sh':
+    ensure => file,
+    mode   => '0755',
+    owner  => 0,
+    group  => 'root',
+    source => 'puppet:///modules/private/netbeans-modules-update.sh',
+  }
+
+  file { [ $prefsrootdir, $prefsdir, $vardir ] :
+    ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+
+  file { "${vardir}/license_accepted":
+    ensure  => file,
+    owner   => 'vagrant',
+    group   => 'vagrant',
+    mode    => '0664',
+    content => 'accepted by automation',
+  }
 
   archive { "/tmp/vagrant-cache/netbeans-${version}-${build}.zip":
     ensure        => present,
@@ -13,7 +38,16 @@ class private::netbeans {
     creates       => '/opt/netbeans/bin/netbeans',
     require       => File['/tmp/vagrant-cache'],
   }
-  ->file { '/usr/share/applications/NetBeans.desktop':
+  ~>exec { '/usr/local/bin/netbeans-modules-update.sh':
+    refreshonly => true,
+    timeout     => 900,
+    user        => 'vagrant',
+    cwd         => '/home/vagrant',
+    environment => ['HOME=/home/vagrant'],
+    require     => [ File['/usr/local/bin/netbeans-modules-update.sh'], File["${vardir}/license_accepted"], Yum::Group['X Window System'] ],
+  }
+
+  file { '/usr/share/applications/NetBeans.desktop':
     ensure  => file,
     content => '
 [Desktop Entry]

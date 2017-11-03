@@ -97,7 +97,7 @@ resize2fs /dev/VolGroup/lv_root
     end
   end
 
-  config.vm.provision "shell", env: {"HTTP_PROXY" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"], "HTTPS_PROXY" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"], "NO_PROXY" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"] }, inline: <<-SHELL
+  config.vm.provision "bootstrap", type: "shell", env: {"HTTP_PROXY" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"], "HTTPS_PROXY" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"], "NO_PROXY" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"] }, inline: <<-SHELL
 
     if [ -n "${HTTP_PROXY}" ]; then
       grep -q "proxy=" /etc/yum.conf || echo "proxy=${HTTP_PROXY}" >> /etc/yum.conf
@@ -133,7 +133,7 @@ resize2fs /dev/VolGroup/lv_root
     )
   SHELL
 
-  config.vm.provision "puppet" do |puppet|
+  config.vm.provision "puppet", type: "puppet" do |puppet|
     puppet.environment_path = "environments"
     puppet.environment = "dev"
     puppet.facter = {
