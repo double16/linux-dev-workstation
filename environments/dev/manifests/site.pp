@@ -143,6 +143,7 @@ package { [
     'gparted',
     'lsof',
     'nmap-ncat',
+    'socat',
     'maven',
     'freerdp',
     'alien',
