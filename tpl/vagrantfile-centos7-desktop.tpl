@@ -34,4 +34,10 @@ Vagrant.configure("2") do |config|
       v.vmx["vhv.enable"] = "TRUE"
     end
   end
+
+  config.vm.provision "import certs and keys", type: "shell", inline: <<-SHELL
+    [ -x /usr/local/sbin/import-certs.sh ]    && /usr/local/sbin/import-certs.sh
+    [ -x /usr/local/sbin/import-ssh-keys.sh ] && /usr/local/sbin/import-ssh-keys.sh
+  SHELL
 end
+
