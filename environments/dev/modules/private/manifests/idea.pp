@@ -3,9 +3,9 @@ class private::idea {
   $version = '2017.2.5'
   $build = '172.4343.14'
   $prefsdir = '/home/vagrant/.IntelliJIdea2017.2'
-  $colorsdir = "${prefsdir}/colors"
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
+  $colorsdir = "${configdir}/colors"
 
   file { '/etc/sysctl.d/idea.conf':
     ensure  => file,
@@ -48,22 +48,7 @@ StartupNotify=true
 ',
   }
 
-  file { $prefsdir:
-    ensure => directory,
-    owner  => 'vagrant',
-    group  => 'vagrant',
-  }
-  file { $colorsdir:
-    ensure => directory,
-    owner  => 'vagrant',
-    group  => 'vagrant',
-  }
-  file { $configdir:
-    ensure => directory,
-    owner  => 'vagrant',
-    group  => 'vagrant',
-  }
-  file { $plugindir:
+  file { [ $prefsdir, $configdir, $colorsdir, $plugindir, "${configdir}/options" ] :
     ensure => directory,
     owner  => 'vagrant',
     group  => 'vagrant',
@@ -131,9 +116,9 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'NodeJS':
-    version   => '172.3757.32',
-    updateid  => '37668',
-    sha256sum => '957033172e2cbcaf69f6e74236b0ed6994acf93354b95ba0111152fe50a72c96',
+    version   => '172.4155.10',
+    updateid  => '38475',
+    sha256sum => '2d6aba4e51fa274ecd518e73851439c3a3df60fb88e374d81a6cddb535f9aabd',
   }
 
   private::idea::plugin_zip { 'BashSupport':
@@ -238,6 +223,12 @@ StartupNotify=true
     sha256sum => 'ff5b77aa78d14018a0295daab1e08b3496d264f3f18cf34bc424a872648238a9',
   }
 
+  private::idea::plugin_zip { 'vagrant':
+    version   => '172.3317.76',
+    updateid  => '37002',
+    sha256sum => '3e52f3139ab8de92346f58c781bb88b75ea3af0f81d566464f60f8d1ba4cbb90',
+  }
+
   remote_file { "${colorsdir}/Solarized Dark.icls":
     ensure  => present,
     source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Dark.icls',
@@ -252,5 +243,19 @@ StartupNotify=true
     owner   => 'vagrant',
     group   => 'vagrant',
     require => File[$colorsdir],
+  }
+
+  file { "${configdir}/options/colors.scheme.xml":
+    ensure  => file,
+    mode    => '0664',
+    owner   => 'vagrant',
+    group   => 'vagrant',
+    replace => false,
+    content => '
+<application>
+  <component name="EditorColorsManagerImpl">
+    <global_color_scheme name="Solarized Light" />
+  </component>
+</application>',
   }
 }
