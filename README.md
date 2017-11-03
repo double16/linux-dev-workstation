@@ -5,9 +5,9 @@ This Vagrant image contains a developer workspace with the following software:
 * CentOS 7.4
 * Java 8
 * Java 9
-* IntelliJ IDEA Ultimate
+* IntelliJ IDEA Ultimate + sundry plugins
 * NetBeans
-* vim 8, gvim, various vim plugins
+* vim 8, gvim, sundry vim plugins
 * git
 * svn
 * Docker, Docker Compose, Kitematic
@@ -25,6 +25,7 @@ This Vagrant image contains a developer workspace with the following software:
 * Chrome
 * VirtualBox
 * Vagrant
+* R, RStudio
 * sdkman
 * Groovy via sdkman
 * Gradle via sdkman
