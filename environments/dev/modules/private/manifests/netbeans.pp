@@ -5,6 +5,7 @@ class private::netbeans {
   $prefsrootdir = '/home/vagrant/.netbeans'
   $prefsdir = "${prefsrootdir}/${version}"
   $vardir = "${prefsdir}/var"
+  $confdir = "${prefsdir}/config"
 
   file { '/usr/local/bin/netbeans-modules-update.sh':
     ensure => file,
@@ -45,6 +46,28 @@ class private::netbeans {
     cwd         => '/home/vagrant',
     environment => ['HOME=/home/vagrant'],
     require     => [ File['/usr/local/bin/netbeans-modules-update.sh'], File["${vardir}/license_accepted"], Yum::Group['X Window System'] ],
+  }
+
+  vcsrepo { '/tmp/vagrant-cache/netbeans-colors-solarized':
+    ensure   => present,
+    provider => git,
+    source   => 'https://github.com/fentie/netbeans-colors-solarized.git',
+    user     => 'vagrant',
+    require  => [ File[$prefsdir], Exec['/usr/local/bin/netbeans-modules-update.sh'] ],
+  }
+  ->augeas { 'NetBeans Solarized Light Theme':
+    lens    => 'Xml.lns',
+    incl    => '/tmp/vagrant-cache/netbeans-colors-solarized/config/.nbattrs',
+    context => '/files/tmp/vagrant-cache/netbeans-colors-solarized/config/.nbattrs',
+    changes => [
+      'set attributes/fileobject[#attribute[name="Editors"]]/attr[#attribute[name="currentFontColorProfile"]]/#attribute/stringvalue Netbeans_Solarized_Light',
+    ],
+  }
+  ->exec { 'NetBeans Solarized':
+    path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
+    command => "cp -rn /tmp/vagrant-cache/netbeans-colors-solarized/config ${confdir}",
+    creates => "${confdir}/Editors",
+    user    => 'vagrant',
   }
 
   file { '/usr/share/applications/NetBeans.desktop':
