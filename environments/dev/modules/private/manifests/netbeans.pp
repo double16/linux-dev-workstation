@@ -15,6 +15,14 @@ class private::netbeans {
     source => 'puppet:///modules/private/netbeans-modules-update.sh',
   }
 
+  file { '/opt/netbeans-plugins.txt':
+    ensure => file,
+    mode   => '0644',
+    owner  => 0,
+    group  => 'root',
+    source => 'puppet:///modules/private/netbeans-plugins.txt',
+  }
+
   file { [ $prefsrootdir, $prefsdir, $vardir ] :
     ensure => directory,
     owner  => 'vagrant',
@@ -45,7 +53,12 @@ class private::netbeans {
     user        => 'vagrant',
     cwd         => '/home/vagrant',
     environment => ['HOME=/home/vagrant'],
-    require     => [ File['/usr/local/bin/netbeans-modules-update.sh'], File["${vardir}/license_accepted"], Yum::Group['X Window System'] ],
+    require     => [
+      File['/usr/local/bin/netbeans-modules-update.sh'],
+      File['/opt/netbeans-plugins.txt'],
+      File["${vardir}/license_accepted"],
+      Exec['NetBeans Solarized'],
+      Yum::Group['X Window System'] ],
   }
 
   vcsrepo { '/tmp/vagrant-cache/netbeans-colors-solarized':
@@ -53,7 +66,7 @@ class private::netbeans {
     provider => git,
     source   => 'https://github.com/fentie/netbeans-colors-solarized.git',
     user     => 'vagrant',
-    require  => [ File[$prefsdir], Exec['/usr/local/bin/netbeans-modules-update.sh'] ],
+    require  => [ File[$prefsdir] ],
   }
   ->augeas { 'NetBeans Solarized Light Theme':
     lens    => 'Xml.lns',
@@ -65,7 +78,7 @@ class private::netbeans {
   }
   ->exec { 'NetBeans Solarized':
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
-    command => "cp -rn /tmp/vagrant-cache/netbeans-colors-solarized/config ${confdir}",
+    command => "mkdir -p ${confdir} && rsync -r /tmp/vagrant-cache/netbeans-colors-solarized/config/ ${confdir}/",
     creates => "${confdir}/Editors",
     user    => 'vagrant',
   }
