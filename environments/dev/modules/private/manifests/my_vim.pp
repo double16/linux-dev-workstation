@@ -150,6 +150,7 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     cwd     => '/home/vagrant/.vim/bundle/youcompleteme',
     creates => '/home/vagrant/.vim/bundle/youcompleteme/third_party/ycmd/build.py',
     user    => 'vagrant',
+    timeout => 900,
   }
   -> exec { 'compile youcompleteme':
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin','/opt/nodenv/shims'],
