@@ -25,11 +25,11 @@ Packer builds are available for the following providers:
 
 The VMs are large, 10-12GB uncompressed. You'll likely need to build them individually.
 
-* packer build -only=virtualbox-iso -var-file=centos7.json centos.json
-* packer build -only=vmware-iso -var-file=centos7.json centos.json
-* packer build -only=parallels-iso -var-file=centos7.json centos.json
-* packer build -only=amazon-ebs -var-file=centos7.json centos.json
-* packer build -only=qemu -var-file=centos7.json centos.json
+* packer build -only=virtualbox-iso centos.json
+* packer build -only=vmware-iso     centos.json
+* packer build -only=parallels-iso  centos.json
+* packer build -only=amazon-ebs     centos.json
+* packer build -only=qemu           centos.json
 
 There are environment variables needed for building. If you aren't using a specific build, the variable is required, but a dummy value will do.
 
