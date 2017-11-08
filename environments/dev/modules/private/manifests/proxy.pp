@@ -52,7 +52,7 @@ net.ipv6.conf.default.disable_ipv6=1
   file_line { 'no_proxy in global environment':
     ensure            => $proxy_presence,
     path              => '/etc/environment',
-    line              => "no_proxy=localhost,.localdomain,.local,127.0.0.1,${::proxy_excludes}",
+    line              => "no_proxy=localhost,.localdomain,.local,127.0.0.1,169.254.0.0/16,${::proxy_excludes}",
     match             => '^no_proxy\=',
     match_for_absence => true,
     multiple          => true,
@@ -89,19 +89,33 @@ net.ipv6.conf.default.disable_ipv6=1
     match             => '^proxy\s*=',
     match_for_absence => true,
   }
+  -> file_line { 'curl noproxy for root':
+    ensure            => $proxy_presence,
+    path              => '/root/.curlrc',
+    line              => "noproxy = localhost,.localdomain,.local,127.0.0.1,169.254.0.0/16,${::proxy_excludes}",
+    match             => '^noproxy\s*=',
+    match_for_absence => true,
+  }
   -> Exec<| stage == 'main' |>
 
   file { '/home/vagrant/.curlrc':
     ensure => file,
     owner  => 'nobody',
     group  => 'root',
-    mode   => '0444',
+    mode   => '0644',
   }
   -> file_line { 'curl proxy for vagrant':
     ensure            => $proxy_presence,
     path              => '/home/vagrant/.curlrc',
     line              => "proxy = ${::proxy_url}",
     match             => '^proxy\s*=',
+    match_for_absence => true,
+  }
+  -> file_line { 'curl noproxy for vagrant':
+    ensure            => $proxy_presence,
+    path              => '/home/vagrant/.curlrc',
+    line              => "noproxy = localhost,.localdomain,.local,127.0.0.1,169.254.0.0/16,${::proxy_excludes}",
+    match             => '^noproxy\s*=',
     match_for_absence => true,
   }
   -> Exec<| stage == 'main' |>
