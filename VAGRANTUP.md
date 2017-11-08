@@ -1,4 +1,8 @@
-Your development box has been created. There are several ways to configure the box for your environment. To apply configuration changes, run the following command:
+Your development box has been created. Likely you will not have a graphical desktop at this point. Restart the box using the following command and you should see a graphical desktop. (Cloud providers such as AWS see below for VNC instructions.)
+
+  vagrant reload
+
+There are several ways to configure the box for your environment. To apply configuration changes, run the following command:
 
   vagrant provision
 
