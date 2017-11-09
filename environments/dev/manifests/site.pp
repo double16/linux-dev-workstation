@@ -193,6 +193,7 @@ include ::private::vnc
 include ::private::hashistack
 include ::private::my_vcsrepos
 include ::private::rlang
+include ::private::pdk
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
