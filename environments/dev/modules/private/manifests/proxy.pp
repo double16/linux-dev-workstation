@@ -25,13 +25,27 @@ net.ipv6.conf.default.disable_ipv6=1
     default => absent,
   }
 
-  unless empty($::search_domain) {
-    file_line { 'search domain in /etc/resolve.conf':
-      path  => '/etc/resolv.conf',
-      line  => "search ${::search_domain}",
-      match => '^search\s+',
-    }
+  $search_domain_ensure = $::search_domain ? {
+    /.+/    => present,
+    default => absent,
   }
+
+  file { '/etc/dhcp/dhclient.conf':
+    ensure => file,
+    owner  => 0,
+    group  => 'root',
+    mode   => '0644',
+  }
+  ->file_line { 'search domain in dhclient.conf':
+    ensure            => $search_domain_ensure,
+    path              => '/etc/dhcp/dhclient.conf',
+    line              => "prepend domain-name \"${::search_domain}\";",
+    match             => '^prepend\s+domain-name\s+',
+    match_for_absence => true,
+    replace           => $search_domain_ensure ? { absent => false, default => true},
+    multiple          => true,
+  }
+  ~>service {'network': }
 
   file_line { 'http_proxy in global environment':
     ensure            => $proxy_presence,
