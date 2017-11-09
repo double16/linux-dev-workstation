@@ -17,7 +17,7 @@ This Vagrant image contains a developer workspace with the following software:
 * rbenv (Ruby Environments)
 * Maven
 * Ansible
-* Puppet
+* Puppet, Puppet Development Kit
 * Slack
 * HipChat
 * Xfce Desktop
