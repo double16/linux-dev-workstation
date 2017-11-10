@@ -30,22 +30,24 @@ net.ipv6.conf.default.disable_ipv6=1
     default => absent,
   }
 
-  file { '/etc/dhcp/dhclient.conf':
-    ensure => file,
-    owner  => 0,
-    group  => 'root',
-    mode   => '0644',
+  unless $::virtual == 'docker' {
+    file { '/etc/dhcp/dhclient.conf':
+      ensure => file,
+      owner  => 0,
+      group  => 'root',
+      mode   => '0644',
+    }
+    ->file_line { 'search domain in dhclient.conf':
+      ensure            => $search_domain_ensure,
+      path              => '/etc/dhcp/dhclient.conf',
+      line              => "prepend domain-search \"${::search_domain}\";",
+      match             => '^prepend\s+domain-search\s+',
+      match_for_absence => true,
+      replace           => $search_domain_ensure ? { absent => false, default => true},
+      multiple          => true,
+    }
+    ~>service {'network': }
   }
-  ->file_line { 'search domain in dhclient.conf':
-    ensure            => $search_domain_ensure,
-    path              => '/etc/dhcp/dhclient.conf',
-    line              => "prepend domain-search \"${::search_domain}\";",
-    match             => '^prepend\s+domain-search\s+',
-    match_for_absence => true,
-    replace           => $search_domain_ensure ? { absent => false, default => true},
-    multiple          => true,
-  }
-  ~>service {'network': }
 
   file_line { 'http_proxy in global environment':
     ensure            => $proxy_presence,
