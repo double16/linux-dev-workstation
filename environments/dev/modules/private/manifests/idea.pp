@@ -25,9 +25,15 @@ class private::idea {
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
+  ->exec { "chown -R vagrant:vagrant /opt/idea-IU-${build}":
+    path   => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin'],
+    onlyif => "find /opt/idea-IU-${build} -not \\( -user vagrant -and -group vagrant \\) | grep -q '.'",
+  }
   ->file { '/opt/idea':
     ensure => link,
     target => "/opt/idea-IU-${build}",
+    owner  => 'vagrant',
+    group  => 'vagrant',
   }
   ->file { '/usr/share/applications/IntelliJ IDEA.desktop':
     ensure  => file,
