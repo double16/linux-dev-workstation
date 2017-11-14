@@ -57,13 +57,7 @@ Vagrant.configure("2") do |config|
   end
 
   if Vagrant.has_plugin?("vagrant-cachier")
-    unless config.vm.box.nil?
-      if config.vm.box.match(/[A-Za-z0-9]+:\/\//)
-        config.cache.scope = :machine
-      else
-        config.cache.scope = :box
-      end
-    end
+    config.cache.scope = :box
   end
 
   config.vm.provision "base-bootstrap", type: "shell", inline: <<-SHELL
