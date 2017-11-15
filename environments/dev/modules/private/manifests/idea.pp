@@ -12,7 +12,8 @@ class private::idea {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => 'fs.inotify.max_user_watches = 524288',
+    content => 'fs.inotify.max_user_watches = 524288
+',
   }
 
   archive { "/tmp/vagrant-cache/idea-${version}.tar.gz":

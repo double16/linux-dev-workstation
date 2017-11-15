@@ -2,12 +2,22 @@ class private::my_docker {
   unless $::virtual == 'docker' {
 
     $docker_version = $::operatingsystem ? {
-      'Ubuntu' => "17.09.0~ce-0~ubuntu-${::lsbdistcodename}",
+      'Ubuntu' => '17.09.0~ce-0~ubuntu',
       'CentOS' => '17.09.0.ce-1.el7.centos',
-      default => '17.09.0-ce',
+      default  => '17.09.0-ce',
     }
 
     package { 'docker-engine': ensure => absent, }
+    ->file { '/etc/sysctl.d/forwarding.conf':
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => '# IP forwarding for Docker
+net.ipv4.ip_forward = 1
+net.ipv6.conf.all.forwarding = 1
+',
+    }
     ->remote_file { '/etc/yum.repos.d/docker-ce.repo':
       source => 'https://download.docker.com/linux/centos/docker-ce.repo',
     }
