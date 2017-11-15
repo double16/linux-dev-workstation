@@ -152,6 +152,13 @@ package { [
   ]: ensure => present,
 }
 
+package { [
+    'yq',
+  ]:
+  ensure   => present,
+  provider => 'pip',
+}
+
 exec { 'xml2json':
   path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
   command => 'pip install https://github.com/hay/xml2json/zipball/master',
