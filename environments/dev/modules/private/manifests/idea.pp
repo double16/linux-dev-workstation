@@ -1,7 +1,7 @@
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2017.2.5'
-  $build = '172.4343.14'
+  $version = '2017.2.6'
+  $build = '172.4574.11'
   $prefsdir = '/home/vagrant/.IntelliJIdea2017.2'
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
@@ -22,7 +22,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => 'a08ff0adfad2e8008d42e92d09696e43a70566b544db6c6f872e5b4d20436d2c',
+    checksum      => '565f44d1b955844a11010c4735fa7adfb5aba20327b2424897382ff487344ede',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
