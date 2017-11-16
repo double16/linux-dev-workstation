@@ -42,7 +42,7 @@ class private::my_sdkman {
 
   sdkman::package { 'gradle':
     ensure     => present,
-    version    => '4.2.1',
+    version    => '4.3.1',
     is_default => true,
   }
 
@@ -62,7 +62,7 @@ class private::my_sdkman {
   ->sdkman::package { 'java8':
     ensure       => present,
     package_name => 'java',
-    version      => '8u144-zulu',
+    version      => '8u152-zulu',
     is_default   => true,
   }
 
