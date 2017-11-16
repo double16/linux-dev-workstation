@@ -36,6 +36,7 @@ class private::git_from_source($version) {
     cwd       => "/usr/src/git-${version}",
     command   => 'make',
     creates   => "/usr/src/git-${version}/git",
+    timeout   => 900,
     subscribe => Exec["configure git ${version}"],
   }
   ->exec { "install git ${version}":
