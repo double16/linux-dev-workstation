@@ -1,14 +1,14 @@
 forge "https://forge.puppet.com"
 
 mod 'stahnma-epel'
-mod 'puppet-yum'
+mod 'puppet-yum', '2.1'
 mod 'treydock-yum_cron', '2.0.0'
 mod 'puppet-archive', '>= 2.1.0 < 3.0.0'
 mod 'unibet-vagrant'
-mod 'puppet-virtualbox', '1.8'
+mod 'puppet-virtualbox', '2.0'
 mod 'paulosuzart-sdkman'
 mod 'zanloy-vim'
-mod 'puppetlabs-vcsrepo'
+mod 'puppetlabs-vcsrepo', '2.2'
 mod 'jdowning-rbenv'
 mod 'kemra102-ius'
 mod 'lwf-remote_file'

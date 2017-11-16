@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-concat",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "author": "Puppet Labs",
   "summary": "Construct files from multiple fragments.",
   "license": "Apache-2.0",
@@ -50,7 +50,6 @@
     {
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
-        "10 SP4",
         "11 SP1",
         "12"
       ]
@@ -80,7 +79,6 @@
     {
       "operatingsystem": "Windows",
       "operatingsystemrelease": [
-        "Server 2003 R2",
         "Server 2008 R2",
         "Server 2012",
         "Server 2012 R2"
@@ -97,7 +95,8 @@
     {
       "operatingsystem": "OSX",
       "operatingsystemrelease": [
-        "10.9"
+        "10.10",
+        "10.11"
       ]
     }
   ],

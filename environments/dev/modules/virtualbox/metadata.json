@@ -1,6 +1,6 @@
 {
   "name": "puppet-virtualbox",
-  "version": "1.8.0",
+  "version": "2.0.0",
   "author": "Vox Pupuli",
   "summary": "Installs Virtualbox on RHEL and Debian-like systems",
   "license": "Apache-2.0",
@@ -8,9 +8,18 @@
   "project_page": "https://github.com/voxpupuli/puppet-virtualbox",
   "issues_url": "https://github.com/voxpupuli/puppet-virtualbox/issues",
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 4.8.0 <5.0.0"},
-    {"name":"puppetlabs/apt","version_requirement":">= 2.1.0 <3.0.0"},
-    {"name":"stahnma/epel","version_requirement":">= 1.0.0 <2.0.0"}
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.1 <5.0.0"
+    },
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 2.1.0 <3.0.0"
+    },
+    {
+      "name": "stahnma/epel",
+      "version_requirement": ">= 1.0.0 <2.0.0"
+    }
   ],
   "data_provider": null,
   "tags": [
@@ -21,7 +30,6 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5",
         "6",
         "7"
       ]
@@ -29,7 +37,6 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "5",
         "6",
         "7"
       ]
@@ -37,24 +44,22 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "10.04",
-        "12.04",
         "14.04"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "6",
         "7",
-        "8"
+        "8",
+        "9"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 3.8.7 < 5.0.0"
+      "version_requirement": ">= 4.7.0 < 5.0.0"
     }
   ]
 }
