@@ -15,8 +15,7 @@ Vagrant.configure("2") do |config|
   if ENV['VAGRANT_FROM_SCRATCH']
     config.vm.box = "bento/centos-7.4"
   else
-    config.vm.box = "box/virtualbox/linux-dev-workstation-201711.1.box"
-    #config.vm.box = "double16/linux-dev-workstation"
+    config.vm.box = "double16/linux-dev-workstation"
   end
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
