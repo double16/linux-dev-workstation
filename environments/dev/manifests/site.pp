@@ -148,6 +148,8 @@ package { [
     'freerdp',
     'alien',
     'which',
+    'tree',
+    'im-chooser',
     'go',
   ]: ensure => present,
 }
@@ -202,6 +204,7 @@ include ::private::my_vcsrepos
 include ::private::rlang
 include ::private::pdk
 include ::private::vscode
+include ::private::my_emacs
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,

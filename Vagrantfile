@@ -15,7 +15,8 @@ Vagrant.configure("2") do |config|
   if ENV['VAGRANT_FROM_SCRATCH']
     config.vm.box = "bento/centos-7.4"
   else
-    config.vm.box = "double16/linux-dev-workstation"
+    config.vm.box = "box/virtualbox/linux-dev-workstation-201711.1.box"
+    #config.vm.box = "double16/linux-dev-workstation"
   end
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
@@ -146,6 +147,7 @@ resize2fs /dev/VolGroup/lv_root
       "host_username" => vagrant_config['username'] || ENV['USER'] || ENV['USERNAME'] || 'vagrant',
     }
 #    puppet.options = "--debug"
+#    puppet.options = "--noop"
   end
 
 end

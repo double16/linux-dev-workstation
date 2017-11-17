@@ -9,6 +9,7 @@ This Vagrant image contains a developer workspace with the following software:
 * NetBeans
 * [Visual Studio Code](https://code.visualstudio.com)
 * vim 8, gvim, sundry vim plugins
+* emacs with [spacemacs](https://github.com/syl20bnr/spacemacs)
 * git
 * svn
 * Docker, Docker Compose, Kitematic
