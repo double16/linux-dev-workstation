@@ -201,6 +201,7 @@ include ::private::hashistack
 include ::private::my_vcsrepos
 include ::private::rlang
 include ::private::pdk
+include ::private::vscode
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,

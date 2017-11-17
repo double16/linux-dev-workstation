@@ -7,6 +7,7 @@ This Vagrant image contains a developer workspace with the following software:
 * Java 9
 * IntelliJ IDEA Ultimate + sundry plugins
 * NetBeans
+* [Visual Studio Code](https://code.visualstudio.com)
 * vim 8, gvim, sundry vim plugins
 * git
 * svn

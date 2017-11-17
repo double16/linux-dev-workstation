@@ -52,6 +52,7 @@
     <property name="plugin-8" type="string" value="launcher">
       <property name="items" type="array">
         <value type="string" value="14793955354.desktop"/>
+        <value type="string" value="15109491831.desktop"/>
         <value type="string" value="15102555301.desktop"/>
       </property>
     </property>
