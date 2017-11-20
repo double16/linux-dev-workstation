@@ -50,6 +50,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'octref.vetur',
     'formulahendry.auto-close-tag',
     'rbbit.typescript-hero',
+    'jpogran.puppet-vscode',
   ]: }
   ->file { '/home/vagrant/.config/Code':
     ensure => directory,
