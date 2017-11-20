@@ -119,6 +119,7 @@ package { 'python2-pip':
 ->Package<| provider == 'pip' |>
 
 package { [
+    'man-pages',
     'asciidoc',
     'dos2unix',
     'htop',
@@ -144,6 +145,7 @@ package { [
     'lsof',
     'nmap-ncat',
     'socat',
+    'tcpdump',
     'maven',
     'freerdp',
     'alien',

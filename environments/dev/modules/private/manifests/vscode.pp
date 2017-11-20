@@ -44,6 +44,12 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'vsmobile.vscode-react-native',
     'cazzar09.Gradle',
     'yzhang.markdown-all-in-one',
+    'dbaeumer.vscode-eslint',
+    'eg2.tslint',
+    'ecmel.vscode-html-css',
+    'octref.vetur',
+    'formulahendry.auto-close-tag',
+    'rbbit.typescript-hero',
   ]: }
   ->file { '/home/vagrant/.config/Code':
     ensure => directory,
@@ -66,7 +72,8 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     content => '
 {
     "workbench.iconTheme": "vscode-icons",
-    "workbench.colorTheme": "Solarized Light"
+    "workbench.colorTheme": "Solarized Light",
+    "gradle.useCommand": "./gradlew"
 }
 ',
   }
