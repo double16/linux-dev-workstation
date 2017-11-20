@@ -71,6 +71,8 @@ proxy_excludes=#{vagrant_config['proxy_excludes'] || ENV['NO_PROXY']}
 ipv4only=#{vagrant_config['ipv4only']}
 search_domain=#{vagrant_config['search_domain']}
 host_username=#{vagrant_config['username'] || ENV['USER'] || ENV['USERNAME'] || 'vagrant'}
+user_name=#{vagrant_config['user_name'] || `git config --get user.name 2>/dev/null`.chomp}
+user_email=#{vagrant_config['user_email'] || `git config --get user.email 2>/dev/null`.chomp}
 FACTS
 
 /opt/puppetlabs/bin/puppet apply --modulepath=/etc/puppetlabs/code/environments/dev/modules /etc/puppetlabs/code/environments/dev/manifests/site.pp

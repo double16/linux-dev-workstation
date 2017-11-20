@@ -33,6 +33,9 @@ configs:
         search_domain: company.com
         # Limit DNS resolution to IPV4
         ipv4only: true
+        # Populates git config
+        user_name: Droopy Dog
+        user_email: droppy@dogpound.nil
 ```
 
 ## Proxies
@@ -43,6 +46,9 @@ Any SSH public/private key pairs found in the `/vagrant` guest directory, which 
 
 ## SSH User
 The `vagrant` user is the primary user on the box. SSH will be configured to use the host machine user account. The environment variables `USER` and `USERNAME` are checked. The profile in `config.yaml` may include a `username` value to specify the user name.
+
+## Git User
+If the host computer has defined a name and email for git commits, git will be configured in the box the same way. The name and email for commits can be specified in `config.yaml` using `user_name` and `user_email` keys. See example above.
 
 ## CA Certificates
 CA certificates can be added to the system wide trust store by placing the files similarly to the above SSH keys. The files must be in PEM format and have an extension of `.pem`, `.crt` or `.cer`.
@@ -73,3 +79,5 @@ $ vncviewer localhost:5900
 If you want to use a different VNC client, point it to `localhost:5900`.
 
 _DO NOT_ expose port 5900 by adjusting firewall rules. The VNC server has no password. If you want direct access to VNC then you must change the VNC configuration. SSH tunneling is preferred.
+
+Sometimes after starting a new EC2 instance, the IP and hostname will be changed while it is running. It seems the VNC systemctl service doesn't handle this well and VNC won't be started. Restart the EC2 instance to fix it.

@@ -136,7 +136,7 @@ net.ipv6.conf.default.disable_ipv6=1
   }
   -> Exec<| stage == 'main' |>
 
-  unless empty($::proxy_url) { 
+  unless empty($::proxy_url) {
     git::config { 'http.proxy':
       value   => $::proxy_url,
       user    => 'root',
@@ -147,7 +147,7 @@ net.ipv6.conf.default.disable_ipv6=1
   } else {
     # TODO: remove git proxy
   }
- 
+
   if $::proxy_url {
 
     Nodenv::Plugin<| |>

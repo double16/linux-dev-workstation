@@ -242,6 +242,24 @@ unless str2bool($::packer) {
   ssh_keygen { 'vagrant': }
 }
 
+unless empty($::user_name) {
+  git::config { 'user.name':
+    value   => $::user_name,
+    user    => 'vagrant',
+    scope   => 'global',
+    require => Class['Private::Git_from_source'],
+  }
+}
+
+unless empty($::user_email) {
+  git::config { 'user.email':
+    value   => $::user_email,
+    user    => 'vagrant',
+    scope   => 'global',
+    require => Class['Private::Git_from_source'],
+  }
+}
+
 file { '/usr/local/src':
   ensure => 'directory',
   owner  => 0,
