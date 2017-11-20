@@ -2,25 +2,25 @@
 # HashiCorp tools
 #
 class private::hashistack {
-  archive { '/tmp/vagrant-cache/packer_1.1.1_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/packer_1.1.2_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/packer',
-    source        => 'https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip',
-    checksum      => 'e407566e2063ac697e0bbf6f2dd334be448d58bed93f44a186408bf1fc54c552',
+    source        => 'https://releases.hashicorp.com/packer/1.1.2/packer_1.1.2_linux_amd64.zip',
+    checksum      => '7e315a6110333d9d4269ac2ec5c68e663d82a4575d3e853996a976875612724b',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
   package { ['qemu', 'qemu-kvm']: }
 
-  archive { '/tmp/vagrant-cache/vault_0.8.3_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/vault_0.9.0_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/vault',
-    source        => 'https://releases.hashicorp.com/vault/0.8.3/vault_0.8.3_linux_amd64.zip',
-    checksum      => 'a3b687904cd1151e7c7b1a3d016c93177b33f4f9ce5254e1d4f060fca2ac2626',
+    source        => 'https://releases.hashicorp.com/vault/0.9.0/vault_0.9.0_linux_amd64.zip',
+    checksum      => '801ce0ceaab4d2e59dbb35ea5191cfe8e6f36bb91500e86bec2d154172de59a4',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
