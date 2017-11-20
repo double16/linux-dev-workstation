@@ -5,7 +5,8 @@ require 'yaml'
 
 current_dir    = '.'
 configs        = File.exists?("#{current_dir}/config.yaml") ? YAML.load_file("#{current_dir}/config.yaml") : { 'configs' => Hash.new }
-vagrant_config = configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']]
+default_config = configs['configs'].fetch('default', Hash.new)
+vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
 vagrant_config = Hash.new if vagrant_config.nil?
 readme         = File.dirname(File.expand_path(__FILE__)) + '/VAGRANTUP.md'
 

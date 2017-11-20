@@ -21,9 +21,8 @@ configs:
     large:
         memory: 8192
         cores: 4
-    proxied:
-        memory: 4096
-        cores: 2
+    # settings in 'default' are applied to all configurations
+    default:
         # Proxy URL that will be configured in various places
         proxy_url: http://proxy:8123
         # Domains excluded from the proxy, comma separated list
@@ -32,6 +31,8 @@ configs:
         ipv4only: true
         # Force search domain in /etc/resolv.conf
         search_domain: company.com
+        # Limit DNS resolution to IPV4
+        ipv4only: true
 ```
 
 ## Proxies

@@ -17,8 +17,9 @@ configs:
         proxy_url: http://proxy:8123
         # Domains excluded from the proxy, comma separated list
         proxy_excludes: .internal.net,.dmz.net
-        # Limit DNS resolution to IPV4
-        ipv4only: true
         # Force search domain in /etc/resolv.conf
         search_domain: company.com
-
+    # settings in 'default' are applied to all configurations
+    default:
+        # Limit DNS resolution to IPV4
+        ipv4only: true

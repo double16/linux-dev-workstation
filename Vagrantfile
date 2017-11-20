@@ -5,7 +5,8 @@ require 'yaml'
 
 current_dir    = File.dirname(File.expand_path(__FILE__))
 configs        = YAML.load_file("#{current_dir}/config.yaml")
-vagrant_config = configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']]
+default_config = configs['configs'].fetch('default', Hash.new)
+vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
 
 Vagrant.configure("2") do |config|
   # This trick is used to prefer a VM box over docker
