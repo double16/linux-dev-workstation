@@ -227,11 +227,17 @@ file { '/home/vagrant/.ssh/config':
   group  => 'vagrant',
   mode   => '0644',
 }
-->file_line { 'ssh user':
-  ensure => present,
-  path   => '/home/vagrant/.ssh/config',
-  line   => "User ${::host_username}",
-  match  => '^User\ ',
+
+unless str2bool($::packer) {
+  file_line { 'ssh user':
+    ensure  => present,
+    path    => '/home/vagrant/.ssh/config',
+    line    => "User ${::host_username}",
+    match   => '^User\ ',
+    require => File['/home/vagrant/.ssh/config'],
+  }
+
+  ssh_keygen { 'vagrant': }
 }
 
 file { '/usr/local/src':
@@ -270,6 +276,4 @@ file { '/home/vagrant/Workspace':
   owner  => 'vagrant',
   group  => 'vagrant',
 }
-
-ssh_keygen { 'vagrant': }
 
