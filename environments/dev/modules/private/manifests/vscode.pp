@@ -51,6 +51,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'formulahendry.auto-close-tag',
     'rbbit.typescript-hero',
     'jpogran.puppet-vscode',
+    'mrmlnc.vscode-json5',
   ]: }
   ->file { '/home/vagrant/.config/Code':
     ensure => directory,
@@ -74,7 +75,10 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 {
     "workbench.iconTheme": "vscode-icons",
     "workbench.colorTheme": "Solarized Light",
-    "gradle.useCommand": "./gradlew"
+    "gradle.useCommand": "./gradlew",
+    "git.confirmSync": false,
+    "editor.wordWrap": "bounded",
+    "editor.formatOnPaste": true
 }
 ',
   }
