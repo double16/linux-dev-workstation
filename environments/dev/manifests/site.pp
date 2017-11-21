@@ -153,6 +153,7 @@ package { [
     'tree',
     'im-chooser',
     'go',
+    'gnupg',
   ]: ensure => present,
 }
 
