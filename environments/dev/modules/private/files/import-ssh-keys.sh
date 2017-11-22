@@ -21,11 +21,12 @@ find /vagrant/ -iname '*.pub' \
      -a -not -path '/vagrant/environments/*' \
      -a -not -path '/vagrant/.*/*' \
      -print | \
-     xargs -L 1 grep -l "^ssh-" | \
-     while read PUBLIC_KEY; do
+     xargs grep -l "^ssh-" | \
+     xargs sha256sum | \
+     while read PUBLIC_KEY_HASH PUBLIC_KEY; do
 
   PRIVATE_KEY="${PUBLIC_KEY/.pub/}"
-  PRIVATE_KEY_IN_VM="${SSH_DIR}/$(sha256sum ${PRIVATE_KEY_IN_VM} | cut -d ' ' -f 1).pem"
+  PRIVATE_KEY_IN_VM="${SSH_DIR}/${PUBLIC_KEY_HASH}.pem"
   if [ -s "${PRIVATE_KEY}" ] && ! grep -q "IdentityFile \"${PRIVATE_KEY_IN_VM}\"" "${SSH_CONFIG}"; then
     # We can't control the permissions in /vagrant, so copy the key into the VM
     cp "${PRIVATE_KEY}" "${PRIVATE_KEY_IN_VM}"
