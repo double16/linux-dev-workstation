@@ -58,4 +58,24 @@ class private::my_emacs {
     provider => git,
     source   => 'https://github.com/syl20bnr/spacemacs.git',
   }
+
+  file { '/home/vagrant/.spacemacs':
+    ensure  => file,
+    owner   => 'vagrant',
+    group   => 'vagrant',
+    source  => 'puppet:///modules/private/dotconfig/spacemacs',
+    replace => false,
+  }
+
+  exec { 'spacemacs install':
+    path        => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+    command     => 'pkill emacs ; emacs --daemon ; pkill emacs; true',
+    provider    => 'shell',
+    environment => [ 'HOME=/home/vagrant' ],
+    user        => 'vagrant',
+    group       => 'vagrant',
+    cwd         => '/home/vagrant',
+    refreshonly => true,
+    subscribe   => [ Vcsrepo['/home/vagrant/.emacs.d'], File['/home/vagrant/.spacemacs'] ],
+  }
 }
