@@ -1,3 +1,6 @@
+#
+# Install Docker and related tools
+#
 class private::my_docker {
   unless $::virtual == 'docker' {
 
@@ -47,5 +50,14 @@ net.ipv6.conf.all.forwarding = 1
 
   file { '/usr/local/bin/docker-clean':
     ensure => absent,
+  }
+
+  remote_file { '/usr/local/bin/container-diff':
+    source        => 'https://storage.googleapis.com/container-diff/v0.5.2/container-diff-linux-amd64',
+    owner         => 0,
+    group         => 'root',
+    mode          => '0755',
+    checksum      => '49a4050e1fc4015bdb9f9be3aa6acf846ac45fe9a1b782568f1bd66b9d3dd917',
+    checksum_type => 'sha256',
   }
 }
