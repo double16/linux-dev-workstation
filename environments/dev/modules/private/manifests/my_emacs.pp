@@ -76,6 +76,7 @@ class private::my_emacs {
     group       => 'vagrant',
     cwd         => '/home/vagrant',
     refreshonly => true,
+    timeout     => 1200,
     subscribe   => [ Vcsrepo['/home/vagrant/.emacs.d'], File['/home/vagrant/.spacemacs'] ],
   }
 }
