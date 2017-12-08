@@ -1,8 +1,8 @@
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2017.2.6'
-  $build = '172.4574.11'
-  $prefsdir = '/home/vagrant/.IntelliJIdea2017.2'
+  $version = '2017.3'
+  $build = '173.3727.127'
+  $prefsdir = '/home/vagrant/.IntelliJIdea2017.3'
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
   $colorsdir = "${configdir}/colors"
@@ -22,7 +22,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => '565f44d1b955844a11010c4735fa7adfb5aba20327b2424897382ff487344ede',
+    checksum      => 'f75db2b4014d115f185bf867a1e5a6b4dae289444bf74e46b58ad2844e07d325',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -71,14 +71,18 @@ StartupNotify=true
   # Find plugin at https://plugins.jetbrains.com/idea
   # Copy direct download link
   # To get the sha256 sum: curl -L ${url} | shasum -a 256
-  define plugin_zip($version, $updateid, $sha256sum) {
+  define plugin_zip($version, $updateid, $sha256sum = undef) {
+    $checksum_type = $sha256sum ? {
+      undef   => undef,
+      default => 'sha256',
+    }
     archive { "/tmp/vagrant-cache/idea-plugins/${title}-${version}.zip":
       ensure        => present,
       extract       => true,
       extract_path  => $::private::idea::plugindir,
       source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
       checksum      => $sha256sum,
-      checksum_type => 'sha256',
+      checksum_type => $checksum_type,
       creates       => "${::private::idea::plugindir}/${title}",
       cleanup       => false,
       user          => 'vagrant',
@@ -87,12 +91,16 @@ StartupNotify=true
     }
   }
 
-  define plugin_jar($version, $updateid, $sha256sum) {
+  define plugin_jar($version, $updateid, $sha256sum = undef) {
+    $checksum_type = $sha256sum ? {
+      undef   => undef,
+      default => 'sha256',
+    }
     remote_file { "${::private::idea::plugindir}/${title}.jar":
       ensure        => present,
       source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
       checksum      => $sha256sum,
-      checksum_type => 'sha256',
+      checksum_type => $checksum_type,
       owner         => 'vagrant',
       group         => 'vagrant',
       require       => File[$::private::idea::plugindir],
@@ -100,141 +108,118 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'LiveEdit':
-    version   => '172.4343.25',
-    updateid  => '39751',
-    sha256sum => '1f3afcec669cb044d65889dc6b8224f5af0b8b3f2c165fdaefb6869896c08778',
+    version  => '173.3727.69',
+    updateid => '40799',
   }
 
   private::idea::plugin_zip { 'AngularJS':
-    version   => '172.4155.35',
-    updateid  => '39192',
-    sha256sum => '9eaecf1eeb47d26b7bbe745b1aaa23a3a38b3e3e721705eafcef9a61a4808318',
+    version  => '173.3727.69',
+    updateid => '40796',
   }
 
   private::idea::plugin_zip { 'ruby':
-    version   => '2017.2.20170906',
-    updateid  => '38512',
-    sha256sum => '6544f712f9191a0bffd787f3d6a698902300bce0b960e6ac07db19ab95c691bf',
+    version  => '2017.3.20171128',
+    updateid => '41036',
   }
 
   private::idea::plugin_zip { 'puppet':
-    version   => '172.3317.76',
-    updateid  => '36968',
-    sha256sum => '2f1a0affbc9d6888aed79968106522628fbaf016100ad9223371de1a9c1aa803',
+    version  => '173.3727.127',
+    updateid => '41058',
   }
 
   private::idea::plugin_zip { 'NodeJS':
-    version   => '172.4155.10',
-    updateid  => '38475',
-    sha256sum => '2d6aba4e51fa274ecd518e73851439c3a3df60fb88e374d81a6cddb535f9aabd',
+    version  => '173.3727.69',
+    updateid => '40792',
   }
 
   private::idea::plugin_zip { 'BashSupport':
-    version   => '1.6.12.172',
-    updateid  => '38357',
-    sha256sum => 'dd5e347ffe07f4e7c5464dab7c9128f64d970a35599e4e85b801663206bec2b9',
+    version  => '1.6.12.173',
+    updateid => '38798',
   }
 
   private::idea::plugin_zip { 'Docker':
-    version   => '172.3968.28',
-    updateid  => '38244',
-    sha256sum => 'e6d3d3db8977fee9eb31c193843acb7cf7bd5126b499da8e0df40f1cbdbe2e7c',
+    version  => '173.3727.15',
+    updateid => '40538',
   }
 
   private::idea::plugin_zip { 'idea-gitignore':
-    version   => '2.3.0',
-    updateid  => '40109',
-    sha256sum => '207d45fe2c284a516fd677689bf26b7b31cf41c7e36d6bd1e4a034c125186610',
+    version  => '2.3.2',
+    updateid => '40625',
   }
 
   private::idea::plugin_zip { 'ini4idea':
-    version   => '172.3317.57',
-    updateid  => '36822',
-    sha256sum => 'b96c53ed3e7d56d5b46ffe0f2301bfa2360da0cd5a1692b1b8c7dc0dabdfb90c',
+    version  => '173.3727.84',
+    updateid => '40770',
   }
 
   private::idea::plugin_zip { 'intellij-hcl':
-    version   => '0.6.8',
-    updateid  => '40107',
-    sha256sum => 'b09668f87b325f491190b69dbfe8da50450ddf29f0495e1bc4753358551cb573',
+    version  => '0.6.9.3',
+    updateid => '41177',
   }
 
   private::idea::plugin_zip { 'intellij-go':
-    version   => '172.3968.45',
-    updateid  => '38446',
-    sha256sum => 'd2a64e992183399e4a5ff536691fad1a0e7b17cae7a1770f51cb676bfe3b4c9a',
+    version  => '173.3727.144',
+    updateid => '41097',
   }
 
   private::idea::plugin_zip { 'Jade':
-    version   => '172.2656.13',
-    updateid  => '35649',
-    sha256sum => '8e9a8bc3b4b2187f3946a98d65436c1945cad4804dc3eeecfd4eb776b4a4b5b6',
+    version  => '173.3531.1',
+    updateid => '40091',
   }
 
   private::idea::plugin_zip { 'asciidoctor':
-    version   => '0.19.1',
-    updateid  => '38643',
-    sha256sum => 'd5cadedc343039c8d2a6b0a6db35da55f502c68895cb3a265eeb32cca586e0f8',
+    version  => '0.19.2',
+    updateid => '40599',
   }
 
   private::idea::plugin_zip { 'Kotlin':
-    version   => '1.1.51-release-IJ2017.2-1',
-    updateid  => '39169',
-    sha256sum => '55474130f14543ce3059096079659c2e843b422625548a451a0f3b7717d0b09c',
+    version  => '1.2.0-release-IJ2017.3-1',
+    updateid => '40986',
   }
 
   private::idea::plugin_zip { 'Bitbucket Linky':
-    version   => '4.1',
-    updateid  => '39954',
-    sha256sum => 'c20393d6af058355a3904e7892b67d1c6e0e66bf8fc2873b3e59a718bee5bcc0',
+    version  => '5.0',
+    updateid => '40911',
   }
 
-  private::idea::plugin_zip { 'GradleDependencySupport':
-    version   => '1.8',
-    updateid  => '31587',
-    sha256sum => 'b1708f1536d452e8276c796810f2191a5b1dd083a78fccb2b2342e5ff723f310',
+  private::idea::plugin_zip { 'Gradle Dependencies Helper':
+    version  => '1.9',
+    updateid => '40756',
   }
 
   private::idea::plugin_zip { 'R4Intellij':
-    version   => '1.0.8',
-    updateid  => '37756',
-    sha256sum => '0ad3db61e99a95b7046344f2c0df11668c14255d379c02cd3736a5bf417f5055',
+    version  => '1.0.8',
+    updateid => '37756',
   }
 
   private::idea::plugin_zip { 'js-karma':
-    version   => '172.3968.20',
-    updateid  => '38070',
-    sha256sum => 'a1776aafd92a3d74e35e924cd72ac11bd615c5f0e2a5374bb107d217df41f963',
+    version  => '173.3727.69',
+    updateid => '40793',
   }
 
   private::idea::plugin_zip { 'sass-lint-plugin':
-    version   => '1.0.7',
-    updateid  => '39734',
-    sha256sum => '2b49c19e1f314fb2e8a312470e59d652b4216bcb34ceae49e22bbfd7aae5e3c3',
+    version  => '1.0.8',
+    updateid => '40438',
   }
 
   private::idea::plugin_jar { 'react-css-modules-intellij-plugin':
-    version   => '1.0.1',
-    updateid  => '30724',
-    sha256sum => '6aa617ab4a8caeaa93142a3b8924d81fb6da9024d0d6f618b59c05696730cf4e',
+    version  => '1.0.1',
+    updateid => '30724',
   }
 
   private::idea::plugin_jar { 'bootstrap3':
-    version   => '4.0.4',
-    updateid  => '39293',
-    sha256sum => '2dfdb0d2c5263299458a355b5749f2d74d8a18c675e8a575a7d74b87eea34b68',
+    version  => '4.0.4',
+    updateid => '39293',
   }
 
   private::idea::plugin_jar { 'com.jetbrains.ideolog-172.0.4.0':
-    version   => '172.0.4.0',
-    updateid  => '38886',
-    sha256sum => 'ff5b77aa78d14018a0295daab1e08b3496d264f3f18cf34bc424a872648238a9',
+    version  => '173.0.5.0',
+    updateid => '40955',
   }
 
   private::idea::plugin_zip { 'vagrant':
-    version   => '172.3317.76',
-    updateid  => '37002',
-    sha256sum => '3e52f3139ab8de92346f58c781bb88b75ea3af0f81d566464f60f8d1ba4cbb90',
+    version  => '173.3727.127',
+    updateid => '41069',
   }
 
   remote_file { "${colorsdir}/Solarized Dark.icls":
