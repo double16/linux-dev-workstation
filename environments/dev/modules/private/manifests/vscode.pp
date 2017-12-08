@@ -27,6 +27,10 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
   }
   ->package { 'code': }
 
+  package { 'pylint':
+    provider => 'pip',
+  }
+
   private::vscode::extension { [
     'Braver.vscode-solarized',
     'nodesource.vscode-for-node-js-development-pack',
@@ -77,7 +81,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     "workbench.colorTheme": "Solarized Light",
     "gradle.useCommand": "./gradlew",
     "git.confirmSync": false,
-    "editor.wordWrap": "bounded",
+    "editor.wordWrap": "on",
     "editor.formatOnPaste": true
 }
 ',

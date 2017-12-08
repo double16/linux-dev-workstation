@@ -148,7 +148,7 @@ net.ipv6.conf.default.disable_ipv6=1
     # TODO: remove git proxy
   }
 
-  if $::proxy_url {
+  unless empty(delete($::proxy_url, ' ')) {
 
     Nodenv::Plugin<| |>
     ->Nodenv::Build<| |>
@@ -176,7 +176,7 @@ net.ipv6.conf.default.disable_ipv6=1
       path    => ['/bin','/sbin/','/usr/bin','/usr/sbin','/opt/nodenv/bin','/opt/nodenv/shims'],
       # nodenv each plugin isn't recognized during the first run??
       #command => "nodenv each npm config delete proxy",
-      command => "ls /opt/nodenv/versions/*/bin/node | xargs -L 1 -I {} npm config delete proxy",
+      command => 'ls /opt/nodenv/versions/*/bin/node | xargs -L 1 -I {} npm config delete proxy',
     }
     ->Nodenv::Package<| |>
 

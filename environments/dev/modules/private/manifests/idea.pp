@@ -266,4 +266,19 @@ StartupNotify=true
   </component>
 </application>',
   }
+
+  file { "${configdir}/options/git.xml":
+    ensure  => file,
+    mode    => '0664',
+    owner   => 'vagrant',
+    group   => 'vagrant',
+    replace => false,
+    content => '
+<application>
+  <component name="Git.Application.Settings">
+    <option name="myPathToGit" value="/usr/bin/git" />
+    <option name="SSH_EXECUTABLE" value="NATIVE_SSH" />
+  </component>
+</application>',
+  }
 }
