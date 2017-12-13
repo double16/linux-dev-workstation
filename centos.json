@@ -168,7 +168,7 @@
         "box_tag": "double16/{{user `vm_name`}}",
         "access_token": "{{user `cloud_token`}}",
         "version": "{{user `version`}}",
-        "no_release": "false"
+        "no_release": "true"
       }
     ]
   ],
@@ -274,7 +274,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "tpl/vagrantfile-centos7-desktop.tpl",
-    "version": "201712.1",
+    "version": "201801.1",
     "virtualbox_guest_os_type": "RedHat_64",
     "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",
