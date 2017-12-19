@@ -30,7 +30,7 @@ class private::my_sdkman {
 
   sdkman::package { 'groovy':
     ensure     => present,
-    version    => '2.4.12',
+    version    => '2.4.13',
     is_default => true,
   }
 
@@ -42,14 +42,22 @@ class private::my_sdkman {
 
   sdkman::package { 'gradle':
     ensure     => present,
-    version    => '4.3.1',
+    version    => '4.4',
     is_default => true,
   }
 
-  sdkman::package { 'grails':
-    ensure     => present,
-    version    => '3.2.11',
-    is_default => true,
+  sdkman::package { 'grails 3.2':
+    ensure       => present,
+    package_name => 'grails',
+    version      => '3.2.11',
+    is_default   => false,
+  }
+
+  sdkman::package { 'grails 3.3':
+    ensure       => present,
+    package_name => 'grails',
+    version      => '3.3.2',
+    is_default   => true,
   }
 
   # Something isn't working with the is_default parameter, so we use a dependency to get java8 to install last

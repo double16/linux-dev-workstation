@@ -5,9 +5,9 @@ class private::my_docker {
   unless $::virtual == 'docker' {
 
     $docker_version = $::operatingsystem ? {
-      'Ubuntu' => '17.09.0~ce-0~ubuntu',
-      'CentOS' => '17.09.0.ce-1.el7.centos',
-      default  => '17.09.0-ce',
+      'Ubuntu' => '17.09.1~ce-0~ubuntu',
+      'CentOS' => '17.09.1.ce-1.el7.centos',
+      default  => '17.09.1-ce',
     }
 
     package { 'docker-engine': ensure => absent, }

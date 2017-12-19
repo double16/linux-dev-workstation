@@ -2,8 +2,8 @@
 # Installs Node.js, tools and packages
 #
 class private::my_node {
-  $node_lts = '8.9.1'
-  $node_latest = '9.2.0'
+  $node_lts = '8.9.3'
+  $node_latest = '9.3.0'
 
   class { '::nodenv':
     install_dir => '/opt/nodenv',
