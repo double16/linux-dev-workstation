@@ -38,7 +38,7 @@ class private::my_emacs {
   ->exec { "build emacs ${version}":
     path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
     cwd       => "/usr/src/emacs-${version}",
-    command   => 'make',
+    command   => 'setarch $(uname -m) -R make',
     creates   => "/usr/src/emacs-${version}/src/emacs",
     timeout   => 900,
     subscribe => Exec["configure emacs ${version}"],
