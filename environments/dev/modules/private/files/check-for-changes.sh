@@ -33,6 +33,17 @@ find ${ROOT} -name .git -type d -not -ipath '*/.tmp/*' -not -ipath '*/pkg/*' -pr
   cd - >/dev/null
 done
 
+find ${ROOT} -name .svn -type d -not -ipath '*/.tmp/*' -prune | while read D; do
+  cd "${D}/.." >/dev/null
+  svn status > "${STATUS}"
+  if [ -s "${STATUS}" ]; then
+    echo $(dirname "${D}"): >> "${CHANGED}"
+    sed -e 's/^/  - "/' -e 's/$/"/' "${STATUS}" >> "${CHANGED}"
+    echo >> "${CHANGED}"
+  fi
+  cd - >/dev/null
+done
+
 if [ -s "${CHANGED}" ]; then
   echo 'icon:emblem-important' > ${PIPE}
   echo 'tooltip:Changes found, not safe to destroy box' > ${PIPE}
