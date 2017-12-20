@@ -207,6 +207,7 @@ include ::private::my_vcsrepos
 include ::private::rlang
 include ::private::pdk
 include ::private::vscode
+include ::private::pending_changes
 include ::private::triton
 include ::private::aws
 include ::private::azure
