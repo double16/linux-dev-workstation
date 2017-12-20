@@ -207,7 +207,15 @@ include ::private::my_vcsrepos
 include ::private::rlang
 include ::private::pdk
 include ::private::vscode
-include ::private::my_emacs
+include ::private::triton
+include ::private::aws
+include ::private::azure
+include ::private::googlecloud
+
+# emacs won't compile under docker because we don't have permission to disable ASLR and exec-shield
+unless $::virtual == 'docker' {
+  include ::private::my_emacs
+}
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
