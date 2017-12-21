@@ -7,6 +7,7 @@ current_dir    = File.dirname(File.expand_path(__FILE__))
 configs        = YAML.load_file("#{current_dir}/config.yaml")
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
+monitor_count  = vagrant_config['monitors']
 
 Vagrant.configure("2") do |config|
   # This trick is used to prefer a VM box over docker
@@ -40,12 +41,10 @@ Vagrant.configure("2") do |config|
     config.cache.scope = :machine
   end
 
-  # Increase memory for Parallels Desktop
   config.vm.provider "parallels" do |p, o|
     p.memory = vagrant_config['memory']
   end
 
-  # Increase memory for Virtualbox
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.no_install = true
   end
@@ -55,46 +54,21 @@ Vagrant.configure("2") do |config|
     vb.memory = vagrant_config['memory']
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
     vb.customize ["modifyvm", :id, "--paravirtprovider", "default"]
-  end
-
-  config.vm.provider "virtualbox" do |vb|
-    # Validate this should be run it once
-    if ARGV[0] == "upX" && ! File.exist?("./disk1.vdi")
-      vb.customize [
-        'createhd',
-        '--filename', "./disk1.vdi",
-        '--format', 'VDI',
-        # 20GB
-        '--size', 20 * 1024
-      ]
-
-      vb.customize [
-        'storageattach', :id,
-        '--storagectl', 'SATA Controller',
-        '--port', 1, '--device', 0,
-        '--type', 'hdd', '--medium',
-#        file_to_disk
-      ]
-    end
-
-    if ARGV[0] == "upX" && ! File.exist?("./disk1.vdi")
-      # Run script to map new disk
-      config.vm.provision "shell", inline: <<-SHELL
-pvcreate /dev/sdb
-vgextend VolGroup /dev/sdb
-lvextend /dev/VolGroup/lv_root /dev/sdb
-resize2fs /dev/VolGroup/lv_root
-  SHELL
+    if monitor_count
+      vb.customize ["modifyvm", :id, "--monitorcount", monitor_count]
     end
   end
 
-  # Increase memory for VMware
   ["vmware_fusion", "vmware_workstation"].each do |p|
     config.vm.provider p do |v|
       v.gui = true
       v.vmx["numvcpus"] = vagrant_config['cores']
       v.vmx["memsize"] = vagrant_config['memory']
       v.vmx["vhv.enable"] = "TRUE"
+      if monitor_count
+        v.vmx["svga.numDisplays"] = monitor_count
+        v.vmx["svga.autodetect"] = "FALSE"
+      end
     end
   end
 

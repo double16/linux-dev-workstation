@@ -8,6 +8,7 @@ configs        = File.exists?("#{current_dir}/config.yaml") ? YAML.load_file("#{
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
 vagrant_config = Hash.new if vagrant_config.nil?
+monitor_count  = vagrant_config['monitors']
 readme         = File.dirname(File.expand_path(__FILE__)) + '/VAGRANTUP.md'
 
 Vagrant.configure("2") do |config|
@@ -36,6 +37,9 @@ Vagrant.configure("2") do |config|
      v.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
      v.customize ["modifyvm", :id, "--hwvirtex", "on"]
      v.customize ["modifyvm", :id, "--paravirtprovider", "default"]
+     if monitor_count
+       v.customize ["modifyvm", :id, "--monitorcount", monitor_count]
+     end
    end
 
   ["vmware_fusion", "vmware_workstation"].each do |provider|
@@ -50,6 +54,10 @@ Vagrant.configure("2") do |config|
       v.vmx["scsi0.virtualDev"] = "lsilogic"
       v.vmx["mks.enable3d"] = "TRUE"
       v.vmx["vhv.enable"] = "TRUE"
+      if monitor_count
+        v.vmx["svga.numDisplays"] = monitor_count
+        v.vmx["svga.autodetect"] = "FALSE"
+      end
     end
   end
 
