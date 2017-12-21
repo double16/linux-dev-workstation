@@ -42,7 +42,7 @@ class private::my_sdkman {
 
   sdkman::package { 'gradle':
     ensure     => present,
-    version    => '4.4',
+    version    => '4.4.1',
     is_default => true,
   }
 
