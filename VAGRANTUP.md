@@ -36,6 +36,8 @@ configs:
         # Populates git config
         user_name: Droopy Dog
         user_email: droppy@dogpound.nil
+        # Optional Timezone, pulled from host machine if not specified
+        timezone: America/Chicago
 ```
 
 ## Proxies

@@ -19,7 +19,8 @@ function pending {
   grep -qF " [ahead " "$1"
 }
 
-echo 'tooltip:Scanning for changes...' > ${PIPE}
+TIME="$(date '+%l:%M%p')"
+echo "tooltip:${TIME} Scanning for changes..." > ${PIPE}
 rm "${CHANGED}" 2>/dev/null
 
 find ${ROOT} -name .git -type d -not -ipath '*/.tmp/*' -not -ipath '*/pkg/*' -prune | while read D; do
@@ -44,12 +45,13 @@ find ${ROOT} -name .svn -type d -not -ipath '*/.tmp/*' -prune | while read D; do
   cd - >/dev/null
 done
 
+TIME="$(date '+%l:%M%p')"
 if [ -s "${CHANGED}" ]; then
   echo 'icon:emblem-important' > ${PIPE}
-  echo 'tooltip:Changes found, not safe to destroy box' > ${PIPE}
+  echo "tooltip:${TIME} Changes found, not safe to destroy box" > ${PIPE}
 else
   echo 'icon:emblem-generic' > ${PIPE}
-  echo 'tooltip:No changes found, safe to destroy box' > ${PIPE}
+  echo "tooltip:${TIME} No changes found, safe to destroy box" > ${PIPE}
 fi
 
 exit 0

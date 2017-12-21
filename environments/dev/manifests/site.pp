@@ -19,6 +19,13 @@ service { ['initial-setup', 'initial-setup-text', 'initial-setup-graphical']:
   enable => false,
 }
 
+if $::timezone {
+  notice("Timezone is ${::timezone}")
+  class { 'timezone':
+      timezone => $::timezone,
+  }
+}
+
 file { '/tmp/vagrant-cache':
   ensure => directory,
   mode   => '0777',

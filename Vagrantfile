@@ -147,6 +147,7 @@ resize2fs /dev/VolGroup/lv_root
       "host_username" => vagrant_config['username'] || ENV['USER'] || ENV['USERNAME'] || 'vagrant',
       "user_name" => vagrant_config['user_name'] || `git config --get user.name 2>/dev/null`.chomp,
       "user_email" => vagrant_config['user_email'] || `git config --get user.email 2>/dev/null`.chomp,
+      "timezone" => vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600),
     }
 #    puppet.options = "--debug"
 #    puppet.options = "--noop"

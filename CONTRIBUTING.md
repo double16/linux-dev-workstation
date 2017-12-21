@@ -6,7 +6,7 @@ Fork this repo, create a branch, and submit a PR. CI is done using CircleCI by u
 
 Update puppet modules from the `Puppetfile`:
 ```shell
-$ librarian-puppet install --path=environments/dev/modules --destructive --strip-dot-git
+$ librarian-puppet install --path=environments/dev/modules --strip-dot-git
 ```
 
 If the `zanloy-vim` module is updated, the URL to vim-pathogen needs to be changed to a github.com URL to make it past some filtering proxies. Change `https://tpo.pe/pathogen.vim` to `https://raw.githubusercontent.com/tpope/vim-pathogen/v2.4/autoload/pathogen.vim` in the file `environments/dev/modules/vim/manifests/pathogen.pp`.

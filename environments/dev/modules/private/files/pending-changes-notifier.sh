@@ -30,9 +30,11 @@ export -f on_click
 
 ( sleep 5s; /usr/local/bin/check-for-changes.sh ) &
 
+TIME="$(date '+%l:%M%p')"
+
 # create the notification icon
 yad --notification                  \
     --listen                        \
     --image="emblem-new"              \
-    --text="Scanning for changes..."   \
+    --text="${TIME} Scanning for changes..."   \
     --command="bash -c on_click" <&3
