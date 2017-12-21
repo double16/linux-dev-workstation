@@ -25,7 +25,9 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 ',
   }
-  ->package { 'code': }
+  ->package { 'code':
+    require => Yum::Group['X Window System'],
+  }
 
   package { 'pylint':
     provider => 'pip',
