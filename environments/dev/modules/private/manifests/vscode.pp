@@ -25,8 +25,11 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 ',
   }
+
+  Yum::Group<| title == 'X Window System' |>
+  ->package { 'mesa-libGL': }
   ->package { 'code':
-    require => Yum::Group['X Window System'],
+    require => File['/etc/yum.repos.d/vscode.repo'],
   }
 
   package { 'pylint':
