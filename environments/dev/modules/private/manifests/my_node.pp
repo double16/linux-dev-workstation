@@ -5,7 +5,18 @@ class private::my_node {
   $node_lts = '8.9.3'
   $node_latest = '9.3.0'
 
-  class { '::nodenv':
+  file { '/tmp/vagrant-cache/nodenv':
+    ensure => directory,
+    mode   => '0777',
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+  ->file_line { 'NODE_BUILD_CACHE_PATH':
+    path  => '/etc/environment',
+    line  => 'NODE_BUILD_CACHE_PATH=/tmp/vagrant-cache/nodenv',
+    match => '^NODE_BUILD_CACHE_PATH\=',
+  }
+  ->class { '::nodenv':
     install_dir => '/opt/nodenv',
     latest      => true,
   }

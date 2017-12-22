@@ -111,6 +111,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision "puppet", type: "puppet" do |puppet|
     puppet.environment_path = "environments"
     puppet.environment = "dev"
+    puppet.environment_variables = {
+      'NODE_BUILD_CACHE_PATH' => '/tmp/vagrant-cache/nodenv',
+      'RUBY_BUILD_CACHE_PATH' => '/tmp/vagrant-cache/rbenv',
+    }
     puppet.facter = {
       "proxy_url" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"] || ENV["HTTP_PROXY"],
       "http_proxy" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"],
