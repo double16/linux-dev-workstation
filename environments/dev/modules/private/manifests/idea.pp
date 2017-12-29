@@ -1,7 +1,7 @@
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2017.3.1'
-  $build = '173.3942.27'
+  $version = '2017.3.2'
+  $build = '173.4127.27'
   $prefsdir = '/home/vagrant/.IntelliJIdea2017.3'
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
@@ -22,7 +22,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => '48510017a099d2cfa72797c8d9224cada0a467bbdbc43f545bd94bf727150a3b',
+    checksum      => 'ac87f00d467f002ed7ab3b94956d71ef493cd25f7ae7dcfa2e0cab9c4e8e9fd0',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -128,8 +128,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'NodeJS':
-    version  => '173.3942.4',
-    updateid => '41061',
+    version  => '173.4127.22',
+    updateid => '41666',
   }
 
   private::idea::plugin_zip { 'BashSupport':
@@ -193,8 +193,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'js-karma':
-    version  => '173.3942.31',
-    updateid => '41374',
+    version  => '173.4127.22',
+    updateid => '41670',
   }
 
   private::idea::plugin_zip { 'sass-lint-plugin':

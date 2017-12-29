@@ -5,8 +5,8 @@ This Vagrant image contains a developer workspace with the following software:
 * CentOS 7.4
 * Java 8
 * Java 9
-* IntelliJ IDEA Ultimate + sundry plugins
-* NetBeans
+* [IntelliJ IDEA Ultimate + sundry plugins](https://www.jetbrains.com/idea/)
+* [NetBeans](https://netbeans.org)
 * [Visual Studio Code](https://code.visualstudio.com)
 * vim 8, gvim, sundry vim plugins
 * emacs with [spacemacs](https://github.com/syl20bnr/spacemacs)
@@ -16,32 +16,33 @@ This Vagrant image contains a developer workspace with the following software:
 * Python 2
 * asciidoc
 * nodenv (NodeJS environments)
-* rbenv (Ruby Environments)
-* Maven
-* Ansible
+* [rbenv](https://github.com/rbenv/rbenv) (Ruby Environments)
+* [Maven](https://maven.apache.org)
+* [Ansible](https://www.ansible.com)
 * Puppet, Puppet Development Kit
-* Slack
+* [Slack](https://slack.com)
 * HipChat
 * Xfce Desktop
-* Firefox
+* [Firefox](https://www.mozilla.org/en-US/firefox/)
 * Chrome
-* VirtualBox
-* Vagrant
-* R, RStudio
-* sdkman
-* Groovy via sdkman
-* Gradle via sdkman
-* Grails via sdkman
+* [VirtualBox](https://www.virtualbox.org)
+* [Vagrant](https://www.vagrantup.com)
+* [R, RStudio](https://www.rstudio.com)
+* [sdkman](http://sdkman.io)
+* [Groovy](http://groovy-lang.org) via sdkman
+* [Gradle](https://gradle.org) via sdkman
+* [Grails](https://grails.org) via sdkman
 * [Packer](http://packer.io)
 * [Consul](http://consul.io)
 * [Vault](http://vaultproject.io)
+* [Terraform](https://www.terraform.io)
 
 It also features configuration options:
 
 * Configuring HTTP proxies from standard environment variables (HTTP_PROXY, ...) or configuration described in [VAGRANTUP.md](VAGRANTUP.md).
 * Import of SSH keys
 * Import of CA certifications
-* Checkout of source code repositories when bringing the Vagrant box up
+* Checkout of source code repositories when provisioning the Vagrant box
 
 ## Configure
 See [VAGRANTUP.md](VAGRANTUP.md) for configuration details. This file is also included in the box built by Packer and output after the `vagrant up`.
