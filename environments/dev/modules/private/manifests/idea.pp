@@ -113,8 +113,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'AngularJS':
-    version  => '173.3942.31',
-    updateid => '41372',
+    version  => '173.4127.22',
+    updateid => '41668',
   }
 
   private::idea::plugin_zip { 'ruby':
