@@ -14,13 +14,13 @@ class private::hashistack {
   }
   package { ['qemu', 'qemu-kvm']: }
 
-  archive { '/tmp/vagrant-cache/vault_0.9.0_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/vault_0.9.1_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/vault',
-    source        => 'https://releases.hashicorp.com/vault/0.9.0/vault_0.9.0_linux_amd64.zip',
-    checksum      => '801ce0ceaab4d2e59dbb35ea5191cfe8e6f36bb91500e86bec2d154172de59a4',
+    source        => 'https://releases.hashicorp.com/vault/0.9.1/vault_0.9.1_linux_amd64.zip',
+    checksum      => '6308013ee0d6278e98cdfe8d6de0162102a8d25f3bcd1e3737bf7b022a9f6702',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
