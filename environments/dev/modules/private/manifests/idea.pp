@@ -183,8 +183,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'Gradle Dependencies Helper':
-    version  => '1.9',
-    updateid => '40756',
+    version  => '1.10',
+    updateid => '42005',
   }
 
   private::idea::plugin_zip { 'R4Intellij':
@@ -212,9 +212,9 @@ StartupNotify=true
     updateid => '39293',
   }
 
-  private::idea::plugin_jar { 'com.jetbrains.ideolog-173.0.5.0':
-    version  => '173.0.5.0',
-    updateid => '40955',
+  private::idea::plugin_jar { 'com.jetbrains.ideolog-173.0.6.0':
+    version  => '173.0.6.0',
+    updateid => '42025',
   }
 
   private::idea::plugin_zip { 'vagrant':
