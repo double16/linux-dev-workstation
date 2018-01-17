@@ -10,6 +10,7 @@ This Vagrant image contains a developer workspace with the following software:
 * [Visual Studio Code](https://code.visualstudio.com)
 * vim 8, gvim, sundry vim plugins
 * emacs with [spacemacs](https://github.com/syl20bnr/spacemacs)
+* [Editor Config](http://editorconfig.org) support in most IDEs and editors
 * git
 * svn
 * Docker, Docker Compose, Kitematic

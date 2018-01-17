@@ -99,6 +99,7 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     'tpope/vim-commentary',
     'ctrlpvim/ctrlp.vim',
     'ekalinin/dockerfile.vim',
+    'editorconfig/editorconfig-vim',
   ]:
   }
 

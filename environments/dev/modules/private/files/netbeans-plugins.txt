@@ -26,3 +26,4 @@ open.url.of.git.repository.hoster
 com.junichi11.netbeans.gitignoreio
 git.toolbar
 org.vaadin.netbeans.maven
+com.welovecoding.netbeans.plugin.editorconfig
