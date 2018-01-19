@@ -190,7 +190,9 @@ class { '::git':
 }
 
 unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
-  include ::virtualbox
+  class { '::virtualbox':
+    version => '5.2',
+  }
   package { "kernel-devel-${::kernelrelease}": }
   ->Exec<| title == 'vboxdrv' |>
 }
