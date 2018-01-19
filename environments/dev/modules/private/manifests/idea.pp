@@ -1,7 +1,7 @@
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2017.3.2'
-  $build = '173.4127.27'
+  $version = '2017.3.3'
+  $build = '173.4301.25'
   $prefsdir = '/home/vagrant/.IntelliJIdea2017.3'
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
@@ -22,7 +22,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => 'ac87f00d467f002ed7ab3b94956d71ef493cd25f7ae7dcfa2e0cab9c4e8e9fd0',
+    checksum      => '05a7382ad5f04a64f0caa10c14af61c0270cf8a2ac25bb2c14a52536c3587e55',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -118,8 +118,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'ruby':
-    version  => '2017.3.20171205',
-    updateid => '41245',
+    version  => '2017.3.20171228',
+    updateid => '41888',
   }
 
   private::idea::plugin_zip { 'puppet':
@@ -128,8 +128,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'NodeJS':
-    version  => '173.4127.22',
-    updateid => '41666',
+    version  => '173.4301.12',
+    updateid => '42139',
   }
 
   private::idea::plugin_zip { 'BashSupport':
@@ -143,8 +143,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'idea-gitignore':
-    version  => '2.3.2',
-    updateid => '40625',
+    version  => '2.4.0',
+    updateid => '42151',
   }
 
   private::idea::plugin_zip { 'ini4idea':
@@ -158,8 +158,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'intellij-go':
-    version  => '173.3727.144',
-    updateid => '41097',
+    version  => '173.4381.1',
+    updateid => '42110',
   }
 
   private::idea::plugin_zip { 'Jade':
@@ -183,8 +183,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'Gradle Dependencies Helper':
-    version  => '1.10',
-    updateid => '42005',
+    version  => '1.11',
+    updateid => '42210',
   }
 
   private::idea::plugin_zip { 'R4Intellij':
