@@ -56,7 +56,7 @@
                             "uri": "https://packerbuildswest.blob.core.windows.net/vmcontainer8978da9d-005c-4d7c-9791-e715d5561704/osDisk.8978da9d-005c-4d7c-9791-e715d5561704.vhd"
                         },
                         "caching": "ReadWrite",
-                        "diskSizeGB": 32
+                        "diskSizeGB": 100
                     },
                     "dataDisks": []
                 },
@@ -101,7 +101,7 @@
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
-                        "etag": "W/\"03b7f1d3-42a0-4f07-a99c-b792f55e0461\"",
+                        "etag": "W/\"93675d5f-4c16-4f52-8093-515c5794e7bc\"",
                         "properties": {
                             "provisioningState": "Succeeded",
                             "privateIPAddress": "10.252.0.4",
@@ -288,10 +288,14 @@
             "properties": {
                 "provisioningState": "Succeeded",
                 "resourceGuid": "186f50d3-0f8d-427c-a506-95be7e904f43",
-                "ipAddress": "104.42.238.46",
+                "ipAddress": "104.42.69.238",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Dynamic",
-                "idleTimeoutInMinutes": 4
+                "idleTimeoutInMinutes": 4,
+                "dnsSettings": {
+                    "domainNameLabel": "[parameters('publicIPAddresses_packerrun_name')]",
+                    "fqdn": "[concat(parameters('publicIPAddresses_packerrun_name'),'.westus.cloudapp.azure.com')]"
+                }
             },
             "dependsOn": []
         },
@@ -313,7 +317,7 @@
                 "subnets": [
                     {
                         "name": "default",
-                        "etag": "W/\"74138dfd-7d6e-4588-a003-8b33eb0983a4\"",
+                        "etag": "W/\"b475e812-cdbb-4387-bc21-7b1d71e62801\"",
                         "properties": {
                             "provisioningState": "Succeeded",
                             "addressPrefix": "10.252.0.0/16"
@@ -363,3 +367,4 @@
         }
     ]
 }
+
