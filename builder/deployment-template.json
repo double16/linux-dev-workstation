@@ -1,0 +1,365 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_packer_name": {
+            "defaultValue": "packer",
+            "type": "String"
+        },
+        "virtualMachines_packerrun_name": {
+            "defaultValue": "packerrun",
+            "type": "String"
+        },
+        "networkSecurityGroups_ssh_name": {
+            "defaultValue": "ssh",
+            "type": "String"
+        },
+        "networkInterfaces_packerrun_name": {
+            "defaultValue": "packerrun",
+            "type": "String"
+        },
+        "publicIPAddresses_packerrun_name": {
+            "defaultValue": "packerrun",
+            "type": "String"
+        },
+        "subnets_default_name": {
+            "defaultValue": "default",
+            "type": "String"
+        },
+        "securityRules_ssh_22_name": {
+            "defaultValue": "ssh_22",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b/resourceGroups/packerruns/providers/Microsoft.Compute/virtualMachines/packerrun'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_packerrun_name')]",
+            "apiVersion": "2017-03-30",
+            "location": "westus",
+            "scale": null,
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D4S_v3"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "packer-osDisk.6ed5bf40-0929-4c4a-896f-e3591624c670.vhd",
+                        "createOption": "FromImage",
+                        "image": {
+                            "uri": "https://packerbuildswest.blob.core.windows.net/system/Microsoft.Compute/Images/images/packer-osDisk.6ed5bf40-0929-4c4a-896f-e3591624c670.vhd"
+                        },
+                        "vhd": {
+                            "uri": "https://packerbuildswest.blob.core.windows.net/vmcontainer8978da9d-005c-4d7c-9791-e715d5561704/osDisk.8978da9d-005c-4d7c-9791-e715d5561704.vhd"
+                        },
+                        "caching": "ReadWrite",
+                        "diskSizeGB": 32
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_packerrun_name')]",
+                    "adminUsername": "packer",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false
+                    },
+                    "secrets": []
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_packerrun_name'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_packerrun_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b/resourceGroups/packerruns/providers/Microsoft.Network/networkInterfaces/packerrun'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_packerrun_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "westus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "cd402f30-0504-4b7b-8e67-a3169d67c647",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "etag": "W/\"03b7f1d3-42a0-4f07-a99c-b792f55e0461\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.252.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_packerrun_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_packer_name'), parameters('subnets_default_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "1vs4lhfaejvuza3w3vfjp1smrc.dx.internal.cloudapp.net"
+                },
+                "macAddress": "00-0D-3A-37-C6-61",
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "primary": true,
+                "virtualMachine": {
+                    "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_packerrun_name'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_packerrun_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_packer_name'), parameters('subnets_default_name'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_packerrun_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b/resourceGroups/packerruns/providers/Microsoft.Network/networkSecurityGroups/ssh'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_ssh_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "westus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "49af8b24-87c0-4b16-91eb-9cefbb2811b9",
+                "securityRules": [
+                    {
+                        "name": "[concat(parameters('networkSecurityGroups_ssh_name'),'_22')]",
+                        "etag": "W/\"0e45ba8b-2a1a-45b3-970d-1d753e12b504\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ],
+                "defaultSecurityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "etag": "W/\"0e45ba8b-2a1a-45b3-970d-1d753e12b504\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAzureLoadBalancerInBound",
+                        "etag": "W/\"0e45ba8b-2a1a-45b3-970d-1d753e12b504\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from azure load balancer",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllInBound",
+                        "etag": "W/\"0e45ba8b-2a1a-45b3-970d-1d753e12b504\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all inbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowVnetOutBound",
+                        "etag": "W/\"0e45ba8b-2a1a-45b3-970d-1d753e12b504\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowInternetOutBound",
+                        "etag": "W/\"0e45ba8b-2a1a-45b3-970d-1d753e12b504\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllOutBound",
+                        "etag": "W/\"0e45ba8b-2a1a-45b3-970d-1d753e12b504\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all outbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b/resourceGroups/packerruns/providers/Microsoft.Network/publicIPAddresses/packerrun'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddresses_packerrun_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "westus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "186f50d3-0f8d-427c-a506-95be7e904f43",
+                "ipAddress": "104.42.238.46",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b/resourceGroups/packerruns/providers/Microsoft.Network/virtualNetworks/packer'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_packer_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "westus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "9ce565dd-22a0-4c6b-83b6-ed4a97ee4c8a",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.252.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "etag": "W/\"74138dfd-7d6e-4588-a003-8b33eb0983a4\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.252.0.0/16"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": []
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b/resourceGroups/packerruns/providers/Microsoft.Network/networkSecurityGroups/ssh/securityRules/ssh_22'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_ssh_name'), '/', parameters('securityRules_ssh_22_name'))]",
+            "apiVersion": "2017-06-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound",
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ssh_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b/resourceGroups/packerruns/providers/Microsoft.Network/virtualNetworks/packer/subnets/default'.",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_packer_name'), '/', parameters('subnets_default_name'))]",
+            "apiVersion": "2017-06-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.252.0.0/16"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_packer_name'))]"
+            ]
+        }
+    ]
+}

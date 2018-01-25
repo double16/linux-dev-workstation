@@ -1,0 +1,82 @@
+{
+  "_comment": "Create an image that can be used to run a VM to build the vagrant boxes on Azure because it supports nested virtualization.",
+  "builders": [
+    {
+      "type": "azure-arm",
+
+      "client_id": "{{ user `azure_client_id` }}",
+      "client_secret": "{{ user `azure_client_secret` }}",
+      "object_id": "{{ user `azure_object_id` }}",
+      "resource_group_name": "{{ user `azure_resource_group` }}",
+      "storage_account": "{{ user `azure_storage_account` }}",
+      "subscription_id": "{{ user `azure_subscription_id` }}",
+      "tenant_id": "{{ user `azure_tenant_id` }}",
+
+      "capture_container_name": "images",
+      "capture_name_prefix": "packer",
+
+      "os_type": "Linux",
+      "image_publisher": "Canonical",
+      "image_offer": "UbuntuServer",
+      "image_sku": "16.04-LTS",
+
+      "azure_tags": {
+        "dept": "engineering",
+        "task": "image building"
+      },
+
+      "ssh_pty": "true",
+      "location": "West US",
+      "vm_size": "Standard_D4S_v3",
+      "os_disk_size_gb": "32"
+    }
+  ],
+  "provisioners": [
+    {
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "rsync_proxy={{user `rsync_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+      "inline": [
+        "echo 'deb http://download.virtualbox.org/virtualbox/debian xenial contrib' >> /etc/apt/sources.list",
+        "curl -sL --fail https://www.virtualbox.org/download/oracle_vbox_2016.asc | apt-key add -",
+        "curl -sL --fail https://www.virtualbox.org/download/oracle_vbox.asc | apt-key add -",
+        "apt-get update",
+        "apt-get upgrade -y",
+        "apt-get install -y unzip git qemu qemu-kvm virtualbox-5.2",
+
+        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.1.3/packer_1.1.3_linux_amd64.zip",
+        "cd /usr/bin && unzip /tmp/packer.zip && chmod +x /usr/bin/packer",
+        "rm /tmp/packer.zip",
+
+        "curl -sL -o /tmp/vagrant_2.0.1_x86_64.deb https://releases.hashicorp.com/vagrant/2.0.1/vagrant_2.0.1_x86_64.deb",
+        "dpkg -i /tmp/vagrant_2.0.1_x86_64.deb",
+        "rm /tmp/vagrant_2.0.1_x86_64.deb",
+        "vagrant plugin install vagrant-cachier vagrant-vbguest",
+
+        "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+      ],
+      "inline_shebang": "/bin/sh -xe",
+      "type": "shell",
+      "skip_clean": true
+    }
+  ],
+  "variables": {
+    "ftp_proxy": "{{env `ftp_proxy`}}",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "no_proxy": "{{env `no_proxy`}}",
+    "rsync_proxy": "{{env `rsync_proxy`}}",
+    "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",
+    "azure_client_secret": "{{ env `AZURE_CLIENT_SECRET` }}",
+    "azure_object_id": "3d1dde02-4df2-49e0-bf1c-e4a0efa152a3",
+    "azure_resource_group": "packerbuildswest",
+    "azure_storage_account": "packerbuildswest",
+    "azure_subscription_id": "e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b",
+    "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba",
+  }
+}

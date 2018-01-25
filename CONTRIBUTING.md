@@ -33,7 +33,10 @@ The VMs are large, 10-12GB uncompressed. You'll likely need to build them indivi
 
 There are environment variables needed for building. If you aren't using a specific build, the variable is required, but a dummy value will do.
 
+* `VAGRANT_CLOUD_TOKEN` - vagrantcloud.com token for publishing Vagrant boxes
 * `AWS_ACCESS_KEY` - Access key for AWS EC2 allowing read/write access (not admin) to EC2
 * `AWS_SECRET_KEY` - Secret key for AWS
-* `VAGRANT_CLOUD_TOKEN` - vagrantcloud.com token for publishing Vagrant boxes
 
+## Building in Azure
+
+If you'd like to use a VM in the cloud to build the boxes, Azure supports nested virtualization. The `builder` directory has a Packer `builder.json` to build the VM with Packer, VirtualBox and QEMU. You'll need to follow the instructions provided in the Packer documentation to create a VM based on the VHD image.
