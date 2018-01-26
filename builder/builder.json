@@ -47,7 +47,7 @@
         "curl -sL --fail https://www.virtualbox.org/download/oracle_vbox.asc | apt-key add -",
         "apt-get update",
         "apt-get upgrade -y",
-        "apt-get install -y unzip git qemu qemu-kvm virtualbox-5.2",
+        "apt-get install -y unzip git qemu qemu-kvm virtualbox-5.2 awscli iftop jq",
 
         "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.1.3/packer_1.1.3_linux_amd64.zip",
         "cd /usr/bin && unzip /tmp/packer.zip && chmod +x /usr/bin/packer",

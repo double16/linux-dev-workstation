@@ -261,7 +261,7 @@
     "iso_name": "CentOS-7-x86_64-DVD-1708.iso",
     "iso_path": "iso",
     "iso_url": "http://mirrors.sonic.net/centos/7.4.1708/isos/x86_64/CentOS-7-x86_64-DVD-1708.iso",
-    "aws_ami_name": "CentOS Linux 7 x86_64 HVM EBS 1801_01",
+    "aws_ami_name": "CentOS Linux 7 x86_64 HVM EBS 1801",
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "kickstart": "ks.cfg",
