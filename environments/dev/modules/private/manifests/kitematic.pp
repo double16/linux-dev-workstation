@@ -34,7 +34,7 @@ class private::kitematic
     require => Package['alien'],
   }
   ->exec { 'Kitematic rpm fixes':
-    command   => join([
+    command => join([
       '/usr/bin/rpmrebuild',
       '--verbose',
       '--batch',
@@ -42,9 +42,9 @@ class private::kitematic
       '-p',
       "/opt/kitematic-${version}-1.x86_64.rpm"
     ], ' '),
-    creates   => "/rpmbuild/RPMS/x86_64/kitematic-${version}-1.x86_64.rpm",
-    timeout   => 0,
-    require   => Package['rpmrebuild'],
+    creates => "/rpmbuild/RPMS/x86_64/kitematic-${version}-1.x86_64.rpm",
+    timeout => 0,
+    require => Package['rpmrebuild'],
   }
   ->package { 'kitematic':
     ensure          => $version,

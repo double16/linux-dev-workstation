@@ -37,6 +37,7 @@ This Vagrant image contains a developer workspace with the following software:
 * [Consul](http://consul.io)
 * [Vault](http://vaultproject.io)
 * [Terraform](https://www.terraform.io)
+* [iTerm2](https://iterm2.com) shell integration
 
 It also features configuration options:
 

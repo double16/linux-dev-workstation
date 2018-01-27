@@ -47,7 +47,7 @@
         "curl -sL --fail https://www.virtualbox.org/download/oracle_vbox.asc | apt-key add -",
         "apt-get update",
         "apt-get upgrade -y",
-        "apt-get install -y unzip git qemu qemu-kvm virtualbox-5.2 awscli iftop jq",
+        "apt-get install -y unzip git qemu qemu-kvm virtualbox-5.2 awscli iftop jq php",
 
         "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.1.3/packer_1.1.3_linux_amd64.zip",
         "cd /usr/bin && unzip /tmp/packer.zip && chmod +x /usr/bin/packer",
@@ -57,6 +57,8 @@
         "dpkg -i /tmp/vagrant_2.0.1_x86_64.deb",
         "rm /tmp/vagrant_2.0.1_x86_64.deb",
         "vagrant plugin install vagrant-cachier vagrant-vbguest",
+
+        "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash' - vagrant",
 
         "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
       ],
@@ -77,6 +79,6 @@
     "azure_resource_group": "packerbuildswest",
     "azure_storage_account": "packerbuildswest",
     "azure_subscription_id": "e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b",
-    "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba",
+    "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba"
   }
 }
