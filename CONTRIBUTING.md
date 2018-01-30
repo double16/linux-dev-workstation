@@ -22,6 +22,7 @@ Packer builds are available for the following providers:
 * Parallels
 * AWS
 * qemu
+* Azure (VHD only, Vagrant box is not supported)
 
 The VMs are large, 10-12GB uncompressed. You'll likely need to build them individually.
 
@@ -30,12 +31,15 @@ The VMs are large, 10-12GB uncompressed. You'll likely need to build them indivi
 * packer build -only=parallels-iso  centos.json
 * packer build -only=amazon-ebs     centos.json
 * packer build -only=qemu           centos.json
+* packer build -only=azure-arm      centos.json
 
 There are environment variables needed for building. If you aren't using a specific build, the variable is required, but a dummy value will do.
 
 * `VAGRANT_CLOUD_TOKEN` - vagrantcloud.com token for publishing Vagrant boxes
 * `AWS_ACCESS_KEY` - Access key for AWS EC2 allowing read/write access (not admin) to EC2
 * `AWS_SECRET_KEY` - Secret key for AWS
+* `AZURE_CLIENT_ID` - Client ID for Azure
+* `AZURE_CLIENT_SECRET` - Secret for Azure
 
 ## Building in Azure
 
