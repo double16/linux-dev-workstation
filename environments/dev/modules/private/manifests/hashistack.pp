@@ -25,13 +25,13 @@ class private::hashistack {
     require       => File['/tmp/vagrant-cache'],
   }
 
-  archive { '/tmp/vagrant-cache/consul_1.0.2_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/consul_1.0.3_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/consul',
-    source        => 'https://releases.hashicorp.com/consul/1.0.2/consul_1.0.2_linux_amd64.zip',
-    checksum      => '418329f0f4fc3f18ef08674537b576e57df3f3026f258794b4b4b611beae6c9b',
+    source        => 'https://releases.hashicorp.com/consul/1.0.3/consul_1.0.3_linux_amd64.zip',
+    checksum      => '4782e4662de8effe49e97c50b1a1233c03c0026881f6c004144cc3b73f446ec5',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
