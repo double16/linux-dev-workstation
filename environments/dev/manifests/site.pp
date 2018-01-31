@@ -161,6 +161,8 @@ package { [
     'im-chooser',
     'go',
     'gnupg',
+    'gkrellm',
+    'gkrellm-top',
   ]: ensure => present,
 }
 
