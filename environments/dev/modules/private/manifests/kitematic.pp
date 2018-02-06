@@ -14,7 +14,13 @@ class private::kitematic
     command => '/usr/bin/sed -i -e \'s@^baseurl=http://dl.atrpms.net/@baseurl=https://www.mirrorservice.org/sites/dl.atrpms.net/@g\' /etc/yum.repos.d/atrpms*repo',
     onlyif  => '/usr/bin/grep -qF \'baseurl=http://dl.atrpms.net/\' /etc/yum.repos.d/atrpms*repo',
   }
-  ->package { [ 'rpmrebuild', 'zsh', 'libnotify', 'ffmpeg-devel' ]: }
+  ->package { [ 'rpmrebuild', 'zsh', 'libnotify' ]: }
+  ->exec { 'yum replace -y libmp3lame0 --replace-with=lame-libs':
+    unless  => 'yum list installed lame-libs',
+    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+    require => [ Yum::Plugin['replace'] ],
+  }
+  ->package { [ 'ffmpeg-devel' ]: }
   ->archive { "/tmp/vagrant-cache/Kitematic-${version}.zip":
     ensure        => present,
     source        => "https://github.com/docker/kitematic/releases/download/v${version}/Kitematic-${version}-Ubuntu.zip",
