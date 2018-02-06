@@ -252,6 +252,7 @@ include ::private::aws
 include ::private::azure
 include ::private::googlecloud
 include ::private::iterm2
+include ::private::circleci
 
 # emacs won't compile under docker because we don't have permission to disable ASLR and exec-shield
 unless $::virtual == 'docker' {

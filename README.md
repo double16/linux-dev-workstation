@@ -38,6 +38,7 @@ This Vagrant image contains a developer workspace with the following software:
 * [Vault](http://vaultproject.io)
 * [Terraform](https://www.terraform.io)
 * [iTerm2](https://iterm2.com) shell integration
+* [CircleCI](https://circleci.com/docs/2.0/local-jobs/) CLI
 
 It also features configuration options:
 

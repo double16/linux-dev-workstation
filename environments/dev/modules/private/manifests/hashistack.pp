@@ -14,13 +14,13 @@ class private::hashistack {
   }
   package { ['qemu', 'qemu-kvm']: }
 
-  archive { '/tmp/vagrant-cache/vault_0.9.1_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/vault_0.9.3_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/vault',
-    source        => 'https://releases.hashicorp.com/vault/0.9.1/vault_0.9.1_linux_amd64.zip',
-    checksum      => '6308013ee0d6278e98cdfe8d6de0162102a8d25f3bcd1e3737bf7b022a9f6702',
+    source        => 'https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip',
+    checksum      => '4ba8b9dafb903d20b4c87e8954015a07a6995f53a9650ac02b39e6cae502645e',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -36,13 +36,13 @@ class private::hashistack {
     require       => File['/tmp/vagrant-cache'],
   }
 
-  archive { '/tmp/vagrant-cache/terraform_0.11.2_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/terraform_0.11.3_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/terraform',
-    source        => 'https://releases.hashicorp.com/terraform/0.11.2/terraform_0.11.2_linux_amd64.zip',
-    checksum      => 'f728fa73ff2a4c4235a28de4019802531758c7c090b6ca4c024d48063ab8537b',
+    source        => 'https://releases.hashicorp.com/terraform/0.11.3/terraform_0.11.3_linux_amd64.zip',
+    checksum      => '6b8a7b83954597d36bbed23913dd51bc253906c612a070a21db373eab71b277b',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
