@@ -163,6 +163,7 @@ package { [
     'gnupg',
     'gkrellm',
     'gkrellm-top',
+    'collectl',
 
     'ffmpeg',
     'libvdpau',
