@@ -5,6 +5,8 @@ jobs:
     docker:
       - image: pdouble16/vagrant-build-base:2018.02.1
         user: root
+    environment:
+      - VAGRANT_DEFAULT_PROVIDER: docker
 
     steps:
       - checkout
@@ -57,7 +59,7 @@ jobs:
       - run:
           name: Test Vagrant Up
           command: |
-            vagrant up --provider docker --provision
+            vagrant up --provision
 
       - run:
           name: Build Docker Public Image Cache
