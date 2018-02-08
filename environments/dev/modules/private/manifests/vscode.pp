@@ -61,6 +61,9 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'rbbit.typescript-hero',
     'jpogran.puppet-vscode',
     'mrmlnc.vscode-json5',
+    'wholroyd.hcl',
+    'mauve.terraform',
+    'mindginative.terraform-snippets',
   ]: }
   ->file { '/home/vagrant/.config/Code':
     ensure => directory,
