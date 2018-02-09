@@ -43,7 +43,7 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     autoupgrade    => true,
     set_as_default => true,
     opt_syntax     => true,
-    opt_bg_shading => 'dark',
+    opt_bg_shading => 'light',
     opt_misc       => ['number'],
   }
   ->package{ 'gvim': }
