@@ -58,7 +58,7 @@ yum::group { 'Development Tools':
   ensure => present,
 }
 ->package { ['git2u-all','git2u']: ensure => purged, }
-->class { '::private::git_from_source': version => '2.13.5', }
+->class { '::private::git_from_source': version => '2.16.1', }
 ->Package<| title == 'alien' |>
 ->Exec<| title == 'vboxdrv' |>
 
@@ -165,6 +165,7 @@ package { [
     'gkrellm-top',
     'collectl',
 
+    # For recording the screen via 'ffmpeg x11grab'
     'ffmpeg',
     'libvdpau',
     'libavcodec52',

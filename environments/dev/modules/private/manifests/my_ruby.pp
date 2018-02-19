@@ -1,3 +1,6 @@
+#
+# Ruby Versions and gems
+#
 class private::my_ruby {
   $ruby_ver = '2.1.10'
 
@@ -32,7 +35,12 @@ class private::my_ruby {
   }
 
   rbenv::gem { 'rake': }
-  rbenv::gem { 'librarian-puppet': }
+  rbenv::gem { 'librarian-puppet':
+    version => '>=3.0.0',
+  }
+  rbenv::gem { 'librarianp':
+    version => '>=0.6.4',
+  }
   rbenv::gem { 'puppet-lint': }
   rbenv::gem { 'generate-puppetfile': }
 

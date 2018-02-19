@@ -1,3 +1,6 @@
+#
+# IntelliJ IDEA Ultimate and plugins
+#
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
   $version = '2017.3.4'

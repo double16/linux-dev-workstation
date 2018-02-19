@@ -1,3 +1,6 @@
+#
+# Visual Studio Code IDE, plugins and tools
+#
 class private::vscode {
 
   define extension() {
@@ -32,7 +35,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     require => File['/etc/yum.repos.d/vscode.repo'],
   }
 
-  package { 'pylint':
+  package { [ 'pylint', 'autopep8' ]:
     provider => 'pip',
   }
 

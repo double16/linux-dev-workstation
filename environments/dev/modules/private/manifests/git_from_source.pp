@@ -11,13 +11,11 @@ class private::git_from_source($version) {
     'perl-devel',
     'zlib-devel']: }
   ->archive { "/tmp/vagrant-cache/git-${version}.tar.gz":
-    source        => "https://github.com/git/git/archive/v${version}.tar.gz",
-    extract_path  => '/usr/src',
-    extract       => true,
-    creates       => "/usr/src/git-${version}",
-    checksum      => '09abc168f62992a86bab45fcdb7f4fc41baa3f1973e1fb663dc563d5ad94766a',
-    checksum_type => 'sha256',
-    require       => File['/tmp/vagrant-cache'],
+    source       => "https://github.com/git/git/archive/v${version}.tar.gz",
+    extract_path => '/usr/src',
+    extract      => true,
+    creates      => "/usr/src/git-${version}",
+    require      => File['/tmp/vagrant-cache'],
   }
   ->exec { "make configure git ${version}":
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
