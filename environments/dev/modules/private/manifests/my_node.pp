@@ -3,7 +3,7 @@
 #
 class private::my_node {
   $node_lts = '8.9.4'
-  $node_latest = '9.4.0'
+  $node_latest = '9.6.1'
 
   file { '/tmp/vagrant-cache/nodenv':
     ensure => directory,

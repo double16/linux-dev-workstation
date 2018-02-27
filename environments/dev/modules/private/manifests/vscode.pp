@@ -54,7 +54,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'humao.rest-client',
     'xabikos.ReactSnippets',
     'vsmobile.vscode-react-native',
-    'cazzar09.Gradle',
+    'naco-siren.gradle-language',
     'yzhang.markdown-all-in-one',
     'dbaeumer.vscode-eslint',
     'eg2.tslint',
@@ -90,7 +90,6 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 {
     "workbench.iconTheme": "vscode-icons",
     "workbench.colorTheme": "Solarized Light",
-    "gradle.useCommand": "./gradlew",
     "git.confirmSync": false,
     "editor.wordWrap": "on",
     "editor.formatOnPaste": true

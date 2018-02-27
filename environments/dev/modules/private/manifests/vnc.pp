@@ -1,3 +1,6 @@
+#
+# Configure VNC server for vagrant user to run on start on localhost port 5900
+#
 class private::vnc {
   package { ['tigervnc-server', 'x11vnc']: }
   ->file_line { 'vncserver service user':

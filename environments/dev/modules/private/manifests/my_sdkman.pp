@@ -42,14 +42,14 @@ class private::my_sdkman {
 
   sdkman::package { 'gradle':
     ensure     => present,
-    version    => '4.4.1',
+    version    => '4.5.1',
     is_default => true,
   }
 
   sdkman::package { 'grails 3.2':
     ensure       => present,
     package_name => 'grails',
-    version      => '3.2.11',
+    version      => '3.2.12',
     is_default   => false,
   }
 

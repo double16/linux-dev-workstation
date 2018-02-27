@@ -58,7 +58,7 @@ yum::group { 'Development Tools':
   ensure => present,
 }
 ->package { ['git2u-all','git2u']: ensure => purged, }
-->class { '::private::git_from_source': version => '2.16.1', }
+->class { '::private::git_from_source': version => '2.16.2', }
 ->Package<| title == 'alien' |>
 ->Exec<| title == 'vboxdrv' |>
 
