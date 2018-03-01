@@ -36,6 +36,7 @@
     <property name="plugin-6" type="string" value="systray">
       <property name="names-visible" type="array">
         <value type="string" value="xfce4-power-manager"/>
+        <value type="string" value="clipman"/>
       </property>
     </property>
     <property name="plugin-5" type="string" value="launcher">
@@ -54,6 +55,11 @@
         <value type="string" value="14793955354.desktop"/>
         <value type="string" value="15109491831.desktop"/>
         <value type="string" value="15102555301.desktop"/>
+      </property>
+    </property>
+    <property name="clipman" type="empty">
+      <property name="settings" type="empty">
+        <property name="add-primary-clipboard" type="bool" value="true"/>
       </property>
     </property>
   </property>

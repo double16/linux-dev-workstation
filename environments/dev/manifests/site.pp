@@ -90,6 +90,10 @@ yum::group { 'X Window System':
   after => '\[daemon\]',
   match => '^AutomaticLogin=.*',
 }
+->package { [
+  'xfce4-clipman-plugin',
+  'xfce4-datetime-plugin'
+  ]: }
 
 exec { 'graphical runlevel':
   path    => '/bin:/sbin:/usr/bin:/usr/sbin',
