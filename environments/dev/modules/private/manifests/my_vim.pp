@@ -143,6 +143,12 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     content => 'nmap <F8> :TagbarToggle<cr>',
   }
 
+  # https://unix.stackexchange.com/questions/196098/copy-paste-in-xfce4-terminal-adds-0-and-1
+  vim::config { 'disable bracketed paste mode':
+    user    => 'vagrant',
+    content => 'set t_BE=',
+  }
+
   package { ['cmake','python-devel']: }
   -> private::my_vim::plugin { 'valloric/youcompleteme': }
   -> exec { 'youcompleteme submodule':
