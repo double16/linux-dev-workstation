@@ -205,6 +205,11 @@ StartupNotify=true
     updateid => '40438',
   }
 
+  private::idea::plugin_zip { 'CloudFormation':
+    version  => '0.5.42',
+    updateid => '38829',
+  }
+
   private::idea::plugin_jar { 'react-css-modules-intellij-plugin':
     version  => '1.0.1',
     updateid => '30724',
