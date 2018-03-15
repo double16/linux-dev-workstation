@@ -3,8 +3,8 @@
 #
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2017.3.4'
-  $build = '173.4548.28'
+  $version = '2017.3.5'
+  $build = '173.4674.33'
   $prefsdir = '/home/vagrant/.IntelliJIdea2017.3'
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
@@ -25,7 +25,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => 'd1f33796fa317c04e0618a9bd329f944355c3374011815c398384ca5cc57bfbc',
+    checksum      => '52ac5f588a66b2e622953943384047494d0be326abf4f81ba81d81c8f9c3cfce',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -116,8 +116,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'AngularJS':
-    version  => '173.4127.22',
-    updateid => '41668',
+    version  => '173.4548.30',
+    updateid => '42716',
   }
 
   private::idea::plugin_zip { 'ruby':
@@ -136,8 +136,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'BashSupport':
-    version  => '1.6.12.173',
-    updateid => '38798',
+    version  => '1.6.13.173',
+    updateid => '43928',
   }
 
   private::idea::plugin_zip { 'Docker':
@@ -156,13 +156,13 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'intellij-hcl':
-    version  => '0.6.9.3',
-    updateid => '41177',
+    version  => '0.6.9.5',
+    updateid => '43665',
   }
 
   private::idea::plugin_zip { 'intellij-go':
-    version  => '173.4381.1',
-    updateid => '42110',
+    version  => '173.4674.34',
+    updateid => '43888',
   }
 
   private::idea::plugin_zip { 'Jade':
@@ -171,13 +171,13 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'asciidoctor':
-    version  => '0.19.2',
-    updateid => '40599',
+    version  => '0.20.0',
+    updateid => '43513',
   }
 
   private::idea::plugin_zip { 'Kotlin':
-    version  => '1.2.10-release-IJ2017.3-1',
-    updateid => '41422',
+    version  => '1.2.30-release-IJ2017.3-1',
+    updateid => '43774',
   }
 
   private::idea::plugin_zip { 'Bitbucket Linky':
@@ -216,8 +216,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_jar { 'com.jetbrains.ideolog-173.0.6.0':
-    version  => '173.0.6.0',
-    updateid => '42025',
+    version  => '173.0.7.0',
+    updateid => '43007',
   }
 
   private::idea::plugin_zip { 'vagrant':
