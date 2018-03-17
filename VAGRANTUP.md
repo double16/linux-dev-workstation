@@ -76,8 +76,8 @@ qgroundcontrol:
 Running the box on the cloud provides a VNC server. You need to use SSH tunneling to access the server. Assuming you have `vncviewer` installed with either the TightVNC or TigerVNC package:
 
 ```shell
-$ ssh -t -L 5900:localhost:5900 vagrant@ec2-NNN.amazonaws.com
-$ vncviewer localhost:5900
+$ ssh -t -L 5910:localhost:5900 centos@ec2-NNN.amazonaws.com
+$ vncviewer localhost:5910
 ```
 
 If you want to use a different VNC client, point it to `localhost:5900`.

@@ -64,7 +64,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'rbbit.typescript-hero',
     'jpogran.puppet-vscode',
     'mrmlnc.vscode-json5',
-    'wholroyd.hcl',
+    'wholroyd.HCL',
     'mauve.terraform',
     'mindginative.terraform-snippets',
   ]: }
