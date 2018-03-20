@@ -50,7 +50,7 @@
                         "name": "packer-osDisk.6ed5bf40-0929-4c4a-896f-e3591624c670.vhd",
                         "createOption": "FromImage",
                         "image": {
-                            "uri": "https://packerbuildswest.blob.core.windows.net/system/Microsoft.Compute/Images/images/packer-osDisk.6ed5bf40-0929-4c4a-896f-e3591624c670.vhd"
+                            "uri": "https://packerbuildswest.blob.core.windows.net/system/Microsoft.Compute/Images/images/packer-osDisk.d95bfd55-0575-49e1-a93d-e6df71baae0e.vhd"
                         },
                         "vhd": {
                             "uri": "https://packerbuildswest.blob.core.windows.net/vmcontainer8978da9d-005c-4d7c-9791-e715d5561704/osDisk.8978da9d-005c-4d7c-9791-e715d5561704.vhd"
