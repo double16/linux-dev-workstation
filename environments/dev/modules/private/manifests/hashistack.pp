@@ -36,13 +36,13 @@ class private::hashistack {
     require       => File['/tmp/vagrant-cache'],
   }
 
-  archive { '/tmp/vagrant-cache/terraform_0.11.3_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/terraform_0.11.4_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/terraform',
-    source        => 'https://releases.hashicorp.com/terraform/0.11.3/terraform_0.11.3_linux_amd64.zip',
-    checksum      => '6b8a7b83954597d36bbed23913dd51bc253906c612a070a21db373eab71b277b',
+    source        => 'https://releases.hashicorp.com/terraform/0.11.4/terraform_0.11.4_linux_amd64.zip',
+    checksum      => '817be651ca41b999c09250a9fcade541a941afab41c0c663bd25529a4d5cfd31',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
