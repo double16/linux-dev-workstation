@@ -2,13 +2,13 @@
 # HashiCorp tools
 #
 class private::hashistack {
-  archive { '/tmp/vagrant-cache/packer_1.2.1_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/packer_1.2.2_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/packer',
-    source        => 'https://releases.hashicorp.com/packer/1.2.1/packer_1.2.1_linux_amd64.zip',
-    checksum      => 'dd90f00b69c4d8f88a8d657fff0bb909c77ebb998afd1f77da110bc05e2ed9c3',
+    source        => 'https://releases.hashicorp.com/packer/1.2.2/packer_1.2.2_linux_amd64.zip',
+    checksum      => 'd86e2236208e8efb7e9a4e788072b428de3f2300414cb338cf1836e0985666e0',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }

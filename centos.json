@@ -151,7 +151,13 @@
           "volume_type": "gp2",
           "delete_on_termination": true
         }
-      ]
+      ],
+      "tags": {
+        "Application": "{{ user `vm_name`}}",
+        "Environment": "dev",
+        "Version": "{{ user `version` }}",
+        "OS": "{{ user `aws_ami_name`}}"
+      }
     },
     {
       "type": "azure-arm",
