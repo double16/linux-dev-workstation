@@ -8,7 +8,7 @@ class private::hashistack {
     extract       => true,
     creates       => '/usr/bin/packer',
     source        => 'https://releases.hashicorp.com/packer/1.2.2/packer_1.2.2_linux_amd64.zip',
-    checksum      => 'd86e2236208e8efb7e9a4e788072b428de3f2300414cb338cf1836e0985666e0',
+    checksum      => '6575f8357a03ecad7997151234b1b9f09c7a5cf91c194b23a461ee279d68c6a8',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
