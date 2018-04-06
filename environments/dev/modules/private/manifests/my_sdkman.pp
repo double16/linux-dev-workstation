@@ -30,19 +30,19 @@ class private::my_sdkman {
 
   sdkman::package { 'groovy':
     ensure     => present,
-    version    => '2.4.13',
+    version    => '2.4.15',
     is_default => true,
   }
 
   sdkman::package { 'groovyserv':
     ensure     => present,
-    version    => '1.1.0',
+    version    => '1.2.0',
     is_default => true,
   }
 
   sdkman::package { 'gradle':
     ensure     => present,
-    version    => '4.5.1',
+    version    => '4.6',
     is_default => true,
   }
 
@@ -70,8 +70,14 @@ class private::my_sdkman {
   ->sdkman::package { 'java8':
     ensure       => present,
     package_name => 'java',
-    version      => '8u152-zulu',
+    version      => '9.0.4-openjdk',
     is_default   => true,
+  }
+  ->sdkman::package { 'java10':
+    ensure       => present,
+    package_name => 'java',
+    version      => '10.0.0-openjdk',
+    is_default   => false,
   }
 
 }
