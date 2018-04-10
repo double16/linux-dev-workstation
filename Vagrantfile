@@ -103,7 +103,7 @@ Vagrant.configure("2") do |config|
     )
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
-      rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+      rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm
       yum install -y puppet-agent
     )
   SHELL

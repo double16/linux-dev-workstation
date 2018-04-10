@@ -2,7 +2,7 @@
 # Ruby Versions and gems
 #
 class private::my_ruby {
-  $ruby_ver = '2.1.10'
+  $ruby_ver = '2.4.3'
 
   file { '/tmp/vagrant-cache/rbenv':
     ensure => directory,
@@ -20,15 +20,21 @@ class private::my_ruby {
     latest      => true,
     require     => Class['private::git_from_source'],
   }
+  ->Rbenv::Build<| |>
+
+  Rbenv::Build<| |> {
+    env => ['RUBY_BUILD_CACHE_PATH=/tmp/vagrant-cache/rbenv'],
+  }
+  Exec <| title == "rbenv-ownit-${ruby_ver}" |> -> Rbenv::Gem<| |>
 
   rbenv::plugin { 'rbenv/ruby-build': latest => true }
   rbenv::plugin { 'sstephenson/ruby-build': latest => true }
   rbenv::build { $ruby_ver: global => true }
   rbenv::build { '1.9.3-p551': }
-  rbenv::build { 'jruby-1.7.26': }
-  rbenv::build { '2.4.2': }
-  rbenv::build { '2.3.5': }
-  rbenv::build { 'jruby-9.1.13.0': }
+  rbenv::build { 'jruby-1.7.27': }
+  rbenv::build { '2.1.10': }
+  rbenv::build { '2.3.6': }
+  rbenv::build { 'jruby-9.1.16.0': }
 
   Rbenv::Gem {
     ruby_version => $ruby_ver,

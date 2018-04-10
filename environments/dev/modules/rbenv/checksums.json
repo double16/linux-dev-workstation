@@ -1,6 +1,6 @@
 {
   "Dockerfile": "a8062f2d83afad8d1704a98fcace798a",
-  "Gemfile": "f780f5fbe25418e664f88420f0f5c83f",
+  "Gemfile": "45c40bc046a642b3737f85f578724400",
   "LICENSE": "4af37e701e8f3e94c2de463993264b10",
   "Puppetfile": "ccc44c05543bf87aeba51c707fd77652",
   "Puppetfile.lock": "64643448e929f7e6cccfa8121c0af447",
@@ -15,8 +15,8 @@
   "manifests/gem.pp": "f4ee93fe2e13b2b9ecdcb0299b9767aa",
   "manifests/init.pp": "315d271f461d50b32104f3993bcfcde9",
   "manifests/params.pp": "98bf420e11127df7d59e8586d685c810",
-  "manifests/plugin.pp": "691d5faab6306040857a352a6867897e",
-  "metadata.json": "d93cfff0868e7a8e3e0db9f70f022da2",
+  "manifests/plugin.pp": "14ef1ad378a00e8365e237fecaddd126",
+  "metadata.json": "111a541e144354c597f90743ecb6bbc8",
   "spec/classes/coverage_spec.rb": "5b6dfa0dd426aca0ccfae23c0a629f0b",
   "spec/classes/rbenv_spec.rb": "427b5071e62823b1b6e33081863b1c20",
   "spec/defines/build_spec.rb": "ab77b1ff35fc35e077ce44da14ad09e4",

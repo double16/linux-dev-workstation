@@ -90,6 +90,29 @@ default:
    minage = 1
 ~~~
 
+### Use a non-standard indent character
+
+To use a non-standard indent character or string for added settings, set the `indent_char` and the `indent_width` parameters. The `indent_width` parameter controls how many `indent_char` should appear in the indent.
+
+~~puppet
+ini_setting { 'procedure cache size':
+  ensure         => present,
+  path           => '/var/lib/ase/config/ASE-16_0/SYBASE.cfg',
+  section        => 'SQL Server Administration',
+  setting        => 'procedure cache size',
+  value          => '15000',
+  indent_char    => "\t",
+  indent_width   => 2,
+}
+~~~
+
+Results in:
+
+~~~puppet
+[SQL Server Administration]
+		procedure cache size = 15000
+~~~
+
 ### Implement child providers
 
 You might want to create child providers that inherit the `ini_setting` provider, for one or both of these purposes:
@@ -312,7 +335,7 @@ Determines whether the specified setting should exist. Valid options: 'present' 
 
 *Optional.* Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
-  * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`. 
+  * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
 
 Global show_diff configuraton takes priority over this one -
@@ -330,6 +353,14 @@ Global show_diff configuraton takes priority over this one -
 ##### `section_suffix`
 
 *Optional.*  Designates the string that will appear after the section's name.  Default value: "]".
+
+##### `indent_char`
+
+*Optional.*  Designates the character (or string) to use to indent newly created settings. This does not affect settings that already exist in the file, even if they are changed. Default value: " ".
+
+##### `indent_width`
+
+*Optional.*  Designates the number of `indent_char` with which to  indent newly inserted settings. If this is not defined, the indentation is automatically computed from existing settings in the section, or if the section does not yet exist, no indent is made. This does not affect settings that already exist in the file, even if they are changed.
 
 ##### `refreshonly`
 
@@ -394,7 +425,7 @@ Specifies whether the subsetting should be present. Valid options: 'present' and
 
 *Optional.* Prevents outputting actual values to the logfile. Useful for handling of passwords and other sensitive information. Possible values are:
   * `true`: This allows all values to be passed to logfiles. (default)
-  * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`. 
+  * `false`: The values in the logfiles will be replaced with `[redacted sensitive information]`.
   * `md5`: The values in the logfiles will be replaced with their md5 hash.
 
 Global show_diff configuraton takes priority over this one -

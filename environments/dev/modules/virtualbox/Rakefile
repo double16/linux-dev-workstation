@@ -26,6 +26,12 @@ exclude_paths = %w(
 PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
+desc 'Auto-correct puppet-lint offenses'
+task 'lint:auto_correct' do
+  PuppetLint.configuration.fix = true
+  Rake::Task[:lint].invoke
+end
+
 desc 'Run acceptance tests'
 RSpec::Core::RakeTask.new(:acceptance) do |t|
   t.pattern = 'spec/acceptance'
@@ -48,6 +54,27 @@ task test_with_coveralls: [:test] do
   end
 end
 
+desc "Print supported beaker sets"
+task 'beaker_sets', [:directory] do |t, args|
+  directory = args[:directory]
+
+  metadata = JSON.load(File.read('metadata.json'))
+
+  (metadata['operatingsystem_support'] || []).each do |os|
+    (os['operatingsystemrelease'] || []).each do |release|
+      if directory
+        beaker_set = "#{directory}/#{os['operatingsystem'].downcase}-#{release}"
+      else
+        beaker_set = "#{os['operatingsystem'].downcase}-#{release}-x64"
+      end
+
+      filename = "spec/acceptance/nodesets/#{beaker_set}.yml"
+
+      puts beaker_set if File.exists? filename
+    end
+  end
+end
+
 begin
   require 'github_changelog_generator/task'
   GitHubChangelogGenerator::RakeTask.new :changelog do |config|
@@ -61,18 +88,5 @@ begin
     config.project = metadata['name']
   end
 rescue LoadError
-end
-
-desc 'prepare a new release'
-task :prepare_release, [:version] do |t, args|
-  # check for missing parameter
-  # exit early, exit often
-  (puts 'you need to provide a version like: rake prepare_releasep[1.0.0]'; exit) unless args[:version]
-  version = args[:version]
-  (puts 'format needs to be X.X.X'; exit) unless /^\d+\.\d+\.\d+$/.match(version)
-  ENV['BLACKSMITH_FULL_VERSION'] = version
-  Rake::Task['module:bump:full'].invoke
-  Rake::Task['changelog'].invoke
-  Rake::Task['strings:generate'].invoke
 end
 # vim: syntax=ruby

@@ -1,3 +1,47 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org).
+
+## Supported Release [2.2.0]
+### Summary
+This release uses the PDK convert functionality which in return makes the module PDK compliant. It also includes a roll up of maintenance changes.
+
+### Added
+- PDK convert inifile ([MODULES-6453](https://tickets.puppet.com/browse/MODULES-6453)).
+- Modulesync updates.
+
+### Fixed
+- Changes to address additional Rubocop failures.
+- Addressing puppet-lint doc warnings.
+
+### Removed
+- `gem update bundler` command in .travis.yml due to ([MODULES-6339](https://tickets.puppet.com/browse/MODULES-6339)).
+
+## Supported Release 2.1.1
+### Summary
+This release is in order to implement Rubocop within the module and includes a wide array of formatting changes throughout the code and the enabling of rubocop checks to be run against all pull requests against the module.
+
+### Changed
+- Rubocop checks will now be run against any PRs made towards the module.
+- The module has undergone a substantial reformatting in order to comply with the designated standards.
+
+## Supported Release 2.1.0
+### Summary
+This is a clean release prior to the implementation of rubocop within the module.
+
+### Added
+- Several Modulesync updates have been made.
+- Indent Character can now be set.
+- Support for Debian 9 has been added.
+
+### Removed
+- Support for Ubuntu 1004 and 1204 has been removed.
+- Support for SLES 10 SP4 has been removed.
+- Support for Debian 6 has been removed.
+- Support for Solaris 12 has been removed.
+- Support for Windows Server 2003 R2 has been removed.
+
 ## Supported Release 2.0.0
 ### Summary
 This is a major release that includes a few bugfixes as well as some general module updates.
@@ -278,3 +322,5 @@ them.
 
 ##2012-08-17 - Chris Price <chris@pupppetlabs.com> - 0.0.2
  * Add support for "global" section at beginning of file (c57dab4)
+
+ [2.2.0]:https://github.com/puppetlabs/puppetlabs-apt/compare/2.1.1...2.2.0

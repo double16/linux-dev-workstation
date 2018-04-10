@@ -64,13 +64,13 @@ class private::my_sdkman {
   sdkman::package { 'java9':
     ensure       => present,
     package_name => 'java',
-    version      => '9.0.1-zulu',
+    version      => '9.0.4-openjdk',
     is_default   => false,
   }
   ->sdkman::package { 'java8':
     ensure       => present,
     package_name => 'java',
-    version      => '9.0.4-openjdk',
+    version      => '8.0.163-zulu',
     is_default   => true,
   }
   ->sdkman::package { 'java10':
