@@ -1,3 +1,6 @@
+#
+# Uses SDKMan to install several Java based tools, including the JDK itself.
+#
 class private::my_sdkman {
 
   class { '::sdkman' :

@@ -3,9 +3,9 @@
 #
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2017.3.5'
-  $build = '173.4674.33'
-  $prefsdir = '/home/vagrant/.IntelliJIdea2017.3'
+  $version = '2018.1'
+  $build = '181.4203.550'
+  $prefsdir = '/home/vagrant/.IntelliJIdea2018.1'
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
   $colorsdir = "${configdir}/colors"
@@ -25,7 +25,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => '52ac5f588a66b2e622953943384047494d0be326abf4f81ba81d81c8f9c3cfce',
+    checksum      => '20ac5f3ed9caf5707ea0cab7235c558b43ff4e795f200643f30d9f3daa7c2859',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -111,73 +111,73 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'LiveEdit':
-    version  => '173.3942.31',
-    updateid => '41376',
+    version  => '181.3870.1',
+    updateid => '43520',
   }
 
   private::idea::plugin_zip { 'AngularJS':
-    version  => '173.4548.30',
-    updateid => '42716',
+    version  => '181.4203.498',
+    updateid => '44284',
   }
 
   private::idea::plugin_zip { 'ruby':
-    version  => '2017.3.20171228',
-    updateid => '41888',
+    version  => '2018.1.20180327',
+    updateid => '44560',
   }
 
   private::idea::plugin_zip { 'puppet':
-    version  => '173.3727.127',
-    updateid => '41058',
+    version  => '181.3007.14',
+    updateid => '42572',
   }
 
   private::idea::plugin_zip { 'NodeJS':
-    version  => '173.4301.12',
-    updateid => '42139',
+    version  => '181.4096.12',
+    updateid => '43943',
   }
 
   private::idea::plugin_zip { 'BashSupport':
-    version  => '1.6.13.173',
-    updateid => '43928',
+    version  => '1.6.13.181',
+    updateid => '43929',
   }
 
   private::idea::plugin_zip { 'Docker':
-    version  => '173.3727.15',
-    updateid => '40538',
+    version  => '181.4203.550',
+    updateid => '44503',
   }
 
   private::idea::plugin_zip { 'idea-gitignore':
-    version  => '2.4.0',
-    updateid => '42151',
+    version  => '2.5.0',
+    updateid => '44417',
   }
 
   private::idea::plugin_zip { 'ini4idea':
-    version  => '173.3727.84',
-    updateid => '40770',
+    version  => '181.3741.23',
+    updateid => '43335',
   }
 
   private::idea::plugin_zip { 'intellij-hcl':
-    version  => '0.6.9.5',
-    updateid => '43665',
+    version  => '0.6.10',
+    updateid => '44787',
   }
 
   private::idea::plugin_zip { 'intellij-go':
-    version  => '173.4674.34',
-    updateid => '43888',
+    version  => '181.4203.564.171',
+    updateid => '44601',
   }
 
   private::idea::plugin_zip { 'Jade':
-    version  => '173.3531.1',
-    updateid => '40091',
+    version  => '181.3870.1',
+    updateid => '43526',
   }
 
   private::idea::plugin_zip { 'asciidoctor':
-    version  => '0.20.0',
-    updateid => '43513',
+    version  => '0.20.2',
+    updateid => '44416',
   }
 
   private::idea::plugin_zip { 'Kotlin':
-    version  => '1.2.30-release-IJ2017.3-1',
-    updateid => '43774',
+    version  => '1.2.31-release-IJ2018.1-1',
+    updateid => '44362',
   }
 
   private::idea::plugin_zip { 'Bitbucket Linky':
@@ -191,13 +191,13 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'R4Intellij':
-    version  => '1.0.8',
-    updateid => '37756',
+    version  => '1.0.9',
+    updateid => '44232',
   }
 
   private::idea::plugin_zip { 'js-karma':
-    version  => '173.4127.22',
-    updateid => '41670',
+    version  => '181.3741.1',
+    updateid => '43281',
   }
 
   private::idea::plugin_zip { 'sass-lint-plugin':
@@ -221,8 +221,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_jar { 'com.jetbrains.ideolog-173.0.6.0':
-    version  => '173.0.7.0',
-    updateid => '43007',
+    version  => '181.0.7.0',
+    updateid => '43008',
   }
 
   private::idea::plugin_zip { 'vagrant':
