@@ -14,35 +14,35 @@ class private::hashistack {
   }
   package { ['qemu', 'qemu-kvm']: }
 
-  archive { '/tmp/vagrant-cache/vault_0.9.5_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/vault_0.10.0_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/vault',
-    source        => 'https://releases.hashicorp.com/vault/0.9.5/vault_0.9.5_linux_amd64.zip',
-    checksum      => 'f6dbc9fdac00598d2a319c9b744b85bf17d9530298f93d29ef2065bc751df099',
+    source        => 'https://releases.hashicorp.com/vault/0.10.0/vault_0.10.0_linux_amd64.zip',
+    checksum      => 'a6b4b6db132f3bbe6fbb77f76228ffa45bd55a5a1ab83ff043c2c665c3f5a744',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
 
-  archive { '/tmp/vagrant-cache/consul_1.0.6_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/consul_1.0.7_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/consul',
-    source        => 'https://releases.hashicorp.com/consul/1.0.6/consul_1.0.6_linux_amd64.zip',
-    checksum      => 'bcc504f658cef2944d1cd703eda90045e084a15752d23c038400cf98c716ea01',
+    source        => 'https://releases.hashicorp.com/consul/1.0.7/consul_1.0.7_linux_amd64.zip',
+    checksum      => '6c2c8f6f5f91dcff845f1b2ce8a29bd230c11397c448ce85aae6dacd68aa4c14',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
 
-  archive { '/tmp/vagrant-cache/terraform_0.11.4_linux_amd64.zip':
+  archive { '/tmp/vagrant-cache/terraform_0.11.7_linux_amd64.zip':
     ensure        => present,
     extract_path  => '/usr/bin',
     extract       => true,
     creates       => '/usr/bin/terraform',
-    source        => 'https://releases.hashicorp.com/terraform/0.11.4/terraform_0.11.4_linux_amd64.zip',
-    checksum      => '817be651ca41b999c09250a9fcade541a941afab41c0c663bd25529a4d5cfd31',
+    source        => 'https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip',
+    checksum      => '6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
