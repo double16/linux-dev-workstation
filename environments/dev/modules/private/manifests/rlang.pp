@@ -10,7 +10,7 @@ class private::rlang {
     extract_path    => '/tmp',
     extract_command => 'rpm -ivh %s',
     creates         => '/usr/bin/rstudio',
-    checksum        => '331addcbbe1b33843df68e1d16fbd66c7a774459d3f6113fb3e6b3e3cb8e2437',
+    checksum        => '8e6435aa53fa0ea9878ef9c09b6419f4',
     checksum_type   => 'md5',
     require         => File['/tmp/vagrant-cache'],
   }
