@@ -3,8 +3,8 @@
 #
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2018.1'
-  $build = '181.4203.550'
+  $version = '2018.1.1'
+  $build = '181.4445.78'
   $prefsdir = '/home/vagrant/.IntelliJIdea2018.1'
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
@@ -25,7 +25,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => '20ac5f3ed9caf5707ea0cab7235c558b43ff4e795f200643f30d9f3daa7c2859',
+    checksum      => '259ede8f233bdde5435ac2c800423428a4692e489fe4d764667c90a246ab0629',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -146,8 +146,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'idea-gitignore':
-    version  => '2.5.0',
-    updateid => '44417',
+    version  => '2.6.1',
+    updateid => '45023',
   }
 
   private::idea::plugin_zip { 'ini4idea':
@@ -216,8 +216,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_jar { 'bootstrap3':
-    version  => '4.0.4',
-    updateid => '39293',
+    version  => '4.1.1',
+    updateid => '45070',
   }
 
   private::idea::plugin_jar { 'com.jetbrains.ideolog-173.0.6.0':
