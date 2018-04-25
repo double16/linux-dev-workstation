@@ -3,8 +3,8 @@
 #
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2018.1.1'
-  $build = '181.4445.78'
+  $version = '2018.1.2'
+  $build = '181.4668.68'
   $prefsdir = '/home/vagrant/.IntelliJIdea2018.1'
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
@@ -25,7 +25,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => '259ede8f233bdde5435ac2c800423428a4692e489fe4d764667c90a246ab0629',
+    checksum      => 'c0a8f0fdd9c80bec62320fc26bdf3546ee513f51d990e0cf6d66b3d998e23a10',
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -121,8 +121,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'ruby':
-    version  => '2018.1.20180327',
-    updateid => '44560',
+    version  => '2018.1.20180417',
+    updateid => '45171',
   }
 
   private::idea::plugin_zip { 'puppet':
@@ -131,8 +131,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'NodeJS':
-    version  => '181.4096.12',
-    updateid => '43943',
+    version  => '181.4668.7',
+    updateid => '45105',
   }
 
   private::idea::plugin_zip { 'BashSupport':
@@ -196,8 +196,8 @@ StartupNotify=true
   }
 
   private::idea::plugin_zip { 'js-karma':
-    version  => '181.3741.1',
-    updateid => '43281',
+    version  => '181.4668.7',
+    updateid => '45107',
   }
 
   private::idea::plugin_zip { 'sass-lint-plugin':
