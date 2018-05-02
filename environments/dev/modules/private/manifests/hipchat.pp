@@ -1,3 +1,4 @@
+# Atlassian HipChat
 class private::hipchat {
   file { '/etc/yum.repos.d/hipchat.repo':
     ensure  => file,
@@ -11,6 +12,6 @@ enabled=1
 gpgcheck=0
 #gpgkey=https://www.hipchat.com/keys/hipchat-linux.key
 ',
-  }->
-  package { 'hipchat4': }
+  }
+  ->package { 'hipchat4': }
 }

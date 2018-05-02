@@ -4,10 +4,11 @@
 class private::my_docker {
   unless $::virtual == 'docker' {
 
+    $docker_base_version = lookup('docker', Hash)['version']
     $docker_version = $::operatingsystem ? {
-      'Ubuntu' => '18.03.0~ce-0~ubuntu',
-      'CentOS' => '18.03.0.ce-1.el7.centos',
-      default  => '18.03.0-ce',
+      'Ubuntu' => "${docker_base_version}~ce-0~ubuntu",
+      'CentOS' => "${docker_base_version}.ce-1.el7.centos",
+      default  => "${docker_base_version}-ce",
     }
 
     package { 'docker-engine': ensure => absent, }
@@ -52,12 +53,17 @@ net.ipv6.conf.all.forwarding = 1
     ensure => absent,
   }
 
+  $condiff_config = lookup('container-diff', Hash)
+  $condiff_version = $condiff_config['version']
+  $condiff_checksum = $condiff_config['checksum']
   remote_file { '/usr/local/bin/container-diff':
-    source        => 'https://storage.googleapis.com/container-diff/v0.5.2/container-diff-linux-amd64',
+    source        => "https://storage.googleapis.com/container-diff/v${condiff_version}/container-diff-linux-amd64",
+    # 2018-05-01 storage.googleapis.com uses a cross-signed TLS cert, current Ruby/Net::HTTP does not recognize it
+    verify_peer   => false,
     owner         => 0,
     group         => 'root',
     mode          => '0755',
-    checksum      => '49a4050e1fc4015bdb9f9be3aa6acf846ac45fe9a1b782568f1bd66b9d3dd917',
+    checksum      => $condiff_checksum,
     checksum_type => 'sha256',
   }
 }

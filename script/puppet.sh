@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 
 rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm
-yum install -y puppet-agent
+yum install -y puppet-agent-5.5.1-1.el7.x86_64
 for X in $(ls /opt/puppetlabs/bin); do
 	ln -sf /opt/puppetlabs/bin/$X /usr/bin/$X
 done

@@ -41,7 +41,7 @@ $service_running = $::virtual ? {
 if $::virtual == 'docker' {
   class { '::yum_cron':
     apply_updates  => true,
-    service_ensure => false,
+    service_ensure => 'stopped',
     service_enable => false,
   }
 } else {
@@ -58,7 +58,9 @@ yum::group { 'Development Tools':
   ensure => present,
 }
 ->package { ['git2u-all','git2u']: ensure => purged, }
-->class { '::private::git_from_source': version => '2.16.2', }
+->class { '::private::git_from_source':
+  version => lookup('git', Hash)['version'],
+}
 ->Package<| title == 'alien' |>
 ->Exec<| title == 'vboxdrv' |>
 

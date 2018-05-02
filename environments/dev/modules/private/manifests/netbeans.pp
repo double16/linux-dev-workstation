@@ -1,7 +1,11 @@
+# NetBeans IDE, application and plugins.
 class private::netbeans {
   # http://download.netbeans.org/netbeans/8.2/final/zip/netbeans-8.2-201609300101.zip
-  $version = '8.2'
-  $build = '201609300101'
+  $config = lookup('netbeans', Hash)
+  $version = $config['version']
+  $build = $config['build']
+  $checksum = $config['checksum']
+
   $prefsrootdir = '/home/vagrant/.netbeans'
   $prefsdir = "${prefsrootdir}/${version}"
   $vardir = "${prefsdir}/var"
@@ -40,7 +44,7 @@ class private::netbeans {
   archive { "/tmp/vagrant-cache/netbeans-${version}-${build}.zip":
     ensure        => present,
     source        => "http://download.netbeans.org/netbeans/${version}/final/zip/netbeans-${version}-${build}.zip",
-    checksum      => 'ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948',
+    checksum      => $checksum,
     checksum_type => 'sha256',
     extract_path  => '/opt',
     extract       => true,

@@ -4,7 +4,9 @@
 #
 class private::kitematic
 {
-  $version = '0.17.3'
+  $config = lookup('kitematic', Hash)
+  $version = $config['version']
+  $checksum = $config['checksum']
 
   exec { 'atrpms-repo-7-7':
     command => '/usr/bin/rpm -i --nodeps https://www.mirrorservice.org/sites/dl.atrpms.net/el7-x86_64/atrpms/stable/atrpms-repo-7-7.el7.x86_64.rpm',
@@ -27,7 +29,7 @@ class private::kitematic
     extract_path  => '/opt',
     extract       => true,
     extract_flags => '-oj',
-    checksum      => 'd2cd5e320550115eea593d6d9765182dc67ac9dd3fe6bfce27e093eb780720a6',
+    checksum      => $checksum,
     checksum_type => 'sha256',
     creates       => "/opt/Kitematic_${version}_amd64.deb",
     require       => File['/tmp/vagrant-cache'],

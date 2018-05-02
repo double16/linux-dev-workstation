@@ -3,9 +3,13 @@
 #
 class private::idea {
   # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
-  $version = '2018.1.2'
-  $build = '181.4668.68'
-  $prefsdir = '/home/vagrant/.IntelliJIdea2018.1'
+  $config = lookup('idea', Hash)
+  $version = $config['version']
+  $build = $config['build']
+  $checksum = $config['checksum']
+
+  $version_parts = split($version, '[.]')
+  $prefsdir = "/home/vagrant/.IntelliJIdea${version_parts[0]}.${version_parts[1]}"
   $configdir = "${prefsdir}/config"
   $plugindir = "${configdir}/plugins"
   $colorsdir = "${configdir}/colors"
@@ -25,7 +29,7 @@ class private::idea {
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
-    checksum      => 'c0a8f0fdd9c80bec62320fc26bdf3546ee513f51d990e0cf6d66b3d998e23a10',
+    checksum      => $checksum,
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }
@@ -110,124 +114,23 @@ StartupNotify=true
     }
   }
 
-  private::idea::plugin_zip { 'LiveEdit':
-    version  => '181.3870.1',
-    updateid => '43520',
-  }
+  $config['plugins'].each |$item| {
+      $plugin_name = $item['name']
+      $plugin_type = $item['type']
+      $plugin_version = $item['version']
+      $plugin_updatedid = $item['updatedid']
 
-  private::idea::plugin_zip { 'AngularJS':
-    version  => '181.4203.498',
-    updateid => '44284',
-  }
-
-  private::idea::plugin_zip { 'ruby':
-    version  => '2018.1.20180417',
-    updateid => '45171',
-  }
-
-  private::idea::plugin_zip { 'puppet':
-    version  => '181.3007.14',
-    updateid => '42572',
-  }
-
-  private::idea::plugin_zip { 'NodeJS':
-    version  => '181.4668.7',
-    updateid => '45105',
-  }
-
-  private::idea::plugin_zip { 'BashSupport':
-    version  => '1.6.13.181',
-    updateid => '43929',
-  }
-
-  private::idea::plugin_zip { 'Docker':
-    version  => '181.4203.550',
-    updateid => '44503',
-  }
-
-  private::idea::plugin_zip { 'idea-gitignore':
-    version  => '2.6.1',
-    updateid => '45023',
-  }
-
-  private::idea::plugin_zip { 'ini4idea':
-    version  => '181.3741.23',
-    updateid => '43335',
-  }
-
-  private::idea::plugin_zip { 'intellij-hcl':
-    version  => '0.6.10',
-    updateid => '44787',
-  }
-
-  private::idea::plugin_zip { 'intellij-go':
-    version  => '181.4203.564.171',
-    updateid => '44601',
-  }
-
-  private::idea::plugin_zip { 'Jade':
-    version  => '181.3870.1',
-    updateid => '43526',
-  }
-
-  private::idea::plugin_zip { 'asciidoctor':
-    version  => '0.20.2',
-    updateid => '44416',
-  }
-
-  private::idea::plugin_zip { 'Kotlin':
-    version  => '1.2.31-release-IJ2018.1-1',
-    updateid => '44362',
-  }
-
-  private::idea::plugin_zip { 'Bitbucket Linky':
-    version  => '5.0',
-    updateid => '40911',
-  }
-
-  private::idea::plugin_zip { 'Gradle Dependencies Helper':
-    version  => '1.11',
-    updateid => '42210',
-  }
-
-  private::idea::plugin_zip { 'R4Intellij':
-    version  => '1.0.9',
-    updateid => '44232',
-  }
-
-  private::idea::plugin_zip { 'js-karma':
-    version  => '181.4668.7',
-    updateid => '45107',
-  }
-
-  private::idea::plugin_zip { 'sass-lint-plugin':
-    version  => '1.0.8',
-    updateid => '40438',
-  }
-
-  private::idea::plugin_zip { 'CloudFormation':
-    version  => '0.5.42',
-    updateid => '38829',
-  }
-
-  private::idea::plugin_jar { 'react-css-modules-intellij-plugin':
-    version  => '1.0.1',
-    updateid => '30724',
-  }
-
-  private::idea::plugin_jar { 'bootstrap3':
-    version  => '4.1.1',
-    updateid => '45070',
-  }
-
-  private::idea::plugin_jar { 'com.jetbrains.ideolog-173.0.6.0':
-    version  => '181.0.7.0',
-    updateid => '43008',
-  }
-
-  private::idea::plugin_zip { 'vagrant':
-    version  => '173.3727.127',
-    updateid => '41069',
+      if $plugin_type == 'jar' {
+        private::idea::plugin_jar { $plugin_name:
+          version  => $plugin_version,
+          updateid => $plugin_updatedid,
+        }
+      } else {
+        private::idea::plugin_zip { $plugin_name:
+          version  => $plugin_version,
+          updateid => $plugin_updatedid,
+        }
+      }
   }
 
   remote_file { "${colorsdir}/Solarized Dark.icls":

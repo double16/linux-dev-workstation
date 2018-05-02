@@ -104,7 +104,8 @@ Vagrant.configure("2") do |config|
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
       rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm
-      yum install -y puppet-agent
+      yum install -y puppet-agent-5.5.1-1.el7.x86_64
+      mkdir -p /etc/puppetlabs/facter/facts.d
     )
   SHELL
 
@@ -115,6 +116,7 @@ Vagrant.configure("2") do |config|
       'NODE_BUILD_CACHE_PATH' => '/tmp/vagrant-cache/nodenv',
       'RUBY_BUILD_CACHE_PATH' => '/tmp/vagrant-cache/rbenv',
     }
+    puppet.working_directory = "/tmp/vagrant-puppet"
     puppet.facter = {
       "proxy_url" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"] || ENV["HTTP_PROXY"],
       "http_proxy" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"],

@@ -120,11 +120,10 @@ Puppet::Type.newtype(:ini_setting) do
          'Defaults to undef (autodetect).'
   end
 
-  newparam(:refreshonly) do
+  newparam(:refreshonly, boolean: true, parent: Puppet::Parameter::Boolean) do
     desc 'A flag indicating whether or not the ini_setting should be updated ' \
          'only when called as part of a refresh event'
     defaultto false
-    newvalues(true, false)
   end
 
   def refresh

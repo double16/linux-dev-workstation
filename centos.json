@@ -240,12 +240,16 @@
     {
       "type": "file",
       "source": "environments/dev",
-      "destination": "/etc/puppetlabs/code/environments"
+      "destination": "/etc/puppetlabs/code/environments/dev"
     },
     {
       "type": "puppet-masterless",
       "manifest_file": "environments/dev/manifests/site.pp",
       "module_paths": ["environments/dev/modules"],
+      "extra_arguments": [
+        "--hiera_config",
+        "/etc/puppetlabs/code/environments/dev/hiera.yaml"
+      ],
       "puppet_bin_dir": "/opt/puppetlabs/bin",
       "facter": {
         "proxy_url": "{{user `http_proxy`}}",

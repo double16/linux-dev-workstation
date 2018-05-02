@@ -31,57 +31,20 @@ class private::my_sdkman {
   File['/home/vagrant/.sdkman/archives']
   -> Sdkman::Package<| |>
 
-  sdkman::package { 'groovy':
-    ensure     => present,
-    version    => '2.4.15',
-    is_default => true,
-  }
+  # Something isn't working with the is_default parameter, so we use dependencies because the last installed will be the default
+  Sdkman::Package<| is_default == false |>
+  ->Sdkman::Package<| is_default == true |>
 
-  sdkman::package { 'groovyserv':
-    ensure     => present,
-    version    => '1.2.0',
-    is_default => true,
+  $packages = lookup('sdkman', Array)
+  $packages.each |$item| {
+    $package = $item['package']
+    $version = $item['version']
+    $is_default = pick($item['default'], false)
+    sdkman::package { "${package} ${version}":
+      ensure       => present,
+      package_name => $package,
+      version      => $version,
+      is_default   => $is_default,
+    }
   }
-
-  sdkman::package { 'gradle':
-    ensure     => present,
-    version    => '4.6',
-    is_default => true,
-  }
-
-  sdkman::package { 'grails 3.2':
-    ensure       => present,
-    package_name => 'grails',
-    version      => '3.2.12',
-    is_default   => false,
-  }
-
-  sdkman::package { 'grails 3.3':
-    ensure       => present,
-    package_name => 'grails',
-    version      => '3.3.2',
-    is_default   => true,
-  }
-
-  # Something isn't working with the is_default parameter, so we use a dependency to get java8 to install last
-  sdkman::package { 'java9':
-    ensure       => present,
-    package_name => 'java',
-    version      => '9.0.4-openjdk',
-    is_default   => false,
-  }
-  ->sdkman::package { 'java8':
-    ensure       => present,
-    package_name => 'java',
-    version      => '8.0.163-zulu',
-    is_default   => true,
-  }
-  ->sdkman::package { 'java10':
-    ensure       => present,
-    package_name => 'java',
-    version      => '10.0.0-openjdk',
-    is_default   => false,
-  }
-
 }
-

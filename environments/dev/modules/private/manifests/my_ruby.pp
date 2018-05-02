@@ -2,11 +2,8 @@
 # Ruby Versions and gems
 #
 class private::my_ruby {
-  $ruby_ver = '2.4.3'
-
   file { '/tmp/vagrant-cache/rbenv':
     ensure => directory,
-    mode   => '0777',
     owner  => 'vagrant',
     group  => 'vagrant',
   }
@@ -22,19 +19,24 @@ class private::my_ruby {
   }
   ->Rbenv::Build<| |>
 
+  rbenv::plugin { 'rbenv/ruby-build': latest => true }
+  rbenv::plugin { 'sstephenson/ruby-build': latest => true }
+
   Rbenv::Build<| |> {
     env => ['RUBY_BUILD_CACHE_PATH=/tmp/vagrant-cache/rbenv'],
   }
+
+  $ruby_config = lookup('ruby', Hash)
+  $ruby_versions = $ruby_config['versions']
+  $ruby_ver = $ruby_versions.filter |$item| { $item['global'] == true }[0]['version']
+
   Exec <| title == "rbenv-ownit-${ruby_ver}" |> -> Rbenv::Gem<| |>
 
-  rbenv::plugin { 'rbenv/ruby-build': latest => true }
-  rbenv::plugin { 'sstephenson/ruby-build': latest => true }
-  rbenv::build { $ruby_ver: global => true }
-  rbenv::build { '1.9.3-p551': }
-  rbenv::build { 'jruby-1.7.27': }
-  rbenv::build { '2.1.10': }
-  rbenv::build { '2.3.6': }
-  rbenv::build { 'jruby-9.1.16.0': }
+  $ruby_versions.each |$item| {
+    rbenv::build { $item['version']:
+      global => pick($item['global'], false),
+    }
+  }
 
   Rbenv::Gem {
     ruby_version => $ruby_ver,

@@ -2,7 +2,7 @@
 # Installs emacs and plugins
 #
 class private::my_emacs {
-  $version = '25.3'
+  $version = lookup('emacs', Hash)['version']
 
   package { [
     'libXpm',

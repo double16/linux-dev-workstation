@@ -2,12 +2,8 @@
 # Installs Node.js, tools and packages
 #
 class private::my_node {
-  $node_lts = '8.9.4'
-  $node_latest = '9.6.1'
-
   file { '/tmp/vagrant-cache/nodenv':
     ensure => directory,
-    mode   => '0777',
     owner  => 'vagrant',
     group  => 'vagrant',
   }
@@ -25,17 +21,22 @@ class private::my_node {
   nodenv::plugin { 'nodenv/nodenv-each': }
   nodenv::plugin { 'nodenv/nodenv-package-json-engine': }
 
-  nodenv::build { $node_lts: global => true }
-  nodenv::build { $node_latest: }
+  $node_config = lookup('node', Hash)
+  $node_versions = $node_config['versions']
 
-  [ 'grunt', 'typescript', 'tern' ].each |$package| {
-    nodenv::package { "${package} on LTS":
-      package      => $package,
-      node_version => $node_lts,
+  $node_versions.each |$item| {
+    nodenv::build { $item['version']:
+      global => pick($item['global'], false),
     }
-    nodenv::package { "${package} on latest":
-      package      => $package,
-      node_version => $node_latest,
+  }
+
+  $node_config['packages'].each |$package| {
+    $node_versions.each |$item| {
+      $version = $item['version']
+      nodenv::package { "${package} on ${version}":
+        package      => $package,
+        node_version => $version,
+      }
     }
   }
 }

@@ -2,9 +2,11 @@
 # Install vagrant and generally useful plugins
 #
 class private::my_vagrant {
+  $version = lookup('vagrant', Hash)['version']
+
   class { 'vagrant':
     ensure  => present,
-    version => '2.0.2',
+    version => $version,
   }
   vagrant::plugin { 'vagrant-vbguest':
     user => 'vagrant',

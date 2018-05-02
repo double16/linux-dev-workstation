@@ -6,8 +6,7 @@ require 'yaml'
 current_dir    = '.'
 configs        = File.exists?("#{current_dir}/config.yaml") ? YAML.load_file("#{current_dir}/config.yaml") : { 'configs' => Hash.new }
 default_config = configs['configs'].fetch('default', Hash.new)
-vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
-vagrant_config = Hash.new if vagrant_config.nil?
+vagrant_config = default_config.merge(configs['configs'].fetch(ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use'], Hash.new))
 monitor_count  = vagrant_config['monitors']
 readme         = File.dirname(File.expand_path(__FILE__)) + '/VAGRANTUP.md'
 
@@ -84,8 +83,8 @@ user_email=#{vagrant_config['user_email'] || `git config --get user.email 2>/dev
 timezone=#{vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600)}
 FACTS
 
-/opt/puppetlabs/bin/puppet apply --modulepath=/etc/puppetlabs/code/environments/dev/modules /etc/puppetlabs/code/environments/dev/manifests/site.pp
+cd /etc/puppetlabs/code
+/opt/puppetlabs/bin/puppet apply --hiera_config=/etc/puppetlabs/code/environments/dev/hiera.yaml --modulepath=/etc/puppetlabs/code/environments/dev/modules /etc/puppetlabs/code/environments/dev/manifests/site.pp
   SHELL
 
 end
-
