@@ -252,5 +252,8 @@ containerdiff(yaml)
 kitematic(yaml)
 git(yaml)
 nodejs(yaml)
+# sdkman(yaml) # sdkman has an API for itself to check for later versions, could use that
+# emacs(yaml) # source on ftp.gnu.org, no perceivable way to check for updates and it doesn't happen often
+# ruby(yaml) # use local rbenv? different sources, such as ruby and jruby
 
 File.open(YAML_FILE, 'w') { |file| file.write(yaml.to_yaml) }
