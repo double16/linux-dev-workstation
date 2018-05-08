@@ -41,10 +41,10 @@ sdkman:
   version: 10.0.0-openjdk
   default: false
 git:
-  version: 2.16.2
+  version: 2.17.0
 pdk:
-  version: 1.3.2.0
-  checksum: 96540af3ab726a09485aefc2213415c92ffeef34b58de1211926e5429b9a2258
+  version: 1.5.0.0
+  checksum: a1f0089b4aeb0d3599111b07fb43577c6a0753779c9d272705f01f8c676918d3
 docker:
   version: 18.03.1
 container-diff:
@@ -58,14 +58,14 @@ kitematic:
   version: 0.17.3
   checksum: d2cd5e320550115eea593d6d9765182dc67ac9dd3fe6bfce27e093eb780720a6
 rstudio:
-  version: 1.1.442
-  checksum: 8e6435aa53fa0ea9878ef9c09b6419f4
+  version: 1.1.447
+  checksum: 67a02dc224f9136eb071d24ddcd7f5e448e91c919d47e8c6b05c150bef460c82
 slack:
-  version: 3.0.5-0.1
-  checksum: 2733a1ea85275409fb55657b2fc032f49e91973fc8a90ac3a105940bb16579e4
+  version: 3.1.1-0.1
+  checksum: 9048305644e41e43baa44266011d67724fbb2f11024ded6650444546ced0df98
 node:
   versions:
-  - version: 8.9.4
+  - version: 8.11.1
     global: true
   - version: 10.0.0
     global: false

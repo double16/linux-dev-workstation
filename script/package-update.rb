@@ -23,10 +23,10 @@ def sha256(file)
     end
 end
 
-def latest_github_tag(owner, repo)
+def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/)
     tags = JSON.parse(Net::HTTP.get(URI("https://api.github.com/repos/#{owner}/#{repo}/tags")))
     tags.collect { |e| e['name'] }
-        .select { |e| e.match?(/^v[0-9.]+$/) }
+        .select { |e| e.match?(version_match) }
         .collect { |e| e[1..-1] }
         .sort { |a,b| Gem::Version.new(a) <=> Gem::Version.new(b) }
         .reverse
@@ -125,9 +125,132 @@ def hashistack(yaml)
     end
 end
 
+def pdk(yaml)
+    resp = Net::HTTP.get_response(URI("https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=latest"))
+    if resp.is_a?(Net::HTTPFound)
+        location = resp.header['location']
+        latest = location.match(/pdk\/([0-9a-z.]+)\//)[1]
+        if latest != yaml['pdk']['version']
+            puts "Found newer version PDK #{latest}"
+            download_url = "https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=#{latest}"
+            download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.el7.x86_64.rpm"
+            system "curl -L -C - -o #{download_file} '#{download_url}'"
+            if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+                yaml['pdk']['checksum'] = sha256(download_file)
+                yaml['pdk']['version'] = latest
+            else
+                STDERR.puts "Error #{$?} downloading #{download_url}"
+            end        
+        end
+    else
+        STDERR.puts "Error getting checking for newer PDK version: #{resp.to_s}"
+    end
+end
+
+def slack(yaml)
+    latest = yaml['slack']['version']
+    unless yaml['slack'].has_key?('checksum')
+        puts "Found newer version Slack #{latest}"
+        download_url = "https://downloads.slack-edge.com/linux_releases/slack-#{latest}.fc21.x86_64.rpm"
+        download_file = ".vagrant/machines/default/cache/slack-#{latest}.fc21.x86_64.rpm"
+        system "curl -L -C - -o #{download_file} '#{download_url}'"
+        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+            yaml['slack']['checksum'] = sha256(download_file)
+            yaml['slack']['version'] = latest
+        else
+            STDERR.puts "Error #{$?} downloading #{download_url}"
+        end        
+    end
+end
+
+def docker(yaml)
+    latest = latest_github_tag('docker', 'docker-ce', /^v[0-9.]+-ce$/)
+    if latest
+        yaml['docker']['version'] = latest.sub('-ce', '')
+    end
+end
+
+def git(yaml)
+    latest = latest_github_tag('git', 'git')
+    if latest
+        yaml['git']['version'] = latest
+    end
+end
+
+def rstudio(yaml)
+    latest = latest_github_tag('rstudio', 'rstudio')
+    if latest != yaml['rstudio']['version'] or !yaml['rstudio'].has_key?('checksum')
+        puts "Found newer version rstudio #{latest}"
+        download_url = "https://download1.rstudio.org/rstudio-#{latest}-x86_64.rpm"
+        download_file = ".vagrant/machines/default/cache/rstudio-#{latest}-x86_64.rpm"
+        system "curl -L -C - -o #{download_file} '#{download_url}'"
+        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+            yaml['rstudio']['checksum'] = sha256(download_file)
+            yaml['rstudio']['version'] = latest
+        else
+            STDERR.puts "Error #{$?} downloading #{download_url}"
+        end        
+    end
+end
+
+def containerdiff(yaml)
+    latest = latest_github_tag('GoogleContainerTools', 'container-diff')
+    if latest != yaml['container-diff']['version'] or !yaml['container-diff'].has_key?('checksum')
+        puts "Found newer version container-diff #{latest}"
+        download_url = "https://storage.googleapis.com/container-diff/v#{latest}/container-diff-linux-amd64"
+        download_file = ".vagrant/machines/default/cache/container-diff-#{latest}"
+        system "curl -L -C - -o #{download_file} '#{download_url}'"
+        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+            yaml['container-diff']['checksum'] = sha256(download_file)
+            yaml['container-diff']['version'] = latest
+        else
+            STDERR.puts "Error #{$?} downloading #{download_url}"
+        end        
+    end
+end
+
+def kitematic(yaml)
+    latest = latest_github_tag('docker', 'kitematic')
+    if latest != yaml['kitematic']['version'] or !yaml['kitematic'].has_key?('checksum')
+        puts "Found newer version kitematic #{latest}"
+        download_url = "https://github.com/docker/kitematic/releases/download/v#{latest}/Kitematic-#{latest}-Ubuntu.zip"
+        download_file = ".vagrant/machines/default/cache/Kitematic-#{latest}.zip"
+        system "curl -L -C - -o #{download_file} '#{download_url}'"
+        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+            yaml['kitematic']['checksum'] = sha256(download_file)
+            yaml['kitematic']['version'] = latest
+        else
+            STDERR.puts "Error #{$?} downloading #{download_url}"
+        end        
+    end
+end
+
+def nodejs(yaml)
+    tags = JSON.parse(Net::HTTP.get(URI("https://api.github.com/repos/nodejs/node/tags")))
+    versions = tags.collect { |e| e['name'] }
+        .select { |e| e.match?(/^v[0-9.]+$/) }
+        .collect { |e| e[1..-1] }
+    yaml['node']['versions'].each do |info|
+        current_spec = Gem::Version.new(info['version']).approximate_recommendation()
+        latest = versions.select { |e| Gem::Version.new(e).approximate_recommendation() == current_spec }
+            .sort { |a,b| Gem::Version.new(a) <=> Gem::Version.new(b) }
+            .reverse
+            .first
+        info['version'] = latest if latest
+    end
+end
+
 yaml = File.open(YAML_FILE) { |file| YAML.load(file) }
 
-#idea(yaml)
+idea(yaml)
 hashistack(yaml)
+pdk(yaml)
+slack(yaml)
+docker(yaml)
+rstudio(yaml)
+containerdiff(yaml)
+kitematic(yaml)
+git(yaml)
+nodejs(yaml)
 
 File.open(YAML_FILE, 'w') { |file| file.write(yaml.to_yaml) }

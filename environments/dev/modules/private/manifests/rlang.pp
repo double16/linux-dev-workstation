@@ -15,7 +15,7 @@ class private::rlang {
     extract_command => 'rpm -ivh %s',
     creates         => '/usr/bin/rstudio',
     checksum        => $checksum,
-    checksum_type   => 'md5',
+    checksum_type   => 'sha256',
     require         => File['/tmp/vagrant-cache'],
   }
 }
