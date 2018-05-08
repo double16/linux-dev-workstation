@@ -7,6 +7,7 @@ require 'nokogiri'
 require 'net/http'
 require 'cgi'
 require 'digest'
+require 'json'
 
 YAML_FILE = 'environments/dev/hieradata/common.yaml'
 TMPDIR = "tmp"
@@ -20,6 +21,16 @@ def sha256(file)
         end
         sha.to_s
     end
+end
+
+def latest_github_tag(owner, repo)
+    tags = JSON.parse(Net::HTTP.get(URI("https://api.github.com/repos/#{owner}/#{repo}/tags")))
+    tags.collect { |e| e['name'] }
+        .select { |e| e.match?(/^v[0-9.]+$/) }
+        .collect { |e| e[1..-1] }
+        .sort { |a,b| Gem::Version.new(a) <=> Gem::Version.new(b) }
+        .reverse
+        .first
 end
 
 #
@@ -44,7 +55,7 @@ def idea(yaml)
     latest_build = updates_doc.xpath("//channel[@id=\"#{idea_channel}\"]//build")[0]['fullNumber'].to_s
     if yaml['idea']['build'] != latest_build
         latest_version = updates_doc.xpath("//channel[@id=\"#{idea_channel}\"]//build")[0]['version'].to_s.sub(/ .*/, '')
-        STDERR.puts "Updating IDEA to #{latest_version} #{latest_build} ..."
+        puts "Updating IDEA to #{latest_version} #{latest_build} ..."
         download_url = "https://download-cf.jetbrains.com/idea/ideaIU-#{latest_version}.tar.gz"
         download_file = ".vagrant/machines/default/cache/idea-#{latest_version}.tar.gz"
         system "curl -L -C - -o #{download_file} #{download_url}"
@@ -54,7 +65,7 @@ def idea(yaml)
             yaml['idea']['build'] = latest_build
             idea_build = "IU-#{yaml['idea']['build']}"
             File.delete(idea_plugins_file)
-            STDERR.puts "IDEA updated to  #{latest_version} #{latest_build}, SHA256 #{yaml['idea']['checksum']}"
+            puts "IDEA updated to  #{latest_version} #{latest_build}, SHA256 #{yaml['idea']['checksum']}"
         else
             STDERR.puts "Error #{$?} downloading #{download_url}"
         end
@@ -73,7 +84,7 @@ def idea(yaml)
         if available_plugin
             available_version = available_plugin.xpath("version").first.text
             if available_version and available_version.to_s != existing_plugin['version'].to_s
-                STDERR.puts "Getting new version of #{existing_plugin['name']}, #{available_version}"
+                puts "Getting new version of #{existing_plugin['name']}, #{available_version}"
                 resp = Net::HTTP.get_response(URI("https://plugins.jetbrains.com/pluginManager?action=download&id=#{existing_plugin['name']}&build=#{idea_build}"))
                 if resp.is_a?(Net::HTTPFound)
                     location = URI(resp.header['location'])
@@ -95,8 +106,28 @@ def idea(yaml)
     end
 end
 
+def hashistack(yaml)
+    yaml['vagrant']['version'] = latest_github_tag('hashicorp', 'vagrant')
+    yaml['hashistack'].each do |tool, info|
+        latest = latest_github_tag('hashicorp', tool)
+        if (latest != info['version'] or !info.has_key?('checksum'))
+            puts "Found newer version #{tool} #{latest}"
+            download_url = "https://releases.hashicorp.com/#{tool}/#{latest}/#{tool}_#{latest}_linux_amd64.zip"
+            download_file = ".vagrant/machines/default/cache/#{tool}_#{latest}_linux_amd64.zip"
+            system "curl -L -C - -o #{download_file} #{download_url}"
+            if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+                yaml['hashistack'][tool]['checksum'] = sha256(download_file)
+                yaml['hashistack'][tool]['version'] = latest
+            else
+                STDERR.puts "Error #{$?} downloading #{download_url}"
+            end
+        end
+    end
+end
+
 yaml = File.open(YAML_FILE) { |file| YAML.load(file) }
 
-idea(yaml)
+#idea(yaml)
+hashistack(yaml)
 
 File.open(YAML_FILE, 'w') { |file| file.write(yaml.to_yaml) }

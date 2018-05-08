@@ -4,14 +4,17 @@ hashistack:
     version: 1.2.3
     checksum: 822fe76c2dfe699f187ef8c44537d10453a1545db620e40b345cf6991a690f7d
   vault:
-    version: 0.10.0
-    checksum: a6b4b6db132f3bbe6fbb77f76228ffa45bd55a5a1ab83ff043c2c665c3f5a744
+    version: 0.10.1
+    checksum: cb9a276ed5354f0a5ea28281d3780dd5844ae4cec2eec528b37231d6aaa18167
   consul:
     version: 1.0.7
     checksum: 6c2c8f6f5f91dcff845f1b2ce8a29bd230c11397c448ce85aae6dacd68aa4c14
   terraform:
     version: 0.11.7
     checksum: 6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
+  nomad:
+    version: 0.8.3
+    checksum: c7faaee8fad0f6a74df01b9283253ee565f85791adca1d6a38462e0387dee175
 sdkman:
 - package: groovy
   version: 2.4.15
@@ -50,7 +53,7 @@ container-diff:
 emacs:
   version: 25.3
 vagrant:
-  version: 2.0.4
+  version: 2.1.1
 kitematic:
   version: 0.17.3
   checksum: d2cd5e320550115eea593d6d9765182dc67ac9dd3fe6bfce27e093eb780720a6
