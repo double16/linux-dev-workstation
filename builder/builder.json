@@ -52,13 +52,13 @@
         "/usr/sbin/groupadd packer",
         "/usr/sbin/useradd packer -g packer -G wheel,kvm",
 
-        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.1/packer_1.2.1_linux_amd64.zip",
+        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.3/packer_1.2.3_linux_amd64.zip",
         "cd /usr/bin && unzip /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
 
-        "curl -sL -o /tmp/vagrant_2.0.2_x86_64.deb https://releases.hashicorp.com/vagrant/2.0.2/vagrant_2.0.2_x86_64.deb",
-        "dpkg -i /tmp/vagrant_2.0.2_x86_64.deb",
-        "rm /tmp/vagrant_2.0.2_x86_64.deb",
+        "curl -sL -o /tmp/vagrant_2.0.4_x86_64.deb https://releases.hashicorp.com/vagrant/2.0.4/vagrant_2.0.4_x86_64.deb",
+        "dpkg -i /tmp/vagrant_2.0.4_x86_64.deb",
+        "rm /tmp/vagrant_2.0.4_x86_64.deb",
         "vagrant plugin install vagrant-cachier vagrant-vbguest",
 
         "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash' - packer",

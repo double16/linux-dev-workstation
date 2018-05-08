@@ -10,3 +10,4 @@ box
 repos.yaml
 setenv.sh
 /keys.d/
+tmp/

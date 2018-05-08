@@ -1,4 +1,4 @@
-
+---
 hashistack:
   packer:
     version: 1.2.3
@@ -12,189 +12,175 @@ hashistack:
   terraform:
     version: 0.11.7
     checksum: 6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
-
 sdkman:
-  - package: groovy
-    version: 2.4.15
-    default: true
-  - package: groovyserv
-    version: 1.2.0
-    default: true
-  - package: gradle
-    version: 4.7
-    default: true
-  - package: grails
-    version: 3.2.12
-    default: false
-  - package: grails
-    version: 3.3.2
-    default: true
-  - package: java
-    version: 8.0.163-zulu
-    default: true
-  - package: java
-    version: 9.0.4-openjdk
-    default: false
-  - package: java
-    version: 10.0.0-openjdk
-    default: false
-
+- package: groovy
+  version: 2.4.15
+  default: true
+- package: groovyserv
+  version: 1.2.0
+  default: true
+- package: gradle
+  version: 4.7
+  default: true
+- package: grails
+  version: 3.2.12
+  default: false
+- package: grails
+  version: 3.3.2
+  default: true
+- package: java
+  version: 8.0.163-zulu
+  default: true
+- package: java
+  version: 9.0.4-openjdk
+  default: false
+- package: java
+  version: 10.0.0-openjdk
+  default: false
 git:
   version: 2.16.2
-
 pdk:
   version: 1.3.2.0
   checksum: 96540af3ab726a09485aefc2213415c92ffeef34b58de1211926e5429b9a2258
-
 docker:
   version: 18.03.1
-
 container-diff:
   version: 0.9.0
   checksum: 64f45586cc42a53fc9dea97d416a6fa9ffd4fd6690c338afd5341453ec9d1a03
-
 emacs:
   version: 25.3
-
 vagrant:
   version: 2.0.4
-
 kitematic:
   version: 0.17.3
   checksum: d2cd5e320550115eea593d6d9765182dc67ac9dd3fe6bfce27e093eb780720a6
-
 rstudio:
   version: 1.1.442
   checksum: 8e6435aa53fa0ea9878ef9c09b6419f4
-
 slack:
   version: 3.0.5-0.1
   checksum: 2733a1ea85275409fb55657b2fc032f49e91973fc8a90ac3a105940bb16579e4
-
 node:
   versions:
-    - version: 8.9.4
-      global: true
-    - version: 10.0.0
-      global: false
+  - version: 8.9.4
+    global: true
+  - version: 10.0.0
+    global: false
   packages:
-    - grunt
-    - typescript
-    - tern
-
+  - grunt
+  - typescript
+  - tern
 ruby:
   versions:
-    - version: 2.4.3
-      global: true
-    - version: 1.9.3-p551
-    - version: 2.1.10
-    - version: 2.3.6
-    - version: jruby-1.7.27
-    - version: jruby-9.1.16.0
-
+  - version: 2.4.3
+    global: true
+  - version: 1.9.3-p551
+  - version: 2.1.10
+  - version: 2.3.6
+  - version: jruby-1.7.27
+  - version: jruby-9.1.16.0
 netbeans:
   version: 8.2
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
-
 idea:
   version: 2018.1.2
   build: 181.4668.68
   checksum: c0a8f0fdd9c80bec62320fc26bdf3546ee513f51d990e0cf6d66b3d998e23a10
   plugins:
-    - name: LiveEdit
-      type: zip
-      version: 181.3870.1
-      updatedid: 43520
-    - name: AngularJS
-      type: zip
-      version: 181.4203.498
-      updatedid: 44284
-    - name: ruby
-      type: zip
-      version: 2018.1.20180417
-      updatedid: 45171
-    - name: puppet
-      type: zip
-      version: 181.3007.14
-      updatedid: 42572
-    - name: NodeJS
-      type: zip
-      version: 181.4668.7
-      updatedid: 45105
-    - name: BashSupport
-      type: zip
-      version: 1.6.13.181
-      updatedid: 43929
-    - name: Docker
-      type: zip
-      version: 181.4203.550
-      updatedid: 44503
-    - name: idea-gitignore
-      type: zip
-      version: 2.6.1
-      updatedid: 45023
-    - name: ini4idea
-      type: zip
-      version: 181.3741.23
-      updatedid: 43335
-    - name: intellij-hcl
-      type: zip
-      version: 0.6.10
-      updatedid: 44787
-    - name: intellij-go
-      type: zip
-      version: 181.4203.564.171
-      updatedid: 44601
-    - name: Jade
-      type: zip
-      version: 181.3870.1
-      updatedid: 43526
-    - name: asciidoctor
-      type: zip
-      version: 0.20.2
-      updatedid: 44416
-    - name: Kotlin
-      type: zip
-      version: 1.2.31-release-IJ2018.1-1
-      updatedid: 44362
-    - name: Bitbucket Linky
-      type: zip
-      version: 5.0
-      updatedid: 40911
-    - name: Gradle Dependencies Helper
-      type: zip
-      version: 1.11
-      updatedid: 42210
-    - name: R4Intellij
-      type: zip
-      version: 1.0.9
-      updatedid: 44232
-    - name: js-karma
-      type: zip
-      version: 181.4668.7
-      updatedid: 45107
-    - name: sass-lint-plugin
-      type: zip
-      version: 1.0.8
-      updatedid: 40438
-    - name: CloudFormation
-      type: zip
-      version: 0.5.42
-      updatedid: 38829
-    - name: react-css-modules-intellij-plugin
-      type: jar
-      version: 1.0.1
-      updatedid: 30724
-    - name: bootstrap3
-      type: jar
-      version: 4.1.1
-      updatedid: 45070
-    - name: com.jetbrains.ideolog
-      type: jar
-      version: 181.0.7.0
-      updatedid: 43008
-    - name: vagrant
-      type: zip
-      version: 173.3727.127
-      updatedid: 41069
+  - name: com.intellij.plugins.html.instantEditing
+    type: zip
+    version: 181.3870.1
+    updateid: 43520
+  - name: AngularJS
+    type: zip
+    version: 181.4668.7
+    updateid: '45104'
+  - name: org.jetbrains.plugins.ruby
+    type: zip
+    version: 2018.1.20180417
+    updateid: 45171
+  - name: com.intellij.lang.puppet
+    type: zip
+    version: 181.3007.14
+    updateid: 42572
+  - name: NodeJS
+    type: zip
+    version: 181.4668.7
+    updateid: 45105
+  - name: BashSupport
+    type: zip
+    version: 1.6.13.181
+    updateid: 43929
+  - name: Docker
+    type: zip
+    version: 181.4668.68
+    updateid: '45338'
+  - name: mobi.hsz.idea.gitignore
+    type: zip
+    version: 2.6.1
+    updateid: 45023
+  - name: com.jetbrains.plugins.ini4idea
+    type: zip
+    version: 181.3741.23
+    updateid: 43335
+  - name: org.intellij.plugins.hcl
+    type: zip
+    version: 0.6.10
+    updateid: 44787
+  - name: org.jetbrains.plugins.go
+    type: zip
+    version: 181.4668.90
+    updateid: '45394'
+  - name: com.jetbrains.plugins.jade
+    type: zip
+    version: 181.3870.1
+    updateid: 43526
+  - name: org.asciidoctor.intellij.asciidoc
+    type: zip
+    version: 0.20.2
+    updateid: 44416
+  - name: org.jetbrains.kotlin
+    type: zip
+    version: 1.2.41-release-IJ2018.1-1
+    updateid: '45423'
+  - name: com.atlassian.bitbucket.references
+    type: zip
+    version: 5.0
+    updateid: 40911
+  - name: GradleDependenciesHelper
+    type: zip
+    version: 1.11
+    updateid: 42210
+  - name: R4Intellij
+    type: zip
+    version: 1.0.9
+    updateid: 44232
+  - name: Karma
+    type: zip
+    version: 181.4668.7
+    updateid: 45107
+  - name: com.wix.sasslint
+    type: zip
+    version: 1.0.8
+    updateid: 40438
+  - name: AWSCloudFormation
+    type: zip
+    version: 0.5.53
+    updateid: '45402'
+  - name: com.intellij.react.css.modules
+    type: jar
+    version: 1.0.1
+    updateid: 30724
+  - name: nl.jworks.intellij.bootstrap3
+    type: jar
+    version: 4.1.1
+    updateid: 45070
+  - name: com.intellij.ideolog
+    type: jar
+    version: 181.0.7.0
+    updateid: 43008
+  - name: org.jetbrains.plugins.vagrant
+    type: zip
+    version: 0.6.144.1701
+    updateid: '24177'

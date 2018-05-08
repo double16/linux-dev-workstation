@@ -118,17 +118,17 @@ StartupNotify=true
       $plugin_name = $item['name']
       $plugin_type = $item['type']
       $plugin_version = $item['version']
-      $plugin_updatedid = $item['updatedid']
+      $plugin_updateid = $item['updateid']
 
       if $plugin_type == 'jar' {
         private::idea::plugin_jar { $plugin_name:
           version  => $plugin_version,
-          updateid => $plugin_updatedid,
+          updateid => $plugin_updateid,
         }
       } else {
         private::idea::plugin_zip { $plugin_name:
           version  => $plugin_version,
-          updateid => $plugin_updatedid,
+          updateid => $plugin_updateid,
         }
       }
   }
