@@ -6,10 +6,21 @@ require 'yaml'
 require 'nokogiri'
 require 'net/http'
 require 'cgi'
+require 'digest'
 
 YAML_FILE = 'environments/dev/hieradata/common.yaml'
 TMPDIR = "tmp"
 Dir.mkdir(TMPDIR, 0775) unless Dir.exist?(TMPDIR)
+
+def sha256(file)
+    File.open(file, 'r') do |file|
+        sha = Digest::SHA256.new
+        while content = file.read(65535)
+            sha.update content
+        end
+        sha.to_s
+    end
+end
 
 #
 # https://plugins.jetbrains.com/plugins/list?build=IU-181.4668.68
@@ -17,14 +28,44 @@ Dir.mkdir(TMPDIR, 0775) unless Dir.exist?(TMPDIR)
 #  responds with 302, Location: https://plugins.jetbrains.com/files/9746/43008/com.jetbrains.ideolog-181.0.7.0.jar?updateId=43008&pluginId=9746&uuid&code=IU&build=181.4668.68
 #
 def idea(yaml)
+    idea_channel = yaml['idea']['channel'] || 'IDEA_Release'
+    idea_version = "#{yaml['idea']['version']}"
     idea_build = "IU-#{yaml['idea']['build']}"
     idea_plugins_file = File.join(TMPDIR, 'idea-plugins.xml')
+    idea_updates_file = File.join(TMPDIR, 'idea-updates.xml')
+
+    # IDEA version
+    if !File.exist?(idea_updates_file) or Time.now - File.mtime(idea_updates_file) > (12*3600) # seconds
+        File.open(idea_updates_file, 'w') { |file|
+            file.write(Net::HTTP.get(URI("https://www.jetbrains.com/updates/updates.xml")))
+        }
+    end
+    updates_doc = File.open(idea_updates_file) { |file| Nokogiri::XML(file) }
+    latest_build = updates_doc.xpath("//channel[@id=\"#{idea_channel}\"]//build")[0]['fullNumber'].to_s
+    if yaml['idea']['build'] != latest_build
+        latest_version = updates_doc.xpath("//channel[@id=\"#{idea_channel}\"]//build")[0]['version'].to_s.sub(/ .*/, '')
+        STDERR.puts "Updating IDEA to #{latest_version} #{latest_build} ..."
+        download_url = "https://download-cf.jetbrains.com/idea/ideaIU-#{latest_version}.tar.gz"
+        download_file = ".vagrant/machines/default/cache/idea-#{latest_version}.tar.gz"
+        system "curl -L -C - -o #{download_file} #{download_url}"
+        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+            yaml['idea']['checksum'] = sha256(download_file)
+            idea_version = yaml['idea']['version'] = latest_version
+            yaml['idea']['build'] = latest_build
+            idea_build = "IU-#{yaml['idea']['build']}"
+            File.delete(idea_plugins_file)
+            STDERR.puts "IDEA updated to  #{latest_version} #{latest_build}, SHA256 #{yaml['idea']['checksum']}"
+        else
+            STDERR.puts "Error #{$?} downloading #{download_url}"
+        end
+    end
+
+    # plugins
     if !File.exist?(idea_plugins_file) or Time.now - File.mtime(idea_plugins_file) > (12*3600) # seconds
         File.open(idea_plugins_file, 'w') { |file|
             file.write(Net::HTTP.get(URI("https://plugins.jetbrains.com/plugins/list?build=#{idea_build}")))
         }
     end
-
     doc = File.open(idea_plugins_file) { |file| Nokogiri::XML(file) }
     available_plugins = doc.xpath('//idea-plugin')
     yaml['idea']['plugins'].each do |existing_plugin|
