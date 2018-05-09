@@ -242,7 +242,7 @@ include ::private::my_vagrant
 include ::private::my_sdkman
 include ::private::my_docker
 include ::private::idea
-include ::private::netbeans
+#include ::private::netbeans  # netbeans is old, 2016, and vscode is superior
 include ::private::svn
 include ::private::hipchat
 include ::private::slack

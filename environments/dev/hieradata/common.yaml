@@ -87,9 +87,9 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.1.2
-  build: 181.4668.68
-  checksum: c0a8f0fdd9c80bec62320fc26bdf3546ee513f51d990e0cf6d66b3d998e23a10
+  version: 2018.1.3
+  build: 181.4892.42
+  checksum: 4c5dbae40f0f045bcfa1c17c579c0d8cd8fb1823117a49a16ddd23249b078154
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -97,8 +97,8 @@ idea:
     updateid: 43520
   - name: AngularJS
     type: zip
-    version: 181.4668.7
-    updateid: '45104'
+    version: 181.4892.39
+    updateid: '45642'
   - name: org.jetbrains.plugins.ruby
     type: zip
     version: 2018.1.20180417
