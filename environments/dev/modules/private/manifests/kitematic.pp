@@ -9,11 +9,11 @@ class private::kitematic
   $checksum = $config['checksum']
 
   exec { 'atrpms-repo-7-7':
-    command => '/usr/bin/rpm -i --nodeps https://www.mirrorservice.org/sites/dl.atrpms.net/el7-x86_64/atrpms/stable/atrpms-repo-7-7.el7.x86_64.rpm',
+    command => '/usr/bin/rpm -i --nodeps https://mirror.its.sfu.ca/mirror/CentOS-Third-Party/atrpms/el7-x86_64/stable/atrpms-repo-7-7.el7.x86_64.rpm',
     creates => '/etc/yum.repos.d/atrpms.repo',
   }
   ->exec { 'atrpms mirror':
-    command => '/usr/bin/sed -i -e \'s@^baseurl=http://dl.atrpms.net/@baseurl=https://www.mirrorservice.org/sites/dl.atrpms.net/@g\' /etc/yum.repos.d/atrpms*repo',
+    command => '/usr/bin/sed -i -e \'s@^baseurl=http://dl.atrpms.net/@baseurl=https://mirror.its.sfu.ca/mirror/CentOS-Third-Party/atrpms/@g\' /etc/yum.repos.d/atrpms*repo',
     onlyif  => '/usr/bin/grep -qF \'baseurl=http://dl.atrpms.net/\' /etc/yum.repos.d/atrpms*repo',
   }
   ->package { [ 'rpmrebuild', 'zsh', 'libnotify' ]: }

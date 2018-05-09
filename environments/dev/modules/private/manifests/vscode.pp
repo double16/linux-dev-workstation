@@ -48,7 +48,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'robertohuertasm.vscode-icons',
     'formulahendry.code-runner',
     'redhat.java',
-    'lukehoban.Go',
+    'ms-vscode.Go',
     'rebornix.Ruby',
     'PeterJausovec.vscode-docker',
     'humao.rest-client',

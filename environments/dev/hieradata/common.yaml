@@ -5,7 +5,7 @@ hashistack:
     checksum: 822fe76c2dfe699f187ef8c44537d10453a1545db620e40b345cf6991a690f7d
   vault:
     version: 0.10.1
-    checksum: cb9a276ed5354f0a5ea28281d3780dd5844ae4cec2eec528b37231d6aaa18167
+    checksum: 031e521b4603487126fd353a9557dd22a02304a8a11f843e9914be59a8009c8a
   consul:
     version: 1.0.7
     checksum: 6c2c8f6f5f91dcff845f1b2ce8a29bd230c11397c448ce85aae6dacd68aa4c14
@@ -32,7 +32,7 @@ sdkman:
   version: 3.3.2
   default: true
 - package: java
-  version: 8.0.163-zulu
+  version: 8.0.172-zulu
   default: true
 - package: java
   version: 9.0.4-openjdk
