@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
-    docker.image = "jdeathe/centos-ssh:centos-7-2.3.1"
+    docker.image = "jdeathe/centos-ssh:centos-7-2.3.2"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
     docker.has_ssh = true
