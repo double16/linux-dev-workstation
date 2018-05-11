@@ -13,6 +13,10 @@ If the `zanloy-vim` module is updated, the URL to vim-pathogen needs to be chang
 
 If the `paulosuzart-sdkman` module is updated, the `su` commands in the file `environments/dev/modules/sdkman/manifests/package.pp` need to be fixed to have a space after the ` - ` to enable a login shell.
 
+## Update Packages
+
+Most versions of packages are kept in `environments/dev/hieradata/common.yaml`. The `script/package-update.rb` script will update most of them by querying the Internet. Run the script and do `git diff environments/dev/hieradata/common.yaml` to see the changes. The intent is that the box can be built or updated directly after running the script.
+
 ## Packer Builds
 
 Packer builds are available for the following providers:

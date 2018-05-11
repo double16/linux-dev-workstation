@@ -106,6 +106,28 @@ def idea(yaml)
     end
 end
 
+#
+# Update the package_info by downloading from download_url into local download_file.
+# package_info is expected to be a map with 'version' and 'checksum' keys. 'checksum' will be a
+# sha256 sum.
+# @return true if package_info is updated, false if package_info is unchanged
+#
+def update_single_archive(version, download_url, download_file, package_info)
+    system "curl -L -C - -o #{download_file} #{download_url}"
+    if File.size(download_file) < 4096
+        STDERR.puts "Error downloading #{download_url}, size is only #{File.size(download_file)} bytes"
+        File.delete(download_file)
+        false
+    elsif $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+        package_info['checksum'] = sha256(download_file)
+        package_info['version'] = version
+        true
+    else
+        STDERR.puts "Error #{$?} downloading #{download_url}"
+        false
+    end
+end
+
 def hashistack(yaml)
     yaml['vagrant']['version'] = latest_github_tag('hashicorp', 'vagrant')
     yaml['hashistack'].each do |tool, info|
@@ -114,13 +136,7 @@ def hashistack(yaml)
             puts "Found newer version #{tool} #{latest}"
             download_url = "https://releases.hashicorp.com/#{tool}/#{latest}/#{tool}_#{latest}_linux_amd64.zip"
             download_file = ".vagrant/machines/default/cache/#{tool}_#{latest}_linux_amd64.zip"
-            system "curl -L -C - -o #{download_file} #{download_url}"
-            if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
-                yaml['hashistack'][tool]['checksum'] = sha256(download_file)
-                yaml['hashistack'][tool]['version'] = latest
-            else
-                STDERR.puts "Error #{$?} downloading #{download_url}"
-            end
+            update_single_archive(latest, download_url, download_file, yaml['hashistack'][tool])
         end
     end
 end
@@ -134,13 +150,7 @@ def pdk(yaml)
             puts "Found newer version PDK #{latest}"
             download_url = "https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=#{latest}"
             download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.el7.x86_64.rpm"
-            system "curl -L -C - -o #{download_file} '#{download_url}'"
-            if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
-                yaml['pdk']['checksum'] = sha256(download_file)
-                yaml['pdk']['version'] = latest
-            else
-                STDERR.puts "Error #{$?} downloading #{download_url}"
-            end        
+            update_single_archive(latest, download_url, download_file, yaml['pdk'])
         end
     else
         STDERR.puts "Error getting checking for newer PDK version: #{resp.to_s}"
@@ -153,13 +163,7 @@ def slack(yaml)
         puts "Found newer version Slack #{latest}"
         download_url = "https://downloads.slack-edge.com/linux_releases/slack-#{latest}.fc21.x86_64.rpm"
         download_file = ".vagrant/machines/default/cache/slack-#{latest}.fc21.x86_64.rpm"
-        system "curl -L -C - -o #{download_file} '#{download_url}'"
-        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
-            yaml['slack']['checksum'] = sha256(download_file)
-            yaml['slack']['version'] = latest
-        else
-            STDERR.puts "Error #{$?} downloading #{download_url}"
-        end        
+        update_single_archive(latest, download_url, download_file, yaml['slack'])
     end
 end
 
@@ -183,13 +187,7 @@ def rstudio(yaml)
         puts "Found newer version rstudio #{latest}"
         download_url = "https://download1.rstudio.org/rstudio-#{latest}-x86_64.rpm"
         download_file = ".vagrant/machines/default/cache/rstudio-#{latest}-x86_64.rpm"
-        system "curl -L -C - -o #{download_file} '#{download_url}'"
-        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
-            yaml['rstudio']['checksum'] = sha256(download_file)
-            yaml['rstudio']['version'] = latest
-        else
-            STDERR.puts "Error #{$?} downloading #{download_url}"
-        end        
+        update_single_archive(latest, download_url, download_file, yaml['rstudio'])
     end
 end
 
@@ -199,13 +197,7 @@ def containerdiff(yaml)
         puts "Found newer version container-diff #{latest}"
         download_url = "https://storage.googleapis.com/container-diff/v#{latest}/container-diff-linux-amd64"
         download_file = ".vagrant/machines/default/cache/container-diff-#{latest}"
-        system "curl -L -C - -o #{download_file} '#{download_url}'"
-        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
-            yaml['container-diff']['checksum'] = sha256(download_file)
-            yaml['container-diff']['version'] = latest
-        else
-            STDERR.puts "Error #{$?} downloading #{download_url}"
-        end        
+        update_single_archive(latest, download_url, download_file, yaml['container-diff'])
     end
 end
 
@@ -215,13 +207,7 @@ def kitematic(yaml)
         puts "Found newer version kitematic #{latest}"
         download_url = "https://github.com/docker/kitematic/releases/download/v#{latest}/Kitematic-#{latest}-Ubuntu.zip"
         download_file = ".vagrant/machines/default/cache/Kitematic-#{latest}.zip"
-        system "curl -L -C - -o #{download_file} '#{download_url}'"
-        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
-            yaml['kitematic']['checksum'] = sha256(download_file)
-            yaml['kitematic']['version'] = latest
-        else
-            STDERR.puts "Error #{$?} downloading #{download_url}"
-        end        
+        update_single_archive(latest, download_url, download_file, yaml['kitematic'])
     end
 end
 
