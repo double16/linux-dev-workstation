@@ -12,6 +12,7 @@ require 'json'
 YAML_FILE = 'environments/dev/hieradata/common.yaml'
 TMPDIR = "tmp"
 Dir.mkdir(TMPDIR, 0775) unless Dir.exist?(TMPDIR)
+`mkdir -p .vagrant/machines/default/cache`
 
 def sha256(file)
     File.open(file, 'r') do |file|
@@ -26,7 +27,7 @@ end
 def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/)
     tags = JSON.parse(Net::HTTP.get(URI("https://api.github.com/repos/#{owner}/#{repo}/tags")))
     tags.collect { |e| e['name'] }
-        .select { |e| e.match?(version_match) }
+        .select { |e| e.match(version_match) }
         .collect { |e| e[1..-1] }
         .sort { |a,b| Gem::Version.new(a) <=> Gem::Version.new(b) }
         .reverse
@@ -214,7 +215,7 @@ end
 def nodejs(yaml)
     tags = JSON.parse(Net::HTTP.get(URI("https://api.github.com/repos/nodejs/node/tags")))
     versions = tags.collect { |e| e['name'] }
-        .select { |e| e.match?(/^v[0-9.]+$/) }
+        .select { |e| e.match(/^v[0-9.]+$/) }
         .collect { |e| e[1..-1] }
     yaml['node']['versions'].each do |info|
         current_spec = Gem::Version.new(info['version']).approximate_recommendation()
