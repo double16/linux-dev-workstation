@@ -187,13 +187,7 @@
     {
       "type": "docker",
       "image": "jdeathe/centos-ssh:centos-7-2.3.2",
-      "volumes": {
-        "/home/double/src/linux-dev-workstation/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
-      },
-      "commit": true,
-      "changes": [
-        "ENV FACTER_ipv4only true"
-      ]
+      "commit": true
     }
   ],
   "post-processors": [
@@ -219,7 +213,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "gatekeeper:5001/pdouble16/linux-dev-workstation",
+        "repository": "pdouble16/linux-dev-workstation",
         "tag": "{{user `version`}}",
         "only": [ "docker" ]
       },
