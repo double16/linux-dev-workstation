@@ -7,8 +7,8 @@ hashistack:
     version: 0.10.1
     checksum: 031e521b4603487126fd353a9557dd22a02304a8a11f843e9914be59a8009c8a
   consul:
-    version: 1.0.7
-    checksum: 6c2c8f6f5f91dcff845f1b2ce8a29bd230c11397c448ce85aae6dacd68aa4c14
+    version: 1.1.0
+    checksum: 09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45
   terraform:
     version: 0.11.7
     checksum: 6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
@@ -46,7 +46,7 @@ pdk:
   version: 1.5.0.0
   checksum: a1f0089b4aeb0d3599111b07fb43577c6a0753779c9d272705f01f8c676918d3
 docker:
-  version: 18.03.1
+  version: 18.05.0
 container-diff:
   version: 0.9.0
   checksum: 64f45586cc42a53fc9dea97d416a6fa9ffd4fd6690c338afd5341453ec9d1a03
@@ -125,8 +125,8 @@ idea:
     updateid: 45023
   - name: com.jetbrains.plugins.ini4idea
     type: zip
-    version: 181.3741.23
-    updateid: 43335
+    version: 181.4892.97
+    updateid: '45682'
   - name: org.intellij.plugins.hcl
     type: zip
     version: 0.6.10
@@ -141,8 +141,8 @@ idea:
     updateid: 43526
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.20.2
-    updateid: 44416
+    version: 0.20.6
+    updateid: '45778'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.2.41-release-IJ2018.1-1
@@ -165,8 +165,8 @@ idea:
     updateid: 45107
   - name: com.wix.sasslint
     type: zip
-    version: 1.0.8
-    updateid: 40438
+    version: 1.1.0
+    updateid: '45643'
   - name: AWSCloudFormation
     type: zip
     version: 0.5.53

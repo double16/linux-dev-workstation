@@ -36,6 +36,7 @@ The VMs are large, 10-12GB uncompressed. You'll likely need to build them indivi
 * packer build -only=amazon-ebs     centos.json
 * packer build -only=qemu           centos.json
 * packer build -only=azure-arm      centos.json
+* packer build -only=docker         centos.json
 
 There are environment variables needed for building. If you aren't using a specific build, the variable is required, but a dummy value will do.
 

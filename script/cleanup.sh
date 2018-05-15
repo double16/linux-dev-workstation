@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' ) ]]; then
+if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'docker' ) ]]; then
 
   echo "==> Clear out machine id"
   rm -f /etc/machine-id
@@ -39,11 +39,13 @@ if [[ $CLEANUP_BUILD_TOOLS  =~ true || $CLEANUP_BUILD_TOOLS =~ 1 || $CLEANUP_BUI
     yum -y remove gcc libmpc mpfr cpp kernel-devel kernel-headers
 fi
 
-echo "==> Clean up yum cache of metadata and packages to save space"
-yum -y --enablerepo='*' clean all
+if [ ! -d "/tmp/vagrant-cache/yum" ]; then
+    echo "==> Clean up yum cache of metadata and packages to save space"
+    yum -y --enablerepo='*' clean all
+fi
 
 echo "==> Removing temporary files used to build box"
-rm -rf /tmp/*
+find /tmp -not -path '/tmp/vagrant-cache*' -delete
 
 echo "==> Rebuild RPM DB"
 rpmdb --rebuilddb
@@ -52,7 +54,7 @@ rm -f /var/lib/rpm/__db*
 # delete any logs that have built up during the install
 find /var/log/ -name *.log -exec rm -f {} \;
 
-if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'qemu' ) ]]; then
+if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'qemu' || ${PACKER_BUILDER_TYPE} =~ 'docker' ) ]]; then
 
   echo '==> Clear out swap and disable until reboot'
   set +e

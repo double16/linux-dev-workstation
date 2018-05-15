@@ -1,5 +1,6 @@
 {
   "_comment": "Build with `packer build centos.json`",
+  "_comment2": "Provision with Puppet twice to account for transient failures",
   "builders": [
     {
       "boot_command": [
@@ -182,6 +183,17 @@
       "location": "West US",
       "vm_size": "Standard_D2S_v3",
       "os_disk_size_gb": "{{user `disk_size_gb` }}"
+    },
+    {
+      "type": "docker",
+      "image": "jdeathe/centos-ssh:centos-7-2.3.2",
+      "volumes": {
+        "/home/double/src/linux-dev-workstation/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
+      },
+      "commit": true,
+      "changes": [
+        "ENV FACTER_ipv4only true"
+      ]
     }
   ],
   "post-processors": [
@@ -192,7 +204,7 @@
         "type": "vagrant",
         "vagrantfile_template": "{{ user `vagrantfile_template` }}",
         "include": [ "VAGRANTUP.md" ],
-        "except": [ "azure-arm" ]
+        "except": [ "azure-arm", "docker" ]
       },
       {
         "keep_input_artifact": true,
@@ -201,7 +213,19 @@
         "access_token": "{{user `cloud_token`}}",
         "version": "{{user `version`}}",
         "no_release": "true",
-        "except": [ "azure-arm" ]
+        "except": [ "azure-arm", "docker" ]
+      }
+    ],
+    [
+      {
+        "type": "docker-tag",
+        "repository": "gatekeeper:5001/pdouble16/linux-dev-workstation",
+        "tag": "{{user `version`}}",
+        "only": [ "docker" ]
+      },
+      {
+        "type": "docker-push",
+        "only": [ "docker" ]
       }
     ]
   ],
@@ -225,6 +249,7 @@
       "scripts": [
         "script/fix-slow-dns.sh",
         "script/sshd.sh",
+        "script/cache.sh",
         "script/update.sh",
         "script/vagrant.sh",
         "script/desktop.sh",
@@ -244,6 +269,7 @@
     },
     {
       "type": "puppet-masterless",
+      "ignore_exit_codes": true,
       "manifest_file": "environments/dev/manifests/site.pp",
       "module_paths": ["environments/dev/modules"],
       "extra_arguments": [
@@ -256,7 +282,26 @@
         "http_proxy": "{{user `http_proxy`}}",
         "https_proxy": "{{user `https_proxy`}}",
         "proxy_excludes": "{{user `no_proxy`}}",
-        "packer": "true"
+        "packer": "true",
+        "ipv4only": "true"
+      }
+    },
+    {
+      "type": "puppet-masterless",
+      "manifest_file": "environments/dev/manifests/site.pp",
+      "module_paths": ["environments/dev/modules"],
+      "extra_arguments": [
+        "--hiera_config",
+        "/etc/puppetlabs/code/environments/dev/hiera.yaml"
+      ],
+      "puppet_bin_dir": "/opt/puppetlabs/bin",
+      "facter": {
+        "proxy_url": "{{user `http_proxy`}}",
+        "http_proxy": "{{user `http_proxy`}}",
+        "https_proxy": "{{user `https_proxy`}}",
+        "proxy_excludes": "{{user `no_proxy`}}",
+        "packer": "true",
+        "ipv4only": "true"
       }
     },
     {
@@ -318,7 +363,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "tpl/vagrantfile-centos7-desktop.tpl",
-    "version": "201804.1",
+    "version": "201805.1",
     "virtualbox_guest_os_type": "RedHat_64",
     "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",
