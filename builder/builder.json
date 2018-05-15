@@ -43,22 +43,25 @@
       "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
       "inline": [
         "echo 'deb http://download.virtualbox.org/virtualbox/debian xenial contrib' >> /etc/apt/sources.list",
+        "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
         "curl -sL --fail https://www.virtualbox.org/download/oracle_vbox_2016.asc | apt-key add -",
         "curl -sL --fail https://www.virtualbox.org/download/oracle_vbox.asc | apt-key add -",
+        "curl -sL --fail https://download.docker.com/linux/ubuntu/gpg | apt-key add -",
         "apt-get update",
         "apt-get upgrade -y",
-        "apt-get install -y unzip git qemu qemu-kvm virtualbox-5.2 awscli iftop jq php",
+        "apt-get install -y unzip git qemu qemu-kvm virtualbox-5.2 awscli iftop jq php apt-transport-https ca-certificates curl software-properties-common docker-ce",
 
         "/usr/sbin/groupadd packer",
-        "/usr/sbin/useradd packer -g packer -G wheel,kvm",
+        "/bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel",
+        "/usr/sbin/useradd packer -m -g packer -G wheel,kvm",
 
         "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.3/packer_1.2.3_linux_amd64.zip",
         "cd /usr/bin && unzip /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
 
-        "curl -sL -o /tmp/vagrant_2.0.4_x86_64.deb https://releases.hashicorp.com/vagrant/2.0.4/vagrant_2.0.4_x86_64.deb",
-        "dpkg -i /tmp/vagrant_2.0.4_x86_64.deb",
-        "rm /tmp/vagrant_2.0.4_x86_64.deb",
+        "curl -sL -o /tmp/vagrant_2.1.1_x86_64.deb https://releases.hashicorp.com/vagrant/2.1.1/vagrant_2.1.1_x86_64.deb",
+        "dpkg -i /tmp/vagrant_2.1.1_x86_64.deb",
+        "rm /tmp/vagrant_2.1.1_x86_64.deb",
         "vagrant plugin install vagrant-cachier vagrant-vbguest",
 
         "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash' - packer",
