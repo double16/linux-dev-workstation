@@ -13,7 +13,7 @@ class private::kitematic
     creates => '/etc/yum.repos.d/atrpms.repo',
   }
   ->exec { 'atrpms mirror':
-    command => '/usr/bin/sed -i -e \'s@^baseurl=http://dl.atrpms.net/@baseurl=https://mirror.its.sfu.ca/mirror/CentOS-Third-Party/atrpms/@g\' /etc/yum.repos.d/atrpms*repo',
+    command => '/usr/bin/sed -i -e \'s@^baseurl=http://dl.atrpms.net/.*@baseurl=https://mirror.its.sfu.ca/mirror/CentOS-Third-Party/atrpms/el$releasever-$basearch/stable@g\' /etc/yum.repos.d/atrpms*repo',
     onlyif  => '/usr/bin/grep -qF \'baseurl=http://dl.atrpms.net/\' /etc/yum.repos.d/atrpms*repo',
   }
   ->package { [ 'rpmrebuild', 'zsh', 'libnotify' ]: }
