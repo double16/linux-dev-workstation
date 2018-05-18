@@ -46,7 +46,7 @@ pdk:
   version: 1.5.0.0
   checksum: a1f0089b4aeb0d3599111b07fb43577c6a0753779c9d272705f01f8c676918d3
 docker:
-  version: 18.05.0
+  version: 18.03.1
 container-diff:
   version: 0.9.0
   checksum: 64f45586cc42a53fc9dea97d416a6fa9ffd4fd6690c338afd5341453ec9d1a03
