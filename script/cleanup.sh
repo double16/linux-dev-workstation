@@ -46,13 +46,17 @@ if [[ $CLEANUP_BUILD_TOOLS  =~ true || $CLEANUP_BUILD_TOOLS =~ 1 || $CLEANUP_BUI
     yum -y remove gcc libmpc mpfr cpp kernel-devel kernel-headers
 fi
 
-if [ ! -d "/tmp/vagrant-cache/yum" ]; then
+if ! mountpoint /tmp/vagrant-cache; then
     echo "==> Clean up yum cache of metadata and packages to save space"
     yum -y --enablerepo='*' clean all
 fi
 
 echo "==> Removing temporary files used to build box"
-find /tmp -not -path '/tmp/vagrant-cache*' -delete
+if mountpoint /tmp/vagrant-cache; then
+    find /tmp -not -path '/tmp/vagrant-cache*' -a -not -path '/tmp' -delete
+else
+    find /tmp -not -path '/tmp' -delete
+fi
 
 echo "==> Rebuild RPM DB"
 rpmdb --rebuilddb
