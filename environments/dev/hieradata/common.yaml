@@ -8,7 +8,7 @@ hashistack:
     checksum: 031e521b4603487126fd353a9557dd22a02304a8a11f843e9914be59a8009c8a
   consul:
     version: 1.1.0
-    checksum: 09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45
+    checksum: '09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45'
   terraform:
     version: 0.11.7
     checksum: 6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
@@ -161,8 +161,8 @@ idea:
     updateid: 44232
   - name: Karma
     type: zip
-    version: 181.4668.7
-    updateid: 45107
+    version: 181.5087.27
+    updateid: '46119'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.0
