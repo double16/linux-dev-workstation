@@ -186,8 +186,16 @@
     },
     {
       "type": "docker",
+      "volumes": {
+        "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
+      },
       "image": "jdeathe/centos-ssh:centos-7-2.3.2",
-      "commit": true
+      "commit": true,
+      "changes": [
+        "LABEL maintainer='Patrick Double <pat@patdouble.com>' org.label-schema.license='MPL-2.0' org.label-schema.vendor='https://bitbucket.org/double16' org.label-schema.name='Developer Workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation.git'",
+        "ENV SSH_USER=vagrant",
+        "CMD /usr/bin/supervisord --configuration=/etc/supervisord.conf"
+      ]
     }
   ],
   "post-processors": [
@@ -242,6 +250,8 @@
       "expect_disconnect": true,
       "scripts": [
         "script/fix-slow-dns.sh",
+        "script/docker-systemd.sh",
+        "script/dind.sh",
         "script/sshd.sh",
         "script/cache.sh",
         "script/update.sh",
@@ -337,7 +347,7 @@
     "iso_name": "CentOS-7-x86_64-DVD-1804.iso",
     "iso_path": "iso",
     "iso_url": "http://mirrors.sonic.net/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-DVD-1804.iso",
-    "aws_ami_name": "CentOS Linux 7 x86_64 HVM EBS 1801",
+    "aws_ami_name": "CentOS Linux 7 x86_64 HVM EBS 1804",
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",
@@ -363,6 +373,7 @@
     "virtualbox_nictype": "virtio",
     "vm_name": "linux-dev-workstation",
     "vmware_guest_os_type": "centos-64",
-    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}"
+    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
+    "pwd": "{{ env `PWD` }}"
   }
 }

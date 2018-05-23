@@ -24,13 +24,14 @@ def sha256(file)
     end
 end
 
-def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/)
+def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/, filter = lambda { |v| true })
     tags = JSON.parse(Net::HTTP.get(URI("https://api.github.com/repos/#{owner}/#{repo}/tags")))
     tags.collect { |e| e['name'] }
         .select { |e| e.match(version_match) }
         .collect { |e| e[1..-1] }
         .sort { |a,b| Gem::Version.new(a) <=> Gem::Version.new(b) }
         .reverse
+        .select { |v| filter.call(v) }
         .first
 end
 
@@ -65,8 +66,8 @@ def idea(yaml)
             idea_version = yaml['idea']['version'] = latest_version
             yaml['idea']['build'] = latest_build
             idea_build = "IU-#{yaml['idea']['build']}"
-            File.delete(idea_plugins_file)
-            puts "IDEA updated to  #{latest_version} #{latest_build}, SHA256 #{yaml['idea']['checksum']}"
+            File.delete(idea_plugins_file) if File.exists?(idea_plugins_file)
+            puts "IDEA updated to #{latest_version} #{latest_build}, SHA256 #{yaml['idea']['checksum']}"
         else
             STDERR.puts "Error #{$?} downloading #{download_url}"
         end
@@ -169,7 +170,13 @@ def slack(yaml)
 end
 
 def docker(yaml)
-    latest = latest_github_tag('docker', 'docker-ce', /^v[0-9.]+-ce$/)
+    latest = latest_github_tag('docker', 'docker-ce', /^v[0-9.]+-ce$/, lambda { |v|
+        docker_uri = URI("https://download.docker.com/linux/static/stable/x86_64/docker-#{v}.tgz")
+        resp = Net::HTTP.start(docker_uri.host, docker_uri.port, :use_ssl => true) { |http|
+            http.head(docker_uri.path)
+        }
+        resp.is_a?(Net::HTTPFound) || resp.is_a?(Net::HTTPSuccess)
+    })
     if latest
         yaml['docker']['version'] = latest.sub('-ce', '')
     end
@@ -239,8 +246,8 @@ containerdiff(yaml)
 kitematic(yaml)
 git(yaml)
 nodejs(yaml)
-# sdkman(yaml) # sdkman has an API for itself to check for later versions, could use that
-# emacs(yaml) # source on ftp.gnu.org, no perceivable way to check for updates and it doesn't happen often
-# ruby(yaml) # use local rbenv? different sources, such as ruby and jruby
+#TODO: sdkman(yaml) # sdkman has an API for itself to check for later versions, could use that
+#TODO: emacs(yaml) # source on ftp.gnu.org, no perceivable way to check for updates and it doesn't happen often
+#TODO: ruby(yaml) # use local rbenv? different sources, such as ruby and jruby
 
 File.open(YAML_FILE, 'w') { |file| file.write(yaml.to_yaml) }

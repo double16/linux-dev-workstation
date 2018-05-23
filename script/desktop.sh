@@ -4,7 +4,7 @@ if [[ ! "$DESKTOP" =~ ^(true|yes|on|1|TRUE|YES|ON])$ ]]; then
   exit
 fi
 
-USERNAME=vagrant
+USERNAME=${SSH_USERNAME:-vagrant}
 
 cat /etc/redhat-release
 if grep -q -i "release 7" /etc/redhat-release ; then
@@ -17,5 +17,5 @@ GDM_CONFIG=/etc/gdm/custom.conf
 # Configure gdm autologin.
 
 if [ -f $GDM_CONFIG ]; then
-    sed -i s/"daemon]$"/"daemon]\nAutomaticLoginEnable=true\nAutomaticLogin=vagrant"/ /etc/gdm/custom.conf
+    sed -i s/"daemon]$"/"daemon]\nAutomaticLoginEnable=true\nAutomaticLogin=${USERNAME}"/ /etc/gdm/custom.conf
 fi

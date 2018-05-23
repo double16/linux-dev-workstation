@@ -9,6 +9,7 @@ class private::slack {
     ensure          => present,
     source          => "https://downloads.slack-edge.com/linux_releases/slack-${version}.fc21.x86_64.rpm",
     extract         => true,
+    cleanup         => false,
     extract_path    => '/tmp',
     extract_command => 'rpm -ivh %s',
     creates         => '/usr/bin/slack',

@@ -11,6 +11,7 @@ class private::rlang {
     ensure          => present,
     source          => "https://download1.rstudio.org/rstudio-${version}-x86_64.rpm",
     extract         => true,
+    cleanup         => false,
     extract_path    => '/tmp',
     extract_command => 'rpm -ivh %s',
     creates         => '/usr/bin/rstudio',

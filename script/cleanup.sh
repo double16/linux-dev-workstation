@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+USERNAME=${SSH_USERNAME:-vagrant}
+
 if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'docker' ) ]]; then
 
   echo "==> Clear out machine id"
@@ -30,6 +32,11 @@ if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'docke
   done
   rm -rf /dev/.udev/
 
+fi
+
+if [[ ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
+    echo "==> Removing ${USERNAME} .ssh directory, to be created at runtime"
+    rm -rf /home/${USERNAME}/.ssh
 fi
 
 DISK_USAGE_BEFORE_CLEANUP=$(df -h)

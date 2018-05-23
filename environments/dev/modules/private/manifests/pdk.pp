@@ -10,6 +10,7 @@ class private::pdk {
     ensure          => present,
     source          => "https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=${pdk_version}",
     extract         => true,
+    cleanup         => false,
     extract_path    => '/tmp',
     extract_command => 'rpm -ivh %s',
     creates         => '/usr/local/bin/pdk',

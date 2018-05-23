@@ -85,3 +85,24 @@ If you want to use a different VNC client, point it to `localhost:5900`.
 _DO NOT_ expose port 5900 by adjusting firewall rules. The VNC server has no password. If you want direct access to VNC then you must change the VNC configuration. SSH tunneling is preferred.
 
 Sometimes after starting a new EC2 instance, the IP and hostname will be changed while it is running. It seems the VNC systemctl service doesn't handle this well and VNC won't be started. Restart the EC2 instance to fix it.
+
+## Docker
+Running the box as a container is similar to AWS. You use an SSH tunnel and VNC viewer. SSH authentication is a little different, by default it uses the Vagrant insecure SSH key. If you want to use a different SSH key, set the environment variable `SSH_AUTHORIZED_KEYS` with the content of your public key(s). The image is based off https://github.com/jdeathe/centos-ssh, the various SSH options should work with this image.
+
+```shell
+$ docker run -d -p 2020:22 pdouble16/linux-dev-workstation
+$ curl -LSs https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant > id_rsa_insecure
+$ chmod 600 id_rsa_insecure
+$ ssh -t -L 5910:localhost:5900 -i id_rsa_insecure -p 2020:22 vagrant@{docker-host-ip}
+$ vncviewer localhost:5910
+```
+
+If you want to control the hosting Docker daemon from inside the container:
+```shell
+$ docker run -d -p 2020:22 -v /var/run/docker.sock:/var/run/docker.sock pdouble16/linux-dev-workstation
+```
+
+If you want to run Docker in the container without using the host Docker daemon, you need to run with privileged mode:
+```shell
+$ docker run --privileged -d -p 2020:22 pdouble16/linux-dev-workstation
+```

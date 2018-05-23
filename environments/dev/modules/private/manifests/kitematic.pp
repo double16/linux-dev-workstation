@@ -28,6 +28,7 @@ class private::kitematic
     source        => "https://github.com/docker/kitematic/releases/download/v${version}/Kitematic-${version}-Ubuntu.zip",
     extract_path  => '/opt',
     extract       => true,
+    cleanup       => false,
     extract_flags => '-oj',
     checksum      => $checksum,
     checksum_type => 'sha256',

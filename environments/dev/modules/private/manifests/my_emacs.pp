@@ -23,6 +23,7 @@ class private::my_emacs {
     source        => "http://ftp.gnu.org/gnu/emacs/emacs-${version}.tar.gz",
     extract_path  => '/usr/src',
     extract       => true,
+    cleanup       => false,
     creates       => "/usr/src/emacs-${version}",
     checksum      => 'f72c6a1b48b6fbaca2b991eed801964a208a2f8686c70940013db26cd37983c9',
     checksum_type => 'sha256',

@@ -13,6 +13,7 @@ class private::hashistack {
       ensure        => present,
       extract_path  => '/usr/bin',
       extract       => true,
+      cleanup       => false,
       creates       => "/usr/bin/${tool}",
       source        => "https://releases.hashicorp.com/${tool}/${version}/${tool}_${version}_linux_amd64.zip",
       checksum      => $checksum,

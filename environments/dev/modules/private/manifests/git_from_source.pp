@@ -14,6 +14,7 @@ class private::git_from_source($version) {
     source       => "https://github.com/git/git/archive/v${version}.tar.gz",
     extract_path => '/usr/src',
     extract      => true,
+    cleanup      => false,
     creates      => "/usr/src/git-${version}",
     require      => File['/tmp/vagrant-cache'],
   }

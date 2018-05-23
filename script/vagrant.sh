@@ -13,7 +13,8 @@ if [ "$INSTALL_VAGRANT_KEY" = "true" ] || [ "$INSTALL_VAGRANT_KEY" = "1" ]; then
   if ! id -u $SSH_USER >/dev/null 2>&1; then
       echo "==> Creating ${SSH_USER}"
       /usr/sbin/groupadd $SSH_USER
-      /usr/sbin/useradd $SSH_USER -g $SSH_USER -G wheel
+      /usr/sbin/groupadd docker
+      /usr/sbin/useradd $SSH_USER -g $SSH_USER -G wheel,docker
       if [ -n "$SUDO_USER" -a "$SSH_USER" != "$SUDO_USER" -a "$SUDO_USER" != "root" ]; then
         echo "==> Adding $SUDO_USER to group ${SSH_USER}"
         /usr/sbin/usermod -a -G $SSH_USER $SUDO_USER

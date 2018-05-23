@@ -48,6 +48,7 @@ class private::netbeans {
     checksum_type => 'sha256',
     extract_path  => '/opt',
     extract       => true,
+    cleanup       => false,
     creates       => '/opt/netbeans/bin/netbeans',
     require       => File['/tmp/vagrant-cache'],
   }
