@@ -64,9 +64,9 @@ Vagrant.configure("2") do |config|
     p.memory = vagrant_config['memory'] || 4096
   end
 
-  config.vm.provider :docker do |docker|
+  config.vm.provider :docker do |docker, override|
     box_version = File.basename(File.dirname(File.dirname(__FILE__)))
-    box_version = 'latest' unless box_version.match?(/^[0-9][0-9][0-9][0-9]/)
+    box_version = 'latest' unless box_version.match(/^[0-9][0-9][0-9][0-9]/)
     docker.image = "pdouble16/linux-dev-workstation:#{box_version}"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
