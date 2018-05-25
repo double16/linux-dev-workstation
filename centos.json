@@ -174,7 +174,7 @@
       "os_type": "Linux",
       "image_publisher": "OpenLogic",
       "image_offer": "CentOS",
-      "image_sku": "7.4",
+      "image_sku": "7.5",
       "azure_tags": {
         "dept": "engineering",
         "task": "developer workstation"
