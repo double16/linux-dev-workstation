@@ -142,6 +142,7 @@ package { [
     'xz',
     'psmisc',
     'sqlite',
+    'bind-utils',
     #'rancher-compose', # https://github.com/rancher/rancher-compose/releases
     'pandoc',
     'tmux',
