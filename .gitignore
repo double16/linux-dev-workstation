@@ -12,3 +12,4 @@ setenv.sh
 /keys.d/
 tmp/
 *.log
+id_rsa_insecure
