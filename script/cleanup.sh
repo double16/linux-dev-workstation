@@ -65,7 +65,12 @@ rm -f /var/lib/rpm/__db*
 # delete any logs that have built up during the install
 find /var/log/ -name *.log -exec rm -f {} \;
 
-if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'qemu' || ${PACKER_BUILDER_TYPE} =~ 'docker' ) ]]; then
+if [[ ${PACKER_BUILDER_TYPE} =~ 'qemu' ]]; then
+
+    echo '==> Trimming filesystem to save space in the final image'
+    fstrim -v /
+
+elif [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'docker' ) ]]; then
 
   echo '==> Clear out swap and disable until reboot'
   set +e

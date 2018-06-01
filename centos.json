@@ -123,6 +123,9 @@
       "type": "qemu",
       "vm_name": "{{ user `vm_name` }}",
       "accelerator": "kvm",
+      "disk_cache": "unsafe",
+      "disk_discard": "unmap",
+      "disk_interface": "virtio-scsi",
       "qemuargs": [
         [ "-m", "{{ user `memory` }}M" ],
         [ "-smp", "cpus={{ user `cpus` }}" ]

@@ -25,6 +25,7 @@ Vagrant.configure("2") do |config|
 
    config.vm.provider :virtualbox do |v, override|
      v.gui = true
+     v.linked_clone = true if Gem::Version.new(Vagrant::VERSION) >= Gem::Version.new('1.8.0')
      v.customize ["modifyvm", :id, "--memory", vagrant_config['memory'] || 4096]
      v.customize ["modifyvm", :id, "--cpus", vagrant_config['cores'] || 2]
      v.customize ["modifyvm", :id, "--vram", "256"]
