@@ -116,9 +116,9 @@ net.ipv6.conf.default.disable_ipv6=1
 
   file { '/home/vagrant/.curlrc':
     ensure => file,
-    owner  => 'nobody',
-    group  => 'root',
-    mode   => '0644',
+    owner  => 'vagrant',
+    group  => 'vagrant',
+    mode   => '0664',
   }
   -> file_line { 'curl proxy for vagrant':
     ensure            => $proxy_presence,
