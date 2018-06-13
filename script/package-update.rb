@@ -244,10 +244,9 @@ def sdkman(yaml)
                 file.write(Net::HTTP.get(URI("https://api.sdkman.io/1/candidates/#{candidate}/list?platform=Linux")))
             }
         end
-        prefix = version.match(/^([0-9.]+)/)[1]
-        suffix = version[prefix.length, version.length]
+        (x, prefix, suffix) = version.match(/^([0-9.]+)(.*)$/).to_a
         suffix = '' if suffix.nil?
-        re = Regexp.new('^'+prefix.split(/[.]/)[0..-2].join('[.]')+"[.][0-9]+#{suffix}$")
+        re = Regexp.new('^'+prefix.split(/[.]/)[0..-2].join('[.]')+"[.][0-9.]+#{suffix}$")
         latest_version = version
         File.open(candidate_file) do |file|
             file.each_line { |line|
@@ -268,6 +267,41 @@ def sdkman(yaml)
     end
 end
 
+def ruby(yaml)
+    ruby_build_d = File.join(TMPDIR, "ruby-build")
+    if !File.exist?(ruby_build_d)
+        `git clone --single-branch https://github.com/rbenv/ruby-build.git #{ruby_build_d}`
+    elsif Time.now - File.mtime(ruby_build_d) > (12*3600) # seconds
+        `cd #{ruby_build_d} ; git pull`
+    end
+    yaml['ruby']['versions'].each do |version_info|
+        version = version_info['version'].to_s
+        (x, prefix, numbers, patch, suffix) = version.match(/^([A-Za-z]+-)?([0-9.]+)(-p[0-9]+)?(.*)$/).to_a
+        prefix = '' if prefix.nil?
+        suffix = '' if suffix.nil?
+        if patch
+            re = Regexp.new("^#{prefix}#{numbers}-p[0-9]+#{suffix}$")
+        else
+            back = -2
+            back = -3 if prefix == 'jruby-' and !version.start_with?('jruby-1.')
+            re = Regexp.new("^#{prefix}"+numbers.split(/[.]/)[0..back].join('[.]')+"[.][0-9.]+#{suffix}$")
+        end
+        latest_version = version
+        Dir.new("#{ruby_build_d}/share/ruby-build").each do |available|
+            if (re.match(available))
+                v = Gem::Version.new(available[prefix.length, available.length])
+                if (v > Gem::Version.new(latest_version[prefix.length, available.length]))
+                    latest_version = available
+                end
+            end
+        end
+        if (latest_version != version)
+            version_info['version'] = latest_version
+            puts "Found newer version ruby #{latest_version}"
+        end
+    end
+end
+
 yaml = File.open(YAML_FILE) { |file| YAML.load(file) }
 
 idea(yaml)
@@ -281,7 +315,8 @@ kitematic(yaml)
 git(yaml)
 nodejs(yaml)
 sdkman(yaml)
-#TODO: emacs(yaml) # source on ftp.gnu.org, no perceivable way to check for updates and it doesn't happen often
-#TODO: ruby(yaml) # use local rbenv? different sources, such as ruby and jruby
+ruby(yaml)
+
+#IGNORE: emacs(yaml) # source on ftp.gnu.org, no perceivable way to check for updates and it doesn't happen often
 
 File.open(YAML_FILE, 'w') { |file| file.write(yaml.to_yaml) }
