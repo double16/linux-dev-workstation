@@ -234,6 +234,40 @@ def nodejs(yaml)
     end
 end
 
+def sdkman(yaml)
+    yaml['sdkman'].each do |tool|
+        candidate = tool['package']
+        version = tool['version'].to_s
+        candidate_file = File.join(TMPDIR, "sdkman-#{candidate}.txt")
+        if !File.exist?(candidate_file) or Time.now - File.mtime(candidate_file) > (12*3600) # seconds
+            File.open(candidate_file, 'w') { |file|
+                file.write(Net::HTTP.get(URI("https://api.sdkman.io/1/candidates/#{candidate}/list?platform=Linux")))
+            }
+        end
+        prefix = version.match(/^([0-9.]+)/)[1]
+        suffix = version[prefix.length, version.length]
+        suffix = '' if suffix.nil?
+        re = Regexp.new('^'+prefix.split(/[.]/)[0..-2].join('[.]')+"[.][0-9]+#{suffix}$")
+        latest_version = version
+        File.open(candidate_file) do |file|
+            file.each_line { |line|
+                line.split(/\s+/).each { |word|
+                    if (re.match(word))
+                        v = Gem::Version.new(word)
+                        if (v > Gem::Version.new(latest_version))
+                            latest_version = word
+                        end
+                    end
+                }
+            }
+        end
+        if (latest_version != version)
+            tool['version'] = latest_version
+            puts "Found newer version #{candidate} #{latest_version}"
+        end
+    end
+end
+
 yaml = File.open(YAML_FILE) { |file| YAML.load(file) }
 
 idea(yaml)
@@ -246,7 +280,7 @@ containerdiff(yaml)
 kitematic(yaml)
 git(yaml)
 nodejs(yaml)
-#TODO: sdkman(yaml) # sdkman has an API for itself to check for later versions, could use that
+sdkman(yaml)
 #TODO: emacs(yaml) # source on ftp.gnu.org, no perceivable way to check for updates and it doesn't happen often
 #TODO: ruby(yaml) # use local rbenv? different sources, such as ruby and jruby
 
