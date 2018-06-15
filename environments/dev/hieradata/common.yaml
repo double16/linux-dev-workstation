@@ -1,20 +1,20 @@
 ---
 hashistack:
   packer:
-    version: 1.2.3
-    checksum: 822fe76c2dfe699f187ef8c44537d10453a1545db620e40b345cf6991a690f7d
+    version: 1.2.4
+    checksum: 258d1baa23498932baede9b40f2eca4ac363b86b32487b36f48f5102630e9fbb
   vault:
-    version: 0.10.1
-    checksum: 031e521b4603487126fd353a9557dd22a02304a8a11f843e9914be59a8009c8a
+    version: 0.10.2
+    checksum: f725be68316d10ef2e7779fdedd8eb5d4ed9975303c828466bb9a729e01392dd
   consul:
     version: 1.1.0
-    checksum: '09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45'
+    checksum: 09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45
   terraform:
     version: 0.11.7
     checksum: 6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
   nomad:
-    version: 0.8.3
-    checksum: c7faaee8fad0f6a74df01b9283253ee565f85791adca1d6a38462e0387dee175
+    version: 0.8.4
+    checksum: 42fc455d09ea0085cc79d7be4fb2089a9ab7db3cc2e8047e8437855a81b090e9
 sdkman:
 - package: groovy
   version: 2.4.15
@@ -23,13 +23,13 @@ sdkman:
   version: 1.2.0
   default: true
 - package: gradle
-  version: 4.7
+  version: '4.8'
   default: true
 - package: grails
-  version: 3.2.12
+  version: 3.2.13
   default: false
 - package: grails
-  version: 3.3.2
+  version: 3.3.5
   default: true
 - package: java
   version: 8.0.172-zulu
@@ -41,15 +41,15 @@ sdkman:
   version: 10.0.0-openjdk
   default: false
 git:
-  version: 2.17.0
+  version: 2.17.1
 pdk:
   version: 1.5.0.0
   checksum: a1f0089b4aeb0d3599111b07fb43577c6a0753779c9d272705f01f8c676918d3
 docker:
   version: 18.03.1
 container-diff:
-  version: 0.9.0
-  checksum: 64f45586cc42a53fc9dea97d416a6fa9ffd4fd6690c338afd5341453ec9d1a03
+  version: 0.10.0
+  checksum: d4de0af67950a5790a99b10c4f9af45543bfe86548bd35a9d123629225e9b637
 emacs:
   version: 25.3
 vagrant:
@@ -65,7 +65,7 @@ slack:
   checksum: 9048305644e41e43baa44266011d67724fbb2f11024ded6650444546ced0df98
 node:
   versions:
-  - version: 8.11.2
+  - version: 8.11.3
     global: true
   - version: 10.1.0
     global: false
@@ -75,21 +75,21 @@ node:
   - tern
 ruby:
   versions:
-  - version: 2.4.3
+  - version: 2.4.4
     global: true
   - version: 1.9.3-p551
   - version: 2.1.10
-  - version: 2.3.6
+  - version: 2.3.7
   - version: jruby-1.7.27
-  - version: jruby-9.1.16.0
+  - version: jruby-9.1.17.0
 netbeans:
   version: 8.2
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.1.4
-  build: 181.5087.20
-  checksum: fb16e1533902823e1a9c5eccd5193cc548c9ce9ba5687778446a3475266c4284
+  version: 2018.1.5
+  build: 181.5281.24
+  checksum: 010cec3753ec3ea9ad5fb96fa584a04a2682896291c21b2d9f575d8f473dc5d5
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -101,8 +101,8 @@ idea:
     updateid: '45733'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2018.1.20180417
-    updateid: 45171
+    version: 2018.1.20180515
+    updateid: '46186'
   - name: com.intellij.lang.puppet
     type: zip
     version: 181.3007.14
@@ -117,24 +117,24 @@ idea:
     updateid: 43929
   - name: Docker
     type: zip
-    version: 181.4668.68
-    updateid: '45338'
+    version: 181.5087.20
+    updateid: '46446'
   - name: mobi.hsz.idea.gitignore
     type: zip
-    version: 2.6.1
-    updateid: 45023
+    version: 2.6.2
+    updateid: '46104'
   - name: com.jetbrains.plugins.ini4idea
     type: zip
     version: 181.4892.97
     updateid: '45682'
   - name: org.intellij.plugins.hcl
     type: zip
-    version: 0.6.10
-    updateid: 44787
+    version: 0.6.11
+    updateid: '46509'
   - name: org.jetbrains.plugins.go
     type: zip
-    version: 181.4668.90
-    updateid: '45394'
+    version: 181.5087.39.204
+    updateid: '46184'
   - name: com.jetbrains.plugins.jade
     type: zip
     version: 181.3870.1
@@ -145,20 +145,20 @@ idea:
     updateid: '45778'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.2.41-release-IJ2018.1-1
-    updateid: '45423'
+    version: 1.2.50-release-IJ2018.1-1
+    updateid: '46832'
   - name: com.atlassian.bitbucket.references
     type: zip
-    version: 5.0
-    updateid: 40911
+    version: '5.1'
+    updateid: '46168'
   - name: GradleDependenciesHelper
     type: zip
     version: 1.11
     updateid: 42210
   - name: R4Intellij
     type: zip
-    version: 1.0.9
-    updateid: 44232
+    version: 1.0.10
+    updateid: '46804'
   - name: Karma
     type: zip
     version: 181.5087.27
@@ -169,8 +169,8 @@ idea:
     updateid: '45643'
   - name: AWSCloudFormation
     type: zip
-    version: 0.5.53
-    updateid: '45402'
+    version: 0.5.66
+    updateid: '46744'
   - name: com.intellij.react.css.modules
     type: jar
     version: 1.0.1
@@ -185,5 +185,5 @@ idea:
     updateid: 43008
   - name: org.jetbrains.plugins.vagrant
     type: zip
-    version: 0.6.144.1701
-    updateid: '24177'
+    version: 181.5087.20
+    updateid: '46429'
