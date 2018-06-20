@@ -14,7 +14,10 @@ class private::my_node {
   }
   ->class { '::nodenv':
     install_dir => '/opt/nodenv',
+    #owner       => 'vagrant',
+    group       => 'vagrant',
     latest      => true,
+    require     => Class['private::git_from_source'],
   }
 
   nodenv::plugin { 'nodenv/node-build': }
@@ -38,5 +41,11 @@ class private::my_node {
         node_version => $version,
       }
     }
+  }
+
+  Nodenv::Package<| |>
+  ~>exec { 'vagrant owns nodenv':
+    command => 'find /opt/nodenv -not -group vagrant -print0 | xargs -r0 chgrp vagrant && find /opt/nodenv -type d -print0 | xargs -r0 chmod g+ws',
+    path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
   }
 }

@@ -58,6 +58,7 @@ jobs:
       # We are adding '--provision' for testing locally and iterating
       - run:
           name: Test Vagrant Up
+          no_output_timeout: 1h
           command: |
             vagrant up --provision
 

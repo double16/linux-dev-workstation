@@ -361,7 +361,7 @@
     "azure_subscription_id": "e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b",
     "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba",
     "kickstart": "ks.cfg",
-    "memory": "2048",
+    "memory": "3072",
     "no_proxy": "{{env `no_proxy`}}",
     "parallels_guest_os_type": "centos7",
     "rsync_proxy": "{{env `rsync_proxy`}}",

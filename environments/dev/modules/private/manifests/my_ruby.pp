@@ -15,6 +15,8 @@ class private::my_ruby {
   ->class { '::rbenv':
     install_dir => '/opt/rbenv',
     latest      => true,
+    #owner       => 'vagrant',
+    group       => 'vagrant',
     require     => Class['private::git_from_source'],
   }
   ->Rbenv::Build<| |>
@@ -54,4 +56,10 @@ class private::my_ruby {
 
   package { 'augeas-devel': }
   ->rbenv::gem { 'ruby-augeas': }
+
+  Rbenv::Gem<| |>
+  ~>exec { 'vagrant owns rbenv':
+    command => 'find /opt/rbenv -not -group vagrant -print0 | xargs -r0 chgrp vagrant && find /opt/rbenv -type d -print0 | xargs -r0 chmod g+ws',
+    path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
+  }
 }

@@ -87,7 +87,7 @@ _DO NOT_ expose port 5900 by adjusting firewall rules. The VNC server has no pas
 Sometimes after starting a new EC2 instance, the IP and hostname will be changed while it is running. It seems the VNC systemctl service doesn't handle this well and VNC won't be started. Restart the EC2 instance to fix it.
 
 ## Docker
-Running the box as a container is similar to AWS. You use an SSH tunnel and VNC viewer. SSH authentication is a little different, by default it uses the Vagrant insecure SSH key. If you want to use a different SSH key, set the environment variable `SSH_AUTHORIZED_KEYS` with the content of your public key(s). The image is based off https://github.com/jdeathe/centos-ssh, the various SSH options should work with this image.
+Running the box as a container is similar to AWS. You use an SSH tunnel and VNC viewer. SSH authentication is a little different, by default it uses the Vagrant insecure SSH key. If you want to use a different SSH key, set the environment variable `SSH_AUTHORIZED_KEYS` with the content of your public key(s). The image is based on https://github.com/jdeathe/centos-ssh, the various SSH options should work with this image.
 
 ```shell
 $ docker run -d -p 2020:22 pdouble16/linux-dev-workstation

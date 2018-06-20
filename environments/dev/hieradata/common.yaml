@@ -4,11 +4,11 @@ hashistack:
     version: 1.2.4
     checksum: 258d1baa23498932baede9b40f2eca4ac363b86b32487b36f48f5102630e9fbb
   vault:
-    version: 0.10.2
-    checksum: f725be68316d10ef2e7779fdedd8eb5d4ed9975303c828466bb9a729e01392dd
+    version: 0.10.3
+    checksum: ffec1c201f819f47581f54c08653a8d17ec0a6699854ebd7f6625babb9e290ed
   consul:
     version: 1.1.0
-    checksum: 09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45
+    checksum: '09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45'
   terraform:
     version: 0.11.7
     checksum: 6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
@@ -29,7 +29,7 @@ sdkman:
   version: 3.2.13
   default: false
 - package: grails
-  version: 3.3.5
+  version: 3.3.6
   default: true
 - package: java
   version: 8.0.172-zulu
@@ -40,6 +40,12 @@ sdkman:
 - package: java
   version: 10.0.0-openjdk
   default: false
+- package: lazybones
+  version: 0.8.3
+  default: true
+- package: visualvm
+  version: 1.4.1
+  default: true
 git:
   version: 2.17.1
 pdk:
@@ -70,9 +76,11 @@ node:
   - version: 10.1.0
     global: false
   packages:
+  - yarn
   - grunt
   - typescript
   - tern
+  - generator-jhipster
 ruby:
   versions:
   - version: 2.4.4
@@ -161,8 +169,8 @@ idea:
     updateid: '46804'
   - name: Karma
     type: zip
-    version: 181.5087.27
-    updateid: '46119'
+    version: 181.5281.31
+    updateid: '46910'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.0
@@ -187,3 +195,7 @@ idea:
     type: zip
     version: 181.5087.20
     updateid: '46429'
+  - name: VisualVMLauncher
+    type: jar
+    version: 1.10.138.2210
+    updateid: '47033'
