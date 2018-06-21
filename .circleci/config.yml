@@ -78,6 +78,7 @@ jobs:
       # to copy the cached files back into this container for storing in the cache.
       - run:
           name: Copy Vagrant Cache
+          no_output_timeout: 30m
           command: |
             set -x
             rm -rf /home/linux-dev-workstation/.vagrant/machines/default/cache
