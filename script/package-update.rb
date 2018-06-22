@@ -150,9 +150,8 @@ def pdk(yaml)
         latest = location.match(/pdk\/([0-9a-z.]+)\//)[1]
         if latest != yaml['pdk']['version']
             puts "Found newer version PDK #{latest}"
-            download_url = "https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=#{latest}"
             download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.el7.x86_64.rpm"
-            update_single_archive(latest, download_url, download_file, yaml['pdk'])
+            update_single_archive(latest, location, download_file, yaml['pdk'])
         end
     else
         STDERR.puts "Error getting checking for newer PDK version: #{resp.to_s}"

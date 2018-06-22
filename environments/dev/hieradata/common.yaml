@@ -23,7 +23,7 @@ sdkman:
   version: 1.2.0
   default: true
 - package: gradle
-  version: '4.8'
+  version: 4.8.1
   default: true
 - package: grails
   version: 3.2.13
@@ -47,10 +47,10 @@ sdkman:
   version: 1.4.1
   default: true
 git:
-  version: 2.17.1
+  version: 2.18.0
 pdk:
-  version: 1.5.0.0
-  checksum: a1f0089b4aeb0d3599111b07fb43577c6a0753779c9d272705f01f8c676918d3
+  version: 1.6.0.0
+  checksum: 57ef46dd4a8d9025473479187ef0534d4d4ea42583a2f2f95e173def6f24701b
 docker:
   version: 18.03.1
 container-diff:
