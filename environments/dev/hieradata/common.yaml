@@ -199,3 +199,7 @@ idea:
     type: jar
     version: 1.10.138.2210
     updateid: '47033'
+  - name: Lombook Plugin
+    type: zip
+    version: 0.18-2018.1
+    updateid: '47143'
