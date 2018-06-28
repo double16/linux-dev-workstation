@@ -270,6 +270,13 @@
       "type": "shell"
     },
     {
+      "type": "shell",
+      "inline": [
+        "echo version={{ user `version` }} > /etc/{{ user `vm_name`}}_release",
+        "echo build_time=`date` >> /etc/{{ user `vm_name`}}_release"
+      ]
+    },
+    {
       "type": "file",
       "source": "environments/dev",
       "destination": "/etc/puppetlabs/code/environments/dev"
@@ -370,7 +377,7 @@
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "tpl/vagrantfile-centos7-desktop.tpl",
-    "version": "201805.1",
+    "version": "latest",
     "virtualbox_guest_os_type": "RedHat_64",
     "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",
