@@ -271,6 +271,7 @@
     },
     {
       "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "inline": [
         "echo version={{ user `version` }} > /etc/{{ user `vm_name`}}_release",
         "echo build_time=`date` >> /etc/{{ user `vm_name`}}_release"
