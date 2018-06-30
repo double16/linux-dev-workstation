@@ -224,7 +224,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "pdouble16/linux-dev-workstation",
+        "repository": "{{ user `docker_registry` }}pdouble16/linux-dev-workstation",
         "tag": "{{user `version`}}",
         "only": [ "docker" ]
       },
@@ -368,6 +368,8 @@
     "azure_storage_account": "packerbuildswest",
     "azure_subscription_id": "e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b",
     "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba",
+    "docker_registry": "",
+    "docker_registry_example": "gatekeeper:5001/",
     "kickstart": "ks.cfg",
     "memory": "3072",
     "no_proxy": "{{env `no_proxy`}}",
