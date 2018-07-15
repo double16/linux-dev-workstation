@@ -7,8 +7,8 @@ hashistack:
     version: 0.10.3
     checksum: ffec1c201f819f47581f54c08653a8d17ec0a6699854ebd7f6625babb9e290ed
   consul:
-    version: 1.1.0
-    checksum: '09c40c8b5be868003810064916d8460bff334ccfb59a5046390224b27e052c45'
+    version: 1.2.1
+    checksum: e4146334be453146890023303da3e0c815669e108a18fb7d742745df3414a31a
   terraform:
     version: 0.11.7
     checksum: 6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
@@ -54,12 +54,12 @@ pdk:
 docker:
   version: 18.03.1
 container-diff:
-  version: 0.10.0
-  checksum: d4de0af67950a5790a99b10c4f9af45543bfe86548bd35a9d123629225e9b637
+  version: 0.11.0
+  checksum: ca185da4c0f3ef71c3f92511e1e93d14efbd3d0ef02abd85379d9a57975cd823
 emacs:
   version: 25.3
 vagrant:
-  version: 2.1.1
+  version: 2.1.2
 kitematic:
   version: 0.17.3
   checksum: d2cd5e320550115eea593d6d9765182dc67ac9dd3fe6bfce27e093eb780720a6
@@ -95,9 +95,9 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.1.5
-  build: 181.5281.24
-  checksum: 010cec3753ec3ea9ad5fb96fa584a04a2682896291c21b2d9f575d8f473dc5d5
+  version: 2018.1.6
+  build: 181.5540.7
+  checksum: f3e86997a849aabec38c35f1678bcef348569ac5ae75c2db44df306362b12d26
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -109,8 +109,8 @@ idea:
     updateid: '45733'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2018.1.20180515
-    updateid: '46186'
+    version: 2018.1.20180711
+    updateid: '47718'
   - name: com.intellij.lang.puppet
     type: zip
     version: 181.3007.14
@@ -153,8 +153,8 @@ idea:
     updateid: '45778'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.2.50-release-IJ2018.1-1
-    updateid: '46832'
+    version: 1.2.51-release-IJ2018.1-1
+    updateid: '47478'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: '5.1'
@@ -177,8 +177,8 @@ idea:
     updateid: '45643'
   - name: AWSCloudFormation
     type: zip
-    version: 0.5.66
-    updateid: '46744'
+    version: 0.5.68
+    updateid: '47234'
   - name: com.intellij.react.css.modules
     type: jar
     version: 1.0.1
@@ -201,5 +201,5 @@ idea:
     updateid: '47033'
   - name: Lombook Plugin
     type: zip
-    version: 0.18-2018.1
-    updateid: '47143'
+    version: 0.19-2018.1
+    updateid: '47622'
