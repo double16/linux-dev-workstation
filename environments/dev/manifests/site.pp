@@ -108,8 +108,12 @@ exec { 'graphical runlevel':
 #  ensure => present,
 #}
 
-package { 'python2-pip':
+package { 'python34-pip':
   ensure => present,
+}
+~>exec { 'pip upgrade':
+  command     => '/usr/bin/pip3 install --upgrade pip',
+  refreshonly => true,
 }
 ->file { '/etc/xdg':
   ensure => directory,
@@ -212,9 +216,9 @@ package { [
 
 exec { 'xml2json':
   path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
-  command => 'pip install https://github.com/hay/xml2json/zipball/master',
+  command => 'pip3 install https://github.com/hay/xml2json/zipball/master',
   creates => '/usr/bin/xml2json',
-  require => [ Package['python2-pip'], Class['private::proxy'], Ini_setting['pip proxy'] ],
+  require => [ Package['python34-pip'], Class['private::proxy'], Ini_setting['pip proxy'] ],
 }
 
 package { 'unzip': }
