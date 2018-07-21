@@ -77,8 +77,8 @@ Vagrant.configure("2") do |config|
       :LC_ALL   => 'en_US.UTF-8',
       :SSH_INHERIT_ENVIRONMENT => 'true',
     }
-    docker.ports = ["22"]
     docker.volumes = ["/var/run/docker.sock:/var/run/docker.sock"]
+    override.vm.network :forwarded_port, guest: 22, host: 2222, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
   end
 

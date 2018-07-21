@@ -93,7 +93,7 @@ Running the box as a container is similar to AWS. You use an SSH tunnel and VNC 
 $ docker run -d -p 2020:22 pdouble16/linux-dev-workstation
 $ curl -LSs https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant > id_rsa_insecure
 $ chmod 600 id_rsa_insecure
-$ ssh -t -L 5910:localhost:5900 -i id_rsa_insecure -p 2020:22 vagrant@{docker-host-ip}
+$ ssh -t -L 5910:localhost:5900 -i id_rsa_insecure -p 2020 vagrant@{docker-host-ip}
 $ vncviewer localhost:5910
 ```
 
