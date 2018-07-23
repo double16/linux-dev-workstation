@@ -43,7 +43,7 @@ jobs:
           name: Docker Image Build
           no_output_timeout: 1h
           command: |
-            /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} centos.json
+            /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} ${CIRCLE_TAG:+-var no_release=false} centos.json
 
       - run:
           name: Build Docker Public Image Cache
