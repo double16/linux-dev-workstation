@@ -204,12 +204,22 @@
   "post-processors": [
     [
       {
+        "type": "docker-tag",
+        "repository": "{{ user `docker_registry` }}pdouble16/linux-dev-workstation",
+        "tag": "{{user `version`}}",
+        "only": [ "docker" ]
+      },
+      {
+        "type": "docker-push",
+        "only": [ "docker" ]
+      },
+      {
         "keep_input_artifact": false,
         "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `version`}}.box",
         "type": "vagrant",
         "vagrantfile_template": "{{ user `vagrantfile_template` }}",
         "include": [ "VAGRANTUP.md" ],
-        "except": [ "azure-arm", "docker" ]
+        "except": [ "azure-arm" ]
       },
       {
         "keep_input_artifact": true,
@@ -217,20 +227,8 @@
         "box_tag": "double16/{{user `vm_name`}}",
         "access_token": "{{user `cloud_token`}}",
         "version": "{{user `version`}}",
-        "no_release": "true",
-        "except": [ "azure-arm", "docker" ]
-      }
-    ],
-    [
-      {
-        "type": "docker-tag",
-        "repository": "pdouble16/linux-dev-workstation",
-        "tag": "{{user `version`}}",
-        "only": [ "docker" ]
-      },
-      {
-        "type": "docker-push",
-        "only": [ "docker" ]
+        "no_release": "{{ user `no_release` }}",
+        "except": [ "azure-arm" ]
       }
     ]
   ],
@@ -271,6 +269,7 @@
     },
     {
       "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "inline": [
         "echo version={{ user `version` }} > /etc/{{ user `vm_name`}}_release",
         "echo build_time=`date` >> /etc/{{ user `vm_name`}}_release"
@@ -367,6 +366,8 @@
     "azure_storage_account": "packerbuildswest",
     "azure_subscription_id": "e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b",
     "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba",
+    "docker_registry": "",
+    "docker_registry_example": "gatekeeper:5001/",
     "kickstart": "ks.cfg",
     "memory": "3072",
     "no_proxy": "{{env `no_proxy`}}",
@@ -378,6 +379,7 @@
     "update": "true",
     "vagrantfile_template": "tpl/vagrantfile-centos7-desktop.tpl",
     "version": "latest",
+    "no_release": "true",
     "virtualbox_guest_os_type": "RedHat_64",
     "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",

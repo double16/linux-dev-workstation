@@ -66,9 +66,6 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :docker do |docker, override|
-    box_version = File.basename(File.dirname(File.dirname(__FILE__)))
-    box_version = 'latest' unless box_version.match(/^[0-9][0-9][0-9][0-9]/)
-    docker.image = "pdouble16/linux-dev-workstation:#{box_version}"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
     docker.has_ssh = true
@@ -80,6 +77,8 @@ Vagrant.configure("2") do |config|
       :LC_ALL   => 'en_US.UTF-8',
       :SSH_INHERIT_ENVIRONMENT => 'true',
     }
+    docker.volumes = ["/var/run/docker.sock:/var/run/docker.sock"]
+    override.vm.network :forwarded_port, guest: 22, host: 2222, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
   end
 

@@ -19,6 +19,12 @@ jobs:
             - v5-dockerimage-{{ .Branch }}-
             - v5-dockerimage-
 
+      - restore_cache:
+          keys:
+            - v4-vagrant-{{ .Branch }}-{{ .Revision }}
+            - v4-vagrant-{{ .Branch }}-
+            - v4-vagrant-
+
       - run:
           name: Restore Docker Public Image Cache
           command: |
@@ -37,7 +43,7 @@ jobs:
           name: Docker Image Build
           no_output_timeout: 1h
           command: |
-            /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} centos.json
+            /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} ${CIRCLE_TAG:+-var no_release=false} centos.json
 
       - run:
           name: Build Docker Public Image Cache
@@ -51,3 +57,8 @@ jobs:
           key: v5-dockerimage-{{ .Branch }}-{{ checksum "centos.json" }}
           paths:
             - /home/linux-dev-workstation/cache/docker
+
+      - save_cache:
+          key: v4-vagrant-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - /home/linux-dev-workstation/.vagrant/machines/default/cache
