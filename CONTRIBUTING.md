@@ -1,6 +1,6 @@
 # Contributing
 
-Fork this repo, create a branch, and submit a PR. CI is done using CircleCI by using a Docker container to build the Vagrant box. You can build your fork to verify your changes pass.
+Fork this repo, create a branch, and submit a PR. CI is done using CircleCI by using a Docker container to build the Vagrant box. Build your fork to verify your changes pass. See the commands in `.circleci/config.yml` for how it's built.
 
 ## Update Puppet Modules
 

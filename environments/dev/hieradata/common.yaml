@@ -1,11 +1,11 @@
 ---
 hashistack:
   packer:
-    version: 1.2.4
-    checksum: 258d1baa23498932baede9b40f2eca4ac363b86b32487b36f48f5102630e9fbb
+    version: 1.2.5
+    checksum: bc58aa3f3db380b76776e35f69662b49f3cf15cf80420fc81a15ce971430824c
   vault:
-    version: 0.10.3
-    checksum: ffec1c201f819f47581f54c08653a8d17ec0a6699854ebd7f6625babb9e290ed
+    version: 0.10.4
+    checksum: b3c8a62e8f2f1b2d9d7ddca3d8bda620ab0091bb038da0d013c26f7b6b18f13a
   consul:
     version: 1.2.1
     checksum: e4146334be453146890023303da3e0c815669e108a18fb7d742745df3414a31a
@@ -49,10 +49,10 @@ sdkman:
 git:
   version: 2.18.0
 pdk:
-  version: 1.6.0.0
-  checksum: 57ef46dd4a8d9025473479187ef0534d4d4ea42583a2f2f95e173def6f24701b
+  version: 1.6.1.0
+  checksum: 8c5347cb41bfff43298152faf2a2488bcb160a2245d7e2bf03e481c52d2aaa1a
 docker:
-  version: 18.03.1
+  version: 18.06.0
 container-diff:
   version: 0.11.0
   checksum: ca185da4c0f3ef71c3f92511e1e93d14efbd3d0ef02abd85379d9a57975cd823
@@ -203,3 +203,7 @@ idea:
     type: zip
     version: 0.19-2018.1
     updateid: '47622'
+  - name: Lua
+    type: zip
+    updateid: '46023'
+    version: 1.0.114
