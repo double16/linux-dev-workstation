@@ -282,25 +282,6 @@
     },
     {
       "type": "puppet-masterless",
-      "ignore_exit_codes": true,
-      "manifest_file": "environments/dev/manifests/site.pp",
-      "module_paths": ["environments/dev/modules"],
-      "extra_arguments": [
-        "--hiera_config",
-        "/etc/puppetlabs/code/environments/dev/hiera.yaml"
-      ],
-      "puppet_bin_dir": "/opt/puppetlabs/bin",
-      "facter": {
-        "proxy_url": "{{user `http_proxy`}}",
-        "http_proxy": "{{user `http_proxy`}}",
-        "https_proxy": "{{user `https_proxy`}}",
-        "proxy_excludes": "{{user `no_proxy`}}",
-        "packer": "true",
-        "ipv4only": "true"
-      }
-    },
-    {
-      "type": "puppet-masterless",
       "manifest_file": "environments/dev/manifests/site.pp",
       "module_paths": ["environments/dev/modules"],
       "extra_arguments": [
@@ -356,7 +337,7 @@
     "iso_name": "CentOS-7-x86_64-DVD-1804.iso",
     "iso_path": "iso",
     "iso_url": "http://mirrors.sonic.net/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-DVD-1804.iso",
-    "aws_ami_name": "CentOS Linux 7 x86_64 HVM EBS ENA 1804",
+    "aws_ami_name": "CentOS Linux 7 x86_64 HVM EBS ENA 1805",
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",

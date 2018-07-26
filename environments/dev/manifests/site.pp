@@ -175,6 +175,7 @@ package { [
     'gkrellm',
     'gkrellm-top',
     'collectl',
+    'net-tools',
 
     # For recording the screen via 'ffmpeg x11grab'
     'ffmpeg',

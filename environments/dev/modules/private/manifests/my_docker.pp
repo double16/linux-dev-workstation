@@ -4,11 +4,6 @@
 class private::my_docker {
 
   $docker_base_version = lookup('docker', Hash)['version']
-  $docker_version = $::operatingsystem ? {
-    'Ubuntu' => "${docker_base_version}~ce-0~ubuntu",
-    'CentOS' => "${docker_base_version}.ce-1.el7.centos",
-    default  => "${docker_base_version}-ce",
-  }
 
   unless $::virtual == 'docker' {
     package { 'docker-engine': ensure => absent, }
@@ -26,8 +21,8 @@ net.ipv6.conf.all.forwarding = 1
       source => 'https://download.docker.com/linux/centos/docker-ce.repo',
     }
     ->package { ['device-mapper-persistent-data', 'lvm2']: }
-    ->package { 'docker-ce':
-      ensure => $docker_version,
+    ->package { "docker-ce-${docker_base_version}.*":
+      ensure => latest,
     }
     ->class { '::docker':
       manage_package              => false,
