@@ -149,18 +149,42 @@ StartupNotify=true
     require => File[$colorsdir],
   }
 
-  file { "${configdir}/options/colors.scheme.xml":
-    ensure  => file,
-    mode    => '0664',
-    owner   => 'vagrant',
-    group   => 'vagrant',
-    replace => false,
-    content => '
-<application>
-  <component name="EditorColorsManagerImpl">
-    <global_color_scheme name="Solarized Light" />
-  </component>
-</application>',
+  $global_color_scheme = pick($::theme, lookup('theme::default')) ? {
+    /light/ => 'Solarized Light',
+    /dark/  => 'Solarized Dark',
+    /none/  => '',
+    default => undef,
+  }
+  if empty($::theme) {
+    file { "${configdir}/options/colors.scheme.xml":
+      ensure  => file,
+      mode    => '0664',
+      owner   => 'vagrant',
+      group   => 'vagrant',
+      replace => false,
+      content => "
+  <application>
+    <component name=\"EditorColorsManagerImpl\">
+      <global_color_scheme name=\"${global_color_scheme}\" />
+    </component>
+  </application>",
+    }
+  } else {
+    if empty($global_color_scheme) {
+      $global_color_scheme_changes = [
+          "rm component[#attribute/name=\"EditorColorsManagerImpl\"]/global_color_scheme",
+      ]
+    } else {
+      $global_color_scheme_changes = [
+          "set component[#attribute/name=\"EditorColorsManagerImpl\"]/global_color_scheme/#attribute/name \"${global_color_scheme}\"",
+      ]
+    }
+    augeas { 'idea theme':
+      incl    => "${configdir}/options/colors.scheme.xml",
+      lens    => "Xml.lns",
+      context => "/files/${configdir}/options/colors.scheme.xml/application",
+      changes => $global_color_scheme_changes,
+    }
   }
 
   file { "${configdir}/options/git.xml":

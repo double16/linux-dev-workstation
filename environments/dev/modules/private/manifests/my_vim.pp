@@ -1,4 +1,6 @@
 class private::my_vim {
+  $global_color_scheme = pick($::theme, lookup('theme::default'))
+
   yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-mcepl-vim8-epel7':
     ensure  => present,
     content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -43,7 +45,6 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     autoupgrade    => true,
     set_as_default => true,
     opt_syntax     => true,
-    opt_bg_shading => 'light',
     opt_misc       => ['number'],
   }
   ->package{ 'gvim': }
@@ -59,12 +60,20 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
     group  => 'vagrant',
     mode   => '0755',
   }
-  ->file { '/home/vagrant/.config/xfce4/terminal/terminalrc':
-    ensure => file,
-    owner  => 'vagrant',
-    group  => 'vagrant',
-    mode   => '0644',
-    source => '/opt/xfce4-terminal-colors-solarized/light/terminalrc',
+
+  if $global_color_scheme == 'none' {
+    file { '/home/vagrant/.config/xfce4/terminal/terminalrc':
+      ensure => absent,
+    }
+  } elsif !empty($global_color_scheme) {
+    file { '/home/vagrant/.config/xfce4/terminal/terminalrc':
+      ensure  => file,
+      replace => $::theme != undef,
+      owner   => 'vagrant',
+      group   => 'vagrant',
+      mode    => '0644',
+      source  => "/opt/xfce4-terminal-colors-solarized/${global_color_scheme}/terminalrc",
+    }
   }
 
   define plugin() {
@@ -103,11 +112,31 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
   ]:
   }
 
-  vim::config { 'colorscheme':
-    user    => 'vagrant',
-    content => 'colorscheme solarized',
-  }
 
+  unless empty($global_color_scheme) or $global_color_scheme == 'none' {
+    ['vagrant', 'root'].each |$user| {
+      vim::config { "solarized_termtrans for ${user}":
+        user    => $user,
+        content => 'let g:solarized_termtrans=1',
+        order   => '02',
+      }
+      vim::config { "solarized_termcolors ${user}":
+        user    => $user,
+        content => 'let g:solarized_termcolors=256',
+        order   => '03',
+      }
+      vim::config { "background ${user}":
+        user    => $user,
+        content => "set background=${global_color_scheme}",
+        order   => '04',
+      }
+      vim::config { "colorscheme ${user}":
+        user    => $user,
+        content => 'colorscheme solarized',
+        order   => '04',
+      }
+    }
+  }
 
   define beautify($filetype = $title, $allfn, $rangefn) {
     vim::config { "beautify ${filetype}":
