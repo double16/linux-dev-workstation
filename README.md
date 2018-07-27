@@ -5,7 +5,6 @@ This Vagrant image contains a developer workspace with the following software:
 * CentOS 7.4
 * Java 8, 9, 10
 * [IntelliJ IDEA Ultimate + sundry plugins](https://www.jetbrains.com/idea/)
-* <strike>[NetBeans](https://netbeans.org)</strike>
 * [Visual Studio Code](https://code.visualstudio.com)
 * vim 8, gvim, sundry vim plugins
 * emacs with [spacemacs](https://github.com/syl20bnr/spacemacs)
@@ -21,7 +20,6 @@ This Vagrant image contains a developer workspace with the following software:
 * [Ansible](https://www.ansible.com)
 * Puppet, Puppet Development Kit
 * [Slack](https://slack.com)
-* HipChat
 * Xfce Desktop
 * [Firefox](https://www.mozilla.org/en-US/firefox/)
 * Chrome
