@@ -66,6 +66,13 @@ class private::netbeans {
       Yum::Group['X Window System'] ],
   }
 
+  $global_color_scheme = pick($::theme, lookup('theme::default')) ? {
+    /light/ => 'Netbeans_Solarized_Light',
+    /dark/  => 'Netbeans_Solarized_Dark',
+    /none/  => '',
+    default => undef,
+  }
+
   vcsrepo { '/tmp/vagrant-cache/netbeans-colors-solarized':
     ensure   => present,
     provider => git,
@@ -73,19 +80,22 @@ class private::netbeans {
     user     => 'vagrant',
     require  => [ File[$prefsdir] ],
   }
-  ->augeas { 'NetBeans Solarized Light Theme':
-    lens    => 'Xml.lns',
-    incl    => '/tmp/vagrant-cache/netbeans-colors-solarized/config/.nbattrs',
-    context => '/files/tmp/vagrant-cache/netbeans-colors-solarized/config/.nbattrs',
-    changes => [
-      'set attributes/fileobject[#attribute[name="Editors"]]/attr[#attribute[name="currentFontColorProfile"]]/#attribute/stringvalue Netbeans_Solarized_Light',
-    ],
-  }
-  ->exec { 'NetBeans Solarized':
-    path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
-    command => "mkdir -p ${confdir} && rsync -r /tmp/vagrant-cache/netbeans-colors-solarized/config/ ${confdir}/",
-    creates => "${confdir}/Editors",
-    user    => 'vagrant',
+  unless empty($global_color_scheme) {
+    augeas { 'NetBeans Solarized Theme':
+      lens    => 'Xml.lns',
+      incl    => '/tmp/vagrant-cache/netbeans-colors-solarized/config/.nbattrs',
+      context => '/files/tmp/vagrant-cache/netbeans-colors-solarized/config/.nbattrs',
+      changes => [
+        "set attributes/fileobject[#attribute[name=\"Editors\"]]/attr[#attribute[name=\"currentFontColorProfile\"]]/#attribute/stringvalue ${global_color_scheme}",
+      ],
+      require => Vcsrepo['/tmp/vagrant-cache/netbeans-colors-solarized'],
+    }
+    ~>exec { 'NetBeans Solarized':
+      path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
+      command => "mkdir -p ${confdir} && rsync -r /tmp/vagrant-cache/netbeans-colors-solarized/config/ ${confdir}/",
+      creates => "${confdir}/Editors",
+      user    => 'vagrant',
+    }
   }
 
   file { '/usr/share/applications/NetBeans.desktop':

@@ -39,6 +39,17 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     provider => 'pip',
   }
 
+  $global_color_scheme = pick($::theme, lookup('theme::default')) ? {
+    /light/ => 'Solarized Light',
+    /dark/  => 'Solarized Dark',
+    /none/  => '',
+    default => undef,
+  }
+  $init_global_color_scheme = empty($global_color_scheme) ? {
+    true    => '',
+    default => "\"workbench.colorTheme\": \"${global_color_scheme}\"",
+  }
+
   private::vscode::extension { [
     'Braver.vscode-solarized',
     'nodesource.vscode-for-node-js-development-pack',
@@ -88,15 +99,35 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     owner   => 'vagrant',
     group   => 'vagrant',
     mode    => '0664',
-    content => '
+    content => "
 {
-    "workbench.iconTheme": "vscode-icons",
-    "workbench.colorTheme": "Solarized Light",
-    "git.confirmSync": false,
-    "editor.wordWrap": "on",
-    "editor.formatOnPaste": true
+    \"workbench.iconTheme\": \"vscode-icons\",
+    \"vsicons.dontShowNewVersionMessage\": true,
+    ${init_global_color_scheme},
+    \"git.confirmSync\": false,
+    \"gradle.useCommand\": \"./gradlew\",
+    \"editor.wordWrap\": \"on\",
+    \"editor.formatOnPaste\": true
 }
-',
+",
+  }
+
+  unless empty($::theme) {
+    if empty($global_color_scheme) {
+      $global_color_scheme_changes = [
+          "rm dict/entry[. = \"workbench.colorTheme\"]",
+      ]
+    } else {
+      $global_color_scheme_changes = [
+          "set dict/entry[. = \"workbench.colorTheme\"]/string \"${global_color_scheme}\"",
+      ]
+    }
+    augeas { 'vscode theme':
+      incl    => '/home/vagrant/.config/Code/User/settings.json',
+      lens    => "Json.lns",
+      context => "/files/home/vagrant/.config/Code/User/settings.json",
+      changes => $global_color_scheme_changes,
+      require => File['/home/vagrant/.config/Code/User/settings.json'],
+    }
   }
 }
-

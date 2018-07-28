@@ -40,6 +40,9 @@ configs:
         monitors: 1
         # Optional Timezone, pulled from host machine if not specified
         timezone: America/Chicago
+        # Solarized theme selection: 'light', 'dark', 'none' or not specified. Not specifying will
+        # initialize to 'light' but not change it afterwards.
+        theme: light
 ```
 
 ## Proxies
