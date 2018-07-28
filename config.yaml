@@ -21,5 +21,6 @@ configs:
         search_domain: company.com
     # settings in 'default' are applied to all configurations
     default:
+        theme: dark
         # Limit DNS resolution to IPV4
         ipv4only: true

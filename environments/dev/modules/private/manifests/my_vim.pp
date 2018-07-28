@@ -49,33 +49,6 @@ EM2mrdKYTJ+wFGIm+bpFqzRpoQbi8g==
   }
   ->package{ 'gvim': }
 
-  vcsrepo { '/opt/xfce4-terminal-colors-solarized':
-    ensure   => present,
-    provider => git,
-    source   => 'https://github.com/sgerrand/xfce4-terminal-colors-solarized',
-  }
-  ->file { '/home/vagrant/.config/xfce4/terminal':
-    ensure => directory,
-    owner  => 'vagrant',
-    group  => 'vagrant',
-    mode   => '0755',
-  }
-
-  if $global_color_scheme == 'none' {
-    file { '/home/vagrant/.config/xfce4/terminal/terminalrc':
-      ensure => absent,
-    }
-  } elsif !empty($global_color_scheme) {
-    file { '/home/vagrant/.config/xfce4/terminal/terminalrc':
-      ensure  => file,
-      replace => $::theme != undef,
-      owner   => 'vagrant',
-      group   => 'vagrant',
-      mode    => '0644',
-      source  => "/opt/xfce4-terminal-colors-solarized/${global_color_scheme}/terminalrc",
-    }
-  }
-
   define plugin() {
     $plugin_name = split($title, '/')[1]
 

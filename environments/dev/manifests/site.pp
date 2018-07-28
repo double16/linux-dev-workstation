@@ -266,10 +266,12 @@ include ::private::azure
 include ::private::googlecloud
 include ::private::iterm2
 include ::private::circleci
+include ::private::xfce4
 
-# emacs won't compile under docker because we don't have permission to disable ASLR and exec-shield
 unless $::virtual == 'docker' {
   include ::private::my_emacs
+} else {
+  notice('Skipping Emacs. Emacs won\'t compile under Docker because we don\'t have permission to disable ASLR and exec-shield')
 }
 
 file { '/etc/profile.d/java.sh':
@@ -336,14 +338,6 @@ file { '/home/vagrant/.config':
   owner  => 'vagrant',
   group  => 'vagrant',
   mode   => '0755',
-}
-
-file { '/home/vagrant/.config/xfce4':
-  ensure  => directory,
-  recurse => remote,
-  owner   => 'vagrant',
-  group   => 'vagrant',
-  source  => 'puppet:///modules/private/dotconfig/xfce4',
 }
 
 file { '/home/vagrant/.config/git':
