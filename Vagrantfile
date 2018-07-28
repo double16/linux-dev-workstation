@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
       :LC_ALL   => 'en_US.UTF-8',
       :SSH_INHERIT_ENVIRONMENT => 'true',
     }
-    override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
+    override.ssh.proxy_command = "docker run -i --rm --name linux-dev-workstation-tunnel --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
   end
 
   if Vagrant.has_plugin?("vagrant-cachier")
@@ -45,6 +45,9 @@ Vagrant.configure("2") do |config|
     p.memory = vagrant_config['memory']
   end
 
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.no_install = true
+  end
   config.vm.provider "virtualbox" do |vb|
     vb.gui = true
     vb.cpus = vagrant_config['cores']
