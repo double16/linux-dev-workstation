@@ -2,7 +2,7 @@
 
 This Vagrant image contains a developer workspace with the following software:
 
-* CentOS 7.4
+* CentOS 7.5
 * Java 8, 9, 10
 * [IntelliJ IDEA Ultimate + sundry plugins](https://www.jetbrains.com/idea/)
 * [Visual Studio Code](https://code.visualstudio.com)
@@ -11,7 +11,7 @@ This Vagrant image contains a developer workspace with the following software:
 * [Editor Config](http://editorconfig.org) support in most IDEs and editors
 * git
 * svn
-* Docker, Docker Compose, Kitematic
+* [Docker](https://www.docker.com), Docker Compose, [Dockstation](https://dockstation.io)
 * Python 2
 * asciidoc
 * nodenv (NodeJS environments)

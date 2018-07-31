@@ -208,13 +208,13 @@ def containerdiff(yaml)
     end
 end
 
-def kitematic(yaml)
-    latest = latest_github_tag('docker', 'kitematic')
-    if latest != yaml['kitematic']['version'] or !yaml['kitematic'].has_key?('checksum')
-        puts "Found newer version kitematic #{latest}"
-        download_url = "https://github.com/docker/kitematic/releases/download/v#{latest}/Kitematic-#{latest}-Ubuntu.zip"
-        download_file = ".vagrant/machines/default/cache/Kitematic-#{latest}.zip"
-        update_single_archive(latest, download_url, download_file, yaml['kitematic'])
+def dockstation(yaml)
+    latest = latest_github_tag('DockStation', 'dockstation')
+    if latest != yaml['dockstation']['version'] or !yaml['dockstation'].has_key?('checksum')
+        puts "Found newer version dockstation #{latest}"
+        download_url = "https://github.com/DockStation/dockstation/releases/download/v#{latest}/dockstation-#{latest}-x86_64.AppImage"
+        download_file = ".vagrant/machines/default/cache/dockstation-#{latest}-x86_64.AppImage"
+        update_single_archive(latest, download_url, download_file, yaml['dockstation'])
     end
 end
 
@@ -310,7 +310,7 @@ slack(yaml)
 docker(yaml)
 rstudio(yaml)
 containerdiff(yaml)
-kitematic(yaml)
+dockstation(yaml)
 git(yaml)
 nodejs(yaml)
 sdkman(yaml)

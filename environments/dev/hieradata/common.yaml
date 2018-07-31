@@ -64,9 +64,9 @@ emacs:
   version: 25.3
 vagrant:
   version: 2.1.2
-kitematic:
-  version: 0.17.3
-  checksum: d2cd5e320550115eea593d6d9765182dc67ac9dd3fe6bfce27e093eb780720a6
+dockstation:
+  version: 1.4.1
+  checksum: 323b0c24b6ce6b9bbb39df1cacac2881f3b91e48f91fcd8022ce37170a8946b1
 rstudio:
   version: 1.1.453
   checksum: e4cd03e016fa5c6a6964b796f6d3c78a6523334b32d1c2c6ed1b83372672f4c5

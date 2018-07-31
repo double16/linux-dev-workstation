@@ -251,7 +251,7 @@ include ::private::idea
 #include ::private::netbeans  # netbeans is old, 2016, and vscode is superior
 include ::private::svn
 include ::private::slack
-include ::private::kitematic
+include ::private::dockstation
 include ::private::clean
 include ::private::vnc
 include ::private::hashistack

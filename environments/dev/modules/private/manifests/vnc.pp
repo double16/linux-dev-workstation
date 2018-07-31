@@ -3,15 +3,10 @@
 #
 class private::vnc {
   package { ['tigervnc-server', 'x11vnc']: }
-  ->file_line { 'vncserver service user':
-    path  => '/usr/lib/systemd/system/vncserver@.service',
-    line  => 'User=vagrant',
-    match => '^User=.*',
-  }
-  ->file_line { 'vncserver service pid':
-    path  => '/usr/lib/systemd/system/vncserver@.service',
-    line  => 'PIDFile=/home/vagrant/.vnc/%H%i.pid',
-    match => '^PIDFile=.*',
+  ->exec { 'Configure vagrant user in VNC service':
+    path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    command => "sed -i 's/<USER>/vagrant/g' /usr/lib/systemd/system/vncserver@.service",
+    onlyif  => "grep -qF '<USER>' /usr/lib/systemd/system/vncserver@.service",
   }
 
   file { '/usr/sbin/aws-vagrant-auth.sh':
