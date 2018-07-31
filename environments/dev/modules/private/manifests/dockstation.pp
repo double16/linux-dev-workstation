@@ -27,6 +27,17 @@ class private::dockstation {
     source => "/tmp/vagrant-cache/${file}",
   }
 
+  file { [
+    '/home/vagrant/.local',
+    '/home/vagrant/.local/share',
+    '/home/vagrant/.local/share/applications'
+    ]:
+    ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
+    mode   => '0755',
+  }
+
   file { ['/usr/local/share/applications/appimagekit-dockstation.desktop','/home/vagrant/.local/share/applications/appimagekit-dockstation.desktop']:
     ensure => file,
     owner  => 0,

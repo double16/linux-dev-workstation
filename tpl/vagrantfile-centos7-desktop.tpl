@@ -86,6 +86,29 @@ Vagrant.configure("2") do |config|
     config.cache.scope = :box
   end
 
+  # swap is required for propery memory management
+  # if the provider doesn't allocate swap add a small swapfile
+  config.vm.provision "swapfile", type: "shell", inline: <<-SHELL
+    is_running_in_container() {
+      awk -F: '$3 ~ /^\\/$/{ c=1 } END { exit c }' /proc/self/cgroup
+    }
+    if ! is_running_in_container && [ -z "$(/usr/sbin/swapon --show=size --bytes --noheadings)" ]; then
+      if [ ! -s /swapfile ]; then
+        echo "Creating 128M swap space in /swapfile..."
+        dd if=/dev/zero of=/swapfile bs=1M count=128
+        chown root:root /swapfile
+        chmod 0600 /swapfile
+        mkswap /swapfile
+      fi
+      echo "Turning the swapfile on..."
+      swapon /swapfile
+      if ! grep -q /swapfile /etc/fstab; then
+        echo "Adding swap entry to /etc/fstab"
+        echo "\n/swapfile none            swap    sw              0       0" >> /etc/fstab
+      fi
+    fi
+  SHELL
+
   config.vm.provision "base-bootstrap", type: "shell", inline: <<-SHELL
 mkdir -p /etc/facter/facts.d
 cat > /etc/facter/facts.d/vagrant.txt <<FACTS

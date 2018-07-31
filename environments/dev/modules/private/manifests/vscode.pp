@@ -31,7 +31,7 @@ class private::vscode {
   ->exec { 'vscode install from cache':
     command => "/usr/bin/rsync -r --size-only --chown vagrant:vagrant ${cache_path}/ ${extension_path}/",
     timeout => 1800,
-    require => [ File[$cache_path], File[$extension_path] ],
+    require => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
   }
   ->Private::Vscode::Extension<| |>
 
@@ -39,7 +39,7 @@ class private::vscode {
   ->exec { 'vscode populate cache':
     command => "/usr/bin/rsync -r --size-only --delete ${extension_path}/ ${cache_path}/",
     timeout => 1800,
-    require => [ File[$cache_path], File[$extension_path] ],
+    require => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
   }
 
   define extension() {
