@@ -1,6 +1,6 @@
 ---
 configs:
-    use: 'medium'
+    use: 'small'
     small:
         memory: 2048
         cores: 2
