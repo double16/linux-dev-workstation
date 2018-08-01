@@ -36,10 +36,11 @@ class private::vscode {
   ->Private::Vscode::Extension<| |>
 
   Private::Vscode::Extension<| |>
-  ->exec { 'vscode populate cache':
-    command => "/usr/bin/rsync -r --size-only --delete ${extension_path}/ ${cache_path}/",
-    timeout => 1800,
-    require => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
+  ~>exec { 'vscode populate cache':
+    command     => "/usr/bin/rsync -r --size-only --delete ${extension_path}/ ${cache_path}/",
+    timeout     => 1800,
+    refreshonly => true,
+    require     => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
   }
 
   define extension() {
