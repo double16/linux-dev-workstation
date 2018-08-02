@@ -76,21 +76,30 @@ qgroundcontrol:
 ```
 
 ## AWS, Azure
-Running the box on the cloud provides a VNC server. You need to use SSH tunneling to access the server. Assuming you have `vncviewer` installed with either the TightVNC or TigerVNC package:
+Running the box on the cloud provides a VNC server. You need to use SSH tunneling to access the server. The `vagrant ssh` command will forward an unused port to the VNC server. Assuming you have `vncviewer` installed with either the TightVNC or TigerVNC package:
 
 ```shell
-$ ssh -t -L 5910:localhost:5900 centos@ec2-NNN.amazonaws.com
-$ vncviewer localhost:5910
+$ vagrant ssh
+==> default: Running triggers before ssh ...
+==> default: Running trigger: Tunnel VNC connection through SSH...
+==> default: Connect to desktop via VNC using `vncviewer localhost:50841`
+----------------------------------------------------------------
+  CentOS 7.5.1804                             built 2018-08-01
+----------------------------------------------------------------
+[centos@xxxxx ~]$
+$ vncviewer localhost:50841
 ```
 
-If you want to use a different VNC client, point it to `localhost:5900`.
+If you want to use a different VNC client, point it to the equivalent of `localhost:50841` in the output above.
 
 _DO NOT_ expose port 5900 by adjusting firewall rules. The VNC server has no password. If you want direct access to VNC then you must change the VNC configuration. SSH tunneling is preferred.
 
 Sometimes after starting a new EC2 instance, the IP and hostname will be changed while it is running. It seems the VNC systemctl service doesn't handle this well and VNC won't be started. Restart the EC2 instance to fix it.
 
 ## Docker
-Running the box as a container is similar to AWS. You use an SSH tunnel and VNC viewer. SSH authentication is a little different, by default it uses the Vagrant insecure SSH key. If you want to use a different SSH key, set the environment variable `SSH_AUTHORIZED_KEYS` with the content of your public key(s). The image is based on https://github.com/jdeathe/centos-ssh, the various SSH options should work with this image.
+Running the box as a container is similar to using a cloud provider. You use an SSH tunnel and VNC viewer. SSH authentication is a little different, by default it uses the Vagrant insecure SSH key. If you want to use a different SSH key, set the environment variable `SSH_AUTHORIZED_KEYS` with the content of your public key(s). The image is based on https://github.com/jdeathe/centos-ssh, the various SSH options should work with this image.
+
+Vagrant can bring up the box using Docker and supports most of the common Vagrant features. If you want to run the image directly with Docker, it will look similar to the following:
 
 ```shell
 $ docker run -d -p 2020:22 pdouble16/linux-dev-workstation
@@ -100,7 +109,7 @@ $ ssh -t -L 5910:localhost:5900 -i id_rsa_insecure -p 2020 vagrant@{docker-host-
 $ vncviewer localhost:5910
 ```
 
-If you want to control the hosting Docker daemon from inside the container:
+If you want to control the hosting Docker daemon from inside the container (this is the default when running using Vagrant):
 ```shell
 $ docker run -d -p 2020:22 -v /var/run/docker.sock:/var/run/docker.sock pdouble16/linux-dev-workstation
 ```

@@ -2,6 +2,9 @@
 # vi: set ft=ruby :
 
 require 'yaml'
+require 'socket'
+
+Vagrant.require_version ">= 2.1.0"
 
 current_dir    = '.'
 configs        = File.exists?("#{current_dir}/config.yaml") ? YAML.load_file("#{current_dir}/config.yaml") : { 'configs' => Hash.new }
@@ -9,6 +12,28 @@ default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'].fetch(ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use'], Hash.new))
 monitor_count  = vagrant_config['monitors']
 readme         = File.dirname(File.expand_path(__FILE__)) + '/VAGRANTUP.md'
+
+def server_port
+  server = TCPServer.new('127.0.0.1', 0)
+  port = server.addr[1]
+  server.close
+  port
+end
+
+def configure_vnc_tunnel(config)
+  config.trigger.before :ssh do |trigger|
+    trigger.name = "Tunnel VNC connection through SSH"
+    vnc_port = server_port
+    trigger.info = "Connect to desktop via VNC using `vncviewer localhost:#{vnc_port}`"
+    config.ssh.extra_args = ["-L", "#{vnc_port}:localhost:5900"]
+  end
+end
+
+def configure_sshfs(config)
+  if Vagrant.has_plugin?('vagrant-sshfs')
+    config.vm.synced_folder ".", "/vagrant", type: "sshfs"
+  end
+end
 
 Vagrant.configure("2") do |config|
 
@@ -66,6 +91,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :docker do |docker, override|
+    configure_vnc_tunnel(override)
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
     docker.has_ssh = true
@@ -80,6 +106,17 @@ Vagrant.configure("2") do |config|
     docker.volumes = ["/var/run/docker.sock:/var/run/docker.sock"]
     override.vm.network :forwarded_port, guest: 22, host: 2222, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     override.ssh.proxy_command = "docker run -i --rm --name linux-dev-workstation-tunnel --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
+  end
+
+  config.vm.provider :aws do |aws, override|
+    configure_vnc_tunnel(override)
+    configure_sshfs(override)
+    override.ssh.username = "centos"
+  end
+
+  config.vm.provider :azure do |azure, override|
+    configure_vnc_tunnel(override)
+    configure_sshfs(override)
   end
 
   if Vagrant.has_plugin?("vagrant-cachier")

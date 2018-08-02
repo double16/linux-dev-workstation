@@ -2,12 +2,35 @@
 # vi: set ft=ruby :
 
 require 'yaml'
+require 'socket'
 
 current_dir    = File.dirname(File.expand_path(__FILE__))
 configs        = YAML.load_file("#{current_dir}/config.yaml")
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
 monitor_count  = vagrant_config['monitors']
+
+def server_port
+  server = TCPServer.new('127.0.0.1', 0)
+  port = server.addr[1]
+  server.close
+  port
+end
+
+def configure_vnc_tunnel(config)
+  config.trigger.before :ssh do |trigger|
+    trigger.name = "Tunnel VNC connection through SSH"
+    vnc_port = server_port
+    trigger.info = "Connect to desktop via VNC using `vncviewer localhost:#{vnc_port}`"
+    config.ssh.extra_args = ["-L", "#{vnc_port}:localhost:5900"]
+  end
+end
+
+def configure_sshfs(config)
+  if Vagrant.has_plugin?('vagrant-sshfs')
+    config.vm.synced_folder ".", "/vagrant", type: "sshfs"
+  end
+end
 
 Vagrant.configure("2") do |config|
   # This trick is used to prefer a VM box over docker
@@ -20,6 +43,7 @@ Vagrant.configure("2") do |config|
     config.vm.box = "double16/linux-dev-workstation"
   end
   config.vm.provider :docker do |docker, override|
+    configure_vnc_tunnel(override)
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
     docker.image = "jdeathe/centos-ssh:centos-7-2.3.2"
