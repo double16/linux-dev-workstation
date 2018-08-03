@@ -48,6 +48,7 @@ class private::vscode {
       command => "/usr/bin/code --install-extension ${title}",
       unless  => "/usr/bin/code --list-extensions | grep -q ${title}",
       user    => 'vagrant',
+      timeout => 1200,
       require => Package['code'],
     }
   }
