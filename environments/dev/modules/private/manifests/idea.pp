@@ -83,18 +83,20 @@ StartupNotify=true
       undef   => undef,
       default => 'sha256',
     }
-    archive { "/tmp/vagrant-cache/idea-plugins/${title}-${version}.zip":
-      ensure        => present,
-      extract       => true,
-      extract_path  => $::private::idea::plugindir,
-      source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
-      checksum      => $sha256sum,
-      checksum_type => $checksum_type,
-      creates       => "${::private::idea::plugindir}/${title}",
-      cleanup       => false,
-      user          => 'vagrant',
-      group         => 'vagrant',
-      require       => File['/tmp/vagrant-cache/idea-plugins'],
+    unless $::facts['ideaplugins'].dig($title, 'version') == "${version}" {
+      archive { "/tmp/vagrant-cache/idea-plugins/${title}-${version}.zip":
+        ensure        => present,
+        extract       => true,
+        extract_path  => $::private::idea::plugindir,
+        source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
+        checksum      => $sha256sum,
+        checksum_type => $checksum_type,
+        creates       => "${::private::idea::plugindir}/${title}",
+        cleanup       => false,
+        user          => 'vagrant',
+        group         => 'vagrant',
+        require       => File['/tmp/vagrant-cache/idea-plugins'],
+      }
     }
   }
 
@@ -103,14 +105,16 @@ StartupNotify=true
       undef   => undef,
       default => 'sha256',
     }
-    remote_file { "${::private::idea::plugindir}/${title}.jar":
-      ensure        => present,
-      source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
-      checksum      => $sha256sum,
-      checksum_type => $checksum_type,
-      owner         => 'vagrant',
-      group         => 'vagrant',
-      require       => File[$::private::idea::plugindir],
+    unless $::facts['ideaplugins'].dig($title, 'version') == "${version}" {
+      remote_file { "${::private::idea::plugindir}/${title}.jar":
+        ensure        => present,
+        source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
+        checksum      => $sha256sum,
+        checksum_type => $checksum_type,
+        owner         => 'vagrant',
+        group         => 'vagrant',
+        require       => File[$::private::idea::plugindir],
+      }
     }
   }
 

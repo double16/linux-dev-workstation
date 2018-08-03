@@ -10,21 +10,14 @@ class private::dockstation {
 
   package { [ 'fuse', 'squashfuse' ]:}
 
-  remote_file { "/tmp/vagrant-cache/${file}":
+  remote_file { $install_file:
     ensure        => present,
     source        => "https://github.com/DockStation/dockstation/releases/download/v${version}/${file}",
     checksum      => $checksum,
     checksum_type => 'sha256',
-    owner         => 'vagrant',
-    group         => 'vagrant',
-    require       => File['/tmp/vagrant-cache'],
-  }
-  ->file { $install_file:
-    ensure => file,
-    owner  => 0,
-    group  => 'root',
-    mode   => '0755',
-    source => "/tmp/vagrant-cache/${file}",
+    owner         => 0,
+    group         => 'root',
+    mode          => '0755',
   }
 
   file { [

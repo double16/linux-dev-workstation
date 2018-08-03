@@ -62,4 +62,12 @@ class private::my_ruby {
     command => 'find /opt/rbenv -not -group vagrant -print0 | xargs -r0 chgrp vagrant && find /opt/rbenv -type d -print0 | xargs -r0 chmod g+ws',
     path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
   }
+
+  File<| title == '/opt/rbenv'
+    or title == '/opt/rbenv/plugins'
+    or title == '/opt/rbenv/shims'
+    or title == '/opt/rbenv/versions'
+    |> {
+      mode => '2775',
+    }
 }

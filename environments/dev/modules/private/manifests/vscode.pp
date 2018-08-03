@@ -2,7 +2,6 @@
 # Visual Studio Code IDE, plugins and tools
 #
 class private::vscode {
-  $cache_path = '/tmp/vagrant-cache/vscode-extensions'
   $extension_path = '/home/vagrant/.vscode/extensions'
 
   # VS Live Share
@@ -11,12 +10,6 @@ class private::vscode {
     'lttng-ust',
   ]:}
 
-  file { $cache_path:
-    ensure => directory,
-    mode   => '0777',
-    owner  => 'vagrant',
-    group  => 'vagrant',
-  }
   file { [ '/home/vagrant/.vscode', $extension_path ]:
     ensure => directory,
     mode   => '0755',
@@ -24,31 +17,16 @@ class private::vscode {
     group  => 'vagrant',
   }
 
-  exec { 'vscode expire cache':
-    command => "/usr/bin/find ${cache_path} -maxdepth 1 -mtime +30 | xargs -r rm -rf",
-    require => [ File[$cache_path] ],
-  }
-  ->exec { 'vscode install from cache':
-    command => "/usr/bin/rsync -r --size-only --chown vagrant:vagrant ${cache_path}/ ${extension_path}/",
-    timeout => 1800,
-    require => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
-  }
-  ->Private::Vscode::Extension<| |>
-
-  Private::Vscode::Extension<| |>
-  ~>exec { 'vscode populate cache':
-    command     => "/usr/bin/rsync -r --size-only --delete ${extension_path}/ ${cache_path}/",
-    timeout     => 1800,
-    refreshonly => true,
-    require     => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
-  }
-
   define extension() {
-    exec { "vscode extension ${title}":
-      command => "/usr/bin/code --install-extension ${title}",
-      unless  => "/usr/bin/code --list-extensions | grep -q ${title}",
-      user    => 'vagrant',
-      require => Package['code'],
+    unless $title in $::facts['vscodeextensions'] {
+      include ::private::vscode_cache
+
+      exec { "vscode extension ${title}":
+        command => "/usr/bin/code --install-extension ${title}",
+        user    => 'vagrant',
+        require => [ Package['code'], Exec['vscode install from cache'] ],
+        notify  => Exec['vscode populate cache'],
+      }
     }
   }
 

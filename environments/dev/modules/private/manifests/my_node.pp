@@ -48,4 +48,12 @@ class private::my_node {
     command => 'find /opt/nodenv -not -group vagrant -print0 | xargs -r0 chgrp vagrant && find /opt/nodenv -type d -print0 | xargs -r0 chmod g+ws',
     path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
   }
+
+  File<| title == '/opt/nodenv'
+    or title == '/opt/nodenv/plugins'
+    or title == '/opt/nodenv/shims'
+    or title == '/opt/nodenv/versions'
+    |> {
+      mode => '2775',
+    }
 }
