@@ -152,11 +152,12 @@ net.ipv6.conf.default.disable_ipv6=1
 
     Nodenv::Plugin<| |>
     ->Nodenv::Build<| |>
-    ->exec { 'npm proxy':
-      path    => ['/bin','/sbin/','/usr/bin','/usr/sbin','/opt/nodenv/bin','/opt/nodenv/shims'],
+    ~>exec { 'npm proxy':
+      path        => ['/bin','/sbin/','/usr/bin','/usr/sbin','/opt/nodenv/bin','/opt/nodenv/shims'],
       # nodenv each plugin isn't recognized during the first run??
-      #command => "nodenv each npm config set proxy $::proxy_url",
-      command => "ls /opt/nodenv/versions/*/bin/node | xargs -L 1 -I {} npm config set proxy ${::proxy_url}",
+      #command    => "nodenv each npm config set proxy $::proxy_url",
+      command     => "ls /opt/nodenv/versions/*/bin/node | xargs -L 1 -I {} npm config set proxy ${::proxy_url}",
+      refreshonly => true,
     }
     ->Nodenv::Package<| |>
 

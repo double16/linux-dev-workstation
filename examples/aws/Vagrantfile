@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "double16/linux-dev-workstation"
+
+  config.vm.provider :aws do |aws, override|
+    aws.instance_type = 't2.micro'
+    aws.region = 'us-east-1'
+    # The following value is required, but not important, it's overriden by the box
+    aws.ami = 'ami-replacedbyboxami'
+    aws.security_groups = [ 'ssh' ]
+    aws.aws_profile = 'developer'
+    aws.keypair_name = 'developer-key'
+    override.ssh.private_key_path = "#{ENV['HOME']}/.ssh/id_aws.pem"
+    #aws.block_device_mapping = [{ 'DeviceName' => '/dev/sdf', 'Ebs.VolumeSize' => 50 }]
+  end
+end

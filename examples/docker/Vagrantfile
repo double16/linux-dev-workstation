@@ -1,0 +1,7 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "double16/linux-dev-workstation"
+  # The Vagrantfile in the box is sufficient for Docker, no extra config required
+end

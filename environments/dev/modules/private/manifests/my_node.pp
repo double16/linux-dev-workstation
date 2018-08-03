@@ -16,7 +16,7 @@ class private::my_node {
     install_dir => '/opt/nodenv',
     #owner       => 'vagrant',
     group       => 'vagrant',
-    latest      => true,
+    latest      => false,
     require     => Class['private::git_from_source'],
   }
 
