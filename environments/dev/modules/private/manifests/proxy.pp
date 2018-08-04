@@ -80,6 +80,21 @@ net.ipv6.conf.default.disable_ipv6=1
     match             => '^proxy\=',
     match_for_absence => true,
   }
+  ->file_line { 'Yum metadata_expire':
+    path  => '/etc/yum.conf',
+    line  => "metadata_expire=90m",
+    match => '^metadata_expire\=',
+  }
+  ->file_line { 'Yum mirrorlist_expire':
+    path  => '/etc/yum.conf',
+    line  => "mirrorlist_expire=90m",
+    match => '^mirrorlist_expire\=',
+  }
+  ->file_line { 'Yum metadata_expire_filter':
+    path  => '/etc/yum.conf',
+    line  => "metadata_expire_filter=never",
+    match => '^metadata_expire_filter\=',
+  }
   -> Package<| provider == 'yum' |>
 
   ini_setting { 'pip proxy':

@@ -6,14 +6,11 @@
 
       "client_id": "{{ user `azure_client_id` }}",
       "client_secret": "{{ user `azure_client_secret` }}",
-      "object_id": "{{ user `azure_object_id` }}",
-      "resource_group_name": "{{ user `azure_resource_group` }}",
-      "storage_account": "{{ user `azure_storage_account` }}",
       "subscription_id": "{{ user `azure_subscription_id` }}",
       "tenant_id": "{{ user `azure_tenant_id` }}",
 
-      "capture_container_name": "images",
-      "capture_name_prefix": "packer",
+      "managed_image_resource_group_name": "{{ user `azure_resource_group` }}",
+      "managed_image_name": "packer-{{ timestamp }}",
 
       "os_type": "Linux",
       "image_publisher": "Canonical",
@@ -55,13 +52,13 @@
         "/bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel",
         "/usr/sbin/useradd packer -m -g packer -G wheel,kvm,docker",
 
-        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.4/packer_1.2.4_linux_amd64.zip",
+        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.5/packer_1.2.5_linux_amd64.zip",
         "cd /usr/bin && unzip /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
 
-        "curl -sL -o /tmp/vagrant_2.1.1_x86_64.deb https://releases.hashicorp.com/vagrant/2.1.1/vagrant_2.1.1_x86_64.deb",
-        "dpkg -i /tmp/vagrant_2.1.1_x86_64.deb",
-        "rm /tmp/vagrant_2.1.1_x86_64.deb",
+        "curl -sL -o /tmp/vagrant_2.1.2_x86_64.deb https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb",
+        "dpkg -i /tmp/vagrant_2.1.2_x86_64.deb",
+        "rm /tmp/vagrant_2.1.2_x86_64.deb",
         "vagrant plugin install vagrant-cachier vagrant-vbguest",
 
         "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash' - packer",
@@ -81,9 +78,7 @@
     "rsync_proxy": "{{env `rsync_proxy`}}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",
     "azure_client_secret": "{{ env `AZURE_CLIENT_SECRET` }}",
-    "azure_object_id": "3d1dde02-4df2-49e0-bf1c-e4a0efa152a3",
     "azure_resource_group": "packerruns",
-    "azure_storage_account": "packerbuildswest",
     "azure_subscription_id": "e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b",
     "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba"
   }

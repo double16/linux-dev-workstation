@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /home/linux-dev-workstation
     docker:
-      - image: pdouble16/packer-build-base:201808.1
+      - image: pdouble16/packer-build-base:201808.2
         user: root
 
     steps:
@@ -40,10 +40,16 @@ jobs:
             docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}" docker.io
 
       - run:
-          name: Docker Image Build
+          name: Packer Build
           no_output_timeout: 1h
           command: |
-            /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} ${CIRCLE_TAG:+-var no_release=false} centos.json
+            if [[ -z "${CIRCLE_TAG}" ]]; then
+              cat centos.json | jq 'del(."post-processors" | .[] | .[] | select(.type == "vagrant-cloud"))' > centos-circleci.json
+            else
+              cp centos.json centos-circleci.json
+            fi
+
+            /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} ${CIRCLE_TAG:+-var no_release=false} centos-circleci.json
 
       - run:
           name: Build Docker Public Image Cache

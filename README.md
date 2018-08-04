@@ -39,6 +39,7 @@ This Vagrant image contains a developer workspace with the following software:
 
 It also features configuration options:
 
+* Solarized Theme configuration across many applications
 * Configuring HTTP proxies from standard environment variables (HTTP_PROXY, ...) or configuration described in [VAGRANTUP.md](VAGRANTUP.md).
 * Import of SSH keys
 * Import of CA certifications

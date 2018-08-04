@@ -86,7 +86,7 @@ yum::group { 'X Window System':
 }
 ->exec { 'yum-groupinstall-Xfce':
   command => "yum -y groupinstall --skip-broken 'Xfce'",
-  unless  => "yum grouplist hidden 'Xfce' | egrep -i '^Installed.+Groups:$'",
+  unless  => "yum --cacheonly grouplist hidden 'Xfce' | egrep -i '^Installed.+Groups:$'",
   timeout => 0,
   path    => '/bin:/usr/bin:/sbin:/usr/sbin',
 }

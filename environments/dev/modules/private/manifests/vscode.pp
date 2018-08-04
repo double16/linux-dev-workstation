@@ -98,6 +98,8 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'mindginative.terraform-snippets',
     'stayfool.vscode-asciidoc',
     'vscjava.vscode-java-pack',
+    'dotjoshjohnson.xml',
+    'eriklynd.json-tools',
   ]: }
   ->file { '/home/vagrant/.config/Code':
     ensure => directory,

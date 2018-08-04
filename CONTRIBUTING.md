@@ -48,7 +48,7 @@ There are environment variables needed for building. If you aren't using a speci
 
 ## Building in Azure
 
-If you'd like to use a VM in the cloud to build the boxes, Azure supports nested virtualization. The `builder` directory has a Packer `builder.json` file to build the VM with Packer, VirtualBox and QEMU.
+If you'd like to use a VM in the cloud to build the boxes, Azure supports nested virtualization. The `builder` directory has a Packer `builder.json` file to build the VM with Packer, VirtualBox and QEMU/libvirt.
 
 ### Configure your Azure Account
 
@@ -62,4 +62,4 @@ $ packer build -var-file=vars.json builder.json
 
 ### Create the VM
 
-You'll need to follow the instructions provided in this [Packer GitHub issue](https://github.com/Azure/packer-azure/issues/201) to create a VM based on the VHD image.
+You'll need to follow the instructions provided in this [Packer GitHub issue](https://github.com/Azure/packer-azure/issues/201) to create a VM based on the image.

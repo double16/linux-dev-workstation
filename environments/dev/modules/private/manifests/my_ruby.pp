@@ -14,7 +14,7 @@ class private::my_ruby {
   }
   ->class { '::rbenv':
     install_dir => '/opt/rbenv',
-    latest      => true,
+    latest      => false,
     #owner       => 'vagrant',
     group       => 'vagrant',
     require     => Class['private::git_from_source'],
