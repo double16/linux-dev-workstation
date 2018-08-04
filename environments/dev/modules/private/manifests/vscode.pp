@@ -24,6 +24,7 @@ class private::vscode {
       exec { "vscode extension ${title}":
         command => "/usr/bin/code --install-extension ${title}",
         user    => 'vagrant',
+        timeout => 1200,
         require => [ Package['code'], Exec['vscode install from cache'] ],
         notify  => Exec['vscode populate cache'],
       }
