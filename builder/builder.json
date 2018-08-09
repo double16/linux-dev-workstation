@@ -13,10 +13,10 @@
       "managed_image_name": "packer-{{ timestamp }}",
 
       "os_type": "Linux",
-      "image_publisher": "Canonical",
-      "image_offer": "UbuntuServer",
-      "image_sku": "16.04-LTS",
-
+      "image_publisher": "OpenLogic",
+      "image_offer": "CentOS",
+      "image_sku": "7.5",
+      
       "azure_tags": {
         "dept": "engineering",
         "task": "image building"
@@ -39,26 +39,26 @@
       ],
       "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
       "inline": [
-        "echo 'deb http://download.virtualbox.org/virtualbox/debian xenial contrib' >> /etc/apt/sources.list",
-        "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
-        "curl -sL --fail https://www.virtualbox.org/download/oracle_vbox_2016.asc | apt-key add -",
-        "curl -sL --fail https://www.virtualbox.org/download/oracle_vbox.asc | apt-key add -",
-        "curl -sL --fail https://download.docker.com/linux/ubuntu/gpg | apt-key add -",
-        "apt-get update",
-        "apt-get upgrade -y",
-        "apt-get install -y unzip git qemu qemu-kvm virtualbox-5.2 awscli iftop jq php apt-transport-https ca-certificates curl software-properties-common docker-ce",
-
+        "yum install -y yum-utils epel-release",
+        "yum-config-manager --add-repo https://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo",
+        "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
+        "yum upgrade -y",
+        "yum groups mark convert",
+        "yum groupinstall -y 'Development Tools'",
+        "yum install -y kernel-devel kernel-devel-$(uname -r) unzip git qemu qemu-kvm awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce",
+        "yum install -y VirtualBox-5.2",
+        
         "/usr/sbin/groupadd packer",
         "/bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel",
-        "/usr/sbin/useradd packer -m -g packer -G wheel,kvm,docker",
+        "/usr/sbin/useradd packer -m -g packer -G wheel,kvm,docker,vboxusers",
 
         "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.5/packer_1.2.5_linux_amd64.zip",
         "cd /usr/bin && unzip /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
 
-        "curl -sL -o /tmp/vagrant_2.1.2_x86_64.deb https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb",
-        "dpkg -i /tmp/vagrant_2.1.2_x86_64.deb",
-        "rm /tmp/vagrant_2.1.2_x86_64.deb",
+        "curl -sL -o /tmp/vagrant_2.1.2_x86_64.rpm https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.rpm",
+        "rpm -i /tmp/vagrant_2.1.2_x86_64.rpm",
+        "rm /tmp/vagrant_2.1.2_x86_64.rpm",
         "vagrant plugin install vagrant-cachier vagrant-vbguest",
 
         "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash' - packer",
