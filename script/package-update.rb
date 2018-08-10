@@ -189,7 +189,8 @@ def git(yaml)
 end
 
 def rstudio(yaml)
-    latest = latest_github_tag('rstudio', 'rstudio')
+    # Only version 1.1.* has packages
+    latest = latest_github_tag('rstudio', 'rstudio', /^v1[.]1[.][0-9.]+$/)
     if latest != yaml['rstudio']['version'] or !yaml['rstudio'].has_key?('checksum')
         puts "Found newer version rstudio #{latest}"
         download_url = "https://download1.rstudio.org/rstudio-#{latest}-x86_64.rpm"
