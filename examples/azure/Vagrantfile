@@ -1,0 +1,15 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "double16/linux-dev-workstation"
+
+  config.vm.provider :azure do |azure, override|
+    azure.vm_size = 'Standard_D2S_v3'
+    azure.tenant_id = ENV['AZURE_TENANT_ID']
+    azure.client_id = ENV['AZURE_CLIENT_ID']
+    azure.client_secret = ENV['AZURE_CLIENT_SECRET']
+    azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
+    override.ssh.private_key_path = "#{ENV['HOME']}/.ssh/id_rsa"
+  end
+end

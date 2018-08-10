@@ -1,5 +1,5 @@
 {
-  "_comment": "Create an image that can be used to run a VM to build the vagrant boxes on Azure because it supports nested virtualization.",
+  "_comment": "Image that uses Packer to build Vagrant boxes.",
   "builders": [
     {
       "type": "azure-arm",
@@ -19,13 +19,13 @@
       
       "azure_tags": {
         "dept": "engineering",
-        "task": "image building"
+        "task": "packer image building"
       },
 
       "ssh_pty": "true",
       "location": "West US",
-      "vm_size": "Standard_D4S_v3",
-      "os_disk_size_gb": "32"
+      "vm_size": "Standard_D2S_v3",
+      "os_disk_size_gb": "100"
     }
   ],
   "provisioners": [
@@ -39,47 +39,79 @@
       ],
       "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
       "inline": [
+        "set -x -e",
+
         "yum install -y yum-utils epel-release",
         "yum-config-manager --add-repo https://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo",
         "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
         "yum upgrade -y",
         "yum groups mark convert",
         "yum groupinstall -y 'Development Tools'",
-        "yum install -y kernel-devel kernel-devel-$(uname -r) unzip git qemu qemu-kvm awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce",
+        "yum install -y kernel-devel kernel-devel-$(uname -r) unzip git screen qemu qemu-kvm awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel",
         "yum install -y VirtualBox-5.2",
         
-        "/usr/sbin/groupadd packer",
+        "/bin/grep -q '^vagrant:' /etc/group || /usr/sbin/groupadd vagrant",
         "/bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel",
-        "/usr/sbin/useradd packer -m -g packer -G wheel,kvm,docker,vboxusers",
+        "/bin/grep -q '^vagrant:' /etc/passwd || /usr/sbin/useradd vagrant -m -g vagrant -G wheel,kvm,docker,vboxusers",
 
         "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.5/packer_1.2.5_linux_amd64.zip",
-        "cd /usr/bin && unzip /tmp/packer.zip && chmod +x /usr/bin/packer",
+        "cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
 
         "curl -sL -o /tmp/vagrant_2.1.2_x86_64.rpm https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.rpm",
         "rpm -i /tmp/vagrant_2.1.2_x86_64.rpm",
         "rm /tmp/vagrant_2.1.2_x86_64.rpm",
-        "vagrant plugin install vagrant-cachier vagrant-vbguest",
+        "su -c 'vagrant plugin install vagrant-cachier vagrant-vbguest vagrant-azure vagrant-aws' - vagrant",
+        "su -c 'vagrant plugin install vagrant-google' - vagrant",
+        "su -c 'vagrant plugin install vagrant-libvirt' - vagrant",
+        
+        "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash' - vagrant",
 
-        "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash' - packer",
-
+        "su -c 'git clone https://github.com/syndbg/goenv.git ~/.goenv' - vagrant",
+        "su -c 'echo export GOENV_ROOT=\\\"\\$HOME/.goenv\\\" >> ~/.bash_profile' - vagrant",
+        "su -c 'echo export PATH=\\\"\\$GOENV_ROOT/bin:\\$PATH\\\" >> ~/.bash_profile' - vagrant",
+        "su -c 'echo eval \\\"\\$\\(goenv init -\\)\\\" >> ~/.bash_profile' - vagrant",
+        "su -c 'goenv install -s 1.9.2' - vagrant",
+        "su -c 'goenv global 1.9.2' - vagrant",
+        "su -c 'go get github.com/hashicorp/packer' - vagrant",
+        
         "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
       ],
-      "inline_shebang": "/bin/sh -xe",
+      "inline_shebang": "/bin/bash",
       "type": "shell",
       "skip_clean": true
     }
+  ],
+  "post-processors": [
+    [
+      {
+        "keep_input_artifact": false,
+        "output": "box/{{.Provider}}/packer-{{user `version`}}.box",
+        "type": "vagrant"
+      },
+      {
+        "keep_input_artifact": true,
+        "type": "vagrant-cloud",
+        "box_tag": "double16/packer",
+        "access_token": "{{user `cloud_token`}}",
+        "version": "{{user `version`}}",
+        "no_release": "{{ user `no_release` }}"
+      }
+    ]
   ],
   "variables": {
     "ftp_proxy": "{{env `ftp_proxy`}}",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "no_proxy": "{{env `no_proxy`}}",
+    "version": "{{ timestamp }}",
+    "no_release": "true",
     "rsync_proxy": "{{env `rsync_proxy`}}",
+    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",
     "azure_client_secret": "{{ env `AZURE_CLIENT_SECRET` }}",
-    "azure_resource_group": "packerruns",
-    "azure_subscription_id": "e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b",
-    "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba"
+    "azure_subscription_id": "{{ env `AZURE_SUBSCRIPTION_ID` }}",
+    "azure_tenant_id": "{{ env `AZURE_TENANT_ID` }}",
+    "azure_resource_group": "packer"
   }
 }

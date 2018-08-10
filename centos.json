@@ -167,10 +167,9 @@
       "type": "azure-arm",
       "client_id": "{{ user `azure_client_id` }}",
       "client_secret": "{{ user `azure_client_secret` }}",
-      "resource_group_name": "{{ user `azure_resource_group` }}",
       "subscription_id": "{{ user `azure_subscription_id` }}",
       "tenant_id": "{{ user `azure_tenant_id` }}",
-      "managed_image_resource_group_name": "{{ user `azure_resource_group` }}",
+      "managed_image_resource_group_name": "{{ user `vm_name` }}",
       "managed_image_name": "{{ user `vm_name`}}-{{ user `version` }}-{{timestamp}}",
       "os_type": "Linux",
       "image_publisher": "OpenLogic",
@@ -216,8 +215,7 @@
         "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `version`}}.box",
         "type": "vagrant",
         "vagrantfile_template": "{{ user `vagrantfile_template` }}",
-        "include": [ "VAGRANTUP.md" ],
-        "except": [ "azure-arm" ]
+        "include": [ "VAGRANTUP.md" ]
       },
       {
         "keep_input_artifact": true,
@@ -225,8 +223,7 @@
         "box_tag": "double16/{{user `vm_name`}}",
         "access_token": "{{user `cloud_token`}}",
         "version": "{{user `version`}}",
-        "no_release": "{{ user `no_release` }}",
-        "except": [ "azure-arm" ]
+        "no_release": "{{ user `no_release` }}"
       }
     ]
   ],
@@ -340,10 +337,8 @@
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",
     "azure_client_secret": "{{ env `AZURE_CLIENT_SECRET` }}",
-    "azure_resource_group": "packerruns",
-    "azure_storage_account": "packerbuildswest",
-    "azure_subscription_id": "e6229913-d9c3-4ddd-99a4-9e1ef3beaa1b",
-    "azure_tenant_id": "5c448d3f-fcd1-4afe-9447-7aefc2d3e7ba",
+    "azure_subscription_id": "{{ env `AZURE_SUBSCRIPTION_ID` }}",
+    "azure_tenant_id": "{{ env `AZURE_TENANT_ID` }}",
     "docker_registry": "",
     "docker_registry_example": "gatekeeper:5001/",
     "kickstart": "ks.cfg",

@@ -1,13 +1,28 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+builder_json = JSON.parse(File.read('builder.json'))
+
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/centos-7.5"
+  config.vm.box = "double16/packer"
 
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
   end
 
-  config.vm.provision "builder", type: "shell",
-    inline: JSON.parse(File.read('builder.json'))["provisioners"].collect { |e| e['inline'] }.flatten.join("\n")
+  config.vm.provider :azure do |azure, override|
+    azure.vm_size = 'Standard_D4S_v3'
+    override.ssh.private_key_path = "#{ENV['HOME']}/.ssh/id_rsa"
+    if Vagrant.has_plugin?("vagrant-sshfs")
+      override.vm.synced_folder ".", "/vagrant", type: "sshfs"
+    else
+      override.vm.synced_folder ".", "/vagrant", type: "rsync"
+    end
+  end
+
+  config.vm.provider :virtualbox do |vb, override|
+    override.vm.box = "bento/centos-7.5"
+    override.vm.provision "builder", type: "shell",
+      inline: "#!#{builder_json.fetch("inline_shebang","/bin/sh")}\n\n"+(builder_json["provisioners"].collect { |e| e['inline'] }.flatten.join("\n"))
+  end
 end
