@@ -20,7 +20,7 @@ class private::my_emacs {
     'adobe-source-code-pro-fonts',
   ]: }
   ->archive { "/tmp/vagrant-cache/emacs-${version}.tar.gz":
-    source        => "http://ftp.gnu.org/gnu/emacs/emacs-${version}.tar.gz",
+    source        => "http://mirrors.kernel.org/gnu/emacs/emacs-${version}.tar.gz",
     extract_path  => '/usr/src',
     extract       => true,
     cleanup       => false,
