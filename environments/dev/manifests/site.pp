@@ -249,6 +249,13 @@ unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
   }
   package { "kernel-devel-${::kernelrelease}": }
   ->Exec<| title == 'vboxdrv' |>
+
+  exec { 'vboxdrv.sh incorrect egrep':
+    command => "/usr/bin/sed -i 's:/bin/false[)]:/bin/false[)]:' /usr/lib/virtualbox/vboxdrv.sh",
+    onlyif  => '/usr/bin/grep -qF "/bin/false)" /usr/lib/virtualbox/vboxdrv.sh',
+    require => Class['::virtualbox'],
+  }
+  ->Exec<| title == 'vboxdrv' |>
 }
 
 include ::private::my_vim

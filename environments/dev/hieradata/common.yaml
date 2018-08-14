@@ -21,7 +21,7 @@ sdkman:
   version: 2.4.15
   default: true
 - package: groovy
-  version: 2.5.1
+  version: 2.5.2
   default: false
 - package: groovyserv
   version: 1.2.0
@@ -33,7 +33,7 @@ sdkman:
   version: 3.2.13
   default: false
 - package: grails
-  version: 3.3.6
+  version: 3.3.8
   default: true
 - package: kotlin
   version: 1.2.60
@@ -42,7 +42,7 @@ sdkman:
   version: 2.4.5
   default: true
 - package: micronaut
-  version: 1.0.0.M3
+  version: 1.0.0.M4
   default: true
 - package: springboot
   version: 2.0.4.RELEASE
@@ -51,10 +51,10 @@ sdkman:
   version: 8.0.172-zulu
   default: true
 - package: java
-  version: 9.0.4-openjdk
+  version: 9.0.4-open
   default: false
 - package: java
-  version: 10.0.0-openjdk
+  version: 10.0.0-open
   default: false
 - package: lazybones
   version: 0.8.3
@@ -157,8 +157,8 @@ idea:
     updateid: '46509'
   - name: org.jetbrains.plugins.go
     type: zip
-    version: 182.3684.111.849
-    updateid: '48153'
+    version: 182.3911.47.873
+    updateid: '48754'
   - name: com.jetbrains.plugins.jade
     type: zip
     version: 182.3341.1
@@ -193,8 +193,8 @@ idea:
     updateid: '45643'
   - name: AWSCloudFormation
     type: zip
-    version: 0.5.68
-    updateid: '47234'
+    version: 0.5.69
+    updateid: '48798'
   - name: com.intellij.react.css.modules
     type: jar
     version: 1.0.1
