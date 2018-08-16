@@ -47,7 +47,7 @@
         "yum upgrade -y",
         "yum groups mark convert",
         "yum groupinstall -y 'Development Tools'",
-        "yum install -y kernel-devel kernel-devel-$(uname -r) unzip git screen qemu qemu-kvm awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel",
+        "yum install -y kernel-devel kernel-devel-$(uname -r) unzip git screen tmux htop qemu qemu-kvm awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel",
         "yum install -y VirtualBox-5.2",
         
         "/bin/grep -q '^vagrant:' /etc/group || /usr/sbin/groupadd vagrant",
