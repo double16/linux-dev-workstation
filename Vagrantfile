@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "vmware_fusion"
 
   if ENV['VAGRANT_FROM_SCRATCH']
-    config.vm.box = "bento/centos-7.4"
+    config.vm.box = "bento/centos-7.5"
   else
     config.vm.box = "double16/linux-dev-workstation"
   end

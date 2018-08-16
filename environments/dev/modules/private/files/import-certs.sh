@@ -7,10 +7,12 @@
 
 CA_TRUST_DIR=/etc/pki/ca-trust/source/anchors
 
-find /vagrant/ \( -iname '*.crt' -o -iname '*.pem' -o -iname '*.cer' \) \
+find /vagrant/ \
+     \( -path '/vagrant/environments/*' \
+     -o -path '/vagrant/.*/*' \) \
+     -prune -o \
+     \( -iname '*.crt' -o -iname '*.pem' -o -iname '*.cer' \) \
      -a -type f \
-     -a -not -path '/vagrant/environments/*' \
-     -a -not -path '/vagrant/.*/*' \
      -print | \
      xargs -L 1 grep -l "BEGIN CERTIFICATE" | \
      while read CERTS; do

@@ -3,6 +3,7 @@
 #
 class private::my_emacs {
   $version = lookup('emacs', Hash)['version']
+  $checksum = lookup('emacs', Hash)['checksum']
 
   package { [
     'libXpm',
@@ -17,6 +18,7 @@ class private::my_emacs {
     'libpng-devel',
     'libtiff',
     'libtiff-devel',
+    'gnutls-devel',
     'adobe-source-code-pro-fonts',
   ]: }
   ->archive { "/tmp/vagrant-cache/emacs-${version}.tar.gz":
@@ -25,7 +27,7 @@ class private::my_emacs {
     extract       => true,
     cleanup       => false,
     creates       => "/usr/src/emacs-${version}",
-    checksum      => 'f72c6a1b48b6fbaca2b991eed801964a208a2f8686c70940013db26cd37983c9',
+    checksum      => $checksum,
     checksum_type => 'sha256',
     require       => File['/tmp/vagrant-cache'],
   }

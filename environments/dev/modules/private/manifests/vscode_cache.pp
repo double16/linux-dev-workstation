@@ -25,9 +25,10 @@ class private::vscode_cache($extension_path = '/home/vagrant/.vscode/extensions'
 
   exec { 'vscode populate cache':
     command     => "/usr/bin/rsync -r --size-only --delete ${extension_path}/ ${cache_path}/",
-    user    => 'vagrant',
+    user        => 'vagrant',
     timeout     => 1800,
     refreshonly => true,
     require     => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
+    onlyif      => "/usr/bin/mountpoint /tmp/vagrant-cache",
   }
 }

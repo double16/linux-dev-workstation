@@ -73,7 +73,8 @@ container-diff:
   version: 0.11.0
   checksum: ca185da4c0f3ef71c3f92511e1e93d14efbd3d0ef02abd85379d9a57975cd823
 emacs:
-  version: 25.3
+  version: 26.1
+  checksum: 760382d5e8cdc5d0d079e8f754bce1136fbe1473be24bb885669b0e38fc56aa3
 vagrant:
   version: 2.1.2
 dockstation:

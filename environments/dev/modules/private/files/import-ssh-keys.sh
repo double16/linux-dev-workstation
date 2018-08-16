@@ -16,10 +16,12 @@ touch "${SSH_CONFIG}"
 chown vagrant:vagrant "${SSH_CONFIG}"
 chmod 0644 "${SSH_CONFIG}"
 
-find /vagrant/ -iname '*.pub' \
-     -a -type f \
-     -a -not -path '/vagrant/environments/*' \
-     -a -not -path '/vagrant/.*/*' \
+find /vagrant/ \
+     \( -path '/vagrant/environments/*' \
+     -o -path '/vagrant/.*/*' \) \
+     -prune \
+     -o -name '*.pub' \
+     -type f \
      -print | \
      xargs grep -l "^ssh-" | \
      xargs sha256sum | \
