@@ -310,6 +310,7 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "script/vnc.sh",
+        "script/post-perm.sh",
         "script/cleanup.sh"
       ],
       "type": "shell"
