@@ -11,8 +11,8 @@ hashistack:
     version: 1.2.2
     checksum: 7fa3b287b22b58283b8bd5479291161af2badbc945709eb5412840d91b912060
   terraform:
-    version: 0.11.7
-    checksum: 6b8ce67647a59b2a3f70199c304abca0ddec0e49fd060944c26f666298e23418
+    version: 0.11.8
+    checksum: 84ccfb8e13b5fce63051294f787885b76a1fedef6bdbecf51c5e586c9e20c9b7
   nomad:
     version: 0.8.4
     checksum: 42fc455d09ea0085cc79d7be4fb2089a9ab7db3cc2e8047e8437855a81b090e9
@@ -27,7 +27,7 @@ sdkman:
   version: 1.2.0
   default: true
 - package: gradle
-  version: 4.9
+  version: '4.10'
   default: true
 - package: grails
   version: 3.2.13
@@ -36,7 +36,7 @@ sdkman:
   version: 3.3.8
   default: true
 - package: kotlin
-  version: 1.2.60
+  version: 1.2.61
   default: true
 - package: kscript
   version: 2.4.5
@@ -54,7 +54,7 @@ sdkman:
   version: 9.0.4-open
   default: false
 - package: java
-  version: 10.0.0-open
+  version: 10.0.2-open
   default: false
 - package: lazybones
   version: 0.8.3
@@ -65,10 +65,10 @@ sdkman:
 git:
   version: 2.18.0
 pdk:
-  version: 1.6.1.0
-  checksum: 8c5347cb41bfff43298152faf2a2488bcb160a2245d7e2bf03e481c52d2aaa1a
+  version: 1.7.0.0
+  checksum: da868c41f6669f4ea99bc85740e6d39416587fc5caf7f8c0ade25fa43ccf71d7
 docker:
-  version: 18.06.0
+  version: 18.06.1
 container-diff:
   version: 0.11.0
   checksum: ca185da4c0f3ef71c3f92511e1e93d14efbd3d0ef02abd85379d9a57975cd823
@@ -112,9 +112,9 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.2.1
-  build: 182.3911.36
-  checksum: 429456277220bea34aa2216155472b859ba8956b831a3054ca3ddcc588960d20
+  version: 2018.2.2
+  build: 182.4129.33
+  checksum: fc76938e9824330a80e8f7e42f4e71f62aef5aa6a806e8e4894ccb58f980f190
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -126,12 +126,12 @@ idea:
     updateid: '48381'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2018.2.20180730
-    updateid: '48448'
+    version: 2018.2.20180810
+    updateid: '48773'
   - name: com.intellij.lang.puppet
     type: zip
-    version: 182.3684.101
-    updateid: '48156'
+    version: 182.4129.26
+    updateid: '49083'
   - name: NodeJS
     type: zip
     version: 182.3911.9
@@ -158,8 +158,8 @@ idea:
     updateid: '46509'
   - name: org.jetbrains.plugins.go
     type: zip
-    version: 182.3911.47.873
-    updateid: '48754'
+    version: 182.4129.55.890
+    updateid: '49205'
   - name: com.jetbrains.plugins.jade
     type: zip
     version: 182.3341.1
@@ -170,8 +170,8 @@ idea:
     updateid: '45778'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.2.60-release-IJ2018.2-1
-    updateid: '48411'
+    version: 1.2.61-release-IJ2018.2-1
+    updateid: '49055'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: '5.1'
@@ -186,8 +186,8 @@ idea:
     updateid: '46804'
   - name: Karma
     type: zip
-    version: 182.3911.9
-    updateid: '48293'
+    version: 182.4129.13
+    updateid: '48891'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.0
