@@ -180,6 +180,11 @@ export EDITOR="vim"',
     content => 'filetype on',
   }
 
+  vim::config { 'filetype indent':
+    user    => 'vagrant',
+    content => 'filetype plugin indent on',
+  }
+
   package { ['cmake']: }
   -> private::my_vim::plugin { 'valloric/youcompleteme': }
   -> exec { 'youcompleteme submodule':
