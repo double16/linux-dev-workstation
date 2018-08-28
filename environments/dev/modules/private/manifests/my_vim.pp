@@ -1,28 +1,57 @@
 class private::my_vim {
   $global_color_scheme = pick($::theme, lookup('theme::default'))
+  $vim_config = lookup('vim', Hash)
+  $version = $vim_config['version']
 
-  package { 'gf-release':
-    source   => 'http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm',
-    provider => 'rpm',
-  }
-  ->Package<| title != 'gf-release' |>
-  Package['gf-release']
-  ->Yum::Group<| |>
-
-  # In some cases replacing vim-minimal will remove 'sudo', but instaling vim-enhanced on top of vim-minimal is allowed
-  exec { 'yum install -y vim-enhanced || yum replace -y vim-minimal --replace-with=vim-enhanced':
-    unless  => 'yum --cacheonly list installed vim-enhanced | grep -q 8.0',
-    path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-    require => [ Yum::Plugin['replace'], Package['gf-release'] ],
-  }
-  ->class { '::vim':
-    autoupgrade    => true,
+  class { '::vim':
+    autoupgrade    => false,
     set_as_default => true,
+    package        => 'vim-minimal', # we compile the full VIM from source
     opt_syntax     => true,
     opt_misc       => ['number'],
   }
-  ->package{ 'gvim': }
 
+  ensure_packages(['gcc-c++', 'ncurses-devel', 'python-devel', 'python-requests'])
+
+  archive { "/tmp/vagrant-cache/vim-${version}.tar.gz":
+    source       => "https://github.com/vim/vim/archive/v${version}.tar.gz",
+    extract_path => '/usr/src',
+    extract      => true,
+    cleanup      => false,
+    creates      => "/usr/src/vim-${version}",
+    require      => File['/tmp/vagrant-cache'],
+  }
+  ->exec { "make configure vim ${version}":
+    path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+    cwd     => "/usr/src/vim-${version}",
+    command => 'make configure',
+    creates => "/usr/src/vim-${version}/configure",
+    require => [ Package['gcc-c++'], Package['ncurses-devel'], Package['python-devel'] ],
+  }
+  ->exec { "configure vim ${version}":
+    path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+    cwd     => "/usr/src/vim-${version}",
+    command => "/usr/src/vim-${version}/configure --prefix=/usr --enable-cscope --enable-gui=no --enable-multibyte --enable-pythoninterp --enable-rubyinterp --with-features=huge --with-python-config-dir=/usr/lib/python2.7/config --with-tlib=ncurses --without-x",
+    unless  => "grep -qF 'S[\"prefix\"]=\"/usr\"' /usr/src/vim-${version}/config.status",
+  }
+  ->exec { "build vim ${version}":
+    path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+    cwd       => "/usr/src/vim-${version}",
+    command   => 'make',
+    creates   => "/usr/src/vim-${version}/vim",
+    timeout   => 900,
+    subscribe => Exec["configure vim ${version}"],
+  }
+  ->exec { "install vim ${version}":
+    path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+    cwd       => "/usr/src/vim-${version}",
+    command   => 'make install',
+    unless    => "/usr/bin/test -f /usr/bin/vim && /usr/bin/vim --version | grep -qF ${version}",
+    subscribe => Exec["build vim ${version}"],
+    require   => [ Package['vim-minimal'] ],
+  }
+  ->package{ 'gvim': }
+  
   define plugin() {
     $plugin_name = split($title, '/')[1]
 
@@ -125,7 +154,7 @@ class private::my_vim {
     content => 'set t_BE=',
   }
 
-  package { ['cmake','python-devel']: }
+  package { ['cmake']: }
   -> private::my_vim::plugin { 'valloric/youcompleteme': }
   -> exec { 'youcompleteme submodule':
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin'],
@@ -141,7 +170,7 @@ class private::my_vim {
     creates => '/home/vagrant/.vim/bundle/youcompleteme/third_party/ycmd/ycm_core.so',
     user    => 'vagrant',
     timeout => 0,
-    require => [ Package['go'] ],
+    require => [ Package['go'], Package['python-devel'], Package['python-requests'] ],
   }
   Nodenv::Package<| |>
   -> Private::My_vim::Plugin['valloric/youcompleteme']

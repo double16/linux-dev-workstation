@@ -188,6 +188,13 @@ def git(yaml)
     end
 end
 
+def vim(yaml)
+    latest = latest_github_tag('vim', 'vim')
+    if latest
+        yaml['vim']['version'] = latest
+    end
+end
+
 def rstudio(yaml)
     # Only version 1.1.* has packages
     latest = latest_github_tag('rstudio', 'rstudio', /^v1[.]1[.][0-9.]+$/)
@@ -313,6 +320,7 @@ rstudio(yaml)
 containerdiff(yaml)
 dockstation(yaml)
 git(yaml)
+vim(yaml)
 nodejs(yaml)
 sdkman(yaml)
 ruby(yaml)
