@@ -5,8 +5,8 @@ hashistack:
     version: 1.2.5
     checksum: bc58aa3f3db380b76776e35f69662b49f3cf15cf80420fc81a15ce971430824c
   vault:
-    version: 0.10.4
-    checksum: b3c8a62e8f2f1b2d9d7ddca3d8bda620ab0091bb038da0d013c26f7b6b18f13a
+    version: 0.11.0
+    checksum: 1681579a5a158a76e37de2854307d649b75ceddd663e71580df25baae036c267
   consul:
     version: 1.2.2
     checksum: 7fa3b287b22b58283b8bd5479291161af2badbc945709eb5412840d91b912060

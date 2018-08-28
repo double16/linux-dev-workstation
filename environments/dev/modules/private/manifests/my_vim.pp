@@ -11,6 +11,22 @@ class private::my_vim {
     opt_misc       => ['number'],
   }
 
+  file { '/usr/local/bin/vim-version.sh':
+    ensure => file,
+    mode   => '0755',
+    content => '#!/bin/bash
+
+test -f /usr/bin/vim || exit 1
+
+S="$(/usr/bin/vim --version | head -n 2)"
+MAJOR_MINOR="$(echo $S | grep -oE \'IMproved ([0-8.]+)\' | cut -d \' \' -f 2)"
+PATCHES="000$(echo $S | grep -oE \'patches: [0-9]+-[0-9]+\'| cut -d \'-\' -f 2)"
+PATCHES="${PATCHES: -4}"
+
+echo "${MAJOR_MINOR}.${PATCHES}"
+',
+  }
+
   ensure_packages(['gcc-c++', 'ncurses-devel', 'python-devel', 'python-requests'])
 
   archive { "/tmp/vagrant-cache/vim-${version}.tar.gz":
@@ -32,13 +48,13 @@ class private::my_vim {
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
     cwd     => "/usr/src/vim-${version}",
     command => "/usr/src/vim-${version}/configure --prefix=/usr --enable-cscope --enable-gui=no --enable-multibyte --enable-pythoninterp --enable-rubyinterp --with-features=huge --with-python-config-dir=/usr/lib/python2.7/config --with-tlib=ncurses --without-x",
-    unless  => "grep -qF 'S[\"prefix\"]=\"/usr\"' /usr/src/vim-${version}/config.status",
+    unless  => "grep -qF 'S[\"prefix\"]=\"/usr\"' /usr/src/vim-${version}/src/auto/config.status",
   }
   ->exec { "build vim ${version}":
     path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
     cwd       => "/usr/src/vim-${version}",
     command   => 'make',
-    creates   => "/usr/src/vim-${version}/vim",
+    creates   => "/usr/src/vim-${version}/src/vim",
     timeout   => 900,
     subscribe => Exec["configure vim ${version}"],
   }
@@ -46,9 +62,14 @@ class private::my_vim {
     path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
     cwd       => "/usr/src/vim-${version}",
     command   => 'make install',
-    unless    => "/usr/bin/test -f /usr/bin/vim && /usr/bin/vim --version | grep -qF ${version}",
+    unless    => "/usr/local/bin/vim-version.sh | grep -qF ${version}",
     subscribe => Exec["build vim ${version}"],
-    require   => [ Package['vim-minimal'] ],
+    require   => [ Package['vim-minimal'], File['/usr/local/bin/vim-version.sh'] ],
+  }
+  ->file { '/etc/profile.d/editor.sh':
+    mode    => '0755',
+    content => 'export VISUAL="vim"
+export EDITOR="vim"',
   }
   ->package{ 'gvim': }
   
@@ -152,6 +173,11 @@ class private::my_vim {
   vim::config { 'disable bracketed paste mode':
     user    => 'vagrant',
     content => 'set t_BE=',
+  }
+
+  vim::config { 'filetype':
+    user    => 'vagrant',
+    content => 'filetype on',
   }
 
   package { ['cmake']: }
