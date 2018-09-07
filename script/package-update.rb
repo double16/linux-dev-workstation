@@ -25,7 +25,14 @@ def sha256(file)
 end
 
 def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/, filter = lambda { |v| true })
-    tags = JSON.parse(Net::HTTP.get(URI("https://api.github.com/repos/#{owner}/#{repo}/tags")))
+    uri_str = "https://api.github.com/repos/#{owner}/#{repo}/tags"
+    tags = JSON.parse(Net::HTTP.get(URI(uri_str)))
+    
+    if tags.is_a?(Hash) and tags.has_key?('message')
+        STDERR.puts "Error contacting #{uri_str}: #{tags['message']}"
+        return nil
+    end
+
     tags.collect { |e| e['name'] }
         .select { |e| e.match(version_match) }
         .collect { |e| e[1..-1] }
@@ -131,9 +138,9 @@ def update_single_archive(version, download_url, download_file, package_info)
 end
 
 def hashistack(yaml)
-    yaml['vagrant']['version'] = latest_github_tag('hashicorp', 'vagrant')
+    yaml['vagrant']['version'] = latest_github_tag('hashicorp', 'vagrant') || yaml['vagrant']['version']
     yaml['hashistack'].each do |tool, info|
-        latest = latest_github_tag('hashicorp', tool)
+        latest = latest_github_tag('hashicorp', tool) || info['version']
         if (latest != info['version'] or !info.has_key?('checksum'))
             puts "Found newer version #{tool} #{latest}"
             download_url = "https://releases.hashicorp.com/#{tool}/#{latest}/#{tool}_#{latest}_linux_amd64.zip"
@@ -198,6 +205,7 @@ end
 def rstudio(yaml)
     # Only version 1.1.* has packages
     latest = latest_github_tag('rstudio', 'rstudio', /^v1[.]1[.][0-9.]+$/)
+    return if latest.nil?
     if latest != yaml['rstudio']['version'] or !yaml['rstudio'].has_key?('checksum')
         puts "Found newer version rstudio #{latest}"
         download_url = "https://download1.rstudio.org/rstudio-#{latest}-x86_64.rpm"
@@ -208,6 +216,7 @@ end
 
 def containerdiff(yaml)
     latest = latest_github_tag('GoogleContainerTools', 'container-diff')
+    return if latest.nil?
     if latest != yaml['container-diff']['version'] or !yaml['container-diff'].has_key?('checksum')
         puts "Found newer version container-diff #{latest}"
         download_url = "https://storage.googleapis.com/container-diff/v#{latest}/container-diff-linux-amd64"
@@ -216,8 +225,20 @@ def containerdiff(yaml)
     end
 end
 
+def minikube(yaml)
+    latest = latest_github_tag('kubernetes', 'minikube')
+    return if latest.nil?
+    if latest != yaml['minikube']['version'] or !yaml['minikube'].has_key?('checksum')
+        puts "Found newer version minikube #{latest}"
+        download_url = "https://storage.googleapis.com/minikube/releases/v#{latest}/minikube-linux-amd64"
+        download_file = ".vagrant/machines/default/cache/minikube-#{latest}"
+        update_single_archive(latest, download_url, download_file, yaml['minikube'])
+    end
+end
+
 def dockstation(yaml)
     latest = latest_github_tag('DockStation', 'dockstation')
+    return if latest.nil?
     if latest != yaml['dockstation']['version'] or !yaml['dockstation'].has_key?('checksum')
         puts "Found newer version dockstation #{latest}"
         download_url = "https://github.com/DockStation/dockstation/releases/download/v#{latest}/dockstation-#{latest}-x86_64.AppImage"
@@ -228,6 +249,7 @@ end
 
 def nodejs(yaml)
     tags = JSON.parse(Net::HTTP.get(URI("https://api.github.com/repos/nodejs/node/tags")))
+    return if tags.is_a?(Hash)
     versions = tags.collect { |e| e['name'] }
         .select { |e| e.match(/^v[0-9.]+$/) }
         .collect { |e| e[1..-1] }
@@ -297,7 +319,7 @@ def ruby(yaml)
         Dir.new("#{ruby_build_d}/share/ruby-build").each do |available|
             if (re.match(available))
                 v = Gem::Version.new(available[prefix.length, available.length])
-                if (v > Gem::Version.new(latest_version[prefix.length, available.length]))
+                if (v > Gem::Version.new(latest_version[prefix.length, latest_version.length]))
                     latest_version = available
                 end
             end
@@ -318,6 +340,7 @@ slack(yaml)
 docker(yaml)
 rstudio(yaml)
 containerdiff(yaml)
+minikube(yaml)
 dockstation(yaml)
 git(yaml)
 vim(yaml)

@@ -36,6 +36,7 @@ This Vagrant image contains a developer workspace with the following software:
 * [Terraform](https://www.terraform.io)
 * [iTerm2](https://iterm2.com) shell integration
 * [CircleCI](https://circleci.com/docs/2.0/local-jobs/) CLI
+* Kubernetes: [minikube](https://github.com/kubernetes/minikube/blob/master/docs/README.md), [kubectl](https://github.com/kubernetes/kubectl/blob/master/README.md)
 
 It also features configuration options:
 

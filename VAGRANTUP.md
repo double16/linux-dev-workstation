@@ -118,3 +118,10 @@ If you want to run Docker in the container without using the host Docker daemon,
 ```shell
 $ docker run --privileged -d -p 2020:22 pdouble16/linux-dev-workstation
 ```
+
+## Kubernetes
+
+`kubectl` and `minikube` are installed. The default configuration of `minikube` is to use the Docker daemon instead of a separate VM. This means `minikube` must be run with `sudo`:
+```shell
+$ sudo minikube start
+```

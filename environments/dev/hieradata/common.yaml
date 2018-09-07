@@ -5,8 +5,8 @@ hashistack:
     version: 1.2.5
     checksum: bc58aa3f3db380b76776e35f69662b49f3cf15cf80420fc81a15ce971430824c
   vault:
-    version: 0.11.0
-    checksum: 1681579a5a158a76e37de2854307d649b75ceddd663e71580df25baae036c267
+    version: 0.11.1
+    checksum: eb8d2461d0ca249c1f91005f878795998bdeafccfde0b9bae82343541ce65996
   consul:
     version: 1.2.2
     checksum: 7fa3b287b22b58283b8bd5479291161af2badbc945709eb5412840d91b912060
@@ -65,12 +65,15 @@ sdkman:
 git:
   version: 2.18.0
 vim:
-  version: 8.1.0329
+  version: 8.1.0351
 pdk:
   version: 1.7.0.0
   checksum: da868c41f6669f4ea99bc85740e6d39416587fc5caf7f8c0ade25fa43ccf71d7
 docker:
   version: 18.06.1
+minikube:
+  version: 0.28.2
+  checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
 container-diff:
   version: 0.11.0
   checksum: ca185da4c0f3ef71c3f92511e1e93d14efbd3d0ef02abd85379d9a57975cd823
@@ -78,7 +81,7 @@ emacs:
   version: 26.1
   checksum: 760382d5e8cdc5d0d079e8f754bce1136fbe1473be24bb885669b0e38fc56aa3
 vagrant:
-  version: 2.1.2
+  version: 2.1.4
 dockstation:
   version: 1.4.1
   checksum: 323b0c24b6ce6b9bbb39df1cacac2881f3b91e48f91fcd8022ce37170a8946b1
@@ -114,9 +117,9 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.2.2
-  build: 182.4129.33
-  checksum: fc76938e9824330a80e8f7e42f4e71f62aef5aa6a806e8e4894ccb58f980f190
+  version: 2018.2.3
+  build: 182.4323.46
+  checksum: 185651cb4da263798d2515950a74817a0e76eb9f7c824b8cc85aeefbceb98b00
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -124,8 +127,8 @@ idea:
     updateid: '47462'
   - name: AngularJS
     type: zip
-    version: 182.3911.15
-    updateid: '48381'
+    version: 182.4323.44
+    updateid: '49542'
   - name: org.jetbrains.plugins.ruby
     type: zip
     version: 2018.2.20180810
@@ -144,8 +147,8 @@ idea:
     updateid: '46357'
   - name: Docker
     type: zip
-    version: 182.3684.90
-    updateid: '48047'
+    version: 182.4323.18
+    updateid: '49638'
   - name: mobi.hsz.idea.gitignore
     type: zip
     version: 3.0.0.182
@@ -156,8 +159,8 @@ idea:
     updateid: '48384'
   - name: org.intellij.plugins.hcl
     type: zip
-    version: 0.6.11
-    updateid: '46509'
+    version: 0.6.12
+    updateid: '49309'
   - name: org.jetbrains.plugins.go
     type: zip
     version: 182.4129.55.890
@@ -188,12 +191,12 @@ idea:
     updateid: '46804'
   - name: Karma
     type: zip
-    version: 182.4129.13
-    updateid: '48891'
+    version: 182.4323.31
+    updateid: '49367'
   - name: com.wix.sasslint
     type: zip
-    version: 1.1.0
-    updateid: '45643'
+    version: 1.1.1
+    updateid: '49436'
   - name: AWSCloudFormation
     type: zip
     version: 0.5.69
@@ -226,3 +229,7 @@ idea:
     type: zip
     updateid: '46023'
     version: 1.0.114
+  - name: com.intellij.kubernetes
+    type: zip
+    updateid: '47488'
+    version: '182.3588'
