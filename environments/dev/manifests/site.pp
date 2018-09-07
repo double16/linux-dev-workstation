@@ -284,6 +284,7 @@ include ::private::googlecloud
 include ::private::iterm2
 include ::private::circleci
 include ::private::xfce4
+include ::private::rust
 
 unless $::virtual == 'docker' {
   include ::private::my_emacs

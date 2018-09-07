@@ -45,4 +45,5 @@ class private::git_from_source($version) {
     unless    => "/usr/bin/git --version | grep -qF ${version}",
     subscribe => Exec["build git ${version}"],
   }
+  ->package { 'git-extras': }
 }
