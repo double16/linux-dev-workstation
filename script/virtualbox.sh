@@ -15,4 +15,8 @@ if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]]; then
     umount /mnt
     rm -rf $SSH_USER_HOME/VBoxGuestAdditions_$VBOX_VERSION.iso
     rm -f $SSH_USER_HOME/.vbox_version
+
+    echo "==> Mounting /tmp/vagrant-cache"
+    mkdir -p /tmp/vagrant-cache
+    mount -t vboxsf vagrant-cache /tmp/vagrant-cache || true
 fi

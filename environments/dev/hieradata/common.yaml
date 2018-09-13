@@ -63,9 +63,9 @@ sdkman:
   version: 1.4.1
   default: true
 git:
-  version: 2.18.0
+  version: 2.19.0
 vim:
-  version: 8.1.0351
+  version: 8.1.0366
 pdk:
   version: 1.7.0.0
   checksum: da868c41f6669f4ea99bc85740e6d39416587fc5caf7f8c0ade25fa43ccf71d7

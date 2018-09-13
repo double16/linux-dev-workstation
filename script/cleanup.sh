@@ -2,6 +2,9 @@
 
 USERNAME=${SSH_USERNAME:-vagrant}
 
+echo "==> Remove temporary Yum proxy"
+sed '/^proxy=/d' -i /etc/yum.conf
+
 if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'docker' ) ]]; then
 
   echo "==> Clear out machine id"

@@ -25,6 +25,12 @@ net.ipv6.conf.default.disable_ipv6=1
     default => absent,
   }
 
+  $final_yum_proxy = pick($::yum_proxy, $::proxy_url)
+  $yum_proxy_presence = $final_yum_proxy ? {
+    /.+/    => present,
+    default => absent,
+  }
+
   $search_domain_ensure = $::search_domain ? {
     /.+/    => present,
     default => absent,
@@ -74,25 +80,25 @@ net.ipv6.conf.default.disable_ipv6=1
     multiple          => true,
   }
   file_line { 'Yum proxy':
-    ensure            => $proxy_presence,
+    ensure            => $yum_proxy_presence,
     path              => '/etc/yum.conf',
-    line              => "proxy=${::proxy_url}",
+    line              => "proxy=${final_yum_proxy}",
     match             => '^proxy\=',
     match_for_absence => true,
   }
   ->file_line { 'Yum metadata_expire':
     path  => '/etc/yum.conf',
-    line  => "metadata_expire=90m",
+    line  => 'metadata_expire=90m',
     match => '^metadata_expire\=',
   }
   ->file_line { 'Yum mirrorlist_expire':
     path  => '/etc/yum.conf',
-    line  => "mirrorlist_expire=90m",
+    line  => 'mirrorlist_expire=90m',
     match => '^mirrorlist_expire\=',
   }
   ->file_line { 'Yum metadata_expire_filter':
     path  => '/etc/yum.conf',
-    line  => "metadata_expire_filter=never",
+    line  => 'metadata_expire_filter=never',
     match => '^metadata_expire_filter\=',
   }
   -> Package<| provider == 'yum' |>

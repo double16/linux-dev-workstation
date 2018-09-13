@@ -13,3 +13,10 @@ mirrorlist_expire=90m
 metadata_expire_filter=never
 EOF
 fi
+
+if [ -n "$yum_proxy" ]; then
+    echo "==> Configuring temporary Yum proxy"
+    cat >>/etc/yum.conf <<EOF
+proxy=$yum_proxy
+EOF
+fi

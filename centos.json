@@ -65,6 +65,9 @@
         ],
         [
           "modifyvm", "{{.Name}}", "--nictype1", "{{ user `virtualbox_nictype` }}"
+        ],
+        [
+          "sharedfolder", "add", "{{.Name}}", "--name", "vagrant-cache", "--hostpath", "{{ user `pwd`}}/.vagrant/machines/default/cache"
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
@@ -240,6 +243,7 @@
         "https_proxy={{user `https_proxy`}}",
         "ftp_proxy={{user `ftp_proxy`}}",
         "rsync_proxy={{user `rsync_proxy`}}",
+        "yum_proxy={{user `yum_proxy`}}",
         "no_proxy={{user `no_proxy`}}"
       ],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
@@ -289,6 +293,7 @@
         "http_proxy": "{{user `http_proxy`}}",
         "https_proxy": "{{user `https_proxy`}}",
         "proxy_excludes": "{{user `no_proxy`}}",
+        "yum_proxy": "{{user `yum_proxy`}}",
         "packer": "true",
         "ipv4only": "true"
       }
@@ -305,6 +310,7 @@
         "https_proxy={{user `https_proxy`}}",
         "ftp_proxy={{user `ftp_proxy`}}",
         "rsync_proxy={{user `rsync_proxy`}}",
+        "yum_proxy={{user `yum_proxy`}}",
         "no_proxy={{user `no_proxy`}}"
       ],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
@@ -322,11 +328,14 @@
     "desktop": "true",
     "disk_size": "40000",
     "disk_size_gb": "40",
-    "ftp_proxy": "{{env `ftp_proxy`}}",
     "headless": "true",
+    "ftp_proxy": "{{env `ftp_proxy`}}",
     "http_directory": "kickstart/centos7",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
+    "no_proxy": "{{env `no_proxy`}}",
+    "rsync_proxy": "{{env `rsync_proxy`}}",
+    "yum_proxy": "{{env `yum_proxy`}}",
     "install_vagrant_key": "true",
     "iso_checksum": "506e4e06abf778c3435b4e5745df13e79ebfc86565d7ea1e128067ef6b5a6345",
     "iso_checksum_type": "sha256",
@@ -344,9 +353,7 @@
     "docker_registry_example": "gatekeeper:5001/",
     "kickstart": "ks.cfg",
     "memory": "3072",
-    "no_proxy": "{{env `no_proxy`}}",
     "parallels_guest_os_type": "centos7",
-    "rsync_proxy": "{{env `rsync_proxy`}}",
     "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
