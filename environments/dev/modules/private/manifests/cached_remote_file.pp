@@ -8,7 +8,7 @@ define private::cached_remote_file(
   $group = 'root',
   $mode = '0644',
   $checksum = undef,
-  $checksum_type = 'sha256',
+  $checksum_type = undef,
   $target = $title,
   $cache_name = undef,
 ) {

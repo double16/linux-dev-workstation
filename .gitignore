@@ -13,3 +13,6 @@ setenv.sh
 tmp/
 *.log
 id_rsa_insecure
+*.vdi
+*.vmdk
+*.qcow2

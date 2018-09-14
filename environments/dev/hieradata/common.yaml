@@ -2,20 +2,20 @@
 theme::default: light
 hashistack:
   packer:
-    version: 1.2.5
-    checksum: bc58aa3f3db380b76776e35f69662b49f3cf15cf80420fc81a15ce971430824c
+    version: 1.3.0
+    checksum: 0512af351124e63f8079458391e7f7b316e4b3ac4dc40e6f18058fd924f1b24a
   vault:
     version: 0.11.1
     checksum: eb8d2461d0ca249c1f91005f878795998bdeafccfde0b9bae82343541ce65996
   consul:
-    version: 1.2.2
-    checksum: 7fa3b287b22b58283b8bd5479291161af2badbc945709eb5412840d91b912060
+    version: 1.2.3
+    checksum: f97996296ef3905c38c504b35035fb731d3cfd9cad129c9523402a4229c709c5
   terraform:
     version: 0.11.8
     checksum: 84ccfb8e13b5fce63051294f787885b76a1fedef6bdbecf51c5e586c9e20c9b7
   nomad:
-    version: 0.8.4
-    checksum: 42fc455d09ea0085cc79d7be4fb2089a9ab7db3cc2e8047e8437855a81b090e9
+    version: 0.8.5
+    checksum: e56c0e95e7a724b4fadd8eba32da5a3f2846f67e22e2352b19d1ada2066e063b
 sdkman:
 - package: groovy
   version: 2.4.15
@@ -27,7 +27,7 @@ sdkman:
   version: 1.2.0
   default: true
 - package: gradle
-  version: '4.10'
+  version: 4.10.1
   default: true
 - package: grails
   version: 3.2.13
@@ -36,7 +36,7 @@ sdkman:
   version: 3.3.8
   default: true
 - package: kotlin
-  version: 1.2.61
+  version: 1.2.70
   default: true
 - package: kscript
   version: 2.4.5
@@ -45,7 +45,7 @@ sdkman:
   version: 1.0.0.M4
   default: true
 - package: springboot
-  version: 2.0.4.RELEASE
+  version: 2.0.5.RELEASE
   default: true
 - package: java
   version: 8.0.181-zulu
@@ -65,7 +65,7 @@ sdkman:
 git:
   version: 2.19.0
 vim:
-  version: 8.1.0366
+  version: 8.1.0388
 pdk:
   version: 1.7.0.0
   checksum: da868c41f6669f4ea99bc85740e6d39416587fc5caf7f8c0ade25fa43ccf71d7
@@ -81,7 +81,7 @@ emacs:
   version: 26.1
   checksum: 760382d5e8cdc5d0d079e8f754bce1136fbe1473be24bb885669b0e38fc56aa3
 vagrant:
-  version: 2.1.4
+  version: 2.1.5
 dockstation:
   version: 1.4.1
   checksum: 323b0c24b6ce6b9bbb39df1cacac2881f3b91e48f91fcd8022ce37170a8946b1
@@ -175,8 +175,8 @@ idea:
     updateid: '45778'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.2.61-release-IJ2018.2-1
-    updateid: '49055'
+    version: 1.2.70-release-IJ2018.2-1
+    updateid: '49921'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: '5.1'
