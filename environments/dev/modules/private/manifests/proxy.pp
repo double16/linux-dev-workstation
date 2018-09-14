@@ -25,7 +25,7 @@ net.ipv6.conf.default.disable_ipv6=1
     default => absent,
   }
 
-  $final_yum_proxy = pick($::yum_proxy, $::proxy_url)
+  $final_yum_proxy = pick_default($::yum_proxy, $::proxy_url)
   $yum_proxy_presence = $final_yum_proxy ? {
     /.+/    => present,
     default => absent,

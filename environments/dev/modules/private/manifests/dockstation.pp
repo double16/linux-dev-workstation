@@ -10,8 +10,8 @@ class private::dockstation {
 
   package { [ 'fuse', 'squashfuse' ]:}
 
-  remote_file { $install_file:
-    ensure        => present,
+  private::cached_remote_file { $install_file:
+    cache_name    => $file,
     source        => "https://github.com/DockStation/dockstation/releases/download/v${version}/${file}",
     checksum      => $checksum,
     checksum_type => 'sha256',

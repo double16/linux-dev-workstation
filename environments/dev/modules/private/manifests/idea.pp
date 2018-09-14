@@ -106,8 +106,8 @@ StartupNotify=true
       default => 'sha256',
     }
     unless $::facts['ideaplugins'].dig($title, 'version') == "${version}" {
-      remote_file { "${::private::idea::plugindir}/${title}.jar":
-        ensure        => present,
+      private::cached_remote_file { "${::private::idea::plugindir}/${title}.jar":
+        cache_name    => "idea-plugins/${title}-${version}.jar",
         source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
         checksum      => $sha256sum,
         checksum_type => $checksum_type,

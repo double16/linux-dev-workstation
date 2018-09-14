@@ -247,6 +247,8 @@ unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
   class { '::virtualbox':
     version => '5.2',
   }
+  ->User<| title == 'vagrant' |> { groups +> 'vboxusers' }
+
   package { "kernel-devel-${::kernelrelease}": }
   ->Exec<| title == 'vboxdrv' |>
 

@@ -89,7 +89,8 @@ net.ipv6.conf.all.forwarding = 1
   $condiff_config = lookup('container-diff', Hash)
   $condiff_version = $condiff_config['version']
   $condiff_checksum = $condiff_config['checksum']
-  remote_file { '/usr/local/bin/container-diff':
+  private::cached_remote_file { '/usr/local/bin/container-diff':
+    cache_name    => "container-diff-${condiff_version}",
     source        => "https://storage.googleapis.com/container-diff/v${condiff_version}/container-diff-linux-amd64",
     # 2018-05-01 storage.googleapis.com uses a cross-signed TLS cert, current Ruby/Net::HTTP does not recognize it
     verify_peer   => false,
@@ -101,10 +102,10 @@ net.ipv6.conf.all.forwarding = 1
   }
 
   file { '/etc/yum.repos.d/kubernetes.repo':
-    ensure => file,
-    owner  => 0,
-    group  => 'root',
-    mode   => '0644',
+    ensure  => file,
+    owner   => 0,
+    group   => 'root',
+    mode    => '0644',
     content => '[kubernetes]
 name=Kubernetes
 baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
@@ -127,7 +128,8 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
   $minikube_config = lookup('minikube', Hash)
   $minikube_version = $minikube_config['version']
   $minikube_checksum = $minikube_config['checksum']
-  remote_file { '/usr/bin/minikube':
+  private::cached_remote_file { '/usr/bin/minikube':
+    cache_name    => "minikube-${minikube_version}",
     source        => "https://storage.googleapis.com/minikube/releases/v${minikube_version}/minikube-linux-amd64",
     # 2018-05-01 storage.googleapis.com uses a cross-signed TLS cert, current Ruby/Net::HTTP does not recognize it
     verify_peer   => false,
