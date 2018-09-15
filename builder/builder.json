@@ -56,7 +56,7 @@
         "/bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel",
         "/bin/grep -q '^vagrant:' /etc/passwd || /usr/sbin/useradd vagrant -m -g vagrant -G wheel,kvm,docker,vboxusers",
 
-        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.3.0/packer_1.3.0_linux_amd64.zip",
+        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.3.1/packer_1.3.1_linux_amd64.zip",
         "cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
 
