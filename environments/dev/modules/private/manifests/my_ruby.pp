@@ -35,9 +35,23 @@ class private::my_ruby {
   Exec <| title == "rbenv-ownit-${ruby_ver}" |> -> Rbenv::Gem<| |>
 
   $ruby_versions.each |$item| {
-    rbenv::build { $item['version']:
+    $ver = $item['version']
+    $cache = "/tmp/vagrant-cache/rbenv/built-${ver}.tgz"
+    exec { "Unarchive Ruby ${ver}":
+      command => "/usr/bin/tar xpzf ${cache} -C /opt/rbenv/versions",
+      onlyif  => "/usr/bin/test -f ${cache}",
+      creates => "/opt/rbenv/versions/${ver}",
+      require => File['/opt/rbenv/versions'],
+    }
+    ->rbenv::build { $ver:
       global => pick($item['global'], false),
     }
+    ~>exec { "Archive Ruby ${ver}":
+      command     => "/usr/bin/tar czf /tmp/vagrant-cache/rbenv/built-${ver}.tgz -C /opt/rbenv/versions ${ver}",
+      refreshonly => true,
+      require     => File['/tmp/vagrant-cache/rbenv'],
+    }
+    ->Rbenv::Gem<| ruby_version == $ver and gem != 'bundler' |>
   }
 
   Rbenv::Gem {
