@@ -18,5 +18,5 @@ if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]]; then
 
     echo "==> Mounting /tmp/vagrant-cache"
     mkdir -p /tmp/vagrant-cache
-    mount -t vboxsf vagrant-cache /tmp/vagrant-cache || true
+    mount -t vboxsf -o rw,nodev,uid=${SSH_USER},gid=${SSH_USER} vagrant-cache /tmp/vagrant-cache || true
 fi

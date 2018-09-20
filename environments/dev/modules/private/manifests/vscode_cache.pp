@@ -19,14 +19,14 @@ class private::vscode_cache($extension_path = '/home/vagrant/.vscode/extensions'
   ->exec { 'vscode install from cache':
     command => "/usr/bin/rsync -r --size-only --chown vagrant:vagrant ${cache_path}/ ${extension_path}/",
     user    => 'vagrant',
-    timeout => 1800,
+    timeout => 0,
     require => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
   }
 
   exec { 'vscode populate cache':
     command     => "/usr/bin/rsync -r --size-only --delete ${extension_path}/ ${cache_path}/",
     user        => 'vagrant',
-    timeout     => 1800,
+    timeout     => 0,
     refreshonly => true,
     require     => [ File[$cache_path], File[$extension_path], Package['rsync'] ],
     onlyif      => "/usr/bin/mountpoint /tmp/vagrant-cache",
