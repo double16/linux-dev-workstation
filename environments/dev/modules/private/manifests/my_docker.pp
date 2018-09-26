@@ -157,4 +157,39 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
     line  => 'MINIKUBE_WANTNONEDRIVERWARNING=false',
     match => '^MINIKUBE_WANTNONEDRIVERWARNING=',
   }
+
+  $helm_config = lookup('helm', Hash)
+  $helm_version = $helm_config['version']
+  $helm_checksum = $helm_config['checksum']
+  file { '/usr/local/share/helm':
+    ensure => 'directory',
+    mode   => '0755',
+    owner  => 0,
+    group  => 'root',
+  }
+  ->archive { "/tmp/vagrant-cache/helm-${helm_version}.tar.gz":
+    ensure        => present,
+    extract       => true,
+    extract_path  => '/usr/local/share/helm',
+    source        => "https://storage.googleapis.com/kubernetes-helm/helm-v${helm_version}-linux-amd64.tar.gz",
+    checksum      => $helm_checksum,
+    checksum_type => 'sha256',
+    creates       => '/usr/local/share/helm/linux-amd64/helm',
+    cleanup       => false,
+    user          => 0,
+    group         => 'root',
+    require       => File['/tmp/vagrant-cache'],
+  }
+  ->file { '/usr/local/bin/helm':
+    ensure => link,
+    target => '/usr/local/share/helm/linux-amd64/helm',
+    owner  => 0,
+    group  => 'root',
+  }
+  ->file { '/usr/local/bin/tiller':
+    ensure => link,
+    target => '/usr/local/share/helm/linux-amd64/tiller',
+    owner  => 0,
+    group  => 'root',
+  }
 }

@@ -236,6 +236,17 @@ def minikube(yaml)
     end
 end
 
+def helm(yaml)
+    latest = latest_github_tag('helm', 'helm')
+    return if latest.nil?
+    if latest != yaml['helm']['version'] or !yaml['helm'].has_key?('checksum')
+        puts "Found newer version helm #{latest}"
+        download_url = "https://storage.googleapis.com/kubernetes-helm/helm-v#{latest}-linux-amd64.tar.gz"
+        download_file = ".vagrant/machines/default/cache/helm-#{latest}.tar.gz"
+        update_single_archive(latest, download_url, download_file, yaml['helm'])
+    end
+end
+
 def dockstation(yaml)
     latest = latest_github_tag('DockStation', 'dockstation')
     return if latest.nil?
@@ -341,6 +352,7 @@ docker(yaml)
 rstudio(yaml)
 containerdiff(yaml)
 minikube(yaml)
+helm(yaml)
 dockstation(yaml)
 git(yaml)
 vim(yaml)

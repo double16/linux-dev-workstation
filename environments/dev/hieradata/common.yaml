@@ -27,7 +27,7 @@ sdkman:
   version: 1.2.0
   default: true
 - package: gradle
-  version: 4.10.1
+  version: 4.10.2
   default: true
 - package: grails
   version: 3.2.13
@@ -36,7 +36,7 @@ sdkman:
   version: 3.3.8
   default: true
 - package: kotlin
-  version: 1.2.70
+  version: 1.2.71
   default: true
 - package: kscript
   version: 2.4.5
@@ -65,7 +65,7 @@ sdkman:
 git:
   version: 2.19.0
 vim:
-  version: 8.1.0390
+  version: 8.1.0436
 pdk:
   version: 1.7.0.0
   checksum: da868c41f6669f4ea99bc85740e6d39416587fc5caf7f8c0ade25fa43ccf71d7
@@ -74,6 +74,9 @@ docker:
 minikube:
   version: 0.28.2
   checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
+helm:
+  version: 2.11.0
+  checksum: 02a4751586d6a80f6848b58e7f6bd6c973ffffadc52b4c06652db7def02773a1
 container-diff:
   version: 0.11.0
   checksum: ca185da4c0f3ef71c3f92511e1e93d14efbd3d0ef02abd85379d9a57975cd823
@@ -117,9 +120,9 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.2.3
-  build: 182.4323.46
-  checksum: 185651cb4da263798d2515950a74817a0e76eb9f7c824b8cc85aeefbceb98b00
+  version: 2018.2.4
+  build: 182.4505.22
+  checksum: e8c026327c673877281b829ff2339c36cecf3118b5391852ddf969983637b7d0
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -131,8 +134,8 @@ idea:
     updateid: '49542'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2018.2.20180810
-    updateid: '48773'
+    version: 2018.2.20180921
+    updateid: '50171'
   - name: com.intellij.lang.puppet
     type: zip
     version: 182.4129.26
@@ -163,8 +166,8 @@ idea:
     updateid: '49309'
   - name: org.jetbrains.plugins.go
     type: zip
-    version: 182.4129.55.890
-    updateid: '49205'
+    version: 182.4505.32.913
+    updateid: '50142'
   - name: com.jetbrains.plugins.jade
     type: zip
     version: 182.3341.1
@@ -175,16 +178,16 @@ idea:
     updateid: '45778'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.2.70-release-IJ2018.2-1
-    updateid: '49921'
+    version: 1.2.71-release-IJ2018.2-1
+    updateid: '50255'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: '5.1'
     updateid: '46168'
   - name: GradleDependenciesHelper
     type: zip
-    version: 1.11
-    updateid: 42210
+    version: '1.12'
+    updateid: '50101'
   - name: R4Intellij
     type: zip
     version: 1.0.10
@@ -195,8 +198,8 @@ idea:
     updateid: '49367'
   - name: com.wix.sasslint
     type: zip
-    version: 1.1.1
-    updateid: '49436'
+    version: 1.1.2
+    updateid: '50110'
   - name: AWSCloudFormation
     type: zip
     version: 0.5.69

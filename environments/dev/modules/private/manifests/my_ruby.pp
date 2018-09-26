@@ -47,7 +47,7 @@ class private::my_ruby {
       global => pick($item['global'], false),
     }
     ~>exec { "Archive Ruby ${ver}":
-      command     => "/usr/bin/tar czf /tmp/vagrant-cache/rbenv/built-${ver}.tgz -C /opt/rbenv/versions ${ver}",
+      command     => "/usr/bin/tar czf ${cache} -C /opt/rbenv/versions ${ver}",
       refreshonly => true,
       require     => File['/tmp/vagrant-cache/rbenv'],
     }
