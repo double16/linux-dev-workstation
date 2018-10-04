@@ -3,6 +3,7 @@
 #
 class private::vscode {
   $extension_path = '/home/vagrant/.vscode/extensions'
+  $cache_path = '/tmp/vagrant-cache/vscode-extensions'
 
   # VS Live Share
   package { [
@@ -17,16 +18,37 @@ class private::vscode {
     group  => 'vagrant',
   }
 
-  define extension() {
-    unless $title in $::facts['vscodeextensions'] {
-      include ::private::vscode_cache
+  file { $cache_path:
+    ensure => directory,
+    mode   => '0755',
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
 
-      exec { "vscode extension ${title}":
+  define extension() {
+    $extension_path = $private::vscode::extension_path
+    $cache_path = $private::vscode::cache_path
+    $cache_file = "${cache_path}/${title}.tar.gz"
+
+    exec { "vscode extension save cache for ${title}":
+      command => "/bin/ls \"${extension_path}\" | grep -F \"${title}-\" | xargs -r /usr/bin/tar czf \"${cache_file}\" -C \"${extension_path}\"",
+      creates => $cache_file,
+      onlyif  => "/usr/bin/mountpoint /tmp/vagrant-cache && /bin/ls \"${extension_path}\" | grep -qF \"${title}-\"",
+    }
+
+    unless $title in $::facts['vscodeextensions'] {
+      exec { "vscode extension restore cache for ${title}":
+        command => "/usr/bin/tar xzf \"${cache_file}\" -C \"${extension_path}\"",
+        onlyif  => "/usr/bin/find \"${cache_file}\" -mtime -30 | grep -q .",
+        require => File[$extension_path],
+      }
+      ->exec { "vscode extension ${title}":
         command => "/usr/bin/code --install-extension ${title}",
         user    => 'vagrant',
         timeout => 1200,
-        require => [ Package['code'], Exec['vscode install from cache'] ],
-        notify  => Exec['vscode populate cache'],
+        unless  => "/usr/bin/find \"${extension_path}\" -maxdepth 1 -name \"${title}-*\" | grep -q .",
+        require => Package['code'],
+        notify  => Exec["vscode extension save cache for ${title}"],
       }
     }
   }
