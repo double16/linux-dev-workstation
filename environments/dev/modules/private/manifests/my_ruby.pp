@@ -37,6 +37,7 @@ class private::my_ruby {
   $ruby_versions.each |$item| {
     $ver = $item['version']
     $cache = "/tmp/vagrant-cache/rbenv/built-${ver}.tgz"
+    $global = pick($item['global'], false)
     exec { "Unarchive Ruby ${ver}":
       command => "/usr/bin/tar xpzf ${cache} -C /opt/rbenv/versions",
       onlyif  => "/usr/bin/test -f ${cache}",
@@ -44,7 +45,7 @@ class private::my_ruby {
       require => File['/opt/rbenv/versions'],
     }
     ->rbenv::build { $ver:
-      global => pick($item['global'], false),
+      global => $global,
     }
     ~>exec { "Archive Ruby ${ver}":
       command     => "/usr/bin/tar czf ${cache} -C /opt/rbenv/versions ${ver}",
@@ -52,6 +53,15 @@ class private::my_ruby {
       require     => File['/tmp/vagrant-cache/rbenv'],
     }
     ->Rbenv::Gem<| ruby_version == $ver and gem != 'bundler' |>
+
+    if Boolean($global) {
+      # When we restore from cache, rbenv does not have a chance to set the global Ruby version
+      exec { "Ruby ${ver} is global":
+        command => "/opt/rbenv/bin/rbenv global ${ver}",
+        unless  => "/usr/bin/test $(/opt/rbenv/bin/rbenv global) == ${ver}",
+      }
+      ->Rbenv::Gem<| ruby_version == $ver and gem != 'bundler' |>
+    }
   }
 
   Rbenv::Gem {
@@ -68,7 +78,7 @@ class private::my_ruby {
   rbenv::gem { 'puppet-lint': }
   rbenv::gem { 'generate-puppetfile': }
 
-  package { 'augeas-devel': }
+  package { ['augeas-devel', 'gmp-devel']: }
   ->rbenv::gem { 'ruby-augeas': }
 
   Rbenv::Gem<| |>
