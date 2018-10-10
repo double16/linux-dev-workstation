@@ -59,6 +59,7 @@ class private::my_ruby {
       exec { "Ruby ${ver} is global":
         command => "/opt/rbenv/bin/rbenv global ${ver}",
         unless  => "/usr/bin/test $(/opt/rbenv/bin/rbenv global) == ${ver}",
+        require => [ Class['rbenv'], Rbenv::Build[$ver] ],
       }
       ->Rbenv::Gem<| ruby_version == $ver and gem != 'bundler' |>
     }
