@@ -5,8 +5,8 @@ hashistack:
     version: 1.3.1
     checksum: 254cf648a638f7ebd37dc1b334abe940da30b30ac3465b6e0a9ad59829932fa3
   vault:
-    version: 0.11.1
-    checksum: eb8d2461d0ca249c1f91005f878795998bdeafccfde0b9bae82343541ce65996
+    version: 0.11.3
+    checksum: b921abf4ade14087dbc21b6b353aa65f0630fad3275f27641c48b3d36093af25
   consul:
     version: 1.2.3
     checksum: f97996296ef3905c38c504b35035fb731d3cfd9cad129c9523402a4229c709c5
@@ -14,8 +14,8 @@ hashistack:
     version: 0.11.8
     checksum: 84ccfb8e13b5fce63051294f787885b76a1fedef6bdbecf51c5e586c9e20c9b7
   nomad:
-    version: 0.8.5
-    checksum: e56c0e95e7a724b4fadd8eba32da5a3f2846f67e22e2352b19d1ada2066e063b
+    version: 0.8.6
+    checksum: 7569561e4a8fdb283f36f9ff6ed7834be6b1f4a2149246f8bd3fb719265c800c
 sdkman:
 - package: groovy
   version: 2.4.15
@@ -63,25 +63,25 @@ sdkman:
   version: 1.4.1
   default: true
 git:
-  version: 2.19.0
+  version: 2.19.1
 vim:
-  version: 8.1.0436
+  version: 8.1.0468
 pdk:
-  version: 1.7.0.0
-  checksum: da868c41f6669f4ea99bc85740e6d39416587fc5caf7f8c0ade25fa43ccf71d7
+  version: 1.7.1.0
+  checksum: 527d1e834a1d04993954d377eee7d23b88c5efc1d1cef3959981c46a5df707e7
 docker:
   version: 18.06.1
 k8s:
   version: 1.12
 minikube:
-  version: 0.28.2
-  checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
+  version: 0.30.0
+  checksum: f6fcd916adbdabc84fceb4ff3cadd58586f0ef6e576233b1bd03ead1f8f04afa
 helm:
   version: 2.11.0
   checksum: 02a4751586d6a80f6848b58e7f6bd6c973ffffadc52b4c06652db7def02773a1
 container-diff:
-  version: 0.11.0
-  checksum: ca185da4c0f3ef71c3f92511e1e93d14efbd3d0ef02abd85379d9a57975cd823
+  version: 0.12.0
+  checksum: 8199e31424c5fae7fc4b85356b919f94d1e2e152769bea7576bed09799f333ad
 emacs:
   version: 26.1
   checksum: 760382d5e8cdc5d0d079e8f754bce1136fbe1473be24bb885669b0e38fc56aa3
@@ -176,16 +176,16 @@ idea:
     updateid: '47061'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.20.6
-    updateid: '45778'
+    version: 0.21.3
+    updateid: '50566'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.2.71-release-IJ2018.2-1
     updateid: '50255'
   - name: com.atlassian.bitbucket.references
     type: zip
-    version: '5.1'
-    updateid: '46168'
+    version: '5.2'
+    updateid: '50800'
   - name: GradleDependenciesHelper
     type: zip
     version: '1.12'
@@ -196,16 +196,16 @@ idea:
     updateid: '46804'
   - name: Karma
     type: zip
-    version: 182.4323.31
-    updateid: '49367'
+    version: 182.4505.50
+    updateid: '50661'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.2
     updateid: '50110'
   - name: AWSCloudFormation
     type: zip
-    version: 0.5.69
-    updateid: '48798'
+    version: 0.6.5
+    updateid: '50728'
   - name: com.intellij.react.css.modules
     type: jar
     version: 1.0.1
@@ -228,8 +228,8 @@ idea:
     updateid: '47033'
   - name: Lombook Plugin
     type: zip
-    version: 0.19-LATEST-EAP-SNAPSHOT
-    updateid: '47623'
+    version: 0.21.2018.2
+    updateid: '50582'
   - name: Lua
     type: zip
     updateid: '46023'
