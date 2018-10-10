@@ -287,10 +287,10 @@ include ::private::iterm2
 include ::private::circleci
 include ::private::xfce4
 include ::private::rust
-include ::private::snap
 
 unless $::virtual == 'docker' {
   include ::private::my_emacs
+  include ::private::snap # snap containment is strange under docker
 } else {
   notice('Skipping Emacs. Emacs won\'t compile under Docker because we don\'t have permission to disable ASLR and exec-shield')
 }
