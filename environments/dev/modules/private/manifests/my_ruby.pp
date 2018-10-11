@@ -56,9 +56,13 @@ class private::my_ruby {
 
     if Boolean($global) {
       # When we restore from cache, rbenv does not have a chance to set the global Ruby version
-      exec { "Ruby ${ver} is global":
-        command => "/opt/rbenv/bin/rbenv global ${ver}",
-        unless  => "/usr/bin/test $(/opt/rbenv/bin/rbenv global) == ${ver}",
+      file { '/opt/rbenv/version':
+        ensure  => file,
+        replace => false,
+        owner   => 'vagrant',
+        group   => 'vagrant',
+        mode    => '0664',
+        content => $ver,
         require => [ Class['rbenv'], Rbenv::Build[$ver] ],
       }
       ->Rbenv::Gem<| ruby_version == $ver and gem != 'bundler' |>
