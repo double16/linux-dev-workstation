@@ -30,12 +30,6 @@ class private::vscode {
     $cache_path = $private::vscode::cache_path
     $cache_file = "${cache_path}/${title}.tar.gz"
 
-    exec { "vscode extension save cache for ${title}":
-      command => "/bin/ls \"${extension_path}\" | grep -F \"${title}-\" | xargs -r /usr/bin/tar czf \"${cache_file}\" -C \"${extension_path}\"",
-      creates => $cache_file,
-      onlyif  => "/usr/bin/mountpoint /tmp/vagrant-cache && /bin/ls \"${extension_path}\" | grep -qF \"${title}-\"",
-    }
-
     unless $title in $::facts['vscodeextensions'] {
       exec { "vscode extension restore cache for ${title}":
         command => "/usr/bin/tar xzf \"${cache_file}\" -C \"${extension_path}\"",
@@ -46,9 +40,14 @@ class private::vscode {
         command => "/usr/bin/code --install-extension ${title}",
         user    => 'vagrant',
         timeout => 1200,
-        unless  => "/usr/bin/find \"${extension_path}\" -maxdepth 1 -name \"${title}-*\" | grep -q .",
+        unless  => "/usr/bin/find \"${extension_path}\" -maxdepth 1 -iname \"${title}-*\" | grep -q .",
         require => Package['code'],
         notify  => Exec["vscode extension save cache for ${title}"],
+      }
+      ~>exec { "vscode extension save cache for ${title}":
+        command     => "/bin/rm -f \"${cache_file}\" ; /bin/ls \"${extension_path}\" | grep -iF \"${title}-\" | xargs -r /usr/bin/tar czf \"${cache_file}\" -C \"${extension_path}\"",
+        refreshonly => true,
+        onlyif      => '/usr/bin/mountpoint /tmp/vagrant-cache',
       }
     }
   }
