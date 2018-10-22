@@ -8,11 +8,11 @@ hashistack:
     version: 0.11.3
     checksum: b921abf4ade14087dbc21b6b353aa65f0630fad3275f27641c48b3d36093af25
   consul:
-    version: 1.2.3
-    checksum: f97996296ef3905c38c504b35035fb731d3cfd9cad129c9523402a4229c709c5
+    version: 1.3.0
+    checksum: a6896509b72fa229496b3adda51357c95d68a796ae3328d7d6a61195d6c68bac
   terraform:
-    version: 0.11.8
-    checksum: 84ccfb8e13b5fce63051294f787885b76a1fedef6bdbecf51c5e586c9e20c9b7
+    version: 0.11.9
+    checksum: 5d674e7b83945c37f7f14d0e4f655787dad86ba15b26e185604aa0c3812394ab
   nomad:
     version: 0.8.6
     checksum: 7569561e4a8fdb283f36f9ff6ed7834be6b1f4a2149246f8bd3fb719265c800c
@@ -21,7 +21,7 @@ sdkman:
   version: 2.4.15
   default: true
 - package: groovy
-  version: 2.5.2
+  version: 2.5.3
   default: false
 - package: groovyserv
   version: 1.2.0
@@ -45,7 +45,7 @@ sdkman:
   version: 1.0.0.M4
   default: true
 - package: springboot
-  version: 2.0.5.RELEASE
+  version: 2.0.6.RELEASE
   default: true
 - package: java
   version: 8.0.181-zulu
@@ -65,7 +65,7 @@ sdkman:
 git:
   version: 2.19.1
 vim:
-  version: 8.1.0468
+  version: 8.1.0490
 pdk:
   version: 1.7.1.0
   checksum: 527d1e834a1d04993954d377eee7d23b88c5efc1d1cef3959981c46a5df707e7
@@ -89,7 +89,7 @@ emacs:
   version: 26.1
   checksum: 760382d5e8cdc5d0d079e8f754bce1136fbe1473be24bb885669b0e38fc56aa3
 vagrant:
-  version: 2.1.5
+  version: 2.2.0
 dockstation:
   version: 1.4.1
   checksum: 323b0c24b6ce6b9bbb39df1cacac2881f3b91e48f91fcd8022ce37170a8946b1
@@ -113,11 +113,11 @@ node:
   - generator-jhipster
 ruby:
   versions:
-  - version: 2.4.4
+  - version: 2.4.5
     global: true
   - version: 1.9.3-p551
   - version: 2.1.10
-  - version: 2.3.7
+  - version: 2.3.8
   - version: jruby-1.7.27
   - version: jruby-9.1.17.0
 netbeans:
@@ -125,9 +125,9 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.2.4
-  build: 182.4505.22
-  checksum: e8c026327c673877281b829ff2339c36cecf3118b5391852ddf969983637b7d0
+  version: 2018.2.5
+  build: 182.4892.20
+  checksum: eb12fd358bdd295cac52092c5dc0a2805fc30306f52922eecda16da817c436f8
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -139,8 +139,8 @@ idea:
     updateid: '49542'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2018.2.20180921
-    updateid: '50171'
+    version: 2018.2.20181017
+    updateid: '51185'
   - name: com.intellij.lang.puppet
     type: zip
     version: 182.4129.26
@@ -159,8 +159,8 @@ idea:
     updateid: '49638'
   - name: mobi.hsz.idea.gitignore
     type: zip
-    version: 3.0.0.182
-    updateid: '48021'
+    version: 2.6.2
+    updateid: '46104'
   - name: com.jetbrains.plugins.ini4idea
     type: zip
     version: 182.3911.19
@@ -239,5 +239,5 @@ idea:
     version: 1.0.114
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '47488'
-    version: '182.3588'
+    updateid: '50522'
+    version: 182.4892.2
