@@ -225,6 +225,17 @@ def containerdiff(yaml)
     end
 end
 
+def kustomize(yaml)
+    latest = latest_github_tag('kubernetes-sigs', 'kustomize')
+    return if latest.nil?
+    if latest != yaml['kustomize']['version'] or !yaml['kustomize'].has_key?('checksum')
+        puts "Found newer version kustomize #{latest}"
+        download_url = "https://github.com/kubernetes-sigs/kustomize/releases/download/v#{latest}/kustomize_#{latest}_linux_amd64"
+        download_file = ".vagrant/machines/default/cache/kustomize-#{latest}"
+        update_single_archive(latest, download_url, download_file, yaml['kustomize'])
+    end
+end
+
 def minikube(yaml)
     latest = latest_github_tag('kubernetes', 'minikube')
     return if latest.nil?
@@ -351,6 +362,7 @@ slack(yaml)
 docker(yaml)
 rstudio(yaml)
 containerdiff(yaml)
+kustomize(yaml)
 minikube(yaml)
 helm(yaml)
 dockstation(yaml)

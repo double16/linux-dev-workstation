@@ -79,6 +79,9 @@ minikube:
 helm:
   version: 2.11.0
   checksum: 02a4751586d6a80f6848b58e7f6bd6c973ffffadc52b4c06652db7def02773a1
+kustomize:
+  version: 1.0.8
+  checksum: b5066f7250beb023a3eb7511c5699be4dbff57637ac4a78ce63bde6e66c26ac4
 container-diff:
   version: 0.12.0
   checksum: 8199e31424c5fae7fc4b85356b919f94d1e2e152769bea7576bed09799f333ad

@@ -168,6 +168,21 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
     checksum_type => 'sha256',
   }
 
+  $kustomize_config = lookup('kustomize', Hash)
+  $kustomize_version = $kustomize_config['version']
+  $kustomize_checksum = $kustomize_config['checksum']
+  private::cached_remote_file { '/usr/local/bin/kustomize':
+    cache_name    => "kustomize-${kustomize_version}",
+    source        => "https://github.com/kubernetes-sigs/kustomize/releases/download/v${kustomize_version}/kustomize_${kustomize_version}_linux_amd64",
+    # 2018-05-01 storage.googleapis.com uses a cross-signed TLS cert, current Ruby/Net::HTTP does not recognize it
+    verify_peer   => false,
+    owner         => 0,
+    group         => 'root',
+    mode          => '0755',
+    checksum      => $kustomize_checksum,
+    checksum_type => 'sha256',
+  }
+
   file { '/etc/profile.d/kubectl-completion.sh':
     ensure  => file,
     owner   => 0,
