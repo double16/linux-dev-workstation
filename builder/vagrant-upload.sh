@@ -19,7 +19,7 @@ BASE=`pwd -P`
 popd > /dev/null
 
 # The jq tool is needed to parse JSON responses
-if [ ! -f /usr/bin/jq ]; then
+if ! command -v jq ; then
   tput setaf 1; printf "\n\nThe 'jq' utility is not installed.\n\n\n"; tput sgr0
   exit 1
 fi
