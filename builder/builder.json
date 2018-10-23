@@ -26,9 +26,24 @@
       "location": "West US",
       "vm_size": "Standard_D2S_v3",
       "os_disk_size_gb": "100"
+    },
+    {
+      "type": "docker",
+      "image": "jdeathe/centos-ssh:centos-7-2.3.2",
+      "commit": true,
+      "changes": [
+        "LABEL maintainer='Patrick Double <pat@patdouble.com>' org.label-schema.license='MPL-2.0' org.label-schema.vendor='https://bitbucket.org/double16' org.label-schema.name='Packer' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation/builder' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation.git'",
+        "ENV SSH_USER=vagrant",
+        "CMD /usr/bin/supervisord --configuration=/etc/supervisord.conf"
+      ]
     }
   ],
   "provisioners": [
+    {
+      "type": "file",
+      "source": "vagrant-upload.sh",
+      "destination": "/tmp/vagrant-upload.sh"
+    },
     {
       "environment_vars": [
         "http_proxy={{user `http_proxy`}}",
@@ -49,7 +64,7 @@
         "yum upgrade -y",
         "yum groups mark convert",
         "yum groupinstall -y 'Development Tools'",
-        "yum install -y kernel-devel kernel-devel-$(uname -r) unzip git screen tmux htop qemu qemu-kvm awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel apt-cacher-ng",
+        "yum install -y kernel-devel kernel-devel-$(uname -r) unzip git screen tmux htop qemu qemu-kvm awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel apt-cacher-ng coreutils which",
         "yum install -y VirtualBox-5.2",
         
         "/bin/grep -q '^vagrant:' /etc/group || /usr/sbin/groupadd vagrant",
@@ -60,9 +75,9 @@
         "cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
 
-        "curl -sL -o /tmp/vagrant_2.1.5_x86_64.rpm https://releases.hashicorp.com/vagrant/2.1.5/vagrant_2.1.5_x86_64.rpm",
-        "rpm -i /tmp/vagrant_2.1.5_x86_64.rpm",
-        "rm /tmp/vagrant_2.1.5_x86_64.rpm",
+        "curl -sL -o /tmp/vagrant_2.2.0_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.0/vagrant_2.2.0_x86_64.rpm",
+        "rpm -i /tmp/vagrant_2.2.0_x86_64.rpm",
+        "rm /tmp/vagrant_2.2.0_x86_64.rpm",
         "su -c 'vagrant plugin install vagrant-cachier vagrant-vbguest vagrant-azure vagrant-aws' - vagrant",
         "su -c 'vagrant plugin install vagrant-google' - vagrant",
         "su -c 'vagrant plugin install vagrant-libvirt' - vagrant",
@@ -83,8 +98,12 @@
         "su -c 'echo eval \\\"\\$\\(rbenv init -\\)\\\" >> ~/.bash_profile' - vagrant",
         "su -c 'rbenv install 2.4.4 && rbenv global 2.4.4' - vagrant",
         "su -c 'gem install nokogiri' - vagrant",
+
+        "mv /tmp/vagrant-upload.sh /home/vagrant/vagrant-upload.sh",
+        "chown vagrant:vagrant /home/vagrant/vagrant-upload.sh",
+        "chmod +x /home/vagrant/vagrant-upload.sh",
         
-        "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+        "if [ -f /usr/sbin/waagent ]; then /usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync; fi"
       ],
       "inline_shebang": "/bin/bash",
       "type": "shell",
