@@ -6,6 +6,6 @@ class private::rust {
   ->exec { 'bat':
     command => '/usr/bin/cargo install --root /usr/local bat',
     creates => '/usr/local/bin/bat',
-    timeout => 600,
+    timeout => 1200,
   }
 }
