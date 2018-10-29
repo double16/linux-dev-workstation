@@ -23,6 +23,16 @@ class private::my_docker {
       tries     => 10,
       try_sleep => 10,
     }
+
+    file { '/etc/tmpfiles.d/microk8s.conf':
+      ensure  => file,
+      content => 'L /var/run/docker.sock - - - - /var/snap/microk8s/current/docker.sock
+',
+      owner   => 0,
+      group   => 'root',
+      mode    => '0644',
+    }
+
     file { '/var/local/microk8s':
       ensure => directory,
       owner  => 0,
