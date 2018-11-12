@@ -2,17 +2,17 @@
 theme::default: light
 hashistack:
   packer:
-    version: 1.3.1
-    checksum: 254cf648a638f7ebd37dc1b334abe940da30b30ac3465b6e0a9ad59829932fa3
+    version: 1.3.2
+    checksum: 5e51808299135fee7a2e664b09f401b5712b5ef18bd4bad5bc50f4dcd8b149a1
   vault:
-    version: 0.11.3
-    checksum: b921abf4ade14087dbc21b6b353aa65f0630fad3275f27641c48b3d36093af25
+    version: 0.11.4
+    checksum: 3e44826ffcf3756a72d6802d96ea244e605dad362ece27d5c8f8839fb69a7079
   consul:
     version: 1.3.0
     checksum: a6896509b72fa229496b3adda51357c95d68a796ae3328d7d6a61195d6c68bac
   terraform:
-    version: 0.11.9
-    checksum: 5d674e7b83945c37f7f14d0e4f655787dad86ba15b26e185604aa0c3812394ab
+    version: 0.11.10
+    checksum: 43543a0e56e31b0952ea3623521917e060f2718ab06fe2b2d506cfaa14d54527
   nomad:
     version: 0.8.6
     checksum: 7569561e4a8fdb283f36f9ff6ed7834be6b1f4a2149246f8bd3fb719265c800c
@@ -21,7 +21,7 @@ sdkman:
   version: 2.4.15
   default: true
 - package: groovy
-  version: 2.5.3
+  version: 2.5.4
   default: false
 - package: groovyserv
   version: 1.2.0
@@ -42,7 +42,7 @@ sdkman:
   version: 2.4.5
   default: true
 - package: micronaut
-  version: 1.0.0.M4
+  version: 1.0.0
   default: true
 - package: springboot
   version: 2.0.6.RELEASE
@@ -65,7 +65,7 @@ sdkman:
 git:
   version: 2.19.1
 vim:
-  version: 8.1.0490
+  version: 8.1.0524
 pdk:
   version: 1.7.1.0
   checksum: 527d1e834a1d04993954d377eee7d23b88c5efc1d1cef3959981c46a5df707e7
@@ -74,17 +74,18 @@ docker:
 k8s:
   version: 1.12
 minikube:
-  version: 0.30.0
-  checksum: f6fcd916adbdabc84fceb4ff3cadd58586f0ef6e576233b1bd03ead1f8f04afa
+  version: 0.28.2
+  pin: true
+  checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
 helm:
   version: 2.11.0
   checksum: 02a4751586d6a80f6848b58e7f6bd6c973ffffadc52b4c06652db7def02773a1
 kustomize:
-  version: 1.0.8
-  checksum: b5066f7250beb023a3eb7511c5699be4dbff57637ac4a78ce63bde6e66c26ac4
+  version: 1.0.10
+  checksum: 2db953e06ea56e9c09c9d21a768c526e9ee259941ab49a7d821def66529482f2
 container-diff:
-  version: 0.12.0
-  checksum: 8199e31424c5fae7fc4b85356b919f94d1e2e152769bea7576bed09799f333ad
+  version: 0.13.1
+  checksum: 54fbec99f1f453e6ea0fc025e8e2c7289c655e4b2da77432cb062b73d8a1cdf1
 emacs:
   version: 26.1
   checksum: 760382d5e8cdc5d0d079e8f754bce1136fbe1473be24bb885669b0e38fc56aa3
@@ -94,8 +95,8 @@ dockstation:
   version: 1.4.1
   checksum: 323b0c24b6ce6b9bbb39df1cacac2881f3b91e48f91fcd8022ce37170a8946b1
 rstudio:
-  version: 1.1.456
-  checksum: ce5b73584851fa6255719f735142d1b0c90df30e11d50788649b09d842b96ec8
+  version: 1.1.463
+  checksum: 0dbdbbc5dc346e19c9f310ac9fd66333b15ea71d824599f9e114ddac4819a6dd
 slack:
   version: 3.1.1-0.1
   checksum: 9048305644e41e43baa44266011d67724fbb2f11024ded6650444546ced0df98
@@ -151,8 +152,8 @@ idea:
     updateid: '48290'
   - name: BashSupport
     type: zip
-    version: 1.6.13.182
-    updateid: '46357'
+    version: 1.7.3
+    updateid: '51822'
   - name: Docker
     type: zip
     version: 182.4323.18
@@ -179,12 +180,12 @@ idea:
     updateid: '47061'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.21.3
-    updateid: '50566'
+    version: 0.21.4
+    updateid: '51609'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.2.71-release-IJ2018.2-1
-    updateid: '50255'
+    version: 1.3.0-release-IJ2018.2-1
+    updateid: '51536'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: '5.2'
@@ -231,8 +232,8 @@ idea:
     updateid: '47033'
   - name: Lombook Plugin
     type: zip
-    version: 0.21.2018.2
-    updateid: '50582'
+    version: 0.22.2018.2
+    updateid: '51517'
   - name: Lua
     type: zip
     updateid: '46023'

@@ -12,8 +12,8 @@ class private::my_vim {
   }
 
   file { '/usr/local/bin/vim-version.sh':
-    ensure => file,
-    mode   => '0755',
+    ensure  => file,
+    mode    => '0755',
     content => '#!/bin/bash
 
 test -f /usr/bin/vim || exit 1
@@ -72,7 +72,7 @@ echo "${MAJOR_MINOR}.${PATCHES}"
 export EDITOR="vim"',
   }
   ->package{ 'gvim': }
-  
+
   define plugin() {
     $plugin_name = split($title, '/')[1]
 

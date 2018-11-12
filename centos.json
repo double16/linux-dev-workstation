@@ -250,6 +250,7 @@
       "expect_disconnect": true,
       "scripts": [
         "script/fix-slow-dns.sh",
+        "script/yum-docs.sh",
         "script/docker-systemd.sh",
         "script/dind.sh",
         "script/sshd.sh",

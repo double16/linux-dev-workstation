@@ -147,6 +147,7 @@ package { 'python34-pip':
 
 package { [
     'man-pages',
+    'man-db',
     'asciidoc',
     'dos2unix',
     'htop',

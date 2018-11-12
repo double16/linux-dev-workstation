@@ -5,13 +5,13 @@ if [[ ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
   cat >/etc/supervisord.d/dind.conf <<EOF
 [program:dockerd]
 priority = 15
-command = /bin/sh -c "if [ -S /var/run/docker.sock ]; then chown vagrant:docker /var/run/docker.sock; else /usr/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375; fi"
+command = /bin/sh -c "if [ -S /var/run/docker.sock -a /usr/bin/docker version >/dev/null 2>&1 ]; then chgrp docker /var/run/docker.sock; else /usr/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver vfs; fi"
 autostart = true
-startsecs = 0
-startretries = 0
-autorestart = false
+startsecs = 10
+startretries = 3
+autorestart = true
 redirect_stderr = true
-stdout_logfile = /var/log/docker
+stdout_logfile = /var/log/docker.log
 stdout_events_enabled = true
 EOF
 

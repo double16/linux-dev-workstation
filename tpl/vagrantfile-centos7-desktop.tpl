@@ -7,7 +7,7 @@ require 'socket'
 Vagrant.require_version ">= 2.1.0"
 
 current_dir    = '.'
-configs        = File.exists?("#{current_dir}/config.yaml") ? YAML.load_file("#{current_dir}/config.yaml") : { 'configs' => Hash.new }
+configs        = File.exist?("#{current_dir}/config.yaml") ? YAML.load_file("#{current_dir}/config.yaml") : { 'configs' => Hash.new }
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'].fetch(ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use'], Hash.new))
 monitor_count  = vagrant_config['monitors']
@@ -37,7 +37,7 @@ end
 
 Vagrant.configure("2") do |config|
 
-   if File.exists? readme
+   if File.exist? readme
      config.vm.post_up_message = "********************************************************************************
 
 #{File.read(readme)}
@@ -103,7 +103,14 @@ Vagrant.configure("2") do |config|
       :LC_ALL   => 'en_US.UTF-8',
       :SSH_INHERIT_ENVIRONMENT => 'true',
     }
-    docker.volumes = ["/var/run/docker.sock:/var/run/docker.sock"]
+
+    if Gem.win_platform?
+      # "Docker for Windows" translates volumes[] paths into Windows style paths
+      docker.create_args = ['--privileged', '-v', '/var/run/docker.sock:/var/run/docker.sock']
+    else #if File.exist?('/var/run/docker.sock')
+      docker.volumes = ['/var/run/docker.sock:/var/run/docker.sock']
+    end
+
     override.vm.network :forwarded_port, guest: 22, host: 2222, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     override.ssh.proxy_command = "docker run -i --rm --name linux-dev-workstation-tunnel --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
   end
@@ -123,7 +130,7 @@ Vagrant.configure("2") do |config|
     config.cache.scope = :box
   end
 
-  # swap is required for propery memory management
+  # swap is required for proper memory management
   # if the provider doesn't allocate swap add a small swapfile
   config.vm.provision "swapfile", type: "shell", inline: <<-SHELL
     is_running_in_container() {

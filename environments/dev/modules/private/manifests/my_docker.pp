@@ -141,6 +141,18 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
       match => '^MINIKUBE_VM_DRIVER=',
     }
 
+    file_line { 'MINIKUBE_BOOTSTRAPPER':
+      path  => '/etc/environment',
+      line  => 'MINIKUBE_BOOTSTRAPPER=localkube',
+      match => '^MINIKUBE_BOOTSTRAPPER=',
+    }
+
+    file_line { 'MINIKUBE_SHOWBOOTSTRAPPERDEPRECATIONNOTIFICATION':
+      path  => '/etc/environment',
+      line  => 'MINIKUBE_SHOWBOOTSTRAPPERDEPRECATIONNOTIFICATION=false',
+      match => '^MINIKUBE_SHOWBOOTSTRAPPERDEPRECATIONNOTIFICATION=',
+    }
+
     file_line { 'CHANGE_MINIKUBE_NONE_USER':
       path  => '/etc/environment',
       line  => 'CHANGE_MINIKUBE_NONE_USER=true',

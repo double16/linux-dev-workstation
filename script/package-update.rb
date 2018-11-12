@@ -183,6 +183,9 @@ def docker(yaml)
         }
         resp.is_a?(Net::HTTPFound) || resp.is_a?(Net::HTTPSuccess)
     })
+    if yaml['docker']['pin']
+        latest = yaml['docker']['version']
+    end
     if latest
         yaml['docker']['version'] = latest.sub('-ce', '')
     end
@@ -190,6 +193,9 @@ end
 
 def git(yaml)
     latest = latest_github_tag('git', 'git')
+    if yaml['git']['pin']
+        latest = yaml['git']['version']
+    end
     if latest
         yaml['git']['version'] = latest
     end
@@ -197,6 +203,9 @@ end
 
 def vim(yaml)
     latest = latest_github_tag('vim', 'vim')
+    if yaml['vim']['pin']
+        latest = yaml['vim']['version']
+    end
     if latest
         yaml['vim']['version'] = latest
     end
@@ -206,6 +215,9 @@ def rstudio(yaml)
     # Only version 1.1.* has packages
     latest = latest_github_tag('rstudio', 'rstudio', /^v1[.]1[.][0-9.]+$/)
     return if latest.nil?
+    if yaml['rstudio']['pin']
+        latest = yaml['rstudio']['version']
+    end
     if latest != yaml['rstudio']['version'] or !yaml['rstudio'].has_key?('checksum')
         puts "Found newer version rstudio #{latest}"
         download_url = "https://download1.rstudio.org/rstudio-#{latest}-x86_64.rpm"
@@ -217,6 +229,9 @@ end
 def containerdiff(yaml)
     latest = latest_github_tag('GoogleContainerTools', 'container-diff')
     return if latest.nil?
+    if yaml['container-diff']['pin']
+        latest = yaml['container-diff']['version']
+    end
     if latest != yaml['container-diff']['version'] or !yaml['container-diff'].has_key?('checksum')
         puts "Found newer version container-diff #{latest}"
         download_url = "https://storage.googleapis.com/container-diff/v#{latest}/container-diff-linux-amd64"
@@ -228,6 +243,9 @@ end
 def kustomize(yaml)
     latest = latest_github_tag('kubernetes-sigs', 'kustomize')
     return if latest.nil?
+    if yaml['kustomize']['pin']
+        latest = yaml['kustomize']['version']
+    end
     if latest != yaml['kustomize']['version'] or !yaml['kustomize'].has_key?('checksum')
         puts "Found newer version kustomize #{latest}"
         download_url = "https://github.com/kubernetes-sigs/kustomize/releases/download/v#{latest}/kustomize_#{latest}_linux_amd64"
@@ -239,6 +257,9 @@ end
 def minikube(yaml)
     latest = latest_github_tag('kubernetes', 'minikube')
     return if latest.nil?
+    if yaml['minikube']['pin']
+        latest = yaml['minikube']['version']
+    end
     if latest != yaml['minikube']['version'] or !yaml['minikube'].has_key?('checksum')
         puts "Found newer version minikube #{latest}"
         download_url = "https://storage.googleapis.com/minikube/releases/v#{latest}/minikube-linux-amd64"
@@ -250,6 +271,9 @@ end
 def helm(yaml)
     latest = latest_github_tag('helm', 'helm')
     return if latest.nil?
+    if yaml['helm']['pin']
+        latest = yaml['helm']['version']
+    end
     if latest != yaml['helm']['version'] or !yaml['helm'].has_key?('checksum')
         puts "Found newer version helm #{latest}"
         download_url = "https://storage.googleapis.com/kubernetes-helm/helm-v#{latest}-linux-amd64.tar.gz"
@@ -261,6 +285,9 @@ end
 def dockstation(yaml)
     latest = latest_github_tag('DockStation', 'dockstation')
     return if latest.nil?
+    if yaml['dockstation']['pin']
+        latest = yaml['dockstation']['version']
+    end
     if latest != yaml['dockstation']['version'] or !yaml['dockstation'].has_key?('checksum')
         puts "Found newer version dockstation #{latest}"
         download_url = "https://github.com/DockStation/dockstation/releases/download/v#{latest}/dockstation-#{latest}-x86_64.AppImage"
