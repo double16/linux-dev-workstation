@@ -6,8 +6,7 @@ class private::aws {
     provider => 'pip',
   }
 
-  remote_file { '/usr/local/bin/ecs-cli':
-    ensure => present,
+  private::cached_remote_file { '/usr/local/bin/ecs-cli':
     source => 'https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest',
     mode   => '0755',
   }

@@ -78,8 +78,7 @@ alias istioctl=/var/lib/snapd/snap/bin/microk8s.istioctl
       cleanup       => false,
       extract_flags => '-x --strip-components 1 -f',
     }
-    remote_file { '/usr/bin/dind':
-      ensure => present,
+    private::cached_remote_file { '/usr/bin/dind':
       source => 'https://raw.githubusercontent.com/moby/moby/52379fa76dee07ca038624d639d9e14f4fb719ff/hack/dind',
       mode   => '0755',
     }

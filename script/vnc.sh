@@ -12,7 +12,7 @@ if [[ ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
   cat >/etc/supervisord.d/vncserver.conf <<EOF
 [program:vncserver]
 priority = 15
-command = /usr/sbin/runuser -l ${SSH_USERNAME:-vagrant} -c "/usr/bin/vncserver :0"
+command = /usr/sbin/runuser -l ${SSH_USERNAME:-vagrant} -c "/usr/bin/vncserver :0 -rfbport 5900"
 autostart = true
 startsecs = 0
 startretries = 0
@@ -23,4 +23,3 @@ stdout_events_enabled = true
 EOF
 
 fi
-

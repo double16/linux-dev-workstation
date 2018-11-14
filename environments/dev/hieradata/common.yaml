@@ -42,7 +42,7 @@ sdkman:
   version: 2.4.5
   default: true
 - package: micronaut
-  version: 1.0.0
+  version: 1.0.1
   default: true
 - package: springboot
   version: 2.0.6.RELEASE
@@ -65,7 +65,7 @@ sdkman:
 git:
   version: 2.19.1
 vim:
-  version: 8.1.0524
+  version: 8.1.0526
 pdk:
   version: 1.7.1.0
   checksum: 527d1e834a1d04993954d377eee7d23b88c5efc1d1cef3959981c46a5df707e7
@@ -126,9 +126,9 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.2.5
-  build: 182.4892.20
-  checksum: eb12fd358bdd295cac52092c5dc0a2805fc30306f52922eecda16da817c436f8
+  version: 2018.2.6
+  build: 182.5107.16
+  checksum: 4403f201c0a8bf216b07eda0a618f2c459d2f1f92a2ddef2f2de0cac3fbbeb63
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -184,8 +184,8 @@ idea:
     updateid: '51609'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.3.0-release-IJ2018.2-1
-    updateid: '51536'
+    version: 1.3.10-release-IJ2018.2-1
+    updateid: '52010'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: '5.2'

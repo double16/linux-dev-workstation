@@ -2,6 +2,7 @@ class private::my_vim {
   $global_color_scheme = pick($::theme, lookup('theme::default'))
   $vim_config = lookup('vim', Hash)
   $version = $vim_config['version']
+  $cache_file = "/tmp/vagrant-cache/vim-${version}-built.tgz"
 
   class { '::vim':
     autoupgrade    => false,
@@ -72,6 +73,26 @@ echo "${MAJOR_MINOR}.${PATCHES}"
 export EDITOR="vim"',
   }
   ->package{ 'gvim': }
+
+  if $::vagrant_cache_mounted {
+    exec { "cache vim ${version}":
+      path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+      cwd       => '/usr/src',
+      command   => "tar czf ${cache_file} vim-${version}",
+      creates   => $cache_file,
+      subscribe => Exec["build vim ${version}"],
+      require   => [ File['/tmp/vagrant-cache'], Exec["build vim ${version}"] ],
+    }
+    exec { "restore vim ${version}":
+      path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+      cwd     => '/usr/src',
+      command => "tar xzpf ${cache_file}",
+      creates => "/usr/src/vim-${version}",
+      onlyif  => "test -f ${cache_file}",
+      require => [ File['/tmp/vagrant-cache'] ],
+      before  => [ Archive["/tmp/vagrant-cache/vim-${version}.tar.gz"] ],
+    }
+  }
 
   define plugin() {
     $plugin_name = split($title, '/')[1]

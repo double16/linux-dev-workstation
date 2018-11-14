@@ -37,6 +37,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox"
   config.vm.provider "vmware_fusion"
 
+  config.vagrant.plugins = ["vagrant-cachier"]
+
   if ENV['VAGRANT_FROM_SCRATCH']
     config.vm.box = "bento/centos-7.5"
   else

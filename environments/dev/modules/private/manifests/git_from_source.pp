@@ -1,5 +1,7 @@
 # Installs a specific version of git from source
 class private::git_from_source($version) {
+  $cache_file = "/tmp/vagrant-cache/git-${version}-built.tgz"
+
   package { [
     'autoconf',
     'libcurl-devel',
@@ -46,4 +48,24 @@ class private::git_from_source($version) {
     subscribe => Exec["build git ${version}"],
   }
   ->package { 'git-extras': }
+
+  if $::vagrant_cache_mounted {
+    exec { "cache git ${version}":
+      path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+      cwd       => '/usr/src',
+      command   => "tar czf ${cache_file} git-${version}",
+      creates   => $cache_file,
+      subscribe => Exec["build git ${version}"],
+      require   => [ File['/tmp/vagrant-cache'], Exec["build git ${version}"] ],
+    }
+    exec { "restore git ${version}":
+      path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+      cwd     => '/usr/src',
+      command => "tar xzpf ${cache_file}",
+      creates => "/usr/src/git-${version}",
+      onlyif  => "test -f ${cache_file}",
+      require => [ File['/tmp/vagrant-cache'] ],
+      before  => [ Archive["/tmp/vagrant-cache/git-${version}.tar.gz"] ],
+    }
+  }
 }
