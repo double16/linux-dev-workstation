@@ -4,6 +4,8 @@
 class private::my_emacs {
   $version = lookup('emacs', Hash)['version']
   $checksum = lookup('emacs', Hash)['checksum']
+  $cache_file = "/tmp/vagrant-cache/emacs-${version}-built.tgz"
+  $spacemacs_cache_file = "/tmp/vagrant-cache/spacemacs-${version}-built.tgz"
 
   package { [
     'libXpm',
@@ -54,6 +56,26 @@ class private::my_emacs {
     subscribe => Exec["build emacs ${version}"],
   }
 
+  if $::vagrant_cache_mounted {
+    exec { "cache emacs ${version}":
+      path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+      cwd       => '/usr/src',
+      command   => "tar czf ${cache_file} emacs-${version}",
+      creates   => $cache_file,
+      subscribe => Exec["build emacs ${version}"],
+      require   => [ File['/tmp/vagrant-cache'], Exec["build emacs ${version}"] ],
+    }
+    exec { "restore emacs ${version}":
+      path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+      cwd     => '/usr/src',
+      command => "tar xzpf ${cache_file}",
+      creates => "/usr/src/emacs-${version}",
+      onlyif  => "test -f ${cache_file}",
+      require => [ File['/tmp/vagrant-cache'] ],
+      before  => [ Archive["/tmp/vagrant-cache/emacs-${version}.tar.gz"] ],
+    }
+  }
+
   vcsrepo { '/home/vagrant/.emacs.d':
     ensure   => present,
     user     => 'vagrant',
@@ -80,6 +102,27 @@ class private::my_emacs {
     cwd         => '/home/vagrant',
     refreshonly => true,
     timeout     => 1200,
+    require     => [ Exec["install emacs ${version}"] ],
     subscribe   => [ Vcsrepo['/home/vagrant/.emacs.d'], File['/home/vagrant/.spacemacs'] ],
+  }
+
+  if $::vagrant_cache_mounted {
+    exec { "cache spacemacs ${version}":
+      path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+      cwd       => '/home/vagrant',
+      command   => "tar czf ${spacemacs_cache_file} .emacs.d",
+      creates   => $spacemacs_cache_file,
+      subscribe => Exec['spacemacs install'],
+      require   => [ File['/tmp/vagrant-cache'], Exec['spacemacs install'] ],
+    }
+    exec { "restore spacemacs ${version}":
+      path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+      cwd     => '/home/vagrant',
+      command => "tar xzpf ${spacemacs_cache_file}",
+      creates => '/home/vagrant/.emacs.d',
+      onlyif  => "test -f ${spacemacs_cache_file}",
+      require => [ File['/tmp/vagrant-cache'] ],
+      before  => [ Vcsrepo['/home/vagrant/.emacs.d'] ],
+    }
   }
 }
