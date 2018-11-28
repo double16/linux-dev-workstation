@@ -188,6 +188,35 @@
       "os_disk_size_gb": "{{ user `disk_size_gb` }}"
     },
     {
+      "boot_command": [
+        "c  setparams 'kickstart' <enter> linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS\\x207\\x20x\\86_64 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `kickstart` }} inst.text<enter> initrdefi /images/pxeboot/initrd.img<enter> boot<enter>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{ user `disk_size` }}",
+      "disk_block_size": "1",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "{{ user `http_directory` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "output_directory": "output-{{ user `vm_name` }}-hyperv-iso",
+      "communicator": "ssh",
+      "ssh_timeout": "10000s",
+      "shutdown_command": "{{ user `shutdown_command` }}",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "type": "hyperv-iso",
+      "vm_name": "{{ user `vm_name` }}",
+      "cpu": "{{ user `cpus` }}",
+      "ram_size": "{{ user `memory`  }}",
+      "enable_secure_boot": false,
+      "guest_additions_mode": "none",
+      "generation": 2
+    },
+    {
       "type": "docker",
       "volumes": {
         "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
