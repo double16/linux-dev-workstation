@@ -5,59 +5,88 @@ class private::my_docker {
 
   $docker_base_version = lookup('docker', Hash)['version']
   $k8s_version = lookup('k8s', Hash)['version']
+  $microk8s = false
 
   unless $::virtual == 'docker' {
-    require private::snap
-    include private::snap_cache
+    if $microk8s {
+      require private::snap
+      include private::snap_cache
 
-    exec { 'microk8s':
-      command => "/usr/bin/snap install microk8s --classic --channel=${k8s_version}/stable",
-      creates => '/var/lib/snapd/snap/bin/microk8s.enable',
-      timeout => 0,
-      require => Exec['snap restore cache'],
-      notify  => Exec['snap save cache'],
-    }
-    ->exec { 'microk8s available':
-      command   => '/usr/bin/curl -sf http://127.0.0.1:8080/api?timeout=32s',
-      timeout   => '300',
-      tries     => 10,
-      try_sleep => 10,
-    }
-
-    file { '/etc/tmpfiles.d/microk8s.conf':
-      ensure  => file,
-      content => 'L /var/run/docker.sock - - - - /var/snap/microk8s/current/docker.sock
-',
-      owner   => 0,
-      group   => 'root',
-      mode    => '0644',
-    }
-
-    file { '/var/local/microk8s':
-      ensure => directory,
-      owner  => 0,
-      group  => 'root',
-      mode   => '0755',
-    }
-    ['dns', 'dashboard', 'storage', 'ingress'].each |$addon| {
-      exec { "microk8s addons ${addon}":
-        command => "/var/lib/snapd/snap/bin/microk8s.enable ${addon} && touch /var/local/microk8s/${addon}",
-        # microk8s doesn't appear to have a way to track enabled addons consistently
-        creates => "/var/local/microk8s/${addon}",
-        require => [ Exec['microk8s'], File['/var/local/microk8s'], Exec['microk8s available'] ],
+      exec { 'microk8s':
+        command => "/usr/bin/snap install microk8s --classic --channel=${k8s_version}/stable",
+        creates => '/var/lib/snapd/snap/bin/microk8s.enable',
+        timeout => 0,
+        require => Exec['snap restore cache'],
+        notify  => Exec['snap save cache'],
       }
-    }
-    file { '/etc/profile.d/microk8s.sh':
-      ensure  => file,
-      owner   => 0,
-      group   => 'root',
-      mode    => '0644',
-      content => '
-alias docker=/var/lib/snapd/snap/bin/microk8s.docker
-alias kubectl=/var/lib/snapd/snap/bin/microk8s.kubectl
-alias istioctl=/var/lib/snapd/snap/bin/microk8s.istioctl
-',
-      require => Exec['microk8s'],
+      ->exec { 'microk8s available':
+        command   => '/usr/bin/curl -sf http://127.0.0.1:8080/api?timeout=32s',
+        timeout   => '300',
+        tries     => 10,
+        try_sleep => 10,
+      }
+
+      file { '/etc/tmpfiles.d/microk8s.conf':
+        ensure  => file,
+        content => 'L /var/run/docker.sock - - - - /var/snap/microk8s/current/docker.sock
+  ',
+        owner   => 0,
+        group   => 'root',
+        mode    => '0644',
+      }
+
+      file { '/var/local/microk8s':
+        ensure => directory,
+        owner  => 0,
+        group  => 'root',
+        mode   => '0755',
+      }
+      ['dns', 'dashboard', 'storage', 'ingress'].each |$addon| {
+        exec { "microk8s addons ${addon}":
+          command => "/var/lib/snapd/snap/bin/microk8s.enable ${addon} && touch /var/local/microk8s/${addon}",
+          # microk8s doesn't appear to have a way to track enabled addons consistently
+          creates => "/var/local/microk8s/${addon}",
+          require => [ Exec['microk8s'], File['/var/local/microk8s'], Exec['microk8s available'] ],
+        }
+      }
+      file { '/etc/profile.d/microk8s.sh':
+        ensure  => file,
+        owner   => 0,
+        group   => 'root',
+        mode    => '0644',
+        content => '
+  alias docker=/var/lib/snapd/snap/bin/microk8s.docker
+  alias kubectl=/var/lib/snapd/snap/bin/microk8s.kubectl
+  alias istioctl=/var/lib/snapd/snap/bin/microk8s.istioctl
+  ',
+        require => Exec['microk8s'],
+      }
+    } else {
+      package { 'docker-engine': ensure => absent, }
+      ->file { '/etc/sysctl.d/forwarding.conf':
+        ensure  => file,
+        owner   => 0,
+        group   => 'root',
+        mode    => '0644',
+        content => '# IP forwarding for Docker
+  net.ipv4.ip_forward = 1
+  net.ipv6.conf.all.forwarding = 1
+  ',
+      }
+      ->remote_file { '/etc/yum.repos.d/docker-ce.repo':
+        source => 'https://download.docker.com/linux/centos/docker-ce.repo',
+        owner  => 0,
+        group  => 'root',
+        mode   => '0644',
+      }
+      ->package { ['device-mapper-persistent-data', 'lvm2']: }
+      ->package { "docker-ce-${docker_base_version}.*": }
+      ->class { '::docker':
+        manage_package              => false,
+        use_upstream_package_source => false,
+        docker_users                => [ 'vagrant' ],
+        service_overrides_template  => 'private/docker-service-overrides.erb',
+      }
     }
 
     cron { 'docker-prune':
