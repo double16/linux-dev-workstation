@@ -68,12 +68,12 @@ sdkman:
 git:
   version: 2.19.2
 vim:
-  version: 8.1.0565
+  version: 8.1.0568
 pdk:
   version: 1.8.0.0
   checksum: dd10727b21d0b6d0b4ab4bdd374a5c5be4a5c5901c64f7fece2505f28bc0dbd6
 docker:
-  version: 18.09.0
+  version: 18.06.1
 k8s:
   version: 1.12
 minikube:
