@@ -1,6 +1,7 @@
 # Google Chrome
 class private::googlechrome {
   file { '/etc/yum.repos.d/google-chrome.repo':
+    replace => false,
     mode    => '0644',
     owner   => 0,
     group   => 'root',
