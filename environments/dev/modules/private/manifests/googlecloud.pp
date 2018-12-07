@@ -15,5 +15,7 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 ',
   }
-  ->package { 'google-cloud-sdk': }
+  -> Package<| |>
+
+  package { 'google-cloud-sdk': }
 }

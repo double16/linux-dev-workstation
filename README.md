@@ -22,7 +22,7 @@ This Vagrant image contains a developer workspace with the following software:
 * [Slack](https://slack.com)
 * Xfce Desktop
 * [Firefox](https://www.mozilla.org/en-US/firefox/)
-* Chrome
+* Google Chrome
 * [VirtualBox](https://www.virtualbox.org)
 * [Vagrant](https://www.vagrantup.com)
 * [R, RStudio](https://www.rstudio.com)

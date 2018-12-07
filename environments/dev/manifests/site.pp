@@ -67,7 +67,9 @@ yum::plugin { 'replace':
 yum::group { 'Development Tools':
   ensure => present,
 }
-->package { ['git2u-all','git2u']: ensure => purged, }
+->Package<| |>
+
+package { ['git2u-all','git2u']: ensure => purged, }
 ->class { '::private::git_from_source':
   version => lookup('git', Hash)['version'],
 }
@@ -165,7 +167,6 @@ package { [
     'exiv2',
     'ansible',
     'firefox',
-    'chromium',
     'chrome-remote-desktop',
     'java-1.8.0-openjdk-devel',
     'mlocate',
@@ -284,6 +285,7 @@ include ::private::pending_changes
 include ::private::aws
 include ::private::azure
 include ::private::googlecloud
+include ::private::googlechrome
 include ::private::iterm2
 include ::private::circleci
 include ::private::xfce4
