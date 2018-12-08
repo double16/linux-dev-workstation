@@ -50,8 +50,7 @@ Vagrant.configure("2") do |config|
    config.vm.box = "double16/linux-dev-workstation"
 
    config.vm.provider :virtualbox do |v, override|
-     override.vagrant.plugins << 'vagrant-vbguest'
-     override.vagrant.plugins << 'vagrant-disksize'
+     override.vagrant.plugins = ['vagrant-cachier', 'vagrant-vbguest', 'vagrant-disksize']
 
      v.gui = true
      v.linked_clone = true if Gem::Version.new(Vagrant::VERSION) >= Gem::Version.new('1.8.0')
@@ -120,14 +119,14 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :aws do |aws, override|
-    override.vagrant.plugins << 'vagrant-sshfs'
+    override.vagrant.plugins = ["vagrant-sshfs"]
     configure_vnc_tunnel(override)
     configure_sshfs(override)
     override.ssh.username = "centos"
   end
 
   config.vm.provider :azure do |azure, override|
-    override.vagrant.plugins << 'vagrant-sshfs'
+    override.vagrant.plugins = ["vagrant-sshfs"]
     configure_vnc_tunnel(override)
     configure_sshfs(override)
   end
