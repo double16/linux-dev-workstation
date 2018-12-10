@@ -212,6 +212,7 @@
       "vm_name": "{{ user `vm_name` }}",
       "cpu": "{{ user `cpus` }}",
       "ram_size": "{{ user `memory`  }}",
+      "switch_name": "VagrantSwitch",
       "enable_secure_boot": false,
       "guest_additions_mode": "none",
       "generation": 2
@@ -247,7 +248,7 @@
         "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `version`}}.box",
         "type": "vagrant",
         "vagrantfile_template": "{{ user `vagrantfile_template` }}",
-        "include": [ "VAGRANTUP.md" ]
+        "include": [ "VAGRANTUP.md", "rdhcpd.rb" ]
       },
       {
         "keep_input_artifact": true,

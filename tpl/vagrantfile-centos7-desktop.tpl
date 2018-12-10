@@ -2,7 +2,9 @@
 # vi: set ft=ruby :
 
 require 'yaml'
+require 'json'
 require 'socket'
+require 'base64'
 
 Vagrant.require_version ">= 2.1.0"
 
@@ -34,6 +36,18 @@ def configure_sshfs(config)
     config.vm.synced_folder ".", "/vagrant", type: "sshfs"
   end
 end
+
+def hyperv_network_config(switch_name)
+  netip_cmd = "Get-NetIPAddress -InterfaceAlias \"#{switch_name}\" | ConvertTo-JSON"
+  dns_cmd = "Get-DnsClientServerAddress | ConvertTo-JSON"
+  netip_json = JSON.parse(`powershell.exe -encodedCommand #{Base64.strict_encode64(netip_cmd.encode('utf-16le'))}`)
+  dns_json = JSON.parse(`powershell.exe -encodedCommand #{Base64.strict_encode64(dns_cmd.encode('utf-16le'))}`)
+  {
+    :netip => netip_json['IPAddress'],
+    :dns   => dns_json.collect { |e| e['ServerAddresses'] }.flatten.find { |e| e.match(/(?:[0-9]{1,3}\.){3}[0-9]{1,3}/) },
+  }
+end
+
 
 Vagrant.configure("2") do |config|
 
@@ -91,6 +105,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "parallels" do |p, o|
     p.memory = vagrant_config['memory'] || 4096
+  end
+
+  config.vm.provider "hyperv" do |h, o|
+    h.cpus = vagrant_config['cores'] || "2"
+    h.linked_clone = true
+    h.maxmemory = vagrant_config['memory'] || "4096"
   end
 
   config.vm.provider :docker do |docker, override|

@@ -14,8 +14,8 @@ metadata_expire_filter=never
 EOF
 fi
 
-if [ -n "$yum_proxy" ]; then
-    echo "==> Configuring temporary Yum proxy"
+if [ -n "$yum_proxy" ] && curl --fail -s -o /dev/null "$yum_proxy"; then
+    echo "==> Configuring temporary Yum proxy at $yum_proxy"
     cat >>/etc/yum.conf <<EOF
 proxy=$yum_proxy
 EOF
