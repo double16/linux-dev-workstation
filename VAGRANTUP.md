@@ -121,7 +121,7 @@ $ docker run --privileged -d -p 2020:22 pdouble16/linux-dev-workstation
 
 ## Kubernetes
 
-`kubectl` and `microk8s` are installed. `microk8s.kubectl`, `microk8s.docker` and `microk8s.istioctl` are aliased to commands without the `microk8s.` prefix. `microk8s` is a snap application and is difficult to run under Docker. In the Docker container, `minikube` is installed and defaults to use the Docker daemon. It must be run using `sudo`:
+~~`kubectl` and `microk8s` are installed. `microk8s.kubectl`, `microk8s.docker` and `microk8s.istioctl` are aliased to commands without the `microk8s.` prefix. `microk8s` is a snap application and is difficult to run under Docker. In the Docker container,~~ `minikube` is installed and defaults to use the Docker daemon. It must be run using `sudo`:
 ```shell
 $ sudo minikube start
 ```

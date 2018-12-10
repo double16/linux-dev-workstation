@@ -4,7 +4,7 @@ class private::slack {
   $version = $config['version']
   $checksum = $config['checksum']
 
-  package { ['libappindicator', 'libsecret']: }
+  package { ['libappindicator', 'libsecret', 'libgnome-keyring']: }
   ->archive { "/tmp/vagrant-cache/slack-${version}.fc21.x86_64.rpm":
     ensure          => present,
     source          => "https://downloads.slack-edge.com/linux_releases/slack-${version}.fc21.x86_64.rpm",
