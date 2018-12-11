@@ -61,7 +61,6 @@ Vagrant.configure("2") do |config|
 
    config.vagrant.plugins = ["vagrant-cachier"]
    config.vm.define "linux-dev-workstation"
-   config.vm.box = "double16/linux-dev-workstation"
 
    config.vm.provider :virtualbox do |v, override|
      override.vagrant.plugins = ['vagrant-cachier', 'vagrant-vbguest', 'vagrant-disksize']
