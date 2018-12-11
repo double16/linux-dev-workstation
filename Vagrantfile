@@ -34,6 +34,17 @@ def configure_sshfs(config)
   end
 end
 
+def hyperv_network_config(switch_name)
+  netip_cmd = "Get-NetIPAddress -InterfaceAlias \"vEthernet (#{switch_name})\" | ConvertTo-JSON"
+  dns_cmd = "Get-DnsClientServerAddress | ConvertTo-JSON"
+  netip_json = JSON.parse(`powershell.exe -encodedCommand #{Base64.strict_encode64(netip_cmd.encode('utf-16le'))}`)
+  dns_json = JSON.parse(`powershell.exe -encodedCommand #{Base64.strict_encode64(dns_cmd.encode('utf-16le'))}`)
+  {
+    :netip => netip_json['IPAddress'],
+    :dns   => dns_json.collect { |e| e['ServerAddresses'] }.flatten.find { |e| e.match(/(?:[0-9]{1,3}\.){3}[0-9]{1,3}/) },
+  }
+end
+
 Vagrant.configure("2") do |config|
   # This trick is used to prefer a VM box over docker
   config.vm.provider "virtualbox"
@@ -96,6 +107,27 @@ Vagrant.configure("2") do |config|
       if monitor_count
         v.vmx["svga.numDisplays"] = monitor_count
         v.vmx["svga.autodetect"] = "FALSE"
+      end
+    end
+  end
+
+  config.vm.provider "hyperv" do |h, o|
+    h.cpus = vagrant_config['cores'] || "2"
+    h.linked_clone = true
+    h.maxmemory = vagrant_config['memory'] || "4096"
+    o.trigger.before [ :up, :resume, :reload ] do |trigger|
+      unless File.exist?(rdhcpd_pid_f)
+        nc = hyperv_network_config('VagrantSwitch')
+        puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
+        dhcpd_pid = spawn(RbConfig.ruby, "#{current_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
+        File.open(rdhcpd_pid_f, 'w') { |f| f.write(dhcpd_pid.to_s) }
+      end
+    end
+    o.trigger.after [ :halt, :destroy ] do |trigger|
+      if File.exist?(rdhcpd_pid_f)
+        dhcpd_pid = File.read(rdhcpd_pid_f)
+        File.delete(rdhcpd_pid_f)
+        Process.kill("KILL", dhcpd_pid.to_i)
       end
     end
   end

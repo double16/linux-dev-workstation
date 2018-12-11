@@ -14,6 +14,7 @@ default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'].fetch(ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use'], Hash.new))
 monitor_count  = vagrant_config['monitors']
 readme         = File.dirname(File.expand_path(__FILE__)) + '/VAGRANTUP.md'
+rdhcpd_pid_f   = "#{current_dir}/rdhcpd.pid"
 
 def server_port
   server = TCPServer.new('127.0.0.1', 0)
@@ -38,7 +39,7 @@ def configure_sshfs(config)
 end
 
 def hyperv_network_config(switch_name)
-  netip_cmd = "Get-NetIPAddress -InterfaceAlias \"#{switch_name}\" | ConvertTo-JSON"
+  netip_cmd = "Get-NetIPAddress -InterfaceAlias \"vEthernet (#{switch_name})\" | ConvertTo-JSON"
   dns_cmd = "Get-DnsClientServerAddress | ConvertTo-JSON"
   netip_json = JSON.parse(`powershell.exe -encodedCommand #{Base64.strict_encode64(netip_cmd.encode('utf-16le'))}`)
   dns_json = JSON.parse(`powershell.exe -encodedCommand #{Base64.strict_encode64(dns_cmd.encode('utf-16le'))}`)
@@ -47,7 +48,6 @@ def hyperv_network_config(switch_name)
     :dns   => dns_json.collect { |e| e['ServerAddresses'] }.flatten.find { |e| e.match(/(?:[0-9]{1,3}\.){3}[0-9]{1,3}/) },
   }
 end
-
 
 Vagrant.configure("2") do |config|
 
@@ -111,6 +111,21 @@ Vagrant.configure("2") do |config|
     h.cpus = vagrant_config['cores'] || "2"
     h.linked_clone = true
     h.maxmemory = vagrant_config['memory'] || "4096"
+    o.trigger.before [ :up, :resume, :reload ] do |trigger|
+      unless File.exist?(rdhcpd_pid_f)
+        nc = hyperv_network_config('VagrantSwitch')
+        puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
+        dhcpd_pid = spawn(RbConfig.ruby, "#{current_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
+        File.open(rdhcpd_pid_f, 'w') { |f| f.write(dhcpd_pid.to_s) }
+      end
+    end
+    o.trigger.after [ :halt, :destroy ] do |trigger|
+      if File.exist?(rdhcpd_pid_f)
+        dhcpd_pid = File.read(rdhcpd_pid_f)
+        File.delete(rdhcpd_pid_f)
+        Process.kill("KILL", dhcpd_pid.to_i)
+      end
+    end
   end
 
   config.vm.provider :docker do |docker, override|
