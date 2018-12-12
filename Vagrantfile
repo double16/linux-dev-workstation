@@ -4,7 +4,7 @@
 require 'yaml'
 require 'socket'
 
-Vagrant.require_version ">= 2.1.0"
+Vagrant.require_version ">= 2.1.3"
 
 current_dir    = File.dirname(File.expand_path(__FILE__))
 configs        = YAML.load_file("#{current_dir}/config.yaml")

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ORG="$1"
 NAME="$2"
@@ -68,13 +68,14 @@ printf "\n\n"
 # Prepare an upload path, and then extract that upload path from the JSON
 # response using the jq command.
 UPLOAD_PATH=`${CURL} \
+  --fail \
   --tlsv1.2 \
   --silent \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \
   https://app.vagrantup.com/api/v1/box/$ORG/$NAME/version/$VERSION/provider/$PROVIDER/upload | jq -r .upload_path`
 
 # Perform the upload
-${CURL} --tlsv1.2 --include --max-time 7200 --expect100-timeout 7200 --request PUT --output "$FILE.upload.log.txt" --upload-file "$FILE" "$UPLOAD_PATH"
+${CURL} --fail --tlsv1.2 --include --max-time 7200 --expect100-timeout 7200 --request PUT --output "$FILE.upload.log.txt" --upload-file "$FILE" "$UPLOAD_PATH"
 
 printf "\n-----------------------------------------------------\n"
 tput setaf 5
@@ -84,6 +85,7 @@ printf -- "-----------------------------------------------------\n\n"
 
 # Release the version
 ${CURL} \
+  --fail \
   --tlsv1.2 \
   --silent \
   --header "Authorization: Bearer $VAGRANT_CLOUD_TOKEN" \

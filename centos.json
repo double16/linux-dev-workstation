@@ -191,7 +191,7 @@
       "boot_command": [
         "c  setparams 'kickstart' <enter> linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS\\x207\\x20x\\86_64 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `kickstart` }} inst.text<enter> initrdefi /images/pxeboot/initrd.img<enter> boot<enter>"
       ],
-      "boot_wait": "10s",
+      "boot_wait": "20s",
       "disk_size": "{{ user `disk_size` }}",
       "disk_block_size": "1",
       "headless": "{{ user `headless` }}",
@@ -248,7 +248,7 @@
         "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `version`}}.box",
         "type": "vagrant",
         "vagrantfile_template": "{{ user `vagrantfile_template` }}",
-        "include": [ "VAGRANTUP.md", "rdhcpd.rb" ]
+        "include": [ "VAGRANTUP.md", "rdhcpd.rb", "script/create-natswitch.ps1" ]
       },
       {
         "keep_input_artifact": true,

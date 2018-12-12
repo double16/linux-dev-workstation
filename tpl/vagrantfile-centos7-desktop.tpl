@@ -6,7 +6,7 @@ require 'json'
 require 'socket'
 require 'base64'
 
-Vagrant.require_version ">= 2.1.0"
+Vagrant.require_version ">= 2.1.3"
 
 current_dir    = '.'
 configs        = File.exist?("#{current_dir}/config.yaml") ? YAML.load_file("#{current_dir}/config.yaml") : { 'configs' => Hash.new }
