@@ -125,3 +125,19 @@ $ docker run --privileged -d -p 2020:22 pdouble16/linux-dev-workstation
 ```shell
 $ sudo minikube start
 ```
+
+## Hyper-V
+
+Vagrant networking support for Hyper-V isn't as complete as VirtualBox or VMware. There are some extra steps necessary to get an IP address for the box. Hyper-V requires running Vagrant as administrator. Using PowerShell as administrator, execute the following:
+
+```powershell
+PS > vagrant up --provider hyperv   # this may fail, that's ok for now
+PS > ${HOME}\.vagrant.d\boxes\linux-dev-workstation\_version_\hyperv\create-natswitch.ps1  # ignore errors, these are from detecting existing networking
+PS > vagrant reload
+```
+
+To see the GUI:
+1. Open "Hyper-V Manager"
+2. Click the local machine in the left panel
+3. Click the virtual machine created by Vagrant
+4. Click "Connect..." in the right bottom panel

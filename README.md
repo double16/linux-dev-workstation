@@ -86,6 +86,15 @@ $ vagrant provision
 
 Make sure to read [VAGRANTUP.md](VAGRANTUP.md) !
 
+## Hyper-V
+
+There is some setup required before using Hyper-V. Run the following commands in PowerShell as an Administrator:
+
+```powershell
+PS > Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+PS > .\create-natswitch.ps1     # ignore errors, these are from detecting existing networking
+```
+
 ## Credits
 The packer build is strongly based on https://github.com/boxcutter/centos.
 

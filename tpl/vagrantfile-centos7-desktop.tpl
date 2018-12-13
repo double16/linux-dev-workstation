@@ -9,12 +9,13 @@ require 'base64'
 Vagrant.require_version ">= 2.1.3"
 
 current_dir    = '.'
+box_dir        = File.dirname(File.expand_path(__FILE__))
 configs        = File.exist?("#{current_dir}/config.yaml") ? YAML.load_file("#{current_dir}/config.yaml") : { 'configs' => Hash.new }
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'].fetch(ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use'], Hash.new))
 monitor_count  = vagrant_config['monitors']
-readme         = File.dirname(File.expand_path(__FILE__)) + '/VAGRANTUP.md'
-rdhcpd_pid_f   = "#{current_dir}/rdhcpd.pid"
+readme         = "#{box_dir}/VAGRANTUP.md"
+rdhcpd_pid_f   = "#{box_dir}/rdhcpd.pid"
 
 def server_port
   server = TCPServer.new('127.0.0.1', 0)
@@ -49,6 +50,18 @@ def hyperv_network_config(switch_name)
   }
 end
 
+def validate_pid_f(pid_f)
+  return false unless File.exist?(pid_f)
+  pid = File.read(pid_f)
+  begin
+    Process.kill(0, pid.to_i)
+    true
+  rescue
+    File.delete(pid_f)
+    false
+  end
+end
+
 Vagrant.configure("2") do |config|
 
    if File.exist? readme
@@ -56,6 +69,8 @@ Vagrant.configure("2") do |config|
 
 #{File.read(readme)}
 
+********************************************************************************
+Find this file at #{readme}
 ********************************************************************************"
    end
 
@@ -111,18 +126,24 @@ Vagrant.configure("2") do |config|
     h.linked_clone = true
     h.maxmemory = vagrant_config['memory'] || "4096"
     o.trigger.before [ :up, :resume, :reload ] do |trigger|
-      unless File.exist?(rdhcpd_pid_f)
-        nc = hyperv_network_config('VagrantSwitch')
-        puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
-        dhcpd_pid = spawn(RbConfig.ruby, "#{current_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
-        File.open(rdhcpd_pid_f, 'w') { |f| f.write(dhcpd_pid.to_s) }
+      trigger.info = "Start DHCP Server"
+      trigger.ruby do |env, machine| do
+        unless validate_pid_f(rdhcpd_pid_f)
+          nc = hyperv_network_config('VagrantSwitch')
+          puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
+          dhcpd_pid = spawn(RbConfig.ruby, "#{box_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
+          File.open(rdhcpd_pid_f, 'w') { |f| f.write(dhcpd_pid.to_s) }
+        end
       end
     end
-    o.trigger.after [ :halt, :destroy ] do |trigger|
-      if File.exist?(rdhcpd_pid_f)
-        dhcpd_pid = File.read(rdhcpd_pid_f)
-        File.delete(rdhcpd_pid_f)
-        Process.kill("KILL", dhcpd_pid.to_i)
+    o.trigger.after [ :halt, :suspend, :destroy ] do |trigger|
+      trigger.info = "Stop DHCP Server"
+      trigger.ruby do |env, machine| do
+        if validate_pid_f(rdhcpd_pid_f)
+          dhcpd_pid = File.read(rdhcpd_pid_f)
+          File.delete(rdhcpd_pid_f)
+          Process.kill("KILL", dhcpd_pid.to_i)
+        end
       end
     end
   end

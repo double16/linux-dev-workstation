@@ -7,6 +7,7 @@ require 'socket'
 Vagrant.require_version ">= 2.1.3"
 
 current_dir    = File.dirname(File.expand_path(__FILE__))
+box_dir        = current_dir
 configs        = YAML.load_file("#{current_dir}/config.yaml")
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
@@ -43,6 +44,18 @@ def hyperv_network_config(switch_name)
     :netip => netip_json['IPAddress'],
     :dns   => dns_json.collect { |e| e['ServerAddresses'] }.flatten.find { |e| e.match(/(?:[0-9]{1,3}\.){3}[0-9]{1,3}/) },
   }
+end
+
+def validate_pid_f(pid_f)
+  return false unless File.exist?(pid_f)
+  pid = File.read(pid_f)
+  begin
+    Process.kill(0, pid.to_i)
+    true
+  rescue
+    File.delete(pid_f)
+    false
+  end
 end
 
 Vagrant.configure("2") do |config|
@@ -116,18 +129,24 @@ Vagrant.configure("2") do |config|
     h.linked_clone = true
     h.maxmemory = vagrant_config['memory'] || "4096"
     o.trigger.before [ :up, :resume, :reload ] do |trigger|
-      unless File.exist?(rdhcpd_pid_f)
-        nc = hyperv_network_config('VagrantSwitch')
-        puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
-        dhcpd_pid = spawn(RbConfig.ruby, "#{current_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
-        File.open(rdhcpd_pid_f, 'w') { |f| f.write(dhcpd_pid.to_s) }
+      trigger.info = "Start DHCP Server"
+      trigger.ruby do |env, machine| do
+        unless validate_pid_f(rdhcpd_pid_f)
+          nc = hyperv_network_config('VagrantSwitch')
+          puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
+          dhcpd_pid = spawn(RbConfig.ruby, "#{box_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
+          File.open(rdhcpd_pid_f, 'w') { |f| f.write(dhcpd_pid.to_s) }
+        end
       end
     end
     o.trigger.after [ :halt, :destroy ] do |trigger|
-      if File.exist?(rdhcpd_pid_f)
-        dhcpd_pid = File.read(rdhcpd_pid_f)
-        File.delete(rdhcpd_pid_f)
-        Process.kill("KILL", dhcpd_pid.to_i)
+      trigger.info = "Stop DHCP Server"
+      trigger.ruby do |env, machine| do
+        if validate_pid_f(rdhcpd_pid_f)
+          dhcpd_pid = File.read(rdhcpd_pid_f)
+          File.delete(rdhcpd_pid_f)
+          Process.kill("KILL", dhcpd_pid.to_i)
+        end
       end
     end
   end
@@ -172,6 +191,10 @@ Vagrant.configure("2") do |config|
     fi
 
     [ -x /usr/bin/makedeltarpm ] || yum install -y deltarpm
+
+    # Cannot update kernel on VirtualBox 5.x due to incompatible video driver
+    yum install -y kernel-headers kernel-devel kernel-devel-uname-r
+    grep -q "exclude=kernel" /etc/yum.conf || echo "exclude=kernel*" >> /etc/yum.conf
 
     locale -a | grep -qi en_US || (
         yum reinstall -y glibc-common

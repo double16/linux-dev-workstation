@@ -188,6 +188,7 @@ package { [
     'gkrellm-top',
     'collectl',
     'net-tools',
+    'cifs-utils',
 
     # For recording the screen via 'ffmpeg x11grab'
     'ffmpeg',
@@ -250,9 +251,6 @@ unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
     version => '5.2',
   }
   ->User<| title == 'vagrant' |> { groups +> 'vboxusers' }
-
-  package { "kernel-devel-${::kernelrelease}": }
-  ->Exec<| title == 'vboxdrv' |>
 
   exec { 'vboxdrv.sh incorrect egrep':
     command => "/usr/bin/sed -i 's:/bin/false[)]:/bin/false[)]:' /usr/lib/virtualbox/vboxdrv.sh",
