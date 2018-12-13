@@ -203,7 +203,7 @@ MAXRECVLEN  = 1500
 # program start.
 require 'socket'
 soc = UDPSocket.new
-soc.setsockopt( Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1 ) 
+soc.setsockopt( Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1 )
 putlog "binding on #{interface}"
 soc.bind(interface,hport)
 loop do
@@ -211,9 +211,9 @@ loop do
 	packet = BootpPacket.new
 	packet.parse(data)
 	case packet.options[:message_type]
-	when DHCPDISCOVER	
+	when DHCPDISCOVER
 		putlog "Got DHCP-Discover from " + packet.macf + "/"+  packet.options[:hostname].to_s
-		
+
 		reply = packet.clone
 		reply.op = 2
 		#if packet.options[:address_request] != nil
@@ -224,9 +224,9 @@ loop do
 		reply.options[:router] = gateway
 		reply.options[:lease_time] = leasetime
 		reply.options[:dhcp_server] = interface
-		reply.options[:dns_server] = dns 
+		reply.options[:dns_server] = dns
 		soc.send(reply.toPacket, 0, broadcast, cport)
-		putlog "Sending Offer " + lease.join(".") 
+		putlog "Sending Offer " + lease.join(".")
 	when DHCPREQUEST
 		putlog "Got request."		
 		reply = packet.clone
@@ -234,24 +234,24 @@ loop do
 		lease = [network[0],network[1],network[2],whois(packet.macf)]
 		if lease[3] == nil
 			putlog "Got DHCPRequest but the owner is missing in the database"
-			break
+			lease[3] = giveIpTo(packet.macf)
 		end
 		reply.yiaddr = lease.pack("CCCC").unpack("N")[0]
 		reply.options = {:message_type=>DHCPACK}
 		reply.options[:subnet_mask] =  mask
 		reply.options[:router] = gateway
 		reply.options[:lease_time] = leasetime
-		reply.options[:dhcp_server] = interface		
-		reply.options[:dns_server] = dns 
+		reply.options[:dhcp_server] = interface
+		reply.options[:dns_server] = dns
 		soc.send(reply.toPacket, 0, broadcast, cport)
 		putlog "ACK sent."
 	when DHCPRELEASE
 		if @staticdb.member?(packet.macf)
-			putlog "Got release from " + packet.macf + ", ignored! You're in the static database."		
+			putlog "Got release from " + packet.macf + ", ignored! You're in the static database."
 		else
 			n = whois(packet.macf)
 			if n != nil
-				@database[n] = nil			
+				@database[n] = nil
 				putlog "Got release from " + packet.macf + ", freeing up " + n.to_s + "!"
 			else
 				putlog "Got release from " + packet.macf + ", ignored! Not in the database."
