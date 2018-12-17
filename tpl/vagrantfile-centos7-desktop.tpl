@@ -127,7 +127,7 @@ Find this file at #{readme}
     h.maxmemory = vagrant_config['memory'] || "4096"
     o.trigger.before [ :up, :resume, :reload ] do |trigger|
       trigger.info = "Start DHCP Server"
-      trigger.ruby do |env, machine| do
+      trigger.ruby do |env, machine|
         unless validate_pid_f(rdhcpd_pid_f)
           nc = hyperv_network_config('VagrantSwitch')
           puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
@@ -138,7 +138,7 @@ Find this file at #{readme}
     end
     o.trigger.after [ :halt, :suspend, :destroy ] do |trigger|
       trigger.info = "Stop DHCP Server"
-      trigger.ruby do |env, machine| do
+      trigger.ruby do |env, machine|
         if validate_pid_f(rdhcpd_pid_f)
           dhcpd_pid = File.read(rdhcpd_pid_f)
           File.delete(rdhcpd_pid_f)

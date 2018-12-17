@@ -141,3 +141,11 @@ To see the GUI:
 2. Click the local machine in the left panel
 3. Click the virtual machine created by Vagrant
 4. Click "Connect..." in the right bottom panel
+
+### Display Resolution
+
+Display resolution is fixed in the VM at boot time. It can be set by running the following commands:
+
+```shell
+$ grubby --update-kernel=ALL --args="video=hyperv_fb:1440x1024"
+```
