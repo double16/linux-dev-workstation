@@ -122,6 +122,10 @@ Find this file at #{readme}
   end
 
   config.vm.provider "hyperv" do |h, o|
+    # yum breaks when using SMB mounts
+    if Vagrant.has_plugin?("vagrant-cachier")
+      config.cache.auto_detect = false
+    end
     h.cpus = vagrant_config['cores'] || "2"
     h.linked_clone = true
     h.maxmemory = vagrant_config['memory'] || "4096"

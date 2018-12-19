@@ -12,6 +12,7 @@ configs        = YAML.load_file("#{current_dir}/config.yaml")
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
 monitor_count  = vagrant_config['monitors']
+rdhcpd_pid_f   = "#{box_dir}/rdhcpd.pid"
 
 def server_port
   server = TCPServer.new('127.0.0.1', 0)
@@ -125,6 +126,10 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider "hyperv" do |h, o|
+    # yum breaks when using SMB mounts
+    if Vagrant.has_plugin?("vagrant-cachier")
+      config.cache.auto_detect = false
+    end
     h.cpus = vagrant_config['cores'] || "2"
     h.linked_clone = true
     h.maxmemory = vagrant_config['memory'] || "4096"
