@@ -240,9 +240,10 @@ Vagrant.configure("2") do |config|
       "user_email" => vagrant_config['user_email'] || `git config --get user.email 2>/dev/null`.chomp,
       "timezone" => vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600),
       "theme" => vagrant_config['theme'],
+      "resolution" => vagrant_config['resolution'],
     }
-#    puppet.options = "--debug"
-#    puppet.options = "--noop"
+  #  puppet.options = "--debug"
+  #  puppet.options = "--noop"
   end
 
 end

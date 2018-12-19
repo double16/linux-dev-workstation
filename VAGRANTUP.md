@@ -40,6 +40,8 @@ configs:
         user_email: droppy@dogpound.nil
         # Set the number of monitors, defaults to let the provider determine it
         monitors: 1
+        # Configure display resolution on startup, useful for providers that do not automatically resize
+        resolution: 1440x1024
         # Optional Timezone, pulled from host machine if not specified
         timezone: America/Chicago
         # Solarized theme selection: 'light', 'dark', 'none' or not specified. Not specifying will
@@ -158,8 +160,4 @@ To see the GUI:
 
 ### Display Resolution
 
-Display resolution is fixed in the VM at boot time. It can be set by running the following commands:
-
-```shell
-$ grubby --update-kernel=ALL --args="video=hyperv_fb:1440x1024"
-```
+Display resolution is fixed in the VM at boot time. It can be set by configuring the `resolution` property in `config.yaml`.

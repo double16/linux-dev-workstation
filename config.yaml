@@ -1,8 +1,8 @@
 ---
 configs:
-    use: 'small'
+    use: 'medium'
     small:
-        memory: 2048
+        memory: 3072
         cores: 2
     medium:
         memory: 4096
@@ -23,3 +23,5 @@ configs:
     default:
         # Limit DNS resolution to IPV4
         ipv4only: true
+        # Configure display resolution on startup, useful for providers that do not automatically resize
+        #resolution: 1280x1024

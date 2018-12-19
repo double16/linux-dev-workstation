@@ -288,6 +288,7 @@ include ::private::iterm2
 include ::private::circleci
 include ::private::xfce4
 include ::private::rust
+include ::private::fb
 
 unless $::virtual == 'docker' {
   include ::private::my_emacs
