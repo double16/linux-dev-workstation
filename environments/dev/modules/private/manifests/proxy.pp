@@ -13,6 +13,20 @@ net.ipv6.conf.default.disable_ipv6=1
 '
   }
 
+  file { '/etc/gai.conf':
+    ensure => present,
+    owner  => 0,
+    group  => 'root',
+    mode   => '0644',
+  }
+  ->file_line { 'getaddrinfo preference':
+    ensure            => str2bool($::ipv4only) ? { true => present, default => absent },
+    path              => '/etc/gai.conf',
+    line              => 'precedence ::ffff:0:0/96  100',
+    match             => '^precedence\s+::ffff:0:0/96\s+',
+    match_for_absence => true,
+  }
+
   file_line { 'Yum force ipv4':
     ensure => str2bool($::ipv4only) ? { true => present, default => absent },
     path   => '/etc/yum.conf',

@@ -101,7 +101,7 @@ class private::my_emacs {
     group       => 'vagrant',
     cwd         => '/home/vagrant',
     refreshonly => true,
-    timeout     => 1200,
+    timeout     => 2400,
     require     => [ Exec["install emacs ${version}"] ],
     subscribe   => [ Vcsrepo['/home/vagrant/.emacs.d'], File['/home/vagrant/.spacemacs'] ],
   }
