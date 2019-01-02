@@ -19,10 +19,11 @@ if [ "$INSTALL_VAGRANT_KEY" = "true" ] || [ "$INSTALL_VAGRANT_KEY" = "1" ]; then
         echo "==> Adding $SUDO_USER to group ${SSH_USER}"
         /usr/sbin/usermod -a -G $SSH_USER $SUDO_USER
       fi
-      echo "==> Giving ${SSH_USER} sudo powers"
-      echo "${SSH_USER}"|passwd --stdin $SSH_USER
-      echo "${SSH_USER}        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
   fi
+
+  echo "==> Giving ${SSH_USER} sudo powers"
+  echo "${SSH_USER}"|passwd --stdin $SSH_USER
+  echo "${SSH_USER}        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 
   echo '==> Installing Vagrant SSH key'
   mkdir -pm 700 ${SSH_USER_HOME}/.ssh

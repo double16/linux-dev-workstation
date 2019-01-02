@@ -24,12 +24,12 @@ def server_port
   port
 end
 
-def configure_vnc_tunnel(config)
+def configure_rdp_tunnel(config)
   config.trigger.before :ssh do |trigger|
-    trigger.name = "Tunnel VNC connection through SSH"
-    vnc_port = server_port
-    trigger.info = "Connect to desktop via VNC using `vncviewer localhost:#{vnc_port}`"
-    config.ssh.extra_args = ["-L", "#{vnc_port}:localhost:5900"]
+    trigger.name = "Tunnel RDP connection through SSH"
+    rdp_port = server_port
+    trigger.info = "Connect to desktop via RDP using `localhost:#{rdp_port}`"
+    config.ssh.extra_args = ["-L", "#{rdp_port}:localhost:3389"]
   end
 end
 
@@ -76,6 +76,8 @@ Find this file at #{readme}
 
    config.vagrant.plugins = ["vagrant-cachier"]
    config.vm.define "linux-dev-workstation"
+
+   configure_rdp_tunnel(config)
 
    config.vm.provider :virtualbox do |v, override|
      override.vagrant.plugins = ['vagrant-cachier', 'vagrant-vbguest', 'vagrant-disksize']
@@ -153,7 +155,6 @@ Find this file at #{readme}
   end
 
   config.vm.provider :docker do |docker, override|
-    configure_vnc_tunnel(override)
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
     docker.has_ssh = true
@@ -179,14 +180,12 @@ Find this file at #{readme}
 
   config.vm.provider :aws do |aws, override|
     override.vagrant.plugins = ["vagrant-sshfs"]
-    configure_vnc_tunnel(override)
     configure_sshfs(override)
     override.ssh.username = "centos"
   end
 
   config.vm.provider :azure do |azure, override|
     override.vagrant.plugins = ["vagrant-sshfs"]
-    configure_vnc_tunnel(override)
     configure_sshfs(override)
   end
 
