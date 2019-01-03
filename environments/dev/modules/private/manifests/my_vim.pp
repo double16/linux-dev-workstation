@@ -3,6 +3,33 @@ class private::my_vim {
   $vim_config = lookup('vim', Hash)
   $version = $vim_config['version']
   $cache_file = "/tmp/vagrant-cache/vim-${version}-built.tgz"
+  $plugin_path = '/home/vagrant/.vim/bundle'
+  $plugin_cache_path = '/tmp/vagrant-cache/vim-plugins'
+
+  $vim_plugins = [
+    'scrooloose/syntastic',
+    'scrooloose/nerdtree',
+    'Xuyuanp/nerdtree-git-plugin',
+    'altercation/vim-colors-solarized',
+    'rodjek/vim-puppet',
+    'maksimr/vim-jsbeautify',
+    'elzr/vim-json',
+    'bronson/vim-trailing-whitespace',
+    'ervandew/matchem',
+    'jtratner/vim-flavored-markdown',
+    'nathanaelkane/vim-indent-guides',
+    'tpope/vim-fugitive',
+    'bling/vim-airline',
+    'fatih/vim-go',
+    'vim-ruby/vim-ruby',
+    'tpope/vim-endwise',
+    'othree/html5.vim',
+    'junegunn/gv.vim',
+    'tpope/vim-commentary',
+    'ctrlpvim/ctrlp.vim',
+    'ekalinin/dockerfile.vim',
+    'editorconfig/editorconfig-vim',
+  ]
 
   class { '::vim':
     autoupgrade    => false,
@@ -94,42 +121,41 @@ export EDITOR="vim"',
     }
   }
 
+  file { $plugin_cache_path:
+    ensure => directory,
+    mode   => '0755',
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+
   define plugin() {
     $plugin_name = split($title, '/')[1]
+    $plugin_path = $private::my_vim::plugin_path
+    $plugin_cache_path = $private::my_vim::plugin_cache_path
 
     vim::plugin { $plugin_name:
       user => 'vagrant',
       url  => "https://github.com/${title}.git",
     }
+
+    $cache_file = "${plugin_cache_path}/${plugin_name}.tgz"
+    exec { "vim plugin restore cache for ${title}":
+      command => "/usr/bin/tar xzf \"${cache_file}\" -C \"${plugin_path}\"",
+      onlyif  => "/usr/bin/find \"${cache_file}\" -mtime -30 | grep -q .",
+      creates => "${plugin_path}/${plugin_name}",
+      require => File[$plugin_path],
+    }
+    ->Exec<| title == "vagrant-${plugin_name}" |>
+    ~>exec { "vim plugin save cache for ${title}":
+      command     => "/bin/rm -f \"${cache_file}\" ; /bin/ls \"${plugin_path}\" | grep -iF \"${plugin_name}\" | xargs -r /usr/bin/tar czf \"${cache_file}\" -C \"${plugin_path}\"",
+      refreshonly => true,
+      require     => File[$plugin_cache_path],
+      onlyif      => '/usr/bin/mountpoint /tmp/vagrant-cache',
+    }
   }
 
   vim::pathogen { 'vagrant': }
-  private::my_vim::plugin { [
-    'scrooloose/syntastic',
-    'scrooloose/nerdtree',
-    'Xuyuanp/nerdtree-git-plugin',
-    'altercation/vim-colors-solarized',
-    'rodjek/vim-puppet',
-    'maksimr/vim-jsbeautify',
-    'elzr/vim-json',
-    'bronson/vim-trailing-whitespace',
-    'ervandew/matchem',
-    'jtratner/vim-flavored-markdown',
-    'nathanaelkane/vim-indent-guides',
-    'tpope/vim-fugitive',
-    'bling/vim-airline',
-    'fatih/vim-go',
-    'vim-ruby/vim-ruby',
-    'tpope/vim-endwise',
-    'othree/html5.vim',
-    'junegunn/gv.vim',
-    'tpope/vim-commentary',
-    'ctrlpvim/ctrlp.vim',
-    'ekalinin/dockerfile.vim',
-    'editorconfig/editorconfig-vim',
-  ]:
-  }
-
+  private::my_vim::plugin { $vim_plugins: }
 
   unless empty($global_color_scheme) or $global_color_scheme == 'none' {
     ['vagrant', 'root'].each |$user| {
@@ -206,7 +232,14 @@ export EDITOR="vim"',
     content => 'filetype plugin indent on',
   }
 
+  $ycm_cache_file = "${plugin_cache_path}/youcompleteme-built.tgz"
   package { ['cmake']: }
+  exec { 'restore cache for youcompleteme':
+    command => "/usr/bin/tar xzf \"${ycm_cache_file}\" -C \"${plugin_path}\"",
+    onlyif  => "/usr/bin/find \"${ycm_cache_file}\" -mtime -30 | grep -q .",
+    creates => "${plugin_path}/youcompleteme",
+    require => File[$plugin_path],
+  }
   -> private::my_vim::plugin { 'valloric/youcompleteme': }
   -> exec { 'youcompleteme submodule':
     path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin'],
@@ -224,6 +257,13 @@ export EDITOR="vim"',
     timeout => 0,
     require => [ Package['go'], Package['python-devel'], Package['python-requests'] ],
   }
+  ~>exec { 'save cache for youcompleteme':
+    command     => "/bin/rm -f \"${ycm_cache_file}\" ; /bin/ls \"${plugin_path}\" | grep -iF \"${plugin_name}\" | xargs -r /usr/bin/tar czf \"${ycm_cache_file}\" -C \"${plugin_path}\"",
+    refreshonly => true,
+    require     => File[$plugin_cache_path],
+    onlyif      => '/usr/bin/mountpoint /tmp/vagrant-cache',
+  }
+
   Nodenv::Package<| |>
   -> Private::My_vim::Plugin['valloric/youcompleteme']
   Git::Config<| |>
