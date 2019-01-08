@@ -57,6 +57,14 @@ fi
 echo "==> Removing temporary files used to build box"
 if mountpoint /tmp/vagrant-cache; then
     find /tmp -not -path '/tmp/vagrant-cache*' -a -not -path '/tmp' -delete
+
+    rm /var/cache/yum
+    mkdir -p /var/cache/yum
+    chown root:root /var/cache/yum
+    chmod 0755 /var/cache/yum
+
+    sed -i '/proxy=/d' /root/.npmrc
+    sed -i '/proxy=/d' /home/${USERNAME}/.npmrc
 else
     find /tmp -not -path '/tmp' -delete
 fi

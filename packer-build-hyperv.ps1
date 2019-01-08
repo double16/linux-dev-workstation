@@ -19,7 +19,7 @@ if ("" -ne $err) {
   Exit
 }
 
-..\packer.exe build -only=hyperv-iso -var "packer_host=$HostName" -var "packer_user=$ShareUser" -var "packer_password=$SharePassword" -var-file mutual.json centos.json | Tee-Object -FilePath "packer.log"
+packer.exe build -only=hyperv-iso -var "packer_host=$HostName" -var "packer_user=$ShareUser" -var "packer_password=$SharePassword" -var-file custom-vars.json centos.json | Tee-Object -FilePath "packer.log"
 
 
 Remove-SmbShare -Name $ShareName -Force
