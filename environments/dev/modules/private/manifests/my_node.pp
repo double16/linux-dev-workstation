@@ -39,6 +39,7 @@ class private::my_node {
       nodenv::package { "${package} on ${version}":
         package      => $package,
         node_version => $version,
+        timeout      => 600, # default is 300, 2019-01-07
       }
     }
   }

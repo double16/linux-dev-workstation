@@ -36,6 +36,15 @@ class private::my_ruby {
 
   $ruby_versions.each |$item| {
     $ver = $item['version']
+    $ver_maj_min = $ver ? {
+      /.*?([0-9]+\.[0-9]+).*/ => Float($1),
+      default                 => 0.0,
+    }
+    if $ver_maj_min >= 2.3 {
+      $bundler_ver = '>=0'
+    } else {
+      $bundler_ver = '<2'
+    }
     $cache = "/tmp/vagrant-cache/rbenv/built-${ver}.tgz"
     $global = pick($item['global'], false)
     exec { "Unarchive Ruby ${ver}":
@@ -45,7 +54,8 @@ class private::my_ruby {
       require => File['/opt/rbenv/versions'],
     }
     ->rbenv::build { $ver:
-      global => $global,
+      global          => $global,
+      bundler_version => $bundler_ver,
     }
     ~>exec { "Archive Ruby ${ver}":
       command     => "/usr/bin/tar czf ${cache} -C /opt/rbenv/versions ${ver}",
