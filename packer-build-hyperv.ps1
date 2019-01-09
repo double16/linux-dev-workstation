@@ -5,9 +5,16 @@ Import-Module NetTCPIP
 
 $ShareName = "VagrantCache"
 $HostName = Get-NetIPAddress -InterfaceAlias Ethernet0 | foreach { $_.IPAddress }
-$ShareUser = Read-Host -Prompt "User for caching share"
-$SharePassword = Read-Host -assecurestring -Prompt "Password for caching share"
-$SharePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SharePassword))
+
+$ShareUser = $env:SHARE_USER
+if ($null -eq $ShareUser) {
+    $ShareUser = Read-Host -Prompt "User for caching share"
+}
+$SharePassword = $env:SHARE_PASSWORD
+if ($null -eq $SharePassword) {
+    $SharePassword = Read-Host -assecurestring -Prompt "Password for caching share"
+    $SharePassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SharePassword))
+}
 
 Get-SmbShare -Name $ShareName -OutVariable out -ErrorVariable err -erroraction 'silentlycontinue'
 if ("" -ne $out) {

@@ -24,7 +24,14 @@ class private::my_vagrant {
   $cache_file = "/tmp/vagrant-cache/vagrant-plugins-${vagrant_plugins_sum}.tgz"
   $cache_dir = '/home/vagrant/.vagrant.d/gems/2.4.4'
 
-  exec { 'restore cache for vagrant plugins':
+  file { ['/home/vagrant/.vagrant.d', '/home/vagrant/.vagrant.d/gems', '/home/vagrant/.vagrant.d/gems/2.4.4']:
+    ensure  => directory,
+    owner   => 'vagrant',
+    group   => 'vagrant',
+    mode    => '0775',
+    require => Class['vagrant'],
+  }
+  ->exec { 'restore cache for vagrant plugins':
     command => "/usr/bin/tar xzf \"${cache_file}\" -C ${cache_dir}",
     onlyif  => "/usr/bin/find \"${cache_file}\" -mtime -30 | grep -q .",
     creates => "${cache_dir}/cache/vagrant-cachier-1.2.1.gem",
