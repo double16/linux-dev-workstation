@@ -1,4 +1,5 @@
 ' Copyright (c) 2007, Tony Ivanov
+  Copyright (c) 2018-2019, Patrick B. Double
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -22,6 +23,40 @@
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.'
+
+#------------------------------------------------------------------------
+# Process Control
+#------------------------------------------------------------------------
+pid_file = "#{File.dirname(File.expand_path(__FILE__))}/rdhcpd.pid"
+
+def validate_pid_f(pid_f)
+  return false unless File.exist?(pid_f)
+  pid = File.read(pid_f)
+  begin
+    Process.kill(0, pid.to_i)
+    true
+  rescue
+    File.delete(pid_f)
+    false
+  end
+end
+
+if ARGV[0] == "stop"
+	if validate_pid_f(pid_file)
+		dhcpd_pid = File.read(pid_file)
+		File.delete(pid_file)
+		Process.kill("KILL", dhcpd_pid.to_i)
+	end
+	exit 0
+end
+
+if validate_pid_f(pid_file)
+	STDERR.puts "#{__FILE__} already running as PID #{File.read(pid_file)}"
+	exit 1
+end
+at_exit { File.delete(pid_file) }
+File.open(pid_file, 'w') { |f| f.write(Process.pid.to_s) }
+
 
 #------------------------------------------------------------------------
 # Configuration
@@ -200,6 +235,7 @@ DHCPLEASEACTIVE=13
 hport = 67
 cport = 68
 MAXRECVLEN  = 1500
+
 # program start.
 require 'socket'
 soc = UDPSocket.new
@@ -260,6 +296,6 @@ loop do
 	when nil
 		putlog "PANIC! Packet Has no message_type"
 	else
-        putlog "PANIC! Unknown message type "+ packet.options[:message_type].inspect
+		putlog "PANIC! Unknown message type "+ packet.options[:message_type].inspect
 	end
 end
