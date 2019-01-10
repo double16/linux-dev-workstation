@@ -19,3 +19,4 @@ id_rsa_insecure
 .credentialsrc
 rdhcpd.pid
 packer.exe
+packer.zip
