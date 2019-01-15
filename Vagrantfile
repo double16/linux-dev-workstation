@@ -21,12 +21,12 @@ def server_port
   port
 end
 
-def configure_vnc_tunnel(config)
+def configure_rdp_tunnel(config)
   config.trigger.before :ssh do |trigger|
-    trigger.name = "Tunnel VNC connection through SSH"
-    vnc_port = server_port
-    trigger.info = "Connect to desktop via VNC using `vncviewer localhost:#{vnc_port}`"
-    config.ssh.extra_args = ["-L", "#{vnc_port}:localhost:5900"]
+    trigger.name = "Tunnel RDP connection through SSH"
+    rdp_port = server_port
+    trigger.info = "Connect to desktop via RDP using `localhost:#{rdp_port}`"
+    config.ssh.extra_args = ["-L", "#{rdp_port}:localhost:3389"]
   end
 end
 
@@ -71,11 +71,13 @@ Vagrant.configure("2") do |config|
   else
     config.vm.box = "double16/linux-dev-workstation"
   end
+
+  configure_rdp_tunnel(config)
+
   config.vm.provider :docker do |docker, override|
-    configure_vnc_tunnel(override)
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
-    docker.image = "jdeathe/centos-ssh:centos-7-2.3.2"
+    docker.image = "jdeathe/centos-ssh:centos-7-2.4.1"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
     docker.has_ssh = true

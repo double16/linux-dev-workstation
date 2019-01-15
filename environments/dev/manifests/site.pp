@@ -272,7 +272,7 @@ include ::private::svn
 include ::private::slack
 include ::private::dockstation
 include ::private::clean
-include ::private::vnc
+include ::private::rdp
 include ::private::hashistack
 include ::private::my_vcsrepos
 include ::private::rlang
