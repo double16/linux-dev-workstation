@@ -15,7 +15,6 @@ default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'].fetch(ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use'], Hash.new))
 monitor_count  = vagrant_config['monitors']
 readme         = "#{box_dir}/VAGRANTUP.md"
-rdhcpd_pid_f   = "#{box_dir}/rdhcpd.pid"
 
 def server_port
   server = TCPServer.new('127.0.0.1', 0)
@@ -48,18 +47,6 @@ def hyperv_network_config(switch_name)
     :netip => netip_json['IPAddress'],
     :dns   => dns_json.collect { |e| e['ServerAddresses'] }.flatten.find { |e| e.match(/(?:[0-9]{1,3}\.){3}[0-9]{1,3}/) },
   }
-end
-
-def validate_pid_f(pid_f)
-  return false unless File.exist?(pid_f)
-  pid = File.read(pid_f)
-  begin
-    Process.kill(0, pid.to_i)
-    true
-  rescue
-    File.delete(pid_f)
-    false
-  end
 end
 
 Vagrant.configure("2") do |config|
@@ -130,26 +117,19 @@ Find this file at #{readme}
     end
     h.cpus = vagrant_config['cores'] || "2"
     h.linked_clone = true
-    h.maxmemory = vagrant_config['memory'] || "4096"
-    o.trigger.before [ :up, :resume, :reload ] do |trigger|
+    h.memory = vagrant_config['memory'] || "4096"
+    o.trigger.before [ :up, :resume, :reload, :provision ] do |trigger|
       trigger.info = "Start DHCP Server"
       trigger.ruby do |env, machine|
-        unless validate_pid_f(rdhcpd_pid_f)
-          nc = hyperv_network_config('VagrantSwitch')
-          puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
-          dhcpd_pid = spawn(RbConfig.ruby, "#{box_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
-          File.open(rdhcpd_pid_f, 'w') { |f| f.write(dhcpd_pid.to_s) }
-        end
+        nc = hyperv_network_config('VagrantSwitch')
+        puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
+        spawn(RbConfig.ruby, "#{box_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
       end
     end
     o.trigger.after [ :halt, :suspend, :destroy ] do |trigger|
       trigger.info = "Stop DHCP Server"
       trigger.ruby do |env, machine|
-        if validate_pid_f(rdhcpd_pid_f)
-          dhcpd_pid = File.read(rdhcpd_pid_f)
-          File.delete(rdhcpd_pid_f)
-          Process.kill("KILL", dhcpd_pid.to_i)
-        end
+        spawn(RbConfig.ruby, "#{box_dir}/rdhcpd.rb", 'stop')
       end
     end
   end

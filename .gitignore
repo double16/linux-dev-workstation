@@ -18,5 +18,5 @@ id_rsa_insecure
 *.qcow2
 .credentialsrc
 rdhcpd.pid
-packer.exe
-packer.zip
+*.exe
+*.zip
