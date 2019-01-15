@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 
-if [[ ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'azure' || ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
-  echo "==> Configuring RDP for user interface"
+if [[ ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'azure' || ${PACKER_BUILDER_TYPE} =~ 'docker' || ${PACKER_BUILDER_TYPE} =~ 'hyperv' ]]; then
+  echo "==> Configuring RDP for primary user interface"
   systemctl daemon-reload
   systemctl -q is-enabled gdm 2>/dev/null && systemctl disable gdm
   systemctl enable xrdp.service

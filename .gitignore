@@ -17,3 +17,6 @@ id_rsa_insecure
 *.vmdk
 *.qcow2
 .credentialsrc
+rdhcpd.pid
+*.exe
+*.zip
