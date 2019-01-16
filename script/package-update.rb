@@ -153,8 +153,8 @@ end
 def pdk(yaml)
     resp = Net::HTTP.get_response(URI("https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=latest"))
     if resp.is_a?(Net::HTTPFound)
-        location = resp.header['location']
-        latest = location.match(/pdk\/([0-9a-z.]+)\//)[1]
+        location = resp.header['location'] # https://yum.puppet.com/puppet/el/7/x86_64/pdk-1.8.0.0-1.el7.x86_64.rpm
+        latest = location.match(/pdk-([0-9a-z.]+)/)[1]
         if latest != yaml['pdk']['version']
             puts "Found newer version PDK #{latest}"
             download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.el7.x86_64.rpm"
