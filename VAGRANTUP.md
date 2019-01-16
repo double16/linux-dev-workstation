@@ -38,9 +38,9 @@ configs:
         # Populates git config
         user_name: Droopy Dog
         user_email: droppy@dogpound.nil
-        # Set the number of monitors, defaults to let the provider determine it
+        # Set the number of monitors, defaults to let the provider determine it. Not necessary when using RDP.
         monitors: 1
-        # Configure display resolution on startup, useful for providers that do not automatically resize
+        # Configure display resolution on startup, useful for providers that do not automatically resize. Not necessary when using RDP.
         resolution: 1440x1024
         # Optional Timezone, pulled from host machine if not specified
         timezone: America/Chicago
@@ -104,6 +104,20 @@ Point your RDP client to the equivalent of `localhost:50841` in the output above
 
 _DO NOT_ expose port 3389 by adjusting firewall rules. The RDP server has an insecure password. If you want direct access to RDP then you must change the vagrant user password. SSH tunneling is preferred.
 
+## Hyper-V
+
+Vagrant networking support for Hyper-V isn't as complete as VirtualBox or VMware. There are some extra steps necessary to get an IP address for the box. Hyper-V requires running Vagrant as administrator. Using PowerShell as administrator, execute the following:
+
+```powershell
+PS > vagrant up --provider hyperv   # this may fail, that's ok for now
+PS > ${HOME}\.vagrant.d\boxes\linux-dev-workstation\_version_\hyperv\create-natswitch.ps1  # ignore errors, these are from detecting existing networking
+PS > vagrant reload
+```
+
+When prompted for the networking switch, choose `VagrantSwitch`.
+
+Follow the instructions above for cloud providers to connect using RDP. RDP provides a better experience than using the Hyper-V console.
+
 ## Docker
 
 Running the box as a container is similar to using a cloud provider. You use an SSH tunnel and RDP viewer. SSH authentication is a little different, by default it uses the Vagrant insecure SSH key. If you want to use a different SSH key, set the environment variable `SSH_AUTHORIZED_KEYS` with the content of your public key(s). The image is based on https://github.com/jdeathe/centos-ssh, the various SSH options should work with this image.
@@ -148,23 +162,6 @@ $ docker run --privileged -d -p 2020:22 pdouble16/linux-dev-workstation
 $ sudo minikube start
 ```
 
-## Hyper-V
-
-Vagrant networking support for Hyper-V isn't as complete as VirtualBox or VMware. There are some extra steps necessary to get an IP address for the box. Hyper-V requires running Vagrant as administrator. Using PowerShell as administrator, execute the following:
-
-```powershell
-PS > vagrant up --provider hyperv   # this may fail, that's ok for now
-PS > ${HOME}\.vagrant.d\boxes\linux-dev-workstation\_version_\hyperv\create-natswitch.ps1  # ignore errors, these are from detecting existing networking
-PS > vagrant reload
-```
-
-To see the GUI:
-
-1. Open "Hyper-V Manager"
-2. Click the local machine in the left panel
-3. Click the virtual machine created by Vagrant
-4. Click "Connect..." in the right bottom panel
-
 ### Display Resolution
 
-Display resolution is fixed in the VM at boot time. It can be set by configuring the `resolution` property in `config.yaml`.
+Display resolution is fixed in the VM at boot time. It can be set by configuring the `resolution` property in `config.yaml`. This isn't necessary when connecting using RDP, the connection will use the resolution specified in the RDP configuration.

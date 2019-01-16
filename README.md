@@ -47,6 +47,7 @@ It also features configuration options:
 * Checkout of source code repositories when provisioning the Vagrant box
 
 ## Configure
+
 See [VAGRANTUP.md](VAGRANTUP.md) for configuration details. This file is also included in the box built by Packer and output after the `vagrant up`.
 
 ## Installation
@@ -96,5 +97,5 @@ PS > .\create-natswitch.ps1     # ignore errors, these are from detecting existi
 ```
 
 ## Credits
-The packer build is strongly based on https://github.com/boxcutter/centos.
 
+The packer build is strongly based on https://github.com/boxcutter/centos.

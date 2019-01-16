@@ -25,6 +25,7 @@ Packer builds are available for the following providers:
 
 * VirtualBox
 * VMware
+* Hyper-V
 * Parallels
 * AWS
 * qemu
@@ -34,6 +35,7 @@ The VMs are large, 10-12GB uncompressed. You'll likely need to build them indivi
 
 * packer build -only=virtualbox-iso centos.json
 * packer build -only=vmware-iso     centos.json
+* packer build -only=hyperv-iso     centos.json
 * packer build -only=parallels-iso  centos.json
 * packer build -only=amazon-ebs     centos.json
 * packer build -only=qemu           centos.json
@@ -64,4 +66,4 @@ $ packer build -var-file=vars.json builder.json
 
 ### Create the VM
 
-You'll need to follow the instructions provided in this [Packer GitHub issue](https://github.com/Azure/packer-azure/issues/201) to create a VM based on the image.
+Using Vagrant to use the builder VM is recommended. Otherwise, you'll need to follow the instructions provided in this [Packer GitHub issue](https://github.com/Azure/packer-azure/issues/201) to create a VM based on the image.
