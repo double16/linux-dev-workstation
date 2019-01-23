@@ -48,7 +48,7 @@ end
 #  responds with 302, Location: https://plugins.jetbrains.com/files/9746/43008/com.jetbrains.ideolog-181.0.7.0.jar?updateId=43008&pluginId=9746&uuid&code=IU&build=181.4668.68
 #
 def idea(yaml)
-    idea_channel = yaml['idea']['channel'] || 'IDEA_Release'
+    idea_channel = yaml['idea']['channel'] || 'IC-IU-RELEASE-licensing-RELEASE'
     idea_version = "#{yaml['idea']['version']}"
     idea_build = "IU-#{yaml['idea']['build']}"
     idea_plugins_file = File.join(TMPDIR, 'idea-plugins.xml')

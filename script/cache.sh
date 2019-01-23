@@ -19,10 +19,12 @@ metadata_expire_filter=never
 EOF
 
     mkdir -p /tmp/vagrant-cache/npm
-    grep -qF 'cache=' /root/.npmrc || cat >>/root/.npmrc <<EOF
+    chgrp -R wheel /tmp/vagrant-cache/npm
+    find /tmp/vagrant-cache/npm -type d | xargs -r chmod g+rws
+    grep -qF 'cache=' /root/.npmrc 2>/dev/null || cat >>/root/.npmrc <<EOF
 cache=/tmp/vagrant-cache/npm
 EOF
-    grep -qF 'cache=' /home/${USERNAME}/.npmrc || cat >>/home/${USERNAME}/.npmrc <<EOF
+    grep -qF 'cache=' /home/${USERNAME}/.npmrc 2>/dev/null || cat >>/home/${USERNAME}/.npmrc <<EOF
 cache=/tmp/vagrant-cache/npm
 EOF
 
