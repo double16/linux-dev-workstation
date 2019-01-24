@@ -65,6 +65,8 @@ if mountpoint /tmp/vagrant-cache; then
 
     sed -i '/proxy=/d' /root/.npmrc
     sed -i '/proxy=/d' /home/${USERNAME}/.npmrc
+    sed -i '/cache=/d' /root/.npmrc
+    sed -i '/cache=/d' /home/${USERNAME}/.npmrc
 else
     find /tmp -not -path '/tmp' -delete
 fi
