@@ -2,14 +2,14 @@
 theme::default: light
 hashistack:
   packer:
-    version: 1.3.4
-    checksum: 73074f4fa07fe15b5d65a694ee7afae2d1a64f0287e6b40897adee77a7afc552
+    version: 1.3.5
+    checksum: 14922d2bca532ad6ee8e936d5ad0788eba96f773bcdcde8c2dc7c95f830841ec
   vault:
     version: 1.0.3
     checksum: a475946872b1a4a2bd8ea79ea1dd00fe65aa502f45d734a07afc022bf2ba8bcf
   consul:
-    version: 1.4.2
-    checksum: ecdddbc87e7f882c3f9d94e8449865fde553e6f443234a1787414fdacef7af55
+    version: 1.4.3
+    checksum: 8806fdaace8cfca3a0d49a2ef1ea03e5d2b63ff1f3fbe9909dc190637195df5c
   terraform:
     version: 0.11.11
     checksum: 94504f4a67bad612b5c8e3a4b7ce6ca2772b3c1559630dfd71e9c519e3d6149c
@@ -66,14 +66,14 @@ sdkman:
   version: 1.4.2
   default: true
 git:
-  version: 2.20.1
+  version: 2.21.0
 vim:
-  version: 8.1.0925
+  version: 8.1.0996
 pdk:
-  version: 1.9.0.0
-  checksum: 52aa99242adc0a5c76d3df53d4a45cdf0d5c1580257056fe5797c6fde0c8fcc0
+  version: 1.9.1.0
+  checksum: aaed79b09a1ece9c5d59993dd802c4fb98c5c99df0acfb111131ee8949c43f84
 docker:
-  version: 18.06.2
+  version: 18.06.3
 k8s:
   version: 1.12
 minikube:
@@ -81,19 +81,19 @@ minikube:
   pin: true
   checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
 helm:
-  version: 2.12.3
-  checksum: 3425a1b37954dabdf2ba37d5d8a0bd24a225bb8454a06f12b115c55907809107
+  version: 2.13.0
+  checksum: 15eca6ad225a8279de80c7ced42305e24bc5ac60bb7d96f2d2fa4af86e02c794
 kustomize:
-  version: 2.0.1
-  checksum: 7fb7e538e4c48749d3a5972f338158f3aab1579f24bb7481d9d813f9c049b17b
+  version: 2.0.3
+  checksum: a04d79a013827c9ebb0abfe9d41cbcedf507a0310386c8d9a7efec7a36f9d7a3
 container-diff:
-  version: 0.14.0
-  checksum: 43283f28e95a42e4b92d33d5686aa698fb6e88884bce9b70bf988955061d2174
+  version: 0.15.0
+  checksum: 65b10a92ca1eb575037c012c6ab24ae6fe4a913ed86b38048781b17d7cf8021b
 emacs:
   version: 26.1
   checksum: 760382d5e8cdc5d0d079e8f754bce1136fbe1473be24bb885669b0e38fc56aa3
 vagrant:
-  version: 2.2.3
+  version: 2.2.4
 dockstation:
   version: 1.4.1
   checksum: 323b0c24b6ce6b9bbb39df1cacac2881f3b91e48f91fcd8022ce37170a8946b1
@@ -129,9 +129,9 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2018.3.4
-  build: 183.5429.30
-  checksum: 3866349090ea295c0ac4f1b77d20c74d8c9647e73e5ad541c61b3dfbfc4ab5f3
+  version: 2018.3.5
+  build: 183.5912.21
+  checksum: b696da5c3521638f83891191f3bd9063d30d0b7ea81ad0bf9500f2b41840d078
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -139,12 +139,12 @@ idea:
     updateid: '52930'
   - name: AngularJS
     type: zip
-    version: 183.5429.34
-    updateid: '57568'
+    version: 183.5912.23
+    updateid: '58836'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2018.3.20190129
-    updateid: '54683'
+    version: 2018.3.20190226
+    updateid: '58781'
   - name: com.intellij.lang.puppet
     type: zip
     version: 183.4284.36
@@ -175,16 +175,16 @@ idea:
     updateid: '53878'
   - name: org.jetbrains.plugins.go
     type: zip
-    version: 183.5429.30.1615
-    updateid: '58202'
+    version: 183.5912.21.1625
+    updateid: '59090'
   - name: com.jetbrains.plugins.jade
     type: zip
     version: 183.3795.1
     updateid: '51097'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.24.0
-    updateid: '57688'
+    version: 0.24.3
+    updateid: '59008'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.3.21-release-IJ2018.3-1
@@ -194,9 +194,9 @@ idea:
     version: '6.3'
     updateid: '54078'
   - name: GradleDependenciesHelper
-    type: zip
-    version: '1.13'
-    updateid: '53904'
+    type: jar
+    version: '1.14'
+    updateid: '58935'
   - name: R4Intellij
     type: zip
     version: 1.0.10
@@ -211,8 +211,8 @@ idea:
     updateid: '50110'
   - name: AWSCloudFormation
     type: zip
-    version: 0.6.5
-    updateid: '50728'
+    version: 0.6.9
+    updateid: '58727'
   - name: com.intellij.react.css.modules
     type: jar
     version: 1.0.1
@@ -243,5 +243,5 @@ idea:
     version: 1.0.115
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '51366'
-    version: 183.3975.8
+    updateid: '58212'
+    version: 183.5912.2
