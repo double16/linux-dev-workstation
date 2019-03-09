@@ -189,6 +189,7 @@ package { [
     'collectl',
     'net-tools',
     'cifs-utils',
+    'samba',
 
     # For recording the screen via 'ffmpeg x11grab'
     'ffmpeg',
