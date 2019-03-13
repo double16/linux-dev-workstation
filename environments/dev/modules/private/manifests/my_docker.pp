@@ -255,5 +255,6 @@ kubectl patch deploy --namespace kube-system tiller-deploy -p \'{"spec":{"templa
     environment => ['HOME=/home/vagrant','USER=vagrant'],
     user        => 'vagrant',
     unless      => '/usr/local/bin/helm version',
+    require     => Class['private::k3s'],
   }
 }

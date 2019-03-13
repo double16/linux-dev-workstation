@@ -59,6 +59,9 @@ sdkman:
 - package: java
   version: 10.0.2-open
   default: false
+- package: java
+  version: 11.0.2-open
+  default: false
 - package: lazybones
   version: 0.8.3
   default: true

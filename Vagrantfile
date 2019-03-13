@@ -67,7 +67,7 @@ Vagrant.configure("2") do |config|
   config.vagrant.plugins = ["vagrant-cachier"]
 
   if ENV['VAGRANT_FROM_SCRATCH']
-    config.vm.box = "bento/centos-7.5"
+    config.vm.box = "bento/centos-7.6"
   else
     config.vm.box = "double16/linux-dev-workstation"
   end
@@ -181,7 +181,11 @@ Vagrant.configure("2") do |config|
     fi
   SHELL
 
-  config.vm.provision "bootstrap", type: "shell", env: {"HTTP_PROXY" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"], "HTTPS_PROXY" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"], "NO_PROXY" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"] }, inline: <<-SHELL
+  config.vm.provision "bootstrap", type: "shell", env: {"HTTP_PROXY" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"], "HTTPS_PROXY" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"], "NO_PROXY" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"], "YUM_PROXY" => ENV["YUM_PROXY"] }, inline: <<-SHELL
+
+    if [ -n "${YUM_PROXY}" ]; then
+      grep -q "proxy=" /etc/yum.conf || echo "proxy=${YUM_PROXY}" >> /etc/yum.conf
+    fi
 
     if [ -n "${HTTP_PROXY}" ]; then
       grep -q "proxy=" /etc/yum.conf || echo "proxy=${HTTP_PROXY}" >> /etc/yum.conf
@@ -200,8 +204,8 @@ Vagrant.configure("2") do |config|
     [ -x /usr/bin/makedeltarpm ] || yum install -y deltarpm
 
     # Cannot update kernel on VirtualBox 5.x due to incompatible video driver
-    yum install -y kernel-headers kernel-devel kernel-devel-uname-r
-    grep -q "exclude=kernel" /etc/yum.conf || echo "exclude=kernel*" >> /etc/yum.conf
+    yum install -y kernel-headers kernel-devel kernel-devel-`uname -r`
+    # VB 5: grep -q "exclude=kernel" /etc/yum.conf || echo "exclude=kernel*" >> /etc/yum.conf
 
     locale -a | grep -qi en_US || (
         yum reinstall -y glibc-common

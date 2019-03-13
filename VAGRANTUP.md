@@ -95,7 +95,7 @@ $ vagrant ssh
 ==> default: Running trigger: Tunnel RDP connection through SSH...
 ==> default: Connect to desktop via RDP using `localhost:50841`
 ----------------------------------------------------------------
-  CentOS 7.5.1804                             built 2018-08-01
+  CentOS 7.6.1810                             built 2019-03-12
 ----------------------------------------------------------------
 [centos@xxxxx ~]$
 ```
