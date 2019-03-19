@@ -96,7 +96,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'eamodio.gitlens',
     'msjsdiag.debugger-for-chrome',
     'ms-python.python',
-    'robertohuertasm.vscode-icons',
+    'vscode-icons-team.vscode-icons',
     'formulahendry.code-runner',
     'redhat.java',
     'ms-vscode.go',
