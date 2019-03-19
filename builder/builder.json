@@ -29,7 +29,7 @@
     },
     {
       "type": "docker",
-      "image": "jdeathe/centos-ssh:centos-7-2.4.1",
+      "image": "jdeathe/centos-ssh:centos-7-2.5.1",
       "commit": true,
       "changes": [
         "LABEL maintainer='Patrick Double <pat@patdouble.com>' org.label-schema.license='MPL-2.0' org.label-schema.vendor='https://bitbucket.org/double16' org.label-schema.name='Packer' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation/builder' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation.git'",

@@ -234,12 +234,14 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
     owner  => 0,
     group  => 'root',
   }
-  ->file { '/opt/helm-init.sh':
-    ensure  => file,
-    mode    => '0755',
-    owner   => 'vagrant',
-    group   => 'vagrant',
-    content => '
+
+  unless $::virtual == 'docker' {
+    file { '/opt/helm-init.sh':
+      ensure  => file,
+      mode    => '0755',
+      owner   => 'vagrant',
+      group   => 'vagrant',
+      content => '
 #!/usr/bin/env bash
 helm init
 helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
@@ -249,12 +251,13 @@ kubectl get clusterrolebinding tiller-cluster-rule >/dev/null 2>&1 || \
     kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 kubectl patch deploy --namespace kube-system tiller-deploy -p \'{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}\'
 ',
-  }
-  ->exec { '/opt/helm-init.sh':
-    path        => ['/bin','/sbin','/usr/bin','/usr/bin','/usr/local/bin','/usr/local/sbin'],
-    environment => ['HOME=/home/vagrant','USER=vagrant'],
-    user        => 'vagrant',
-    unless      => '/usr/local/bin/helm version',
-    require     => Class['private::k3s'],
+    }
+    ->exec { '/opt/helm-init.sh':
+      path        => ['/bin','/sbin','/usr/bin','/usr/bin','/usr/local/bin','/usr/local/sbin'],
+      environment => ['HOME=/home/vagrant','USER=vagrant'],
+      user        => 'vagrant',
+      unless      => '/usr/local/bin/helm version',
+      require     => Class['private::k3s'],
+    }
   }
 }

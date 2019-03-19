@@ -120,12 +120,16 @@ exec { 'graphical runlevel':
 #  ensure => present,
 #}
 
-package { 'python34-pip':
+package { ['python36-pip', 'python36-devel']:
   ensure => present,
 }
-~>exec { 'pip upgrade':
-  command     => '/usr/bin/pip3 install --upgrade pip',
-  refreshonly => true,
+# ~>exec { 'pip upgrade':
+#   command     => '/usr/bin/pip3.6 install --upgrade pip',
+#   refreshonly => true,
+# }
+->file { '/usr/bin/pip':
+  ensure => link,
+  target => '/usr/bin/pip3.6',
 }
 ->file { '/etc/xdg':
   ensure => directory,
@@ -231,9 +235,9 @@ package { [
 
 exec { 'xml2json':
   path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
-  command => 'pip3 install https://github.com/hay/xml2json/zipball/master',
+  command => 'pip install https://github.com/hay/xml2json/zipball/master',
   creates => '/usr/bin/xml2json',
-  require => [ Package['python34-pip'], Class['private::proxy'], Ini_setting['pip proxy'] ],
+  require => [ Package['python36-pip'], Class['private::proxy'], Ini_setting['pip proxy'] ],
 }
 
 package { 'unzip': }

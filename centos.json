@@ -222,11 +222,11 @@
       "volumes": {
         "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
       },
-      "image": "jdeathe/centos-ssh:centos-7-2.4.1",
+      "image": "jdeathe/centos-ssh:centos-7-2.5.1",
       "commit": true,
       "changes": [
         "LABEL maintainer='Patrick Double <pat@patdouble.com>' org.label-schema.license='MPL-2.0' org.label-schema.vendor='https://bitbucket.org/double16' org.label-schema.name='Developer Workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation.git'",
-        "ENV SSH_USER=vagrant",
+        "ENV SSH_USER=vagrant container=docker",
         "CMD /usr/bin/supervisord --configuration=/etc/supervisord.conf"
       ]
     }
@@ -352,6 +352,7 @@
       ],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
+        "script/docker-systemd.sh",
         "script/rdp.sh",
         "script/post-perm.sh",
         "script/cleanup.sh"

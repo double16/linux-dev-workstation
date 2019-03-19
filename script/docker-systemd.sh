@@ -1,8 +1,7 @@
 #!/bin/bash -eux
 
 if [[ ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
-  echo "==> Configuring systemd"
-  export container=docker
+  echo "==> Configuring systemd for Docker"
   (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done)
   rm -f /lib/systemd/system/multi-user.target.wants/*
   rm -f /etc/systemd/system/*.wants/*

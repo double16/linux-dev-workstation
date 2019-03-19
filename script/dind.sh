@@ -15,4 +15,17 @@ stdout_logfile = /var/log/docker.log
 stdout_events_enabled = true
 EOF
 
+  cat >/etc/supervisord.d/k3s.conf <<EOF
+[program:k3s]
+priority = 16
+command = /opt/k3s/start-k3s.sh
+autostart = true
+startsecs = 10
+startretries = 3
+autorestart = false
+redirect_stderr = true
+stdout_logfile = /var/log/k3s.log
+stdout_events_enabled = true
+EOF
+
 fi
