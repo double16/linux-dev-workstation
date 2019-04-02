@@ -189,7 +189,7 @@
     },
     {
       "boot_command": [
-        "c  setparams 'kickstart' <enter> linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS\\x207\\x20x\\86_64 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `kickstart` }} inst.text<enter> initrdefi /images/pxeboot/initrd.img<enter> boot<enter>"
+        "c<wait>setparams 'kickstart'<enter>linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS\\x207\\x20x86_64 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `kickstart` }} inst.text<enter>initrdefi /images/pxeboot/initrd.img<enter>boot<enter>"
       ],
       "boot_wait": "20s",
       "disk_size": "{{ user `disk_size` }}",

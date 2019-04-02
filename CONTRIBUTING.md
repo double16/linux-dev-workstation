@@ -35,7 +35,7 @@ The VMs are large, 10-12GB uncompressed. You'll likely need to build them indivi
 
 * packer build -only=virtualbox-iso centos.json
 * packer build -only=vmware-iso     centos.json
-* packer build -only=hyperv-iso     centos.json
+* packer-build-hyperv.ps1           (Hyper-V needs setup external to packer)
 * packer build -only=parallels-iso  centos.json
 * packer build -only=amazon-ebs     centos.json
 * packer build -only=qemu           centos.json
