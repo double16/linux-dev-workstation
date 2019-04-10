@@ -12,7 +12,6 @@ configs        = YAML.load_file("#{current_dir}/config.yaml")
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
 monitor_count  = vagrant_config['monitors']
-rdhcpd_pid_f   = "#{box_dir}/rdhcpd.pid"
 
 def server_port
   server = TCPServer.new('127.0.0.1', 0)
@@ -138,22 +137,15 @@ Vagrant.configure("2") do |config|
     o.trigger.before [ :up, :resume, :reload ] do |trigger|
       trigger.info = "Start DHCP Server"
       trigger.ruby do |env, machine|
-        unless validate_pid_f(rdhcpd_pid_f)
-          nc = hyperv_network_config('VagrantSwitch')
-          puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
-          dhcpd_pid = spawn(RbConfig.ruby, "#{box_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
-          File.open(rdhcpd_pid_f, 'w') { |f| f.write(dhcpd_pid.to_s) }
-        end
+        nc = hyperv_network_config('VagrantSwitch')
+        puts "Starting DHCP server on #{nc[:netip]}, DNS #{nc[:dns]}"
+        spawn(RbConfig.ruby, "#{box_dir}/rdhcpd.rb", nc[:netip], nc[:dns])
       end
     end
     o.trigger.after [ :halt, :destroy ] do |trigger|
       trigger.info = "Stop DHCP Server"
       trigger.ruby do |env, machine|
-        if validate_pid_f(rdhcpd_pid_f)
-          dhcpd_pid = File.read(rdhcpd_pid_f)
-          File.delete(rdhcpd_pid_f)
-          Process.kill("KILL", dhcpd_pid.to_i)
-        end
+        spawn(RbConfig.ruby, "#{box_dir}/rdhcpd.rb", 'stop')
       end
     end
   end
