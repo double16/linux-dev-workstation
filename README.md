@@ -96,6 +96,16 @@ PS > Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
 PS > .\create-natswitch.ps1     # ignore errors, these are from detecting existing networking
 ```
 
+## SSL Certificates
+
+If you need custom SSL certificates to be trusted, the following will download and add a sites certificate chain to the trust store. This is usually only needed when using a corporate proxy that intercepts SSL traffic.
+
+```shell
+$ mkdir certs.d
+$ openssl s_client -servername www.google.com -connect www.google.com:443 2>/dev/null </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > certs.d/www.google.com.pem
+$ vagrant provision
+```
+
 ## Credits
 
 The packer build is strongly based on https://github.com/boxcutter/centos.
