@@ -212,8 +212,8 @@ Vagrant.configure("2") do |config|
     )
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
-      rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm
-      yum install -y puppet-agent-5.5.1-1.el7.x86_64
+      rpm -Uvh https://yum.puppet.com/puppet6/puppet6-release-el-7.noarch.rpm
+      yum install -y puppet-agent-6.4.0-1.el7.x86_64
       mkdir -p /etc/puppetlabs/facter/facts.d
     )
   SHELL

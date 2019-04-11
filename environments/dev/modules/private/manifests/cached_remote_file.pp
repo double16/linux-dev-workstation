@@ -38,7 +38,7 @@ define private::cached_remote_file(
       group  => $group,
       mode   => $mode,
     }
-    
+
   } else {
 
     remote_file { $target:
