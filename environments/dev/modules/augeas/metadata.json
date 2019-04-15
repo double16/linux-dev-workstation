@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-augeas",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "author": "camptocamp",
   "summary": "Camptocamp Augeas module",
   "license": "Apache-2.0",
@@ -8,18 +8,17 @@
   "project_page": "https://github.com/camptocamp/puppet-augeas",
   "issues_url": "https://github.com/camptocamp/puppet-augeas/issues",
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0 <5.0.0"}
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 3.2.0 < 6.0.0"
+    }
   ],
   "data_provider": null,
   "description": "Augeas Module for Puppet",
   "requirements": [
     {
-      "name": "pe",
-      "version_requirement": "4.x"
-    },
-    {
       "name": "puppet",
-      "version_requirement": "4.x"
+      "version_requirement": ">= 4.10.0 < 6.0.0"
     }
   ],
   "operatingsystem_support": [

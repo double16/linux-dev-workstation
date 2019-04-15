@@ -21,8 +21,14 @@ class private::my_ruby {
   }
   ->Rbenv::Build<| |>
 
-  rbenv::plugin { 'rbenv/ruby-build': latest => true }
-  rbenv::plugin { 'sstephenson/ruby-build': latest => true }
+  rbenv::plugin { 'rbenv/ruby-build':
+    latest  => true,
+    require => Class['::rbenv'],
+  }
+  rbenv::plugin { 'sstephenson/ruby-build':
+    latest => true,
+    require => Class['::rbenv'],
+  }
 
   Rbenv::Build<| |> {
     env => ['RUBY_BUILD_CACHE_PATH=/tmp/vagrant-cache/rbenv'],

@@ -6,9 +6,8 @@ Puppet::Type.type(:debconf).provide(:debian) do
   confine osfamily: :debian
   defaultfor osfamily: :debian
 
+  # A private class to communicate with the debconf database
   class Debconf < IO
-    # A private class to communicate with the debconf database
-
     # The regular expression used to parse the debconf-communicate output
     DEBCONF_COMMUNICATE = Regexp.new(
       '^([0-9]+)' +             # error code
@@ -20,10 +19,6 @@ Puppet::Type.type(:debconf).provide(:debian) do
     def initialize(pipe)
       # The pipe to the debconf-communicate program
       @pipe = pipe
-
-      # Last return code and message from debconf-communicate
-      @retcode = nil
-      @retmesg = ''
     end
 
     # Open communication channel with the debconf database
@@ -58,30 +53,48 @@ Puppet::Type.type(:debconf).provide(:debian) do
       # Response is devided into the return code (casted to int) and the
       # result text. Depending on the context the text could be an error
       # message or the value of an item.
-      @retcode = Regexp.last_match(1).to_i
-      @retmesg = Regexp.last_match(2)
+      retcode = Regexp.last_match(1).to_i
+      retmesg = Regexp.last_match(2)
+
+      [retcode, retmesg]
     end
 
     # Get an item from the debconf database
     # Return the value of the item or nil if the item is not found
     def get(item)
-      send("GET #{item}")
+      resultcode, resultmesg = send("GET #{item}")
 
       # Check for errors
-      case @retcode
-      when 0 then @retmesg      # OK
+      case resultcode
+      when 0 then resultmesg    # OK
       when 10 then nil          # item doesn't exist
       else
-        raise(Puppet::Error, "Debconf: debconf-communicate returned #{@retcode}: #{@retmesg}")
+        raise(Puppet::Error, "Debconf: 'GET #{item}' returned #{resultcode}: #{resultmesg}")
+      end
+    end
+
+    # Get the seen flag for an item from the debconf database
+    # Return a boolean true or false
+    def seen?(item)
+      resultcode, resultmesg = send("FGET #{item} seen")
+
+      # Check for errors
+      case resultcode
+      when 0 then (resultmesg == 'true')
+      when 10 then false
+      else
+        raise(Puppet::Error, "Debconf: 'FGET #{item} seen' returned #{resultcode}: #{resultmesg}")
       end
     end
 
     # Unregister an item in the debconf database
     def unregister(item)
-      send("UNREGISTER #{item}")
+      resultcode, resultmesg = send("UNREGISTER #{item}")
 
       # Check for errors
-      raise(Puppet::Error, "Debconf: debconf-communicate returned #{@retcode}: #{@retmesg}") unless @retcode.zero?
+      raise(Puppet::Error, "Debconf: 'UNREGISTER #{item}' returned #{resultcode}: #{resultmesg}") unless resultcode.zero?
+
+      @property_hash = {}
     end
   end
 
@@ -91,7 +104,7 @@ Puppet::Type.type(:debconf).provide(:debian) do
 
   def initialize(value = {})
     super(value)
-    @properties = {}
+    @property_hash = {}
   end
 
   # Fetch item properties
@@ -103,60 +116,100 @@ Puppet::Type.type(:debconf).provide(:debian) do
 
       if value
         Puppet.debug("Debconf: #{resource[:item]} = '#{value}'")
-        @properties[:value] = value
-        @properties[:exists] = true
+        @property_hash[:ensure] = :present
+        @property_hash[:value] = value
+
+        seen = debconf.seen?(resource[:item])
+        Puppet.debug("Debconf: #{resource[:item]} seen flag is '#{seen}'")
+        @property_hash[:seen] = seen
       else
-        @properties[:exists] = false
+        @property_hash[:ensure] = :absent
       end
     end
   end
 
-  # Call debconf-set-selections to store the item value
-  def update
-    Puppet.debug("Debconf: updating #{resource[:name]}")
+  # Call debconf-set-selections to store the item values
+  def flush
+    Puppet.debug("Debconf: calling flush #{resource[:name]}")
 
-    # Build the string to send
-    args = [:package, :item, :type, :value].map { |e| resource[e] }.join(' ')
+    case @property_hash[:ensure]
+    when :present
+      IO.popen('/usr/bin/debconf-set-selections', 'w+') do |pipe|
+        # Store type/value
+        if @property_hash[:value]
+          args = [resource[:package], resource[:item]]
+          args << resource[:type]
+          args << resource[:value]
 
-    IO.popen('/usr/bin/debconf-set-selections', 'w+') do |pipe|
-      Puppet.debug("Debconf: debconf-set-selections #{args}")
-      pipe.puts(args)
+          comm = args.join(' ')
+          Puppet.debug("Debconf: debconf-set-selections #{comm}")
+          pipe.puts(comm)
+        end
 
-      # Ignore remaining output from command
-      pipe.close_write
-      pipe.read(nil)
+        # Store seen flag
+        unless resource[:seen].nil?
+          args = [resource[:package], resource[:item]]
+          args << 'seen'
+          args << resource[:seen].to_s
+
+          comm = args.join(' ')
+          Puppet.debug("Debconf: debconf-set-selections #{comm}")
+          pipe.puts(comm)
+        end
+
+        # Ignore remaining output from command
+        pipe.close_write
+        pipe.read(nil)
+      end
+    when :absent
+      Debconf.communicate(resource[:package]) do |debconf|
+        debconf.unregister(resource[:item])
+      end
     end
   end
 
   def create
     Puppet.debug("Debconf: calling create #{resource[:name]}")
-    update
+
+    @property_hash[:ensure] = resource[:ensure]
+    @property_hash[:value]  = resource[:value]
+    @property_hash[:seen]   = resource[:seen] if resource[:seen]
   end
 
   def destroy
     Puppet.debug("Debconf: calling destroy for #{resource[:name]}")
 
-    Debconf.communicate(resource[:package]) do |debconf|
-      debconf.unregister(resource[:item])
-    end
+    @property_hash[:ensure] = :absent
   end
 
   def exists?
     Puppet.debug("Debconf: calling exists? for #{resource[:name]}")
-    fetch if @properties.empty?
+    fetch if @property_hash.empty?
 
-    @properties[:exists]
+    @property_hash[:ensure] == :present
   end
 
   def value
     Puppet.debug("Debconf: calling get #{resource[:item]}")
-    fetch if @properties.empty?
+    fetch if @property_hash.empty?
 
-    @properties[:value]
+    @property_hash[:value]
   end
 
   def value=(val)
     Puppet.debug("Debconf: calling set #{resource[:item]} to #{val}")
-    update
+    @property_hash[:item] = val
+  end
+
+  def seen
+    Puppet.debug("Debconf: calling get seen flag of #{resource[:item]}")
+    fetch if @property_hash.empty?
+
+    @property_hash[:seen].to_s
+  end
+
+  def seen=(val)
+    Puppet.debug("Debconf: calling set seen flag of #{resource[:item]} to #{val}")
+    @property_hash[:seen] = val
   end
 end

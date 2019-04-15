@@ -1,21 +1,24 @@
 {
   "name": "puppet-ssh_keygen",
-  "version": "2.0.1",
-  "author": "voxpupuli",
+  "version": "3.0.1",
+  "author": "Vox Pupuli",
   "summary": "Generate ssh keys with ssh_keygen",
   "license": "Apache-2.0",
   "source": "http://github.com/voxpupuli/puppet-ssh_keygen.git",
   "project_page": "http://github.com/voxpupuli/puppet-ssh_keygen",
   "issues_url": "https://github.com/voxpupuli/puppet-ssh_keygen/issues",
   "dependencies": [
-  
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 4.13.1 < 6.0.0"
+    }
   ],
   "data_provider": null,
   "description": "Generate ssh keys for any user using ssh_keygen, that needs to be present before using the module",
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.8.0 < 6.0.0"
+      "version_requirement": ">= 4.10.0 < 6.0.0"
     }
   ]
 }
