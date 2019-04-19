@@ -2,7 +2,7 @@
 # IntelliJ IDEA Ultimate and plugins
 #
 class private::idea {
-  # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
+  # https://download-cf.jetbrains.com/idea/ideaIU-${version}-jbr11.tar.gz
   $config = lookup('idea', Hash)
   $version = $config['version']
   $build = $config['build']
@@ -25,7 +25,7 @@ class private::idea {
 
   archive { "/tmp/vagrant-cache/idea-${version}.tar.gz":
     ensure        => present,
-    source        => "http://download.jetbrains.com/idea/ideaIU-${version}.tar.gz",
+    source        => "https://download-cf.jetbrains.com/idea/ideaIU--${version}-jbr11.tar.gz",
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",

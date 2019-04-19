@@ -253,7 +253,7 @@ class { '::git':
 
 unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
   class { '::virtualbox':
-    version => '5.2',
+    version => '6.0',
   }
   ->User<| title == 'vagrant' |> { groups +> 'vboxusers' }
 

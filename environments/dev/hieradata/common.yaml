@@ -5,8 +5,8 @@ hashistack:
     version: 1.4.0
     checksum: 7505e11ce05103f6c170c6d491efe3faea1fb49544db0278377160ffb72721e4
   vault:
-    version: 1.1.1
-    checksum: 134261417c8129a92992cba75bf7ebce8ee4d6100de18b722cce7507782e272c
+    version: 1.1.2
+    checksum: e927fd4daac11f6c7b8b3f1f53f2017516e29e99585dc975b657acdeac43500b
   consul:
     version: 1.4.4
     checksum: d3bdf9817c7de9d83426d8c421eb3f37bf82c03c97860ef78fb56e148c4a9765
@@ -51,7 +51,7 @@ sdkman:
   version: 2.0.8.RELEASE
   default: true
 - package: java
-  version: 8.0.202-zulu
+  version: 8.0.212-zulu
   default: true
 - package: java
   version: 9.0.4-open
@@ -71,7 +71,7 @@ sdkman:
 git:
   version: 2.21.0
 vim:
-  version: 8.1.1176
+  version: 8.1.1186
 pdk:
   version: 1.10.0.0
   checksum: e65cc5b6a19420dee8c50640c0dca9442e44dc5f99316874f1ee3dcbae8266b3
@@ -132,36 +132,36 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: '2019.1'
+  version: 2019.1.1
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
-    version: 191.5109.14
-    updateid: '57837'
+    version: 191.6707.7
+    updateid: '60395'
   - name: AngularJS
     type: zip
-    version: 191.6183.59
-    updateid: '59730'
+    version: 191.6707.34
+    updateid: '60739'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2019.1.20190327
-    updateid: '60023'
+    version: 2019.1.20190416
+    updateid: '61023'
   - name: com.intellij.lang.puppet
     type: zip
     version: 191.5849.16
     updateid: '58808'
   - name: NodeJS
     type: zip
-    version: 191.6183.20
-    updateid: '59430'
+    version: 191.6707.7
+    updateid: '60394'
   - name: BashSupport
     type: zip
     version: 1.7.7
     updateid: '60154'
   - name: Docker
     type: zip
-    version: 191.6183.53
-    updateid: '59713'
+    version: 191.6707.7
+    updateid: '60402'
   - name: mobi.hsz.idea.gitignore
     type: zip
     version: 2.6.2
@@ -204,8 +204,8 @@ idea:
     updateid: '60674'
   - name: Karma
     type: zip
-    version: 191.5849.16
-    updateid: '58796'
+    version: 191.6707.7
+    updateid: '60388'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.2
@@ -244,7 +244,7 @@ idea:
     version: 1.0.115
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '59429'
-    version: 191.6183.20
-  checksum: 8d6c9e19f86b215db08576f938ca8ed63b331ff1ea78059c57359c59d7585834
-  build: 191.6183.87
+    updateid: '60651'
+    version: 191.6707.31
+  checksum: 9ef7d11f78899f57be3cb34d83c6ecf6fc6a636c2e780a8974c05729edd73c4c
+  build: 191.6707.61

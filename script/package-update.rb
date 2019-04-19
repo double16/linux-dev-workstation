@@ -65,7 +65,7 @@ def idea(yaml)
     if yaml['idea']['build'] != latest_build
         latest_version = updates_doc.xpath("//channel[@id=\"#{idea_channel}\"]//build")[0]['version'].to_s.sub(/ .*/, '')
         puts "Updating IDEA to #{latest_version} #{latest_build} ..."
-        download_url = "https://download-cf.jetbrains.com/idea/ideaIU-#{latest_version}.tar.gz"
+        download_url = "https://download-cf.jetbrains.com/idea/ideaIU-#{latest_version}-jbr11.tar.gz"
         download_file = ".vagrant/machines/default/cache/idea-#{latest_version}.tar.gz"
         system "curl -L -C - -o #{download_file} #{download_url}"
         if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
