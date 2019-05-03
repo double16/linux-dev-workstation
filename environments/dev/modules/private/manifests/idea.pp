@@ -25,7 +25,7 @@ class private::idea {
 
   archive { "/tmp/vagrant-cache/idea-${version}.tar.gz":
     ensure        => present,
-    source        => "https://download-cf.jetbrains.com/idea/ideaIU--${version}-jbr11.tar.gz",
+    source        => "https://download-cf.jetbrains.com/idea/ideaIU-${version}-jbr11.tar.gz",
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
