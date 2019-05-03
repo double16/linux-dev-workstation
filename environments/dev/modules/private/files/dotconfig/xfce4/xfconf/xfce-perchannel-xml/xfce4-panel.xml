@@ -10,23 +10,38 @@
       <property name="position-locked" type="bool" value="true"/>
       <property name="size" type="uint" value="30"/>
       <property name="plugin-ids" type="array">
-        <value type="int" value="1"/>
+        <value type="int" value="9"/>
+        <value type="int" value="11"/>
         <value type="int" value="5"/>
         <value type="int" value="7"/>
         <value type="int" value="8"/>
         <value type="int" value="3"/>
         <value type="int" value="15"/>
         <value type="int" value="4"/>
+        <value type="int" value="1"/>
         <value type="int" value="6"/>
+        <value type="int" value="10"/>
         <value type="int" value="2"/>
       </property>
     </property>
   </property>
   <property name="plugins" type="empty">
-    <property name="plugin-1" type="string" value="applicationsmenu">
-      <property name="show-button-title" type="bool" value="false"/>
+    <property name="plugin-2" type="string" value="actions">
+      <property name="appearance" type="uint" value="0"/>
+      <property name="items" type="array">
+        <value type="string" value="+lock-screen"/>
+        <value type="string" value="-switch-user"/>
+        <value type="string" value="-separator"/>
+        <value type="string" value="-suspend"/>
+        <value type="string" value="-hibernate"/>
+        <value type="string" value="-separator"/>
+        <value type="string" value="+shutdown"/>
+        <value type="string" value="-restart"/>
+        <value type="string" value="-separator"/>
+        <value type="string" value="-logout"/>
+        <value type="string" value="-logout-dialog"/>
+      </property>
     </property>
-    <property name="plugin-2" type="string" value="actions"/>
     <property name="plugin-3" type="string" value="tasklist"/>
     <property name="plugin-15" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
@@ -35,6 +50,7 @@
     <property name="plugin-4" type="string" value="pager"/>
     <property name="plugin-6" type="string" value="systray">
       <property name="names-visible" type="array">
+        <value type="string" value="yad"/>
         <value type="string" value="xfce4-power-manager"/>
         <value type="string" value="clipman"/>
       </property>
@@ -54,7 +70,6 @@
       <property name="items" type="array">
         <value type="string" value="14793955354.desktop"/>
         <value type="string" value="15109491831.desktop"/>
-        <value type="string" value="15102555301.desktop"/>
       </property>
     </property>
     <property name="clipman" type="empty">
@@ -62,5 +77,9 @@
         <property name="add-primary-clipboard" type="bool" value="true"/>
       </property>
     </property>
+    <property name="plugin-9" type="string" value="whiskermenu"/>
+    <property name="plugin-10" type="string" value="screenshooter"/>
+    <property name="plugin-1" type="string" value="systemload"/>
+    <property name="plugin-11" type="string" value="showdesktop"/>
   </property>
 </channel>

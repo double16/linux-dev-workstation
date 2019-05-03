@@ -106,7 +106,10 @@ yum::group { 'X Window System':
 }
 ->package { [
   'xfce4-clipman-plugin',
-  'xfce4-datetime-plugin'
+  'xfce4-screenshooter',
+  'xfce4-screenshooter-plugin',
+  'xfce4-whiskermenu-plugin',
+  'xfce4-systemload-plugin',
   ]: }
 
 exec { 'graphical runlevel':

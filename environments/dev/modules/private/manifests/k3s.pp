@@ -1,6 +1,6 @@
 # Install Kubernetes using https://k3s.io
 class private::k3s {
-  $k3s_version = '0.2.0'
+  $k3s_version = '0.4.0'
 
   file { '/opt/k3s':
     ensure => directory,

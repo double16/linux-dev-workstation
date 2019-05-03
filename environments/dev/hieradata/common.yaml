@@ -14,8 +14,8 @@ hashistack:
     version: 0.11.13
     checksum: 5925cd4d81e7d8f42a0054df2aafd66e2ab7408dbed2bd748f0022cfe592f8d2
   nomad:
-    version: 0.9.0
-    checksum: 91fa6448494cc3eb3ad7b5d2a3e80c9531fdcc52e6723b891eb5cc17ee685c7f
+    version: 0.9.1
+    checksum: 7ae414ff78c920089946c3a6dfde8d5ce3b14ef42652a805004924b0c5ce5f20
 sdkman:
 - package: groovy
   version: 2.4.16
@@ -71,7 +71,7 @@ sdkman:
 git:
   version: 2.21.0
 vim:
-  version: 8.1.1186
+  version: 8.1.1241
 pdk:
   version: 1.10.0.0
   checksum: e65cc5b6a19420dee8c50640c0dca9442e44dc5f99316874f1ee3dcbae8266b3
@@ -172,8 +172,8 @@ idea:
     updateid: '58824'
   - name: org.intellij.plugins.hcl
     type: zip
-    version: 0.6.13
-    updateid: '53878'
+    version: 0.6.14
+    updateid: '61617'
   - name: org.jetbrains.plugins.go
     type: zip
     version: 191.6183.87.172
@@ -184,12 +184,12 @@ idea:
     updateid: '58804'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.24.4
-    updateid: '60081'
+    version: 0.25.9
+    updateid: '61652'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.3.30-release-IJ2019.1-1
-    updateid: '60768'
+    version: 1.3.31-release-IJ2019.1-1
+    updateid: '61407'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: '7.0'
@@ -224,16 +224,16 @@ idea:
     updateid: 45070
   - name: com.intellij.ideolog
     type: zip
-    version: 191.0.7.0
-    updateid: '53940'
+    version: 191.0.9.0
+    updateid: '61403'
   - name: org.jetbrains.plugins.vagrant
     type: zip
     version: 191.5109.14
     updateid: '57829'
   - name: VisualVMLauncher
     type: jar
-    version: 1.10.138.2210
-    updateid: '47033'
+    version: 1.12.182.000.0
+    updateid: '61588'
   - name: Lombook Plugin
     type: zip
     version: 0.24-2018.3
