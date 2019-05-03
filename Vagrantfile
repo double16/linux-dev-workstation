@@ -102,6 +102,9 @@ Vagrant.configure("2") do |config|
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.no_install = true
   end
+  if Vagrant.has_plugin?("vagrant-disksize")
+    config.disksize.size = '80GB'
+  end
   config.vm.provider "virtualbox" do |vb|
     vb.gui = true
     vb.cpus = vagrant_config['cores']

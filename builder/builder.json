@@ -25,7 +25,7 @@
       "ssh_pty": "true",
       "location": "West US",
       "vm_size": "Standard_D2S_v3",
-      "os_disk_size_gb": "100"
+      "os_disk_size_gb": "200"
     },
     {
       "type": "docker",
