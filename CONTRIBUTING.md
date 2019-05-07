@@ -33,14 +33,14 @@ Packer builds are available for the following providers:
 
 The VMs are large, 10-12GB uncompressed. You'll likely need to build them individually.
 
-* packer build -only=virtualbox-iso centos.json
-* packer build -only=vmware-iso     centos.json
+* packer build -only=virtualbox-iso -var version=YYYYMM.N -var no_release=false centos.json
+* packer build -only=vmware-iso     -var version=YYYYMM.N -var no_release=false centos.json
 * packer-build-hyperv.ps1           (Hyper-V needs setup external to packer)
-* packer build -only=parallels-iso  centos.json
-* packer build -only=amazon-ebs     centos.json
-* packer build -only=qemu           centos.json
-* packer build -only=azure-arm      centos.json
-* packer build -only=docker         centos.json
+* packer build -only=parallels-iso  -var version=YYYYMM.N -var no_release=false centos.json
+* packer build -only=amazon-ebs     -var version=YYYYMM.N -var no_release=false centos.json
+* packer build -only=qemu           -var version=YYYYMM.N -var no_release=false centos.json
+* packer build -only=azure-arm      -var version=YYYYMM.N -var no_release=false centos.json
+* packer build -only=docker         -var version=YYYYMM.N -var no_release=false centos.json
 
 There are environment variables needed for building. If you aren't using a specific build, the variable is required, but a dummy value will do.
 
