@@ -8,8 +8,8 @@ hashistack:
     version: 1.1.2
     checksum: e927fd4daac11f6c7b8b3f1f53f2017516e29e99585dc975b657acdeac43500b
   consul:
-    version: 1.4.4
-    checksum: d3bdf9817c7de9d83426d8c421eb3f37bf82c03c97860ef78fb56e148c4a9765
+    version: 1.5.0
+    checksum: 1399064050019db05d3378f757e058ec4426a917dd2d240336b51532065880b6
   terraform:
     version: 0.11.13
     checksum: 5925cd4d81e7d8f42a0054df2aafd66e2ab7408dbed2bd748f0022cfe592f8d2
@@ -71,7 +71,7 @@ sdkman:
 git:
   version: 2.21.0
 vim:
-  version: 8.1.1241
+  version: 8.1.1332
 pdk:
   version: 1.10.0.0
   checksum: e65cc5b6a19420dee8c50640c0dca9442e44dc5f99316874f1ee3dcbae8266b3
@@ -132,40 +132,40 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2019.1.1
+  version: 2019.1.2
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
-    version: 191.6707.7
-    updateid: '60395'
+    version: 191.7141.2
+    updateid: '61262'
   - name: AngularJS
     type: zip
-    version: 191.6707.34
-    updateid: '60739'
+    version: 191.7141.24
+    updateid: '62008'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2019.1.20190416
-    updateid: '61023'
+    version: 2019.1.20190430
+    updateid: '61628'
   - name: com.intellij.lang.puppet
     type: zip
     version: 191.5849.16
     updateid: '58808'
   - name: NodeJS
     type: zip
-    version: 191.6707.7
-    updateid: '60394'
+    version: 191.7141.32
+    updateid: '61624'
   - name: BashSupport
     type: zip
     version: 1.7.7
     updateid: '60154'
   - name: Docker
     type: zip
-    version: 191.6707.7
-    updateid: '60402'
+    version: 191.7141.44
+    updateid: '62059'
   - name: mobi.hsz.idea.gitignore
     type: zip
-    version: 2.6.2
-    updateid: '46104'
+    version: 3.1.1.191
+    updateid: '62241'
   - name: com.jetbrains.plugins.ini4idea
     type: zip
     version: 191.5849.22
@@ -184,8 +184,8 @@ idea:
     updateid: '58804'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.25.9
-    updateid: '61652'
+    version: 0.25.14
+    updateid: '62150'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.3.31-release-IJ2019.1-1
@@ -204,8 +204,8 @@ idea:
     updateid: '60674'
   - name: Karma
     type: zip
-    version: 191.6707.7
-    updateid: '60388'
+    version: 191.7141.32
+    updateid: '61626'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.2
@@ -224,8 +224,8 @@ idea:
     updateid: 45070
   - name: com.intellij.ideolog
     type: zip
-    version: 191.0.9.0
-    updateid: '61403'
+    version: 191.0.11.0
+    updateid: '62261'
   - name: org.jetbrains.plugins.vagrant
     type: zip
     version: 191.5109.14
@@ -236,8 +236,8 @@ idea:
     updateid: '61588'
   - name: Lombook Plugin
     type: zip
-    version: 0.24-2018.3
-    updateid: '60241'
+    version: 0.25-EAP
+    updateid: '61697'
   - name: Lua
     type: zip
     updateid: '53575'
@@ -246,5 +246,5 @@ idea:
     type: zip
     updateid: '60651'
     version: 191.6707.31
-  checksum: 9ef7d11f78899f57be3cb34d83c6ecf6fc6a636c2e780a8974c05729edd73c4c
-  build: 191.6707.61
+  checksum: df747fd30199a482a5058dd361227b3772ba0e0eed1a092730c63db2f611d7eb
+  build: 191.7141.44

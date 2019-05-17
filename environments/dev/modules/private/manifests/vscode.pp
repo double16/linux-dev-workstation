@@ -104,7 +104,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'PeterJausovec.vscode-docker',
     'humao.rest-client',
     'xabikos.ReactSnippets',
-    'vsmobile.vscode-react-native',
+    'msjsdiag.vscode-react-native',
     'naco-siren.gradle-language',
     'yzhang.markdown-all-in-one',
     'dbaeumer.vscode-eslint',
