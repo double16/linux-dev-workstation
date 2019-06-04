@@ -117,7 +117,8 @@ Find this file at #{readme}
     end
     h.cpus = vagrant_config['cores'] || "2"
     h.linked_clone = true
-    h.memory = vagrant_config['memory'] || "4096"
+    h.maxmemory = vagrant_config['memory'] || "4096"
+    h.memory = "2048"
     o.trigger.before [ :up, :resume, :reload, :provision ] do |trigger|
       trigger.info = "Start DHCP Server"
       trigger.ruby do |env, machine|

@@ -20,3 +20,4 @@ id_rsa_insecure
 rdhcpd.pid
 *.exe
 *.zip
+iso/
