@@ -10,7 +10,7 @@ class private::my_vim {
     'scrooloose/syntastic',
     'scrooloose/nerdtree',
     'Xuyuanp/nerdtree-git-plugin',
-    'altercation/vim-colors-solarized',
+    'lifepillar/vim-solarized8',
     'rodjek/vim-puppet',
     'maksimr/vim-jsbeautify',
     'elzr/vim-json',
@@ -158,16 +158,11 @@ export EDITOR="vim"',
   private::my_vim::plugin { $vim_plugins: }
 
   unless empty($global_color_scheme) or $global_color_scheme == 'none' {
-    ['vagrant', 'root'].each |$user| {
-      vim::config { "solarized_termtrans for ${user}":
-        user    => $user,
-        content => 'let g:solarized_termtrans=1',
-        order   => '02',
-      }
-      vim::config { "solarized_termcolors ${user}":
-        user    => $user,
-        content => 'let g:solarized_termcolors=256',
-        order   => '03',
+    ['vagrant'].each |$user| {
+      if $user == 'root' {
+        $home = '/root'
+      } else {
+        $home = "/home/${user}"
       }
       vim::config { "background ${user}":
         user    => $user,
@@ -176,8 +171,26 @@ export EDITOR="vim"',
       }
       vim::config { "colorscheme ${user}":
         user    => $user,
-        content => 'colorscheme solarized',
+        content => 'colorscheme solarized8',
         order   => '04',
+      }
+      file { "${home}/.vim/colors":
+        owner => $user,
+        group => $user,
+        mode  => '0755',
+      }
+      Private::My_vim::Plugin<| |>
+      ->file { "${home}/.vim/colors/solarized8.vim":
+        ensure => link,
+        target => "${home}/.vim/bundle/vim-solarized8/colors/solarized8.vim",
+        owner  => $user,
+        group  => $user,
+      }
+      ->file { "${home}/.vim/colors/solarized8_flat.vim":
+        ensure => link,
+        target => "${home}/.vim/bundle/vim-solarized8/colors/solarized8_flat.vim",
+        owner  => $user,
+        group  => $user,
       }
     }
   }
