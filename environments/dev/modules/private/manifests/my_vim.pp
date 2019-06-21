@@ -181,16 +181,18 @@ export EDITOR="vim"',
       }
       Private::My_vim::Plugin<| |>
       ->file { "${home}/.vim/colors/solarized8.vim":
-        ensure => link,
-        target => "${home}/.vim/bundle/vim-solarized8/colors/solarized8.vim",
-        owner  => $user,
-        group  => $user,
+        ensure  => link,
+        target  => "${home}/.vim/bundle/vim-solarized8/colors/solarized8.vim",
+        owner   => $user,
+        group   => $user,
+        require => File["${home}/.vim/colors"],
       }
       ->file { "${home}/.vim/colors/solarized8_flat.vim":
-        ensure => link,
-        target => "${home}/.vim/bundle/vim-solarized8/colors/solarized8_flat.vim",
-        owner  => $user,
-        group  => $user,
+        ensure  => link,
+        target  => "${home}/.vim/bundle/vim-solarized8/colors/solarized8_flat.vim",
+        owner   => $user,
+        group   => $user,
+        require => File["${home}/.vim/colors"],
       }
     }
   }
