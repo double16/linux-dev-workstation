@@ -175,9 +175,10 @@ export EDITOR="vim"',
         order   => '04',
       }
       file { "${home}/.vim/colors":
-        owner => $user,
-        group => $user,
-        mode  => '0755',
+        ensure => directory,
+        owner  => $user,
+        group  => $user,
+        mode   => '0755',
       }
       Private::My_vim::Plugin<| |>
       ->file { "${home}/.vim/colors/solarized8.vim":

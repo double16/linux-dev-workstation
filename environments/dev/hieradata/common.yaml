@@ -76,7 +76,7 @@ pdk:
   version: 1.10.0.0
   checksum: e65cc5b6a19420dee8c50640c0dca9442e44dc5f99316874f1ee3dcbae8266b3
 docker:
-  version: 18.06.3
+  version: 18.09
 k8s:
   version: 1.12
 minikube:

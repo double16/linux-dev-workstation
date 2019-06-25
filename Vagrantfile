@@ -67,6 +67,7 @@ Vagrant.configure("2") do |config|
 
   if ENV['VAGRANT_FROM_SCRATCH']
     config.vm.box = "bento/centos-7.6"
+    config.vm.box_version = "= 201812.27.0"
   else
     config.vm.box = "double16/linux-dev-workstation"
   end
@@ -216,7 +217,7 @@ Vagrant.configure("2") do |config|
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
       rpm -Uvh https://yum.puppet.com/puppet6/puppet6-release-el-7.noarch.rpm
-      yum install -y puppet-agent-6.4.0-1.el7.x86_64
+      yum install -y puppet-agent-6.5.0-1.el7.x86_64
       mkdir -p /etc/puppetlabs/facter/facts.d
     )
   SHELL

@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 
 rpm -Uvh https://yum.puppet.com/puppet6/puppet6-release-el-7.noarch.rpm
-yum install -y puppet-agent-6.4.0-1.el7.x86_64
+yum install -y puppet-agent-6.5.0-1.el7.x86_64
 for X in $(ls /opt/puppetlabs/bin); do
 	ln -sf /opt/puppetlabs/bin/$X /usr/bin/$X
 done

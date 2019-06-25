@@ -101,7 +101,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'redhat.java',
     'ms-vscode.go',
     'rebornix.Ruby',
-    'PeterJausovec.vscode-docker',
+    'ms-azuretools.vscode-docker',
     'humao.rest-client',
     'xabikos.ReactSnippets',
     'msjsdiag.vscode-react-native',
