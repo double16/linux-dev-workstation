@@ -80,7 +80,7 @@ class private::my_docker {
         mode   => '0644',
       }
       ->package { ['device-mapper-persistent-data', 'lvm2']: }
-      ->package { "docker-ce-${docker_base_version}.*": }
+      ->package { "docker-ce-${docker_base_version}*": }
       ->class { '::docker':
         manage_package              => false,
         use_upstream_package_source => false,
