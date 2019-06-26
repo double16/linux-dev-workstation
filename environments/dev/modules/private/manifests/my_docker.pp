@@ -100,11 +100,11 @@ class private::my_docker {
   } else {
     # Docker in Docker (dind), based on https://github.com/aws/aws-codebuild-docker-images/blob/master/ubuntu/docker/17.09.0/Dockerfile
     package { [ 'e2fsprogs', 'iptables', 'xfsprogs', 'kmod']: }
-    archive { "/tmp/vagrant-cache/docker-${docker_base_version}-ce.tgz":
+    archive { "/tmp/vagrant-cache/docker-${docker_base_version}.tgz":
       ensure        => present,
       extract       => true,
       extract_path  => '/usr/bin',
-      source        => "https://download.docker.com/linux/static/stable/x86_64/docker-${docker_base_version}-ce.tgz",
+      source        => "https://download.docker.com/linux/static/stable/x86_64/docker-${docker_base_version}.tgz",
       creates       => '/usr/bin/docker',
       cleanup       => false,
       extract_flags => '-x --strip-components 1 -f',
