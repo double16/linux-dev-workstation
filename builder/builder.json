@@ -57,7 +57,7 @@
       "inline": [
         "set -x -e",
 
-        "test -n \"${yum_proxy}\" && echo \"proxy=${yum_proxy}\" >> /etc/yum.conf",
+        "test -n \"${yum_proxy}\" && echo \"proxy=${yum_proxy}\" >> /etc/yum.conf && echo \"--proxy ${yum_proxy}\" >> /root/.curlrc && echo \"--proxy ${yum_proxy}\" >> /home/vagrant/.curlrc",
         "yum install -y yum-utils epel-release",
         "yum-config-manager --add-repo https://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo",
         "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
@@ -71,13 +71,13 @@
         "/bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel",
         "/bin/grep -q '^vagrant:' /etc/passwd || /usr/sbin/useradd vagrant -m -g vagrant -G wheel,kvm,docker,vboxusers",
 
-        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.4.1/packer_1.4.1_linux_amd64.zip",
+        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.4.2/packer_1.4.2_linux_amd64.zip",
         "cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
 
-        "curl -sL -o /tmp/vagrant_2.2.4_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.4/vagrant_2.2.4_x86_64.rpm",
-        "rpm -i /tmp/vagrant_2.2.4_x86_64.rpm",
-        "rm /tmp/vagrant_2.2.4_x86_64.rpm",
+        "curl -sL -o /tmp/vagrant_2.2.5_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.rpm",
+        "rpm -i /tmp/vagrant_2.2.5_x86_64.rpm",
+        "rm /tmp/vagrant_2.2.5_x86_64.rpm",
         "su -c 'vagrant plugin install vagrant-cachier vagrant-vbguest vagrant-azure vagrant-aws' - vagrant",
         "su -c 'vagrant plugin install vagrant-google' - vagrant",
         "su -c 'vagrant plugin install vagrant-libvirt' - vagrant",
@@ -90,7 +90,7 @@
         "su -c 'echo eval \\\"\\$\\(goenv init -\\)\\\" >> ~/.bash_profile' - vagrant",
         "su -c 'goenv install -s 1.9.2' - vagrant",
         "su -c 'goenv global 1.9.2' - vagrant",
-        "su -c 'go get github.com/hashicorp/packer' - vagrant",
+        "su -c 'go get github.com/hashicorp/packer' - vagrant || true",
 
         "yum install -y openssl-devel readline-devel zlib-devel",
         "su -c 'echo export PATH=\\\"\\$PATH:\\$HOME/.rbenv/bin:\\$HOME/.rbenv/shims\\\" >> ~/.bash_profile' - vagrant",
@@ -99,7 +99,8 @@
         "su -c 'rbenv install 2.4.5 && rbenv global 2.4.5' - vagrant",
         "su -c 'gem install nokogiri' - vagrant",
 
-        "mv /tmp/vagrant-upload.sh /home/vagrant/vagrant-upload.sh",
+        "test -f /tmp/vagrant-upload.sh && mv /tmp/vagrant-upload.sh /home/vagrant/vagrant-upload.sh",
+        "test -f /vagrant/vagrant-upload.sh && cp /vagrant/vagrant-upload.sh /home/vagrant/vagrant-upload.sh",
         "chown vagrant:vagrant /home/vagrant/vagrant-upload.sh",
         "chmod +x /home/vagrant/vagrant-upload.sh",
         
