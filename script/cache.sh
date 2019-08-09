@@ -27,6 +27,7 @@ EOF
     grep -qF 'cache=' /home/${USERNAME}/.npmrc 2>/dev/null || cat >>/home/${USERNAME}/.npmrc <<EOF
 cache=/tmp/vagrant-cache/npm_${USERNAME}
 EOF
+    chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.npmrc
 
 fi
 

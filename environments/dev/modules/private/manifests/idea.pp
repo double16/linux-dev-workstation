@@ -2,11 +2,13 @@
 # IntelliJ IDEA Ultimate and plugins
 #
 class private::idea {
-  # https://download-cf.jetbrains.com/idea/ideaIU-${version}-jbr11.tar.gz
+  # https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz
+  # https://download-cf.jetbrains.com/idea/ideaIC-${version}.tar.gz
   $config = lookup('idea', Hash)
   $version = $config['version']
   $build = $config['build']
   $checksum = $config['checksum']
+  $checksumce = $config['checksum-ce']
 
   $version_parts = split($version, '[.]')
   $prefsdir = "/home/vagrant/.IntelliJIdea${version_parts[0]}.${version_parts[1]}"
@@ -25,7 +27,7 @@ class private::idea {
 
   archive { "/tmp/vagrant-cache/idea-${version}.tar.gz":
     ensure        => present,
-    source        => "https://download-cf.jetbrains.com/idea/ideaIU-${version}-jbr11.tar.gz",
+    source        => "https://download-cf.jetbrains.com/idea/ideaIU-${version}.tar.gz",
     extract_path  => '/opt',
     extract       => true,
     creates       => "/opt/idea-IU-${build}/bin/idea.sh",
@@ -52,10 +54,49 @@ Type=Application
 Name=IntelliJ IDEA
 GenericName=IntelliJ IDEA
 Categories=Development
-Comment=
+Comment=Capable and Ergonomic IDE (Ultimate Edition)
 Exec=/opt/idea/bin/idea.sh
 Icon=/opt/idea/bin/idea.png
 DocPath=file:///opt/idea/help/ReferenceCard.pdf
+Path=
+Terminal=false
+StartupNotify=true
+',
+  }
+
+  archive { "/tmp/vagrant-cache/idea-ce-${version}.tar.gz":
+    ensure        => present,
+    source        => "https://download-cf.jetbrains.com/idea/ideaIC-${version}.tar.gz",
+    extract_path  => '/opt',
+    extract       => true,
+    creates       => "/opt/idea-IC-${build}/bin/idea.sh",
+    checksum      => $checksumce,
+    checksum_type => 'sha256',
+    require       => File['/tmp/vagrant-cache'],
+  }
+  ->exec { "chown -R vagrant:vagrant /opt/idea-IC-${build}":
+    path   => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin'],
+    onlyif => "find /opt/idea-IC-${build} -not \\( -user vagrant -and -group vagrant \\) | grep -q '.'",
+  }
+  ->file { '/opt/idea-ce':
+    ensure => link,
+    target => "/opt/idea-IC-${build}",
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+  ->file { '/usr/share/applications/IntelliJ IDEA CE.desktop':
+    ensure  => file,
+    content => '
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=IntelliJ IDEA CE
+GenericName=IntelliJ IDEA Community Edition
+Categories=Development
+Comment=Capable and Ergonomic IDE (Community Edition)
+Exec=/opt/idea-ce/bin/idea.sh
+Icon=/opt/idea-ce/bin/idea.png
+DocPath=file:///opt/idea-ce/help/ReferenceCard.pdf
 Path=
 Terminal=false
 StartupNotify=true

@@ -65,16 +65,30 @@ def idea(yaml)
     if yaml['idea']['build'] != latest_build
         latest_version = updates_doc.xpath("//channel[@id=\"#{idea_channel}\"]//build")[0]['version'].to_s.sub(/ .*/, '')
         puts "Updating IDEA to #{latest_version} #{latest_build} ..."
-        download_url = "https://download-cf.jetbrains.com/idea/ideaIU-#{latest_version}-jbr11.tar.gz"
+        download_url = "https://download-cf.jetbrains.com/idea/ideaIU-#{latest_version}.tar.gz"
         download_file = ".vagrant/machines/default/cache/idea-#{latest_version}.tar.gz"
         system "curl -L -C - -o #{download_file} #{download_url}"
         if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
             yaml['idea']['checksum'] = sha256(download_file)
+            yaml['idea']['checksum-ce'] = ''
             idea_version = yaml['idea']['version'] = latest_version
             yaml['idea']['build'] = latest_build
             idea_build = "IU-#{yaml['idea']['build']}"
             File.delete(idea_plugins_file) if File.exists?(idea_plugins_file)
             puts "IDEA updated to #{latest_version} #{latest_build}, SHA256 #{yaml['idea']['checksum']}"
+        else
+            STDERR.puts "Error #{$?} downloading #{download_url}"
+        end
+    end
+    unless yaml['idea']['checksum-ce']
+        latest_version = yaml['idea']['version']
+        puts "Updating IDEA CE to #{latest_version} #{latest_build} ..."
+        download_url = "https://download-cf.jetbrains.com/idea/ideaIC-#{latest_version}.tar.gz"
+        download_file = ".vagrant/machines/default/cache/idea-ce-#{latest_version}.tar.gz"
+        system "curl -L -C - -o #{download_file} #{download_url}"
+        if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
+            yaml['idea']['checksum-ce'] = sha256(download_file)
+            puts "IDEA CE updated to #{latest_version} #{latest_build}, SHA256 #{yaml['idea']['checksum-ce']}"
         else
             STDERR.puts "Error #{$?} downloading #{download_url}"
         end

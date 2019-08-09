@@ -5,17 +5,17 @@ hashistack:
     version: 1.4.2
     checksum: 2fcbd1662ac76dc4dec381bdc7b5e6316d5b9d48e0774a32fe6ef9ec19f47213
   vault:
-    version: 1.1.3
-    checksum: 293b88f4d31f6bcdcc8b508eccb7b856a0423270adebfa0f52f04144c5a22ae0
+    version: 1.2.1
+    checksum: df14077600df745adf2450f9ea489cf6935352919b27b0367361379460e3b43e
   consul:
-    version: 1.5.1
-    checksum: 58fbf392965b629db0d08984ec2bd43a5cb4c7cc7ba059f2494ec37c32fdcb91
+    version: 1.5.3
+    checksum: b402e1a0db26adb9638a9e85c6c672acd137df233e8c69f26180f2e2fd6f4cbc
   terraform:
-    version: 0.12.3
-    checksum: 75e4323b8514074f8c2118ea382fc677c8b1d1730eda323ada222e0fac57f7db
+    version: 0.12.6
+    checksum: 6544eb55b3e916affeea0a46fe785329c36de1ba1bdb51ca5239d3567101876f
   nomad:
-    version: 0.9.3
-    checksum: cbd008dd2f3c622cb931ce8e7e6465f5b683e66845eb70adb776c970a8029578
+    version: 0.9.4
+    checksum: e0cdd0d787bb925910151f9e38fd6daa9590f1bf08d0c6703b7f544875b58c11
 sdkman:
 - package: groovy
   version: 2.4.16
@@ -51,7 +51,7 @@ sdkman:
   version: 2.0.8.RELEASE
   default: true
 - package: java
-  version: 8.0.212-zulu
+  version: 8.0.222-zulu
   default: true
 - package: java
   version: 9.0.4-open
@@ -71,10 +71,10 @@ sdkman:
 git:
   version: 2.22.0
 vim:
-  version: 8.1.1601
+  version: 8.1.1824
 pdk:
-  version: 1.11.0.0
-  checksum: 33a7a906b829ad3840e547b70bb582d1a344164eeba0b27d57092668ff4011c9
+  version: 1.12.0.0
+  checksum: 066f9181e402e6e43a94c96a967c13d60e62c56efb64cdfdd3cb74a335c7ca1b
 docker:
   version: 18.09.6
 k8s:
@@ -84,11 +84,11 @@ minikube:
   pin: true
   checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
 helm:
-  version: 2.14.1
-  checksum: 804f745e6884435ef1343f4de8940f9db64f935cd9a55ad3d9153d064b7f5896
+  version: 2.14.3
+  checksum: 38614a665859c0f01c9c1d84fa9a5027364f936814d1e47839b05327e400bf55
 kustomize:
-  version: 2.1.0
-  checksum: f12b81585fc70970c16cf8c9f9032c17fdbada288b500740bc001806fdce2f80
+  version: 3.1.0
+  checksum: 73acc575cf4e035a91da63ecffcabe58f9572562b772c1eb7ed863991950afe8
 container-diff:
   version: 0.15.0
   checksum: 65b10a92ca1eb575037c012c6ab24ae6fe4a913ed86b38048781b17d7cf8021b
@@ -104,8 +104,8 @@ rstudio:
   version: 1.1.463
   checksum: 0dbdbbc5dc346e19c9f310ac9fd66333b15ea71d824599f9e114ddac4819a6dd
 slack:
-  version: 3.1.1-0.1
-  checksum: 9048305644e41e43baa44266011d67724fbb2f11024ded6650444546ced0df98
+  version: 4.0.1-0.1
+  checksum: 615ae7321d284da1f02e721f0ba6ee59abb7c31b37342196584dd675e1ed5b12
 node:
   versions:
   - version: 8.11.3
@@ -132,68 +132,68 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2019.1.3
+  version: '2019.2'
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
-    version: 191.7141.2
-    updateid: '61262'
+    version: 192.5728.12
+    updateid: '65381'
   - name: AngularJS
     type: zip
-    version: 191.7479.14
-    updateid: '63137'
+    version: 192.5728.103
+    updateid: '66079'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2019.1.20190528
-    updateid: '63128'
+    version: 2019.2.20190718
+    updateid: '65722'
   - name: com.intellij.lang.puppet
     type: zip
-    version: 191.5849.16
-    updateid: '58808'
+    version: 192.5728.12
+    updateid: '65367'
   - name: NodeJS
     type: zip
-    version: 191.7479.1
-    updateid: '62317'
+    version: 192.5728.87
+    updateid: '65886'
   - name: BashSupport
     type: zip
-    version: 1.7.7
-    updateid: '60154'
+    version: 1.7.12.192
+    updateid: '65772'
   - name: Docker
     type: zip
-    version: 191.7141.44
-    updateid: '62059'
+    version: 192.5728.74
+    updateid: '65724'
   - name: mobi.hsz.idea.gitignore
     type: zip
-    version: 3.1.2.191
-    updateid: '62301'
+    version: 3.2.1.192
+    updateid: '66736'
   - name: com.jetbrains.plugins.ini4idea
     type: zip
-    version: 191.5849.22
-    updateid: '58824'
+    version: 192.5728.26
+    updateid: '65486'
   - name: org.intellij.plugins.hcl
     type: zip
-    version: 0.7.4
-    updateid: '64595'
+    version: 0.7.5
+    updateid: '66428'
   - name: org.jetbrains.plugins.go
     type: zip
-    version: 191.7479.19.213
-    updateid: '64332'
+    version: 192.5728.86.268
+    updateid: '66084'
   - name: com.jetbrains.plugins.jade
     type: zip
-    version: 191.5849.16
-    updateid: '58804'
+    version: 192.5728.12
+    updateid: '65386'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.28.3
-    updateid: '64490'
+    version: 0.28.27
+    updateid: '66608'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.3.40-release-IJ2019.1-1
-    updateid: '64317'
+    version: 1.3.41-release-IJ2019.2-1
+    updateid: '65067'
   - name: com.atlassian.bitbucket.references
     type: zip
-    version: '7.1'
-    updateid: '62505'
+    version: '7.3'
+    updateid: '66212'
   - name: GradleDependenciesHelper
     type: jar
     version: '1.14'
@@ -204,8 +204,8 @@ idea:
     updateid: '64447'
   - name: Karma
     type: zip
-    version: 191.7141.32
-    updateid: '61626'
+    version: 192.5728.12
+    updateid: '65368'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.2
@@ -223,13 +223,13 @@ idea:
     version: 4.1.1
     updateid: 45070
   - name: com.intellij.ideolog
-    type: jar
-    version: 191.0.12.0
-    updateid: '63602'
+    type: zip
+    version: 192.0.12.0
+    updateid: '63720'
   - name: org.jetbrains.plugins.vagrant
     type: zip
-    version: 191.5109.14
-    updateid: '57829'
+    version: 192.5728.12
+    updateid: '65365'
   - name: VisualVMLauncher
     type: jar
     version: 1.13.182.000.2
@@ -240,19 +240,20 @@ idea:
     updateid: '61697'
   - name: Lua
     type: zip
-    updateid: '53575'
-    version: 1.0.115
+    updateid: '65821'
+    version: 1.0.117
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '60651'
-    version: 191.6707.31
+    updateid: '66010'
+    version: 192.5728.98
   - name: color.scheme.Monokai Pro Spectrum
     type: jar
-    updateid: '63276'
-    version: '0.1'
+    updateid: '66678'
+    version: '0.2'
   - name: com.chrisrm.idea.MaterialThemeUI
     type: zip
-    updateid: '63011'
-    version: 3.10.0
-  checksum: ef5bf78d484ac1cdcdf7ccaac29f3e1026191015e658017c3dc945740aee3768
-  build: 191.7479.19
+    updateid: '66593'
+    version: 4.2.2
+  checksum: 80b3e740d156021f1d91bb69a1bcb85f3f4b7b73889e5ec614063a216f69436c
+  build: 192.5728.98
+  checksum-ce: cc864979bd63cfb3c23f7ec79decc95bbd99dbef62c5a6ca6d3328053a6eb37a

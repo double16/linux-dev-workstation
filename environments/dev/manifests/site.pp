@@ -110,6 +110,7 @@ yum::group { 'X Window System':
   'xfce4-screenshooter-plugin',
   'xfce4-whiskermenu-plugin',
   'xfce4-systemload-plugin',
+  'xfce4-fsguard-plugin',
   ]: }
 
 exec { 'graphical runlevel':
@@ -197,6 +198,7 @@ package { [
     'net-tools',
     'cifs-utils',
     'samba',
+    'puppet-bolt',
 
     # For recording the screen via 'ffmpeg x11grab'
     'ffmpeg',

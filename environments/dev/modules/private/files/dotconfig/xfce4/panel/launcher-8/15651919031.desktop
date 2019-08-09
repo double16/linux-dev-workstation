@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=IntelliJ IDEA CE
+GenericName=IntelliJ IDEA Community Edition
+Categories=Development
+Comment=Capable and Ergonomic IDE (Community Edition)
+Exec=/opt/idea-ce/bin/idea.sh
+Icon=/opt/idea-ce/bin/idea.png
+DocPath=file:///opt/idea-ce/help/ReferenceCard.pdf
+Path=
+Terminal=false
+StartupNotify=true
+X-XFCE-Source=file:///usr/share/applications/IntelliJ%20IDEA%20CE.desktop
