@@ -2,7 +2,19 @@
 # Configure RDP server for vagrant user to run on start on localhost port 3389
 #
 class private::rdp {
-  package { ['xrdp', 'xorgxrdp']: }
+  if $::os['release']['full'] == '7.6.1810' {
+    # EPEL upgraded xorgxrdp using deps not available in CentOS 7.6
+    exec { "/usr/bin/rpm -Uvh --nodeps $(/usr/bin/repoquery --quiet --location xorgxrdp | grep '^http.*xorgxrdp.*rpm$')":
+      unless => '/usr/bin/yum list installed xorgxrdp',
+      before => Package['xrdp'],
+    }
+  } else {
+    package { 'xorgxrdp':
+      before => Package['xrdp'],
+    }
+  }
+
+  package { 'xrdp': }
   ->file { '/etc/xrdp/xrdp.ini':
     ensure => file,
     source => 'puppet:///modules/private/xrdp.ini',

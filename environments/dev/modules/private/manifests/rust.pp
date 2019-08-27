@@ -20,13 +20,31 @@ class private::rust {
     onlyif      => '/usr/bin/mountpoint /tmp/vagrant-cache',
   }
 
-  package { ['rust', 'cargo']: }
+  class deps {
+    package { ['rust', 'cargo', 'llvm-devel']: }
+
+    package { 'clang': }
+    ->file { '/etc/ld.so.conf.d/clang6-private-x86_64.conf':
+      ensure  => file,
+      owner   => 0,
+      group   => 'root',
+      mode    => '0644',
+      content => '/usr/lib64/clang-private
+',
+    }
+    ~>exec { 'ld.so cache for clang':
+      command     => '/usr/sbin/ldconfig',
+      refreshonly => true,
+    }
+  }
+  include private::rust::deps
+
   $rust_packages.each |$pkg| {
     exec { $pkg:
       command => "/usr/bin/cargo install --root /usr/local ${pkg}",
       creates => "/usr/local/bin/${pkg}",
       timeout => 1200,
-      require => [ Package['rust'], Package['cargo'], Exec['restore cache for rust packages'] ],
+      require => [ Class['private::rust::deps'], Exec['restore cache for rust packages'] ],
       notify  => Exec['save cache for rust packages'],
     }
   }

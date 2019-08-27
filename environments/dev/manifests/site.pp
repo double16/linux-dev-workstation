@@ -7,7 +7,6 @@ class { '::private::security':
 }
 
 include ::epel
-include ::ius
 include ::augeas
 include ::private::proxy
 
@@ -22,7 +21,6 @@ exec { 'atrpms-repo-7-7':
 -> Package<| |>
 
 Class['epel'] -> Package<| |>
-Class['ius'] -> Package<| |>
 
 # Initial setup prompts for license acceptance
 service { ['initial-setup', 'initial-setup-text', 'initial-setup-graphical']:
@@ -58,10 +56,6 @@ if $::virtual == 'docker' {
   class { '::yum_cron':
     apply_updates => true,
   }
-}
-
-yum::plugin { 'replace':
-  ensure => present,
 }
 
 yum::group { 'Development Tools':

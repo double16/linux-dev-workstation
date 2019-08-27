@@ -1,6 +1,6 @@
 # Install Kubernetes using https://k3s.io
 class private::k3s {
-  $k3s_version = '0.4.0'
+  $k3s_version = lookup('k3s', Hash)['version']
 
   file { '/opt/k3s':
     ensure => directory,
@@ -45,6 +45,9 @@ timeout 30 sh -c "until nc -zv localhost 6443 >/dev/null 2>&1; do echo .; sleep 
         Private::Cached_remote_file['/opt/k3s/install.sh'],
         Private::Cached_remote_file['/opt/k3s/local-path-storage.yaml']
       ],
+    }
+    ~>exec { '/usr/bin/chown -R vagrant:vagrant /etc/rancher':
+      refreshonly => true,
     }
     ->exec { 'k3s local-path storage':
       command => '/opt/k3s/until-ready.sh && (/usr/local/bin/k3s kubectl apply -f /opt/k3s/local-path-storage.yaml ; /usr/local/bin/k3s kubectl patch storageclass local-path -p \'{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}\')',

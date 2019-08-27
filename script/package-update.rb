@@ -25,7 +25,7 @@ def sha256(file)
 end
 
 def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/, filter = lambda { |v| true })
-    uri_str = "https://api.github.com/repos/#{owner}/#{repo}/tags"
+    uri_str = "https://api.github.com/repos/#{owner}/#{repo}/releases"
     tags = JSON.parse(Net::HTTP.get(URI(uri_str)))
     
     if tags.is_a?(Hash) and tags.has_key?('message')
@@ -33,7 +33,7 @@ def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/, filter = lambda
         return nil
     end
 
-    tags.collect { |e| e['name'] }
+    tags.collect { |e| e['tag_name'] }
         .select { |e| e.match(version_match) }
         .collect { |e| e[1..-1] }
         .sort { |a,b| Gem::Version.new(a) <=> Gem::Version.new(b) }
@@ -70,7 +70,7 @@ def idea(yaml)
         system "curl -L -C - -o #{download_file} #{download_url}"
         if $?.exitstatus == 0 or $?.exitstatus == 33 # we have the entire file, the byte range request failed
             yaml['idea']['checksum'] = sha256(download_file)
-            yaml['idea']['checksum-ce'] = ''
+            yaml['idea'].delete('checksum-ce')
             idea_version = yaml['idea']['version'] = latest_version
             yaml['idea']['build'] = latest_build
             idea_build = "IU-#{yaml['idea']['build']}"
@@ -80,7 +80,7 @@ def idea(yaml)
             STDERR.puts "Error #{$?} downloading #{download_url}"
         end
     end
-    unless yaml['idea']['checksum-ce']
+    unless yaml['idea'].has_key?('checksum-ce')
         latest_version = yaml['idea']['version']
         puts "Updating IDEA CE to #{latest_version} #{latest_build} ..."
         download_url = "https://download-cf.jetbrains.com/idea/ideaIC-#{latest_version}.tar.gz"
@@ -190,38 +190,44 @@ def slack(yaml)
 end
 
 def docker(yaml)
-    latest = latest_github_tag('docker', 'docker-ce', /^v[0-9.]+-ce$/, lambda { |v|
-        docker_uri = URI("https://download.docker.com/linux/static/stable/x86_64/docker-#{v}.tgz")
-        resp = Net::HTTP.start(docker_uri.host, docker_uri.port, :use_ssl => true) { |http|
-            http.head(docker_uri.path)
-        }
-        resp.is_a?(Net::HTTPFound) || resp.is_a?(Net::HTTPSuccess)
-    })
-    if yaml['docker']['pin']
-        latest = yaml['docker']['version']
+    unless yaml['docker']['pin']
+        latest = latest_github_tag('docker', 'docker-ce', /^v[0-9.]+$/, lambda { |v|
+            docker_uri = URI("https://download.docker.com/linux/static/stable/x86_64/docker-#{v}.tgz")
+            resp = Net::HTTP.start(docker_uri.host, docker_uri.port, :use_ssl => true) { |http|
+                http.head(docker_uri.path)
+            }
+            resp.is_a?(Net::HTTPFound) || resp.is_a?(Net::HTTPSuccess)
+        })
+        if latest
+            yaml['docker']['version'] = latest.sub('-ce', '')
+        end
     end
-    if latest
-        yaml['docker']['version'] = latest.sub('-ce', '')
+end
+
+def k3s(yaml)
+    unless yaml['k3s']['pin']
+        latest = latest_github_tag('rancher', 'k3s')
+        if latest
+            yaml['k3s']['version'] = latest
+        end
     end
 end
 
 def git(yaml)
-    latest = latest_github_tag('git', 'git')
-    if yaml['git']['pin']
-        latest = yaml['git']['version']
-    end
-    if latest
-        yaml['git']['version'] = latest
+    unless yaml['git']['pin']
+        latest = latest_github_tag('git', 'git')
+        if latest
+            yaml['git']['version'] = latest
+        end
     end
 end
 
 def vim(yaml)
-    latest = latest_github_tag('vim', 'vim')
-    if yaml['vim']['pin']
-        latest = yaml['vim']['version']
-    end
-    if latest
-        yaml['vim']['version'] = latest
+    unless yaml['vim']['pin']
+        latest = latest_github_tag('vim', 'vim')
+        if latest
+            yaml['vim']['version'] = latest
+        end
     end
 end
 
@@ -401,6 +407,7 @@ hashistack(yaml)
 pdk(yaml)
 slack(yaml)
 docker(yaml)
+k3s(yaml)
 rstudio(yaml)
 containerdiff(yaml)
 kustomize(yaml)
