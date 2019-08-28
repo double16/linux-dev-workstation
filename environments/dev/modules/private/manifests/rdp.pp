@@ -4,7 +4,7 @@
 class private::rdp {
   if $::os['release']['full'] == '7.6.1810' {
     # EPEL upgraded xorgxrdp using deps not available in CentOS 7.6
-    exec { "/usr/bin/rpm -Uvh --nodeps $(/usr/bin/repoquery --quiet --location xorgxrdp | grep '^http.*xorgxrdp.*rpm$')":
+    exec { "/usr/bin/yum makecache -y ; /usr/bin/rpm -Uvh --nodeps $(/usr/bin/repoquery --quiet --location xorgxrdp | grep '^http.*xorgxrdp.*rpm$')":
       unless => '/usr/bin/yum list installed xorgxrdp',
       before => Package['xrdp'],
     }
