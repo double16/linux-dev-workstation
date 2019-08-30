@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set +H
+
 if [[ ! "$DESKTOP" =~ ^(true|yes|on|1|TRUE|YES|ON])$ ]]; then
   exit
 fi

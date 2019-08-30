@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+set +H
+
 SSH_USER=${SSH_USERNAME:-vagrant}
 SSH_USER_HOME=${SSH_USER_HOME:-/home/${SSH_USER}}
 

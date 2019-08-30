@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+set +H
+
 echo '==> Applying slow DNS fix'
 if [[ "${PACKER_BUILDER_TYPE}" =~ "virtualbox" ]]; then
   ## https://access.redhat.com/site/solutions/58625 (subscription required)

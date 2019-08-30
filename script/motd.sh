@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+set +H
+
 echo "==> Recording box generation date"
 date > /etc/vagrant_box_build_date
 

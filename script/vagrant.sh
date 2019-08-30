@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+set +H
+
 echo '==> Configuring settings for vagrant'
 
 SSH_USER=${SSH_USERNAME:-vagrant}

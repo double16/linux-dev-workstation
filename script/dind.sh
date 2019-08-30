@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+set +H
+
 if [[ ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
   echo "==> Configuring Docker-in-Docker"
   cat >/etc/supervisord.d/dind.conf <<EOF

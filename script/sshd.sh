@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+set +H
+
 echo '==> Configuring sshd_config options'
 
 echo '==> Turning off sshd DNS lookup to prevent timeout delay'

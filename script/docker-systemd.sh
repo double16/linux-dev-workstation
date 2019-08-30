@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+set +H
+
 if [[ ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
   echo "==> Configuring systemd for Docker"
   (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done)

@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+set +H
+
 USERNAME=${SSH_USERNAME:-vagrant}
 
 echo "==> Remove temporary Yum proxy"
