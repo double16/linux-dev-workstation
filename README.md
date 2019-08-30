@@ -4,7 +4,7 @@ This Vagrant image contains a developer workspace with the following software:
 
 * CentOS 7.6
 * Java 8-11
-* [IntelliJ IDEA Ultimate + sundry plugins](https://www.jetbrains.com/idea/)
+* [IntelliJ IDEA Ultimate, Community Edition and sundry plugins](https://www.jetbrains.com/idea/)
 * [Visual Studio Code](https://code.visualstudio.com)
 * vim 8, gvim, sundry vim plugins
 * emacs with [spacemacs](https://github.com/syl20bnr/spacemacs)

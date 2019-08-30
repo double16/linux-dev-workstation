@@ -33,8 +33,6 @@ configs:
         ipv4only: true
         # Force search domain in /etc/resolv.conf
         search_domain: company.com
-        # Limit DNS resolution to IPV4
-        ipv4only: true
         # Populates git config
         user_name: Droopy Dog
         user_email: droppy@dogpound.nil
@@ -156,11 +154,7 @@ $ docker run --privileged -d -p 2020:22 pdouble16/linux-dev-workstation
 
 ## Kubernetes
 
-~~`kubectl` and `microk8s` are installed. `microk8s.kubectl`, `microk8s.docker` and `microk8s.istioctl` are aliased to commands without the `microk8s.` prefix. `microk8s` is a snap application and is difficult to run under Docker. In the Docker container,~~ `minikube` is installed and defaults to use the Docker daemon. It must be run using `sudo`:
-
-```shell
-$ sudo minikube start
-```
+[k3s](https://k3s.io) is installed in the recommended way. The Docker container has the `k3s` binary installed but no attempt has been made to have it running out of the box.
 
 ### Display Resolution
 

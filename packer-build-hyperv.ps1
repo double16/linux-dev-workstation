@@ -11,26 +11,18 @@ if ($RubyInstalled -eq $false) {
 
 $PackerInstalled = Test-Path ".\packer.exe"
 if ($PackerInstalled -eq $false) {
-#    Invoke-WebRequest -Uri "https://releases.hashicorp.com/packer/1.3.3/packer_1.3.3_windows_amd64.zip" -OutFile "packer.zip"
-#    Extract-Archive -Path "packer.zip" -DestinationPath .
-    echo "Packer missing. Install from https://releases.hashicorp.com/packer/1.3.3/packer_1.3.3_windows_amd64.zip into $PWD as packer.exe"
-    Exit 1
-}
-
-$CurlInstalled = Test-Path ".\curl.exe"
-if ($CurlInstalled -eq $false) {
-    echo "cURL missing. Install curl for 64-bit from https://curl.haxx.se/windows/ into $PWD as curl.exe"
-    Exit 1
+    Invoke-WebRequest -Uri "https://releases.hashicorp.com/packer/1.4.3/packer_1.4.3_windows_amd64.zip" -OutFile "packer.zip"
+    Expand-Archive ".\packer.zip" -DestinationPath .
 }
 
 .\script\create-natswitch.ps1
 
-$dhcp_ip = Get-NetIPAddress -InterfaceAlias "vEthernet (VagrantSwitch)" | foreach { $_.IPAddress }
+$dhcp_ip = Get-NetIPAddress -InterfaceAlias "vEthernet (VagrantSwitch)" | Where-Object {$_.AddressFamily -eq 'IPv4'} | Select -first 1 | foreach { $_.IPAddress }
 $dns_ip = Get-DnsClientServerAddress | foreach { $_.ServerAddresses }
 Start-Process -FilePath "C:\Ruby24-x64\bin\ruby.exe" -ArgumentList "rdhcpd.rb","$dhcp_ip","$dns_ip" -WindowStyle Hidden
 
 $ShareName = "VagrantCache"
-$HostName = Get-NetIPAddress -InterfaceAlias Ethernet0 | foreach { $_.IPAddress }
+$HostName = Get-NetIPAddress -InterfaceAlias Ethernet | Where-Object {$_.AddressFamily -eq 'IPv4'}  | Select -first 1 | foreach { $_.IPAddress }
 
 $ShareUser = $env:SHARE_USER
 if ($null -eq $ShareUser) {
@@ -47,8 +39,9 @@ if ("" -ne $out) {
     Remove-SmbShare -Name $ShareName -Force -erroraction 'silentlycontinue'
 }
 
-mkdir -Force -p .vagrant\machines\default\cache
-New-SmbShare -Name $ShareName -Path C:\Users\req86053\workspace\linux-dev-workstation\.vagrant\machines\default\cache -FullAccess $ShareUser -Temporary -ErrorVariable err
+$SharePath = "$PWD\.vagrant\machines\default\cache"
+mkdir -Force -p $SharePath
+New-SmbShare -Name $ShareName -Path $SharePath -FullAccess $ShareUser -Temporary -ErrorVariable err
 if ("" -ne $err) {
   Exit 2
 }

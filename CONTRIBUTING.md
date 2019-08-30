@@ -47,12 +47,14 @@ There are environment variables needed for building. If you aren't using a speci
 * `VAGRANT_CLOUD_TOKEN` - vagrantcloud.com token for publishing Vagrant boxes
 * `AWS_ACCESS_KEY` - Access key for AWS EC2 allowing read/write access (not admin) to EC2
 * `AWS_SECRET_KEY` - Secret key for AWS
+* `AZURE_SUBSCRIPTION_ID` - Azure subscription
+* `AZURE_TENANT_ID`- - Azure tenant
 * `AZURE_CLIENT_ID` - Client ID for Azure
 * `AZURE_CLIENT_SECRET` - Secret for Azure
 
 ## Building in Azure
 
-If you'd like to use a VM in the cloud to build the boxes, Azure supports nested virtualization. The `builder` directory has a Packer `builder.json` file to build the VM with Packer, VirtualBox and QEMU/libvirt.
+If you'd like to use a VM in the cloud to build the boxes, Azure supports nested virtualization. The `builder` directory has a Packer `builder.json` file to build the VM with Packer, VirtualBox or QEMU/libvirt.
 
 ### Configure your Azure Account
 
