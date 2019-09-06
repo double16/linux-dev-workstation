@@ -86,18 +86,6 @@ yum::group { 'X Window System':
   timeout => 0,
   path    => '/bin:/usr/bin:/sbin:/usr/sbin',
 }
-->file_line { 'gdm autologin enable':
-  path  => '/etc/gdm/custom.conf',
-  line  => 'AutomaticLoginEnable=true',
-  after => '\[daemon\]',
-  match => '^AutomaticLoginEnable=.*',
-}
-->file_line { 'gdm autologin user':
-  path  => '/etc/gdm/custom.conf',
-  line  => 'AutomaticLogin=vagrant',
-  after => '\[daemon\]',
-  match => '^AutomaticLogin=.*',
-}
 ->package { [
   'xfce4-clipman-plugin',
   'xfce4-screenshooter',
@@ -107,10 +95,44 @@ yum::group { 'X Window System':
   'xfce4-fsguard-plugin',
   ]: }
 
+$autologin_default = $::virtual ? {
+  'virtualbox' => present,
+  'vmware'     => present,
+  default      => absent,
+}
+$autologin_ensure = $::native_gui ? {
+  true      => present,
+  'true'    => present,
+  false     => absent,
+  'false'   => absent,
+  default   => $autologin_default,
+}
+file_line { 'gdm autologin enable':
+  ensure            => $autologin_ensure,
+  path              => '/etc/gdm/custom.conf',
+  line              => 'AutomaticLoginEnable=true',
+  after             => '\[daemon\]',
+  match             => '^AutomaticLoginEnable=.*',
+  match_for_absence => true,
+  require           => Exec['yum-groupinstall-Xfce'],
+}
+->file_line { 'gdm autologin user':
+  ensure            => $autologin_ensure,
+  path              => '/etc/gdm/custom.conf',
+  line              => 'AutomaticLogin=vagrant',
+  after             => '\[daemon\]',
+  match             => '^AutomaticLogin=.*',
+  match_for_absence => true,
+}
+
+$systemd_default_target = $autologin_ensure ? {
+  present => 'graphical.target',
+  default => 'multi-user.target',
+}
 exec { 'graphical runlevel':
   path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-  command => 'systemctl set-default graphical.target',
-  unless  => 'systemctl get-default | grep -q graphical',
+  command => "systemctl set-default ${systemd_default_target}",
+  unless  => "systemctl get-default | grep -q ${systemd_default_target}",
   require => Yum::Group['X Window System'],
 }
 

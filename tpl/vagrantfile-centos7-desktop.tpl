@@ -69,7 +69,7 @@ Find this file at #{readme}
    config.vm.provider :virtualbox do |v, override|
      override.vagrant.plugins = ['vagrant-cachier', 'vagrant-vbguest', 'vagrant-disksize']
 
-     v.gui = true
+     v.gui = vagrant_config.fetch('native_gui', true)
      v.linked_clone = true if Gem::Version.new(Vagrant::VERSION) >= Gem::Version.new('1.8.0')
      v.customize ["modifyvm", :id, "--memory", vagrant_config['memory'] || 4096]
      v.customize ["modifyvm", :id, "--cpus", vagrant_config['cores'] || 2]
@@ -89,7 +89,7 @@ Find this file at #{readme}
 
   ["vmware_fusion", "vmware_workstation"].each do |provider|
     config.vm.provider provider do |v, override|
-      v.gui = true
+      v.gui = vagrant_config.fetch('native_gui', true)
       v.vmx["memsize"] = vagrant_config['memory'] || "4096"
       v.vmx["numvcpus"] = vagrant_config['cores'] || "2"
       v.vmx["cpuid.coresPerSocket"] = "1"
@@ -211,6 +211,7 @@ user_name=#{vagrant_config['user_name'] || `git config --get user.name 2>/dev/nu
 user_email=#{vagrant_config['user_email'] || `git config --get user.email 2>/dev/null`.chomp}
 timezone=#{vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600)}
 theme=#{vagrant_config['theme']}
+native_gui=#{vagrant_config['native_gui']}
 resolution=#{vagrant_config['resolution']}
 FACTS
 

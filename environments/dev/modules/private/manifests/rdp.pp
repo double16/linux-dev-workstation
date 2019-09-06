@@ -2,7 +2,7 @@
 # Configure RDP server for vagrant user to run on start on localhost port 3389
 #
 class private::rdp {
-  if $::os['release']['full'] == '7.6.1810' {
+  if SemVer($::os['release']['full']) <= SemVer('7.6.1810') {
     # EPEL upgraded xorgxrdp using deps not available in CentOS 7.6
     exec { "/usr/bin/yum makecache -y ; /usr/bin/rpm -Uvh --nodeps $(/usr/bin/repoquery --quiet --location xorgxrdp | grep '^http.*xorgxrdp.*rpm$')":
       unless => '/usr/bin/yum list installed xorgxrdp',

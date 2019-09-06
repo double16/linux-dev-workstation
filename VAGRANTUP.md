@@ -38,6 +38,8 @@ configs:
         user_email: droppy@dogpound.nil
         # Set the number of monitors, defaults to let the provider determine it. Not necessary when using RDP.
         monitors: 1
+        # Use the Hypervisor's GUI to login in addition to RDP
+        native_gui: true
         # Configure display resolution on startup, useful for providers that do not automatically resize. Not necessary when using RDP.
         resolution: 1440x1024
         # Optional Timezone, pulled from host machine if not specified

@@ -107,7 +107,7 @@ Vagrant.configure("2") do |config|
     config.disksize.size = '80GB'
   end
   config.vm.provider "virtualbox" do |vb|
-    vb.gui = true
+    vb.gui = vagrant_config.fetch('native_gui', true)
     vb.cpus = vagrant_config['cores']
     vb.memory = vagrant_config['memory']
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
@@ -119,7 +119,7 @@ Vagrant.configure("2") do |config|
 
   ["vmware_fusion", "vmware_workstation"].each do |p|
     config.vm.provider p do |v|
-      v.gui = true
+      v.gui = vagrant_config.fetch('native_gui', true)
       v.vmx["numvcpus"] = vagrant_config['cores']
       v.vmx["memsize"] = vagrant_config['memory']
       v.vmx["vhv.enable"] = "TRUE"
@@ -243,6 +243,7 @@ Vagrant.configure("2") do |config|
       "user_email" => vagrant_config['user_email'] || `git config --get user.email 2>/dev/null`.chomp,
       "timezone" => vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600),
       "theme" => vagrant_config['theme'],
+      "native_gui" => vagrant_config['native_gui'],
       "resolution" => vagrant_config['resolution'],
     }
   #  puppet.options = "--debug"
