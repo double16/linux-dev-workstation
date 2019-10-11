@@ -2,8 +2,8 @@
 theme::default: light
 hashistack:
   packer:
-    version: 1.4.3
-    checksum: c89367c7ccb50ca3fa10129bbbe89273fba0fa6a75b44e07692a32f92b1cbf55
+    version: 1.4.4
+    checksum: b4dc37877a0fd00fc72ebda98977c2133be9ba6b26bcdd13b1b14a369e508948
   vault:
     version: 1.2.2
     checksum: 7725b35d9ca8be3668abe63481f0731ca4730509419b4eb29fa0b0baa4798458
@@ -11,11 +11,11 @@ hashistack:
     version: 1.5.3
     checksum: b402e1a0db26adb9638a9e85c6c672acd137df233e8c69f26180f2e2fd6f4cbc
   terraform:
-    version: 0.12.8
-    checksum: 43806e68f7af396449dd4577c6e5cb63c6dc4a253ae233e1dddc46cf423d808b
+    version: 0.12.10
+    checksum: 2215208822f1a183fb57e24289de417c9b3157affbe8a5e520b768edbcb420b4
   nomad:
-    version: 0.9.5
-    checksum: 9a137abad26959b6c5f8169121f1c7082dff7b11b11c7fe5a728deac7d4bd33f
+    version: 0.9.6
+    checksum: 063047c245442674d2e9287fc37a5a369312a3f5ca4c6954036a64039c7adde1
 sdkman:
 - package: groovy
   version: 2.4.16
@@ -30,7 +30,7 @@ sdkman:
   version: 4.10.3
   default: true
 - package: gradle
-  version: 5.6.1
+  version: 5.6.2
   default: false
 - package: kotlin
   version: 1.3.50
@@ -39,10 +39,10 @@ sdkman:
   version: 2.8.0
   default: true
 - package: micronaut
-  version: 1.2.0
+  version: 1.2.3
   default: true
 - package: springboot
-  version: 2.1.7.RELEASE
+  version: 2.1.9.RELEASE
   default: true
 - package: java
   version: 8.0.222-zulu
@@ -60,21 +60,17 @@ sdkman:
   version: 0.8.3
   default: true
 - package: visualvm
-  version: 1.4.2
+  version: 1.4.3
   default: true
-git:
-  version: 2.23.0
-vim:
-  version: 8.1.1890
 pdk:
-  version: 1.13.0.0
-  checksum: e834885e0a728ee551918ea5ce7545c7fa46ff29754ed7803d3ec5dfe8549c2d
+  version: 1.14.0.0
+  checksum: 510c450d3312c097ecbca3fcfd8d980dcae81914109406845f8792a21da2ded1
 docker:
-  version: 19.03.2
+  version: 19.03.3
 k8s:
   version: 1.12
 k3s:
-  version: 0.8.1
+  version: 0.9.1
 minikube:
   version: 0.28.2
   pin: true
@@ -83,14 +79,11 @@ helm:
   version: 2.14.3
   checksum: 38614a665859c0f01c9c1d84fa9a5027364f936814d1e47839b05327e400bf55
 kustomize:
-  version: 3.1.0
-  checksum: 73acc575cf4e035a91da63ecffcabe58f9572562b772c1eb7ed863991950afe8
+  version: 3.2.0
+  checksum: 7db89e32575d81393d5d84f0dc6cbe444457e61ce71af06c6e6b7b6718299c22
 container-diff:
   version: 0.15.0
   checksum: 65b10a92ca1eb575037c012c6ab24ae6fe4a913ed86b38048781b17d7cf8021b
-emacs:
-  version: 26.1
-  checksum: 760382d5e8cdc5d0d079e8f754bce1136fbe1473be24bb885669b0e38fc56aa3
 vagrant:
   version: 2.2.5
 dockstation:
@@ -104,31 +97,29 @@ slack:
   checksum: 615ae7321d284da1f02e721f0ba6ee59abb7c31b37342196584dd675e1ed5b12
 node:
   versions:
-  - version: 8.11.3
+  - version: 10.16.3
     global: true
-  - version: 10.1.0
+  - version: 12.10.0
     global: false
   packages:
   - yarn
   - grunt
   - typescript
   - tern
-  - generator-jhipster
 ruby:
   versions:
-  - version: 2.4.7
+  - version: 2.5.7
     global: true
   - version: 1.9.3-p551
   - version: 2.1.10
   - version: 2.3.8
-  - version: jruby-1.7.27
   - version: jruby-9.1.17.0
 netbeans:
   version: 8.2
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2019.2.2
+  version: 2019.2.3
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -136,12 +127,12 @@ idea:
     updateid: '66958'
   - name: AngularJS
     type: zip
-    version: 192.6262.59
-    updateid: '67632'
+    version: 192.6817.25
+    updateid: '69994'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2019.2.20190829
-    updateid: '68000'
+    version: 2019.2.20190917
+    updateid: '68873'
   - name: com.intellij.lang.puppet
     type: zip
     version: 192.6262.9
@@ -152,12 +143,12 @@ idea:
     updateid: '68291'
   - name: BashSupport
     type: zip
-    version: 1.7.12.192
-    updateid: '65772'
+    version: 1.7.13.192
+    updateid: '68715'
   - name: Docker
     type: zip
-    version: 192.6603.8
-    updateid: '68006'
+    version: 192.6817.4
+    updateid: '68498'
   - name: mobi.hsz.idea.gitignore
     type: zip
     version: 3.2.2.192
@@ -168,8 +159,8 @@ idea:
     updateid: '66888'
   - name: org.intellij.plugins.hcl
     type: zip
-    version: 0.7.5
-    updateid: '66428'
+    version: 0.7.7
+    updateid: '70227'
   - name: org.jetbrains.plugins.go
     type: zip
     version: 192.6603.23.335
@@ -180,8 +171,8 @@ idea:
     updateid: '66955'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.29.10
-    updateid: '67703'
+    version: 0.30.7
+    updateid: '69165'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.3.50-release-IJ2019.2-1
@@ -232,24 +223,24 @@ idea:
     updateid: '64488'
   - name: Lombook Plugin
     type: zip
-    version: 0.26.2-2019.2
-    updateid: '67665'
+    version: 0.27-2019.2
+    updateid: '69852'
   - name: Lua
     type: zip
     updateid: '67040'
     version: 1.0.119
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '68210'
-    version: 192.6603.23
+    updateid: '68496'
+    version: 192.6817.4
   - name: color.scheme.Monokai Pro Spectrum
     type: jar
-    updateid: '66678'
-    version: '0.2'
+    updateid: '69319'
+    version: '1.2'
   - name: com.chrisrm.idea.MaterialThemeUI
     type: zip
-    updateid: '67683'
-    version: 4.4.6
-  checksum: 5b16caa8a495f381b8d72b8c819c701d9cd39ae98efcaf05203d7e40a20fffae
-  build: 192.6603.28
-  checksum-ce: fa2d4229516a49ee776a524cda324c74b12ffb479a703b44c15c84e9c5731faf
+    updateid: '68462'
+    version: 4.5.1
+  checksum: a14fb570dd5b1264bea9463dc211800bc3f789202f27b7926eac5600b983b992
+  build: 192.6817.14
+  checksum-ce: d1a292c16e5fd701ba6f50046afb16bc3722d8ea8510a327b9b6419f4817c43f

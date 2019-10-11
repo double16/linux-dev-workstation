@@ -20,10 +20,31 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.no_install = true
+  end
+  if Vagrant.has_plugin?("vagrant-disksize")
+    config.disksize.size = '200GB'
+    config.vm.provision "disksize", type: "shell", path: "../environments/dev/modules/private/files/disksize.sh"
+  end
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.auto_detect = false
+  end
   config.vm.provider :virtualbox do |vb, override|
-    override.vm.box = "bento/centos-7.6"
+    vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
+    vb.customize ["modifyvm", :id, "--paravirtprovider", "default"]
+    override.vm.box = "roboxes/fedora30"
+    override.vm.synced_folder "..", "/vagrant"
     override.vm.provision "builder", type: "shell",
       env: { yum_proxy: ENV['YUM_PROXY'] || ENV['yum_proxy'] },
       inline: "#!#{builder_json.fetch("inline_shebang","/bin/sh")}\n\n"+(builder_json["provisioners"].collect { |e| e['inline'] }.flatten.join("\n"))
-  end
+    override.vm.provision "vagrant-dotfiles", type: "shell", inline: <<-SHELL
+      mkdir -p /var/local/vagrant/machines/default
+      chown -R vagrant:vagrant /var/local/vagrant
+      [ -e /var/local/vagrant/machines/default/cache ] || ln -sf /vagrant/.vagrant/machines/default/cache /var/local/vagrant/machines/default/cache
+      if ! grep -q 'VAGRANT_DOTFILE_PATH=' /home/vagrant/.bashrc; then
+        echo "export VAGRANT_DOTFILE_PATH=/var/local/vagrant" >> /home/vagrant/.bashrc
+      fi
+    SHELL
+    end
 end

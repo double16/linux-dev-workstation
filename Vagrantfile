@@ -65,28 +65,24 @@ Vagrant.configure("2") do |config|
 
   config.vagrant.plugins = ["vagrant-cachier"]
 
-  if ENV['VAGRANT_FROM_SCRATCH']
-    config.vm.box = "bento/centos-7.6"
-    config.vm.box_version = "= 201907.24.0"
-  else
-    config.vm.box = "double16/linux-dev-workstation"
-  end
+  config.vm.box = "roboxes/fedora30"
+  config.vm.synced_folder ".", "/vagrant"
 
   configure_rdp_tunnel(config)
 
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
-    docker.image = "jdeathe/centos-ssh:centos-7-2.5.1"
+    docker.image = "pdouble16/fedora-ssh:30"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
     docker.has_ssh = true
     docker.env = {
       :SSH_USER => 'vagrant',
       :SSH_SUDO => 'ALL=(ALL) NOPASSWD:ALL',
-      :LANG     => 'en_US.UTF-8',
+      :LANG     => 'en_US.utf8',
       :LANGUAGE => 'en_US:en',
-      :LC_ALL   => 'en_US.UTF-8',
+      :LC_ALL   => 'en_US.utf8',
       :SSH_INHERIT_ENVIRONMENT => 'true',
     }
     override.ssh.proxy_command = "docker run -i --rm --name linux-dev-workstation-tunnel --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
@@ -105,11 +101,22 @@ Vagrant.configure("2") do |config|
   end
   if Vagrant.has_plugin?("vagrant-disksize")
     config.disksize.size = '80GB'
+    config.vm.provision "disksize", type: "shell", path: "environments/dev/modules/private/files/disksize.sh"
   end
   config.vm.provider "virtualbox" do |vb|
     vb.gui = vagrant_config.fetch('native_gui', true)
+    vb.linked_clone = true
     vb.cpus = vagrant_config['cores']
     vb.memory = vagrant_config['memory']
+    vb.customize ["modifyvm", :id, "--vram", "256"]
+    vb.customize ["setextradata", "global", "GUI/MaxGuestResolution", "any"]
+    vb.customize ["setextradata", :id, "CustomVideoMode1", "1024x768x32"]
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+    vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
+#    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+    vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
     vb.customize ["modifyvm", :id, "--paravirtprovider", "default"]
     if monitor_count
@@ -179,13 +186,23 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "bootstrap", type: "shell", env: {"HTTP_PROXY" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"], "HTTPS_PROXY" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"], "NO_PROXY" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"], "YUM_PROXY" => ENV["YUM_PROXY"] }, inline: <<-SHELL
 
+    if mountpoint /tmp/vagrant-cache 2>&1; then
+      mkdir -p /tmp/vagrant-cache/dnf
+      touch /tmp/vagrant-cache/dnf/works
+      if ln -sf /tmp/vagrant-cache/dnf/works /tmp/vagrant-cache/dnf/works.lnk; then
+        rm -rf /var/cache/dnf
+        ln -sf /tmp/vagrant-cache/dnf /var/cache/dnf
+        grep -q "keepcache=true" /etc/dnf/dnf.conf || echo "keepcache=true" >> /etc/dnf/dnf.conf
+      fi
+    fi
+
     if [ -n "${YUM_PROXY}" ]; then
-      grep -q "proxy=" /etc/yum.conf || echo "proxy=${YUM_PROXY}" >> /etc/yum.conf
+      grep -q "proxy=" /etc/dnf/dnf.conf || echo "proxy=${YUM_PROXY}" >> /etc/dnf/dnf.conf
     fi
 
     if [ -n "${HTTP_PROXY}" ]; then
-      grep -q "proxy=" /etc/yum.conf || echo "proxy=${HTTP_PROXY}" >> /etc/yum.conf
-      grep -q "ip_resolve=4" /etc/yum.conf || echo "ip_resolve=4" >> /etc/yum.conf
+      grep -q "proxy=" /etc/dnf/dnf.conf || echo "proxy=${HTTP_PROXY}" >> /etc/dnf/dnf.conf
+      grep -q "ip_resolve=4" /etc/dnf/dnf.conf || echo "ip_resolve=4" >> /etc/dnf/dnf.conf
       grep -q "http_proxy=" /etc/environment || echo "http_proxy=\"${HTTP_PROXY}\"" >> /etc/environment
 
       if [ -n "${HTTPS_PROXY}" ]; then
@@ -197,27 +214,27 @@ Vagrant.configure("2") do |config|
       fi
     fi
 
-    [ -x /usr/bin/makedeltarpm ] || yum install -y deltarpm
+    [ -x /usr/bin/makedeltarpm ] || dnf install -y deltarpm
 
     # Cannot update kernel on VirtualBox 5.x due to incompatible video driver
-    yum install -y kernel-headers kernel-devel kernel-devel-`uname -r`
-    # VB 5: grep -q "exclude=kernel" /etc/yum.conf || echo "exclude=kernel*" >> /etc/yum.conf
+    dnf install -y kernel-headers kernel-devel kernel-devel-`uname -r`
+    # VB 5: grep -q "exclude=kernel" /etc/dnf/dnf.conf || echo "exclude=kernel*" >> /etc/dnf/dnf.conf
 
     locale -a | grep -qi en_US || (
-        yum reinstall -y glibc-common
-        localedef -i en_US -f UTF-8 en_US.UTF-8
-        echo "LANG=en_US.UTF-8" > /etc/locale.conf
-        echo "LANG=en_US.UTF-8" > /etc/sysconfig/i18n
+        dnf install -y glibc-langpack-en
+        localedef -i en_US -f utf8 en_US.utf8
+        echo "LANG=en_US.utf8" > /etc/locale.conf
+        echo "LANG=en_US.utf8" > /etc/sysconfig/i18n
     )
 
-    [ -f /var/lib/vagrant-yum-update ] || (
-      touch /var/lib/vagrant-yum-update
-      yum update -y
+    [ -f /var/lib/vagrant-dnf-update ] || (
+      touch /var/lib/vagrant-dnf-update
+      dnf update -y
     )
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
-      rpm -Uvh https://yum.puppet.com/puppet6/puppet6-release-el-7.noarch.rpm
-      yum install -y puppet-agent-6.7.2-1.el7.x86_64
+      rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-30.noarch.rpm
+      dnf install -y puppet-agent-6.8.1-1.fc30.x86_64
       mkdir -p /etc/puppetlabs/facter/facts.d
     )
   SHELL

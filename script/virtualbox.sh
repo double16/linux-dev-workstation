@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash -ux
 
 set +H
 
@@ -18,7 +18,7 @@ if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]]; then
     rm -rf $SSH_USER_HOME/VBoxGuestAdditions_$VBOX_VERSION.iso
     rm -f $SSH_USER_HOME/.vbox_version
 
-    echo "==> Mounting /tmp/vagrant-cache"
-    mkdir -p /tmp/vagrant-cache
-    mount -t vboxsf -o rw,nodev,uid=${SSH_USER},gid=${SSH_USER} vagrant-cache /tmp/vagrant-cache || true
+    echo "==> Rebooting the machine..."
+    reboot
+    sleep 60s
 fi

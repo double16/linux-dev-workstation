@@ -1,10 +1,10 @@
 {
-  "_comment": "Build with `packer build centos.json`",
+  "_comment": "Build with `packer build packer.json`",
   "_comment2": "Provision with Puppet twice to account for transient failures",
   "builders": [
     {
       "boot_command": [
-        "<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
+        "<tab> linux text biosdevname=0 ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter><enter>"
       ],
       "disk_size": "{{ user `disk_size` }}",
       "guest_os_type": "{{ user `vmware_guest_os_type` }}",
@@ -33,7 +33,7 @@
     },
     {
       "boot_command": [
-        "<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
+        "<tab> linux text biosdevname=0 ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter><enter>"
       ],
       "disk_size": "{{ user `disk_size` }}",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
@@ -75,7 +75,7 @@
     },
     {
       "boot_command": [
-        "<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
+        "<tab> linux text biosdevname=0 ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter><enter>"
       ],
       "disk_size": "{{ user `disk_size` }}",
       "guest_os_type": "{{ user `parallels_guest_os_type` }}",
@@ -105,7 +105,7 @@
     },
     {
       "boot_command": [
-        "<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
+        "<tab> linux text biosdevname=0 ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter><enter>"
       ],
       "disk_size": "{{ user `disk_size` }}",
       "format" : "qcow2",
@@ -142,14 +142,14 @@
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
-          "name": "{{ user `aws_ami_name` }}_*",
+          "name": "{{ user `aws_ami_name` }}",
           "root-device-type": "ebs"
         },
-        "owners": ["679593333241"],
+        "owners": ["125523088429"],
         "most_recent": true
       },
       "instance_type": "t2.medium",
-      "ssh_username": "centos",
+      "ssh_username": "fedora",
       "ami_name": "{{ user `vm_name`}} {{ user `version` }} {{timestamp}}",
       "launch_block_device_mappings": [
         {
@@ -175,9 +175,9 @@
       "managed_image_resource_group_name": "{{ user `vm_name` }}",
       "managed_image_name": "{{ user `vm_name`}}-{{ user `version` }}-{{timestamp}}",
       "os_type": "Linux",
-      "image_publisher": "OpenLogic",
-      "image_offer": "CentOS",
-      "image_sku": "7.6",
+      "image_publisher": "tunnelbiz.com",
+      "image_offer": "fedora linux",
+      "image_sku": "30",
       "azure_tags": {
         "dept": "engineering",
         "task": "developer workstation"
@@ -189,7 +189,7 @@
     },
     {
       "boot_command": [
-        "c<wait>setparams 'kickstart'<enter>linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS\\x207\\x20x86_64 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `kickstart` }} inst.text<enter>initrdefi /images/pxeboot/initrd.img<enter>boot<enter>"
+        "<tab> linux text biosdevname=0 ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter><enter>"
       ],
       "boot_wait": "20s",
       "disk_size": "{{ user `disk_size` }}",
@@ -222,12 +222,12 @@
       "volumes": {
         "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
       },
-      "image": "jdeathe/centos-ssh:centos-7-2.5.1",
+      "image": "pdouble16/fedora-ssh:30.0.1",
       "commit": true,
       "changes": [
         "LABEL maintainer='Patrick Double <pat@patdouble.com>' org.label-schema.license='MPL-2.0' org.label-schema.vendor='https://bitbucket.org/double16' org.label-schema.name='Developer Workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation.git'",
-        "ENV SSH_USER=vagrant container=docker",
-        "CMD /usr/bin/supervisord --configuration=/etc/supervisord.conf"
+        "ENV SSH_USER=vagrant",
+        "ENTRYPOINT [\"/usr/bin/supervisord\", \"--configuration=/etc/supervisord.conf\"]"
       ]
     }
   ],
@@ -268,6 +268,7 @@
         "UPDATE={{user `update`}}",
         "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
         "SSH_USERNAME={{user `ssh_username`}}",
+        "SSH_USER_HOME=/home/{{user `ssh_username`}}",
         "SSH_PASSWORD={{user `ssh_password`}}",
         "PACKER_HOST={{user `packer_host`}}",
         "PACKER_USER={{user `packer_user`}}",
@@ -283,22 +284,23 @@
       "expect_disconnect": true,
       "scripts": [
         "script/fix-slow-dns.sh",
-        "script/yum-docs.sh",
+        "script/dnf-config.sh",
         "script/docker-systemd.sh",
-        "script/dind.sh",
-        "script/sshd.sh",
-        "script/hyperv.sh",
-        "script/cache.sh",
-        "script/update.sh",
-        "script/hyperv.sh",
         "script/vagrant.sh",
-        "script/desktop.sh",
+        "script/sshd.sh",
+        
+        "script/hyperv.sh",
         "script/vmware.sh",
         "script/virtualbox.sh",
         "script/parallels.sh",
+
         "script/cache.sh",
-        "script/puppet.sh",
+        "script/update.sh",
+
+        "script/cache.sh",
+        "script/dind.sh",
         "script/motd.sh",
+        "script/puppet.sh",
         "custom-script.sh"
       ],
       "type": "shell"
@@ -342,6 +344,7 @@
         "UPDATE={{user `update`}}",
         "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
         "SSH_USERNAME={{user `ssh_username`}}",
+        "SSH_USER_HOME=/home/{{user `ssh_username`}}",
         "SSH_PASSWORD={{user `ssh_password`}}",
         "http_proxy={{user `http_proxy`}}",
         "https_proxy={{user `https_proxy`}}",
@@ -368,19 +371,19 @@
     "disk_size_gb": "80",
     "headless": "true",
     "ftp_proxy": "{{env `ftp_proxy`}}",
-    "http_directory": "kickstart/centos7",
+    "http_directory": "kickstart/fedora",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "no_proxy": "{{env `no_proxy`}}",
     "rsync_proxy": "{{env `rsync_proxy`}}",
     "yum_proxy": "{{env `yum_proxy`}}",
     "install_vagrant_key": "true",
-    "iso_checksum": "6d44331cc4f6c506c7bbe9feb8468fad6c51a88ca1393ca6b8b486ea04bec3c1",
     "iso_checksum_type": "sha256",
-    "iso_name": "CentOS-7-x86_64-DVD-1804.iso",
     "iso_path": "iso",
-    "iso_url": "http://mirrors.sonic.net/centos/7.6.1810/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso",
-    "aws_ami_name": "CentOS Linux 7 x86_64 HVM EBS ENA 1805",
+    "iso_checksum": "bb0622b78449298e24a96b90b561b429edec71aae72b8f7a8c3da4d81e4df5b7",
+    "iso_name": "Fedora-Server-dvd-x86_64-30-1.2.iso",
+    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/30/Server/x86_64/iso/Fedora-Server-dvd-x86_64-30-1.2.iso",
+    "aws_ami_name": "Fedora-Cloud-Base-30-1.2.x86_64-hvm-us-east-1-standard-0",
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",
@@ -391,19 +394,19 @@
     "docker_registry_example": "gatekeeper:5001/",
     "kickstart": "ks.cfg",
     "memory": "3072",
-    "parallels_guest_os_type": "centos7",
+    "parallels_guest_os_type": "fedora",
     "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "update": "true",
-    "vagrantfile_template": "tpl/vagrantfile-centos7-desktop.tpl",
+    "vagrantfile_template": "tpl/vagrantfile-fedora-desktop.tpl",
     "version": "latest",
     "no_release": "true",
-    "virtualbox_guest_os_type": "RedHat_64",
+    "virtualbox_guest_os_type": "Fedora_64",
     "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",
     "vm_name": "linux-dev-workstation",
-    "vmware_guest_os_type": "centos-64",
+    "vmware_guest_os_type": "fedora-64",
     "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
     "pwd": "{{ env `PWD` }}",
     "packer_hostname": "{{ env `HOSTNAME` }}",

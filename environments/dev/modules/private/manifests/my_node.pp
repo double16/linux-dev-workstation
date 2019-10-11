@@ -17,7 +17,7 @@ class private::my_node {
     #owner       => 'vagrant',
     group       => 'vagrant',
     latest      => false,
-    require     => Class['private::git_from_source'],
+    require     => Package['git-all'],
   }
 
   nodenv::plugin { 'nodenv/node-build': }

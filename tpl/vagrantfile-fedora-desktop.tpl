@@ -78,8 +78,10 @@ Find this file at #{readme}
      v.customize ["setextradata", :id, "CustomVideoMode1", "1024x768x32"]
      v.customize ["modifyvm", :id, "--ioapic", "on"]
      v.customize ["modifyvm", :id, "--rtcuseutc", "on"]
-     v.customize ["modifyvm", :id, "--accelerate3d", "on"]
+#     v.customize ["modifyvm", :id, "--accelerate3d", "on"]
+     v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
      v.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+     v.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
      v.customize ["modifyvm", :id, "--hwvirtex", "on"]
      v.customize ["modifyvm", :id, "--paravirtprovider", "default"]
      if monitor_count
@@ -111,7 +113,7 @@ Find this file at #{readme}
   end
 
   config.vm.provider "hyperv" do |h, o|
-    # yum breaks when using SMB mounts
+    # dnf breaks when using SMB mounts
     if Vagrant.has_plugin?("vagrant-cachier")
       config.cache.auto_detect = false
     end
@@ -162,7 +164,7 @@ Find this file at #{readme}
   config.vm.provider :aws do |aws, override|
     override.vagrant.plugins = ["vagrant-sshfs"]
     configure_sshfs(override)
-    override.ssh.username = "centos"
+    override.ssh.username = "fedora"
   end
 
   config.vm.provider :azure do |azure, override|
@@ -214,6 +216,8 @@ theme=#{vagrant_config['theme']}
 native_gui=#{vagrant_config['native_gui']}
 resolution=#{vagrant_config['resolution']}
 FACTS
+
+[ -x /usr/local/sbin/disksize.sh ] && /usr/local/sbin/disksize.sh
 
 cd /etc/puppetlabs/code
 /opt/puppetlabs/bin/puppet apply --hiera_config=/etc/puppetlabs/code/environments/dev/hiera.yaml --modulepath=/etc/puppetlabs/code/environments/dev/modules /etc/puppetlabs/code/environments/dev/manifests/site.pp

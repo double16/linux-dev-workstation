@@ -6,21 +6,18 @@ class { '::private::security':
   stage => 'pre',
 }
 
-include ::epel
 include ::augeas
 include ::private::proxy
 
-exec { 'atrpms-repo-7-7':
-  command => '/usr/bin/rpm -i --force --nodeps http://ftp-stud.fht-esslingen.de/atrpms/dl.atrpms.net/el7-x86_64/atrpms/stable/atrpms-repo-7-7.el7.x86_64.rpm',
-  creates => '/etc/yum.repos.d/atrpms.repo',
+Package<| provider == 'yum' or provider == 'dnf' |> {
+  install_options +> '--nogpgcheck',
 }
-->exec { 'atrpms mirror':
-  command => '/usr/bin/sed -i -e \'s@^baseurl=http://dl.atrpms.net/.*@baseurl=http://ftp-stud.fht-esslingen.de/atrpms/dl.atrpms.net/el$releasever-$basearch/atrpms/stable@g\' /etc/yum.repos.d/atrpms*repo',
-  unless  => '/usr/bin/grep -qF \'baseurl=http://ftp-stud.fht-esslingen.de/\' /etc/yum.repos.d/atrpms*repo',
+
+exec { 'RPM Fusion Free':
+  command => '/usr/bin/rpm -i --force --nodeps http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-30.noarch.rpm && /usr/bin/rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-30',
+  creates => '/etc/yum.repos.d/rpmfusion-free.repo',
 }
 -> Package<| |>
-
-Class['epel'] -> Package<| |>
 
 # Initial setup prompts for license acceptance
 service { ['initial-setup', 'initial-setup-text', 'initial-setup-graphical']:
@@ -46,45 +43,19 @@ $service_running = $::virtual ? {
   default  => 'running',
 }
 
-if $::virtual == 'docker' {
-  class { '::yum_cron':
-    apply_updates  => true,
-    service_ensure => 'stopped',
-    service_enable => false,
-  }
-} else {
-  class { '::yum_cron':
-    apply_updates => true,
-  }
+unless $::virtual == 'docker' {
+  package { 'dnf-automatic': }
 }
 
 yum::group { 'Development Tools':
-  ensure => present,
+  ensure  => present,
+  timeout => 0,
 }
 ->Package<| |>
 
-package { ['git2u-all','git2u']: ensure => purged, }
-->class { '::private::git_from_source':
-  version => lookup('git', Hash)['version'],
-}
-->Package<| title == 'alien' |>
-->Exec<| title == 'vboxdrv' |>
-
-Exec<| title == 'yum-groupinstall-X Window System' |> {
-  timeout => 0,
-}
-
-yum::group { 'X Window System':
-  ensure => present,
-}
-->file { '/etc/xorg.conf':
-  ensure  => absent,
-}
-->exec { 'yum-groupinstall-Xfce':
-  command => "yum -y groupinstall --skip-broken 'Xfce'",
-  unless  => "yum --cacheonly grouplist hidden 'Xfce' | egrep -i '^Installed.+Groups:$'",
-  timeout => 0,
-  path    => '/bin:/usr/bin:/sbin:/usr/sbin',
+yum::group { 'Xfce Desktop':
+  ensure  => present,
+  timeout => 1800,
 }
 ->package { [
   'xfce4-clipman-plugin',
@@ -107,22 +78,21 @@ $autologin_ensure = $::native_gui ? {
   'false'   => absent,
   default   => $autologin_default,
 }
-file_line { 'gdm autologin enable':
-  ensure            => $autologin_ensure,
-  path              => '/etc/gdm/custom.conf',
-  line              => 'AutomaticLoginEnable=true',
-  after             => '\[daemon\]',
-  match             => '^AutomaticLoginEnable=.*',
-  match_for_absence => true,
-  require           => Exec['yum-groupinstall-Xfce'],
+ini_setting { 'lightdm autologin enable':
+  ensure  => $autologin_ensure,
+  path    => '/etc/lightdm/lightdm.conf',
+  section => 'Seat:*',
+  setting => 'autologin-user-timeout',
+  value   => '0',
+  require => Yum::Group['Xfce Desktop'],
 }
-->file_line { 'gdm autologin user':
-  ensure            => $autologin_ensure,
-  path              => '/etc/gdm/custom.conf',
-  line              => 'AutomaticLogin=vagrant',
-  after             => '\[daemon\]',
-  match             => '^AutomaticLogin=.*',
-  match_for_absence => true,
+->ini_setting { 'lightdm autologin user':
+  ensure  => $autologin_ensure,
+  path    => '/etc/lightdm/lightdm.conf',
+  section => 'Seat:*',
+  setting => 'autologin-user',
+  value   => 'vagrant',
+  require => Yum::Group['Xfce Desktop'],
 }
 
 $systemd_default_target = $autologin_ensure ? {
@@ -133,23 +103,15 @@ exec { 'graphical runlevel':
   path    => '/bin:/sbin:/usr/bin:/usr/sbin',
   command => "systemctl set-default ${systemd_default_target}",
   unless  => "systemctl get-default | grep -q ${systemd_default_target}",
-  require => Yum::Group['X Window System'],
+  require => Yum::Group['Xfce Desktop'],
 }
 
-#yum::group { 'GNOME Desktop':
-#  ensure => present,
-#}
-
-package { ['python36-pip', 'python36-devel']:
+package { ['python3']:
   ensure => present,
 }
-# ~>exec { 'pip upgrade':
-#   command     => '/usr/bin/pip3.6 install --upgrade pip',
-#   refreshonly => true,
-# }
 ->file { '/usr/bin/pip':
   ensure => link,
-  target => '/usr/bin/pip3.6',
+  target => '/usr/bin/pip3.7',
 }
 ->file { '/etc/xdg':
   ensure => directory,
@@ -219,30 +181,7 @@ package { [
     # For recording the screen via 'ffmpeg x11grab'
     'ffmpeg',
     'libvdpau',
-    'libavcodec52',
-    'libavcodec53',
-    'libavcodec54',
-    'libavcodec55',
-    'libavdevice52',
-    'libavdevice53',
-    'libavdevice54',
-    'libavdevice55',
-    'libavfilter1',
-    'libavfilter2',
-    'libavfilter3',
-    'libavfilter4',
-    'libavformat52',
-    'libavformat53',
-    'libavformat54',
-    'libavformat55',
-    'libavutil50',
-    'libavutil51',
-    'libavutil52',
-    'libpostproc51',
-    'libpostproc52',
-    'libswresample0',
-    'libswscale0',
-    'libswscale2',
+    'libavdevice',
 
   ]: ensure => present,
 }
@@ -257,8 +196,8 @@ package { [
 exec { 'xml2json':
   path    => ['/bin','/sbin','/usr/bin','/usr/sbin'],
   command => 'pip install https://github.com/hay/xml2json/zipball/master',
-  creates => '/usr/bin/xml2json',
-  require => [ Package['python36-pip'], Class['private::proxy'], Ini_setting['pip proxy'] ],
+  creates => '/usr/local/bin/xml2json',
+  require => [ Package['python3'], Class['private::proxy'], Ini_setting['pip proxy'] ],
 }
 
 package { 'unzip': }
@@ -269,11 +208,18 @@ Archive {
 }
 
 class { '::git':
-  package_manage => false,
+  package_name => 'git-all',
+  package_manage => true,
 }
+->Package<| title == 'alien' |>
+->Exec<| title == 'vboxdrv' |>
 
 unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
-  class { '::virtualbox':
+  exec { 'VirtualBox gpg key':
+    command => '/usr/bin/rpm --import https://www.virtualbox.org/download/oracle_vbox.asc',
+    unless  => '/usr/bin/test -f /etc/yum.repos.d/virtualbox.repo',
+  }
+  ->class { '::virtualbox':
     version => '6.0',
   }
   ->User<| title == 'vagrant' |> { groups +> 'vboxusers' }
@@ -294,7 +240,6 @@ include ::private::my_sdkman
 include ::private::my_docker
 include ::private::idea
 #include ::private::netbeans  # netbeans is old, 2016, and vscode is superior
-include ::private::svn
 include ::private::slack
 include ::private::dockstation
 include ::private::clean
@@ -315,13 +260,8 @@ include ::private::circleci
 include ::private::xfce4
 include ::private::rust
 include ::private::fb
-
-unless $::virtual == 'docker' {
-  include ::private::my_emacs
-  include ::private::snap # snap containment is strange under docker
-} else {
-  notice('Skipping Emacs. Emacs won\'t compile under Docker because we don\'t have permission to disable ASLR and exec-shield')
-}
+include ::private::my_emacs
+include ::private::zeal
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
@@ -329,6 +269,14 @@ file { '/etc/profile.d/java.sh':
   group   => 'root',
   mode    => '0755',
   content => 'export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0',
+}
+
+file { '/usr/local/sbin/disksize.sh':
+  ensure  => file,
+  owner   => 0,
+  group   => 'root',
+  mode    => '0755',
+  source  => 'puppet:///modules/private/disksize.sh',
 }
 
 file { '/home/vagrant/.ssh':
@@ -362,7 +310,7 @@ unless empty($::user_name) {
     value   => $::user_name,
     user    => 'vagrant',
     scope   => 'global',
-    require => Class['Private::Git_from_source'],
+    require => Package['git-all'],
   }
 }
 
@@ -371,7 +319,7 @@ unless empty($::user_email) {
     value   => $::user_email,
     user    => 'vagrant',
     scope   => 'global',
-    require => Class['Private::Git_from_source'],
+    require => Package['git-all'],
   }
 }
 

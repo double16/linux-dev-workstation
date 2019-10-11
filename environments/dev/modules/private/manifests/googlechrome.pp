@@ -13,6 +13,10 @@ gpgcheck=1
 gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
 ',
   }
+  ~>exec { 'Google Chrome gpg key':
+    command     => '/usr/bin/rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub',
+    refreshonly => true,
+  }
   -> Package<| |>
 
   package { 'google-chrome-stable': }

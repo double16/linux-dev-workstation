@@ -15,7 +15,7 @@ jobs:
       # `docker save` to cache our images.
       - restore_cache:
           keys:
-            - v5-dockerimage-{{ .Branch }}-{{ checksum "centos.json" }}}
+            - v5-dockerimage-{{ .Branch }}-{{ checksum "packer.json" }}}
             - v5-dockerimage-{{ .Branch }}-
             - v5-dockerimage-
 
@@ -44,12 +44,12 @@ jobs:
           no_output_timeout: 1h
           command: |
             if [[ -z "${CIRCLE_TAG}" ]]; then
-              cat centos.json | jq 'del(."post-processors" | .[] | .[] | select(.type == "vagrant-cloud"))' > centos-circleci.json
+              cat packer.json | jq 'del(."post-processors" | .[] | .[] | select(.type == "vagrant-cloud"))' > packer-circleci.json
             else
-              cp centos.json centos-circleci.json
+              cp packer.json packer-circleci.json
             fi
 
-            /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} ${CIRCLE_TAG:+-var no_release=false} centos-circleci.json
+            /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} ${CIRCLE_TAG:+-var no_release=false} packer-circleci.json
 
       - run:
           name: Build Docker Public Image Cache
@@ -60,7 +60,7 @@ jobs:
             docker images --format '{{.Repository}}:{{.Tag}}' | grep -v "linux-dev-workstation\|:<none>" | xargs -r docker save | gzip -9 > /home/linux-dev-workstation/cache/docker/image.tar.gz
 
       - save_cache:
-          key: v5-dockerimage-{{ .Branch }}-{{ checksum "centos.json" }}
+          key: v5-dockerimage-{{ .Branch }}-{{ checksum "packer.json" }}
           paths:
             - /home/linux-dev-workstation/cache/docker
 

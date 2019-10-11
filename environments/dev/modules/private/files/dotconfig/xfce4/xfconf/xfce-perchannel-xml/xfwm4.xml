@@ -10,7 +10,7 @@
       <value type="string" value="Workspace 3"/>
       <value type="string" value="Workspace 4"/>
     </property>
-    <property name="workspace_count" type="int" value="4"/>
+    <property name="workspace_count" type="int" value="2"/>
     <property name="box_move" type="bool" value="false"/>
     <property name="box_resize" type="bool" value="false"/>
     <property name="button_layout" type="string" value="O|SHMC"/>

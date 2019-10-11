@@ -85,6 +85,24 @@ qgroundcontrol:
   source: https://github.com/mavlink/qgroundcontrol.git
 ```
 
+## Disk Size
+
+Increasing disk size can be done fairly easily. There are two steps: increase the virtual disk size, then grow the filesystem to use the additional space.
+
+### Increase the Virtual Disk Size
+
+The method to increase the disk size depends on the provider. VirtualBox has a Virtual Media Manager in the UI. You can also use the `vagrant-disksize` plugin by adding the following to your `Vagrantfile`. `vagrant up` will then handle the disk size increase.
+
+```Vagrantfile
+  if Vagrant.has_plugin?("vagrant-disksize")
+    config.disksize.size = '200GB'
+  end
+```
+
+### Grow the Filesystem
+
+There is a script at `/usr/local/sbin/disksize.sh` in the box that will grow the filesystem online, i.e. it is run while the box is running and doesn't require a restart. It is safe to run at any time and won't do anything if it can't find free space. Provisioning runs this script, so `vagrant provision` will run it. If you use the `vagrant-disksize` described above, all will be handled for you.
+
 ## AWS, Azure
 
 Running the box on the cloud provides a RDP server. You need to use SSH tunneling to access the server. The `vagrant ssh` command will forward an unused port to the RDP server.
@@ -95,9 +113,9 @@ $ vagrant ssh
 ==> default: Running trigger: Tunnel RDP connection through SSH...
 ==> default: Connect to desktop via RDP using `localhost:50841`
 ----------------------------------------------------------------
-  CentOS 7.6.1810                             built 2019-03-12
+  Fedora 30                                     built 2019-09-16
 ----------------------------------------------------------------
-[centos@xxxxx ~]$
+[fedora@xxxxx ~]$
 ```
 
 Point your RDP client to the equivalent of `localhost:50841` in the output above.
@@ -120,7 +138,7 @@ Follow the instructions above for cloud providers to connect using RDP. RDP prov
 
 ## Docker
 
-Running the box as a container is similar to using a cloud provider. You use an SSH tunnel and RDP viewer. SSH authentication is a little different, by default it uses the Vagrant insecure SSH key. If you want to use a different SSH key, set the environment variable `SSH_AUTHORIZED_KEYS` with the content of your public key(s). The image is based on https://github.com/jdeathe/centos-ssh, the various SSH options should work with this image.
+Running the box as a container is similar to using a cloud provider. You use an SSH tunnel and RDP viewer. SSH authentication is a little different, by default it uses the Vagrant insecure SSH key. If you want to use a different SSH key, set the environment variable `SSH_AUTHORIZED_KEYS` with the content of your public key(s). The image is based on https://github.com/pdouble16/fedora-ssh, the various SSH options should work with this image.
 
 You will need to set the vagrant user password before connecting with RDP.
 

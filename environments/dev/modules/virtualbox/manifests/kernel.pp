@@ -15,7 +15,7 @@ class virtualbox::kernel (
   exec { 'vboxdrv':
     command     => "${vboxdrv_command} setup",
     unless      => '/sbin/lsmod | grep vboxdrv',
-    environment => 'KERN_VER=`uname -r`',
+    environment => 'KERN_VER=/usr/src/kernels/`uname -r`',
     require     => Package[$vboxdrv_dependencies],
   }
 

@@ -167,11 +167,11 @@ end
 def pdk(yaml)
     resp = Net::HTTP.get_response(URI("https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=latest"))
     if resp.is_a?(Net::HTTPFound)
-        location = resp.header['location'] # https://yum.puppet.com/puppet/el/7/x86_64/pdk-1.8.0.0-1.el7.x86_64.rpm
+        location = resp.header['location'] # https://yum.puppet.com/puppet/el/7/x86_64/pdk-1.8.0.0-1.fc30.x86_64.rpm
         latest = location.match(/pdk-([0-9a-z.]+)/)[1]
         if latest != yaml['pdk']['version']
             puts "Found newer version PDK #{latest}"
-            download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.el7.x86_64.rpm"
+            download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.fc30.x86_64.rpm"
             update_single_archive(latest, location, download_file, yaml['pdk'])
         end
     else
@@ -209,24 +209,6 @@ def k3s(yaml)
         latest = latest_github_tag('rancher', 'k3s')
         if latest
             yaml['k3s']['version'] = latest
-        end
-    end
-end
-
-def git(yaml)
-    unless yaml['git']['pin']
-        latest = latest_github_tag('git', 'git')
-        if latest
-            yaml['git']['version'] = latest
-        end
-    end
-end
-
-def vim(yaml)
-    unless yaml['vim']['pin']
-        latest = latest_github_tag('vim', 'vim')
-        if latest
-            yaml['vim']['version'] = latest
         end
     end
 end
@@ -414,12 +396,8 @@ kustomize(yaml)
 minikube(yaml)
 helm(yaml)
 dockstation(yaml)
-git(yaml)
-vim(yaml)
 nodejs(yaml)
 sdkman(yaml)
 ruby(yaml)
-
-#IGNORE: emacs(yaml) # source on ftp.gnu.org, no perceivable way to check for updates and it doesn't happen often
 
 File.open(YAML_FILE, 'w') { |file| file.write(yaml.to_yaml) }

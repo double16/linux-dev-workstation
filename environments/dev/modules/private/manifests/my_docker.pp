@@ -74,10 +74,14 @@ class private::my_docker {
   ',
       }
       ->remote_file { '/etc/yum.repos.d/docker-ce.repo':
-        source => 'https://download.docker.com/linux/centos/docker-ce.repo',
+        source => 'https://download.docker.com/linux/fedora/docker-ce.repo',
         owner  => 0,
         group  => 'root',
         mode   => '0644',
+      }
+      ~>exec { 'Docker gpg key':
+        command     => '/usr/bin/rpm --import https://download.docker.com/linux/fedora/gpg',
+        refreshonly => true,
       }
       ->package { ['device-mapper-persistent-data', 'lvm2']: }
       ->package { "docker-ce-${docker_base_version}*": }
@@ -134,28 +138,13 @@ class private::my_docker {
       content => 'dockremap:165536:65536',
     }
 
-    file { '/etc/yum.repos.d/kubernetes.repo':
-      ensure  => file,
-      owner   => 0,
-      group   => 'root',
-      mode    => '0644',
-      content => '[kubernetes]
-name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-',
-    }
-    ->package { 'kubectl': }
+    package { 'kubernetes-client': }
 
     include private::k3s
   }
 
   package { 'docker-compose':
-    ensure   => present,
-    provider => 'pip',
+    ensure          => present,
   }
 
   file { '/usr/local/bin/docker-clean':

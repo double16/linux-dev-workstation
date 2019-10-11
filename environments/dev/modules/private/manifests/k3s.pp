@@ -39,7 +39,7 @@ timeout 30 sh -c "until nc -zv localhost 6443 >/dev/null 2>&1; do echo .; sleep 
 
   unless $::virtual == 'docker' {
     exec { '/opt/k3s/install.sh':
-      environment => ["INSTALL_K3S_VERSION=v${k3s_version}", 'X_INSTALL_K3S_EXEC=server --docker'],
+      environment => ["INSTALL_K3S_VERSION=v${k3s_version}", 'INSTALL_K3S_EXEC=--bind-address localhost --node-name localhost'],
       creates     => '/etc/systemd/system/k3s.service',
       require     => [
         Private::Cached_remote_file['/opt/k3s/install.sh'],

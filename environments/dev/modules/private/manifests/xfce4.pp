@@ -10,6 +10,14 @@ class private::xfce4 {
     source  => 'puppet:///modules/private/dotconfig/xfce4',
   }
 
+  file { '/home/vagrant/.xscreensaver':
+    ensure  => file,
+    replace => false,
+    owner   => 'vagrant',
+    group   => 'vagrant',
+    source  => 'puppet:///modules/private/dotconfig/xscreensaver',
+  }
+
   vcsrepo { '/opt/xfce4-terminal-colors-solarized':
     ensure   => present,
     provider => git,

@@ -3,22 +3,27 @@
 set +H
 
 USERNAME=${SSH_USERNAME:-vagrant}
+SSH_USER=${SSH_USERNAME:-vagrant}
+SSH_USER_HOME=${SSH_USER_HOME:-/home/${SSH_USER}}
+
+if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]] && ! mountpoint "/tmp/vagrant-cache" 2>/dev/null; then
+    echo "==> Mounting shared folder vagrant-cache to /tmp/vagrant-cache"
+    mkdir -p /tmp/vagrant-cache
+    mount -t vboxsf -o rw,nodev,uid=${SSH_USER},gid=${SSH_USER} vagrant-cache /tmp/vagrant-cache || true
+fi
 
 if mountpoint "/tmp/vagrant-cache"; then
     echo "==> Configuring cache"
-    if [ ! -d /tmp/vagrant-cache/yum ]; then
-        mkdir -p /tmp/vagrant-cache/yum
-        rsync -r /var/cache/yum/ /tmp/vagrant-cache/yum/
+    mkdir -p /tmp/vagrant-cache/dnf
+    touch /tmp/vagrant-cache/dnf/works
+    if ln -sf /tmp/vagrant-cache/dnf/works /tmp/vagrant-cache/dnf/works.lnk; then
+        rsync -r /var/cache/dnf/ /tmp/vagrant-cache/dnf/
+        rm -rf /var/cache/dnf
+        ln -sf /tmp/vagrant-cache/dnf /var/cache/dnf
+        sed -i 's/keepcache=0/keepcache=1/g' /etc/dnf/dnf.conf
+    else
+        echo "==> Symlinks not supported, skipping DNF cache"
     fi
-    rm -rf /var/cache/yum
-    ln -sf /tmp/vagrant-cache/yum /var/cache/yum
-    sed -i 's/keepcache=0/keepcache=1/g' /etc/yum.conf
-    grep -qF 'metadata_expire=' /etc/yum.conf || cat >>/etc/yum.conf <<EOF
-
-metadata_expire=90m
-mirrorlist_expire=90m
-metadata_expire_filter=never
-EOF
 
     mkdir -p /tmp/vagrant-cache/npm /tmp/vagrant-cache/npm_${USERNAME}
     chgrp -R wheel /tmp/vagrant-cache/npm /tmp/vagrant-cache/npm_${USERNAME}
@@ -31,11 +36,4 @@ cache=/tmp/vagrant-cache/npm_${USERNAME}
 EOF
     chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.npmrc
 
-fi
-
-if [ -n "$yum_proxy" ] && ! grep -qF 'proxy=' /etc/yum.conf && curl --fail -s -o /dev/null "${yum_proxy}acng-report.html"; then
-    echo "==> Configuring temporary Yum proxy at $yum_proxy"
-    cat >>/etc/yum.conf <<EOF
-proxy=$yum_proxy
-EOF
 fi

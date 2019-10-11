@@ -1,8 +1,5 @@
 class private::my_vim {
   $global_color_scheme = pick($::theme, lookup('theme::default'))
-  $vim_config = lookup('vim', Hash)
-  $version = $vim_config['version']
-  $cache_file = "/tmp/vagrant-cache/vim-${version}-built.tgz"
   $plugin_path = '/home/vagrant/.vim/bundle'
   $plugin_cache_path = '/tmp/vagrant-cache/vim-plugins'
 
@@ -34,7 +31,7 @@ class private::my_vim {
   class { '::vim':
     autoupgrade    => false,
     set_as_default => true,
-    package        => 'vim-minimal', # we compile the full VIM from source
+    package        => 'vim',
     opt_syntax     => true,
     opt_misc       => ['number'],
   }
@@ -55,71 +52,13 @@ echo "${MAJOR_MINOR}.${PATCHES}"
 ',
   }
 
-  ensure_packages(['gcc-c++', 'ncurses-devel', 'python-devel', 'python-requests'])
 
-  archive { "/tmp/vagrant-cache/vim-${version}.tar.gz":
-    source       => "https://github.com/vim/vim/archive/v${version}.tar.gz",
-    extract_path => '/usr/src',
-    extract      => true,
-    cleanup      => false,
-    creates      => "/usr/src/vim-${version}",
-    require      => File['/tmp/vagrant-cache'],
-  }
-  ->exec { "make configure vim ${version}":
-    path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
-    cwd     => "/usr/src/vim-${version}",
-    command => 'make configure',
-    creates => "/usr/src/vim-${version}/configure",
-    require => [ Package['gcc-c++'], Package['ncurses-devel'], Package['python-devel'] ],
-  }
-  ->exec { "configure vim ${version}":
-    path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
-    cwd     => "/usr/src/vim-${version}",
-    command => "/usr/src/vim-${version}/configure --prefix=/usr --enable-cscope --enable-gui=no --enable-multibyte --enable-pythoninterp --enable-rubyinterp --with-features=huge --with-python-config-dir=/usr/lib/python2.7/config --with-tlib=ncurses --without-x",
-    unless  => "grep -qF 'S[\"prefix\"]=\"/usr\"' /usr/src/vim-${version}/src/auto/config.status",
-  }
-  ->exec { "build vim ${version}":
-    path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
-    cwd       => "/usr/src/vim-${version}",
-    command   => 'make',
-    creates   => "/usr/src/vim-${version}/src/vim",
-    timeout   => 900,
-    subscribe => Exec["configure vim ${version}"],
-  }
-  ->exec { "install vim ${version}":
-    path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
-    cwd       => "/usr/src/vim-${version}",
-    command   => 'make install',
-    unless    => "/usr/local/bin/vim-version.sh | grep -qF ${version}",
-    subscribe => Exec["build vim ${version}"],
-    require   => [ Package['vim-minimal'], File['/usr/local/bin/vim-version.sh'] ],
-  }
-  ->file { '/etc/profile.d/editor.sh':
+  file { '/etc/profile.d/editor.sh':
     mode    => '0755',
     content => 'export VISUAL="vim"
 export EDITOR="vim"',
   }
   ->package{ 'gvim': }
-
-  if $::vagrant_cache_mounted {
-    exec { "cache vim ${version}":
-      path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
-      cwd       => '/usr/src',
-      command   => "tar czf ${cache_file} vim-${version}",
-      creates   => $cache_file,
-      subscribe => Exec["build vim ${version}"],
-      require   => [ File['/tmp/vagrant-cache'], Exec["build vim ${version}"] ],
-    }
-    exec { "restore vim ${version}":
-      path    => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
-      cwd     => '/usr/src',
-      command => "tar xzpf ${cache_file}",
-      creates => "/usr/src/vim-${version}",
-      onlyif  => "test -f ${cache_file}",
-      require => [ File['/tmp/vagrant-cache'] ],
-      before  => [ Archive["/tmp/vagrant-cache/vim-${version}.tar.gz"] ],
-    }
-  }
 
   file { $plugin_cache_path:
     ensure => directory,
@@ -249,7 +188,7 @@ export EDITOR="vim"',
   }
 
   $ycm_cache_file = "${plugin_cache_path}/youcompleteme-built.tgz"
-  package { ['cmake']: }
+  package { ['cmake', 'python-devel', 'python-requests']: }
   exec { 'restore cache for youcompleteme':
     command => "/usr/bin/tar xzf \"${ycm_cache_file}\" -C \"${plugin_path}\"",
     onlyif  => "/usr/bin/find \"${ycm_cache_file}\" -mtime -30 | grep -q .",

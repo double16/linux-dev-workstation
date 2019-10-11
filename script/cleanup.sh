@@ -4,8 +4,8 @@ set +H
 
 USERNAME=${SSH_USERNAME:-vagrant}
 
-echo "==> Remove temporary Yum proxy"
-sed '/^proxy=/d' -i /etc/yum.conf
+echo "==> Remove temporary DNF proxy"
+sed '/^proxy=/d' -i /etc/dnf/dnf.conf
 
 if [[ ! ( ${PACKER_BUILDER_TYPE} =~ 'amazon' || ${PACKER_BUILDER_TYPE} =~ 'docker' ) ]]; then
 
@@ -48,22 +48,25 @@ DISK_USAGE_BEFORE_CLEANUP=$(df -h)
 
 if [[ $CLEANUP_BUILD_TOOLS  =~ true || $CLEANUP_BUILD_TOOLS =~ 1 || $CLEANUP_BUILD_TOOLS =~ yes ]]; then
     echo "==> Removing tools used to build virtual machine drivers"
-    yum -y remove gcc libmpc mpfr cpp kernel-devel kernel-headers
+    dnf -y remove gcc libmpc mpfr cpp kernel-devel kernel-headers
 fi
 
-if ! mountpoint /tmp/vagrant-cache; then
-    echo "==> Clean up yum cache of metadata and packages to save space"
-    yum -y --enablerepo='*' clean all
+if [ ! -L /var/cache/dnf ]; then
+    echo "==> Clean up DNF cache of metadata and packages to save space"
+    dnf -y --enablerepo='*' clean all
 fi
 
 echo "==> Removing temporary files used to build box"
 if mountpoint /tmp/vagrant-cache; then
     find /tmp -not -path '/tmp/vagrant-cache*' -a -not -path '/tmp' -delete
 
-    rm /var/cache/yum
-    mkdir -p /var/cache/yum
-    chown root:root /var/cache/yum
-    chmod 0755 /var/cache/yum
+    if [ -L /var/cache/dnf ]; then
+      rm /var/cache/dnf
+      mkdir -p /var/cache/dnf
+      chown root:root /var/cache/dnf
+      chmod 0755 /var/cache/dnf
+      sed -i 's/keepcache=1/keepcache=0/g' /etc/dnf/dnf.conf
+    fi
 
     sed -i '/proxy=/d' /root/.npmrc
     sed -i '/proxy=/d' /home/${USERNAME}/.npmrc

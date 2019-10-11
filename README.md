@@ -2,7 +2,7 @@
 
 This Vagrant image contains a developer workspace with the following software:
 
-* CentOS 7.6
+* Fedora 30
 * Java 8-11
 * [IntelliJ IDEA Ultimate, Community Edition and sundry plugins](https://www.jetbrains.com/idea/)
 * [Visual Studio Code](https://code.visualstudio.com)
@@ -12,7 +12,7 @@ This Vagrant image contains a developer workspace with the following software:
 * git
 * svn
 * [Docker](https://www.docker.com), Docker Compose, [Dockstation](https://dockstation.io)
-* Python 2
+* Python 3 and 2
 * asciidoc
 * nodenv (NodeJS environments)
 * [rbenv](https://github.com/rbenv/rbenv) (Ruby Environments)
@@ -108,4 +108,4 @@ $ vagrant provision
 
 ## Credits
 
-The packer build is strongly based on https://github.com/boxcutter/centos.
+The packer build is strongly based on https://github.com/boxcutter/fedora.

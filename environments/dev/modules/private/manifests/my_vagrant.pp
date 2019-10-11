@@ -8,7 +8,7 @@ class private::my_vagrant {
     'vagrant-cachier',
     'vagrant-aws',
     'vagrant-azure',
-    'vagrant-google',
+    #'vagrant-google', # deps need Ruby >= 2.5.0, vagrant 2.2.x uses Ruby 2.4.x
     'vagrant-joyent',
     'vagrant-sshfs',
   ]
@@ -65,16 +65,17 @@ unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
     vagrant::plugin { $vagrant_plugins_hypervisor:
       user => 'vagrant',
     }
-    package { [
-      'libvirt',
-      'libvirt-devel',
-      ]:
-    }
-    ->service { 'libvirtd':
-      enable => $libvirtd_enable,
-    }
-    ->vagrant::plugin { 'vagrant-libvirt':
-      user => 'vagrant',
-    }
+    # FIXME:
+    # package { [
+    #   'libvirt',
+    #   'libvirt-devel',
+    #   ]:
+    # }
+    # ->service { 'libvirtd':
+    #   enable => $libvirtd_enable,
+    # }
+    # ->vagrant::plugin { 'vagrant-libvirt':
+    #   user => 'vagrant',
+    # }
   }
 }

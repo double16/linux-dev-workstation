@@ -81,6 +81,35 @@ yum::repos:
         target: '/etc/yum.repos.d/example.repo'
 ```
 
+You can include gpgkeys in yaml as well, and if the key filename matches a
+gpgkey from a mananged repo, it will be included. For example a gpg key for the
+repo above could look like:
+
+```yaml
+---
+yum::gpgkeys:
+    /etc/pki/gpm-gpg/RPM-GPG-KEY-Example:
+        content: |
+            -----BEGIN PGP PUBLIC KEY BLOCK-----
+            Version: GnuPG v1.4.11 (GNU/Linux)
+
+            mQINBFKuaIQBEAC1UphXwMqCAarPUH/ZsOFslabeTVO2pDk5YnO96f+rgZB7xArB
+            OSeQk7B90iqSJ85/c72OAn4OXYvT63gfCeXpJs5M7emXkPsNQWWSju99lW+AqSNm
+            (SNIP SEVERAL LINES)
+            RjsC7FDbL017qxS+ZVA/HGkyfiu4cpgV8VUnbql5eAZ+1Ll6Dw==
+            =hdPa
+            -----END PGP PUBLIC KEY BLOCK-----
+```
+
+... or
+
+```yaml
+---
+yum::gpgkeys:
+    /etc/pki/gpm-gpg/RPM-GPG-KEY-Example:
+        source: puppet:///repos/RPM-GPG-KEY-Example
+```
+
 ### Enable management of one of the pre-defined repos
 
 This module includes several pre-defined Yumrepos for easy management.  This example enables management of the EPEL repository using its default settings.
@@ -254,7 +283,6 @@ yum::versionlock { '0:bash-4.1.2-9.el6_2.*':
   ensure => present,
 }
 ```
-
 Use the following command to retrieve a properly-formated string:
 
 ```sh
@@ -262,14 +290,29 @@ PACKAGE_NAME='bash'
 rpm -q "$PACKAGE_NAME" --qf '%|EPOCH?{%{EPOCH}}:{0}|:%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n'
 ```
 
+To run a `yum clean all` after the versionlock file is updated.
+
+```puppet
+class{'yum::plugin::versionlock':
+  clean => true,
+}
+yum::versionlock { '0:bash-4.1.2-9.el6_2.*':
+  ensure => present,
+}
+```
+
 ### Install or remove *yum* package group
+
+Install yum [package groups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/sec-working_with_package_groups).  To list groups: `yum group list`. Then use that name in your puppet manifest. With support for install_options (e.g. enable repos if disabled by default).
 
 ```puppet
 yum::group { 'X Window System':
-  ensure  => present,
-  timeout => 600,
+  ensure          => present,
+  timeout         => 600,
+  install_options => ['--enablerepo=*'];
 }
 ```
+
 
 ### Install or remove packages via `yum install`
 
@@ -294,6 +337,26 @@ yum::install { 'package-name':
 ```
 
 Please note that resource name must be same as installed package name.
+
+### Puppet tasks
+
+The module has a puppet task that allows to run `yum update` or `yum upgrade`.
+Please refer to the [Bolt documentation](https://puppet.com/docs/bolt/latest/bolt.html) on how to execute a task.
+
+```bash
+$ bolt task show yum
+
+yum - Allows you to perform yum functions
+
+USAGE:
+bolt task run --nodes <node-name> yum action=<value> [quiet=<value>]
+
+PARAMETERS:
+- action: Enum['update', 'upgrade']
+    Action to perform
+- quiet: Optional[Boolean]
+    Run without output
+```
 
 ---
 

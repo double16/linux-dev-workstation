@@ -2,39 +2,95 @@
 # Configure RDP server for vagrant user to run on start on localhost port 3389
 #
 class private::rdp {
-  if SemVer($::os['release']['full']) <= SemVer('7.6.1810') {
-    # EPEL upgraded xorgxrdp using deps not available in CentOS 7.6
-    exec { "/usr/bin/yum makecache -y ; /usr/bin/rpm -Uvh --nodeps $(/usr/bin/repoquery --quiet --location xorgxrdp | grep '^http.*xorgxrdp.*rpm$')":
-      unless => '/usr/bin/yum list installed xorgxrdp',
-      before => Package['xrdp'],
-    }
-  } else {
-    package { 'xorgxrdp':
-      before => Package['xrdp'],
-    }
+  package { 'xorgxrdp':}
+  ->package { 'xrdp': }
+  ->ini_setting { 'xrdp default to Xorg':
+    path    => '/etc/xrdp/xrdp.ini',
+    section => 'Globals',
+    setting => 'autorun',
+    value   => 'Xorg',
   }
-
-  package { 'xrdp': }
-  ->file { '/etc/xrdp/xrdp.ini':
-    ensure => file,
-    source => 'puppet:///modules/private/xrdp.ini',
-    backup => true,
+  ->file_line { 'sesman fix Xorg path':
+    path               => '/etc/xrdp/sesman.ini',
+    line               => 'param=/usr/libexec/Xorg',
+    match              => '^param=Xorg$',
+    append_on_no_match => false,
+    multiple           => false,
+  }
+  ->ini_setting { 'sesman disable root login':
+    path    => '/etc/xrdp/sesman.ini',
+    section => 'Security',
+    setting => 'AllowRootLogin',
+    value   => 'false',
+  }
+  ->ini_setting { 'sesman rdp_drives':
+    path    => '/etc/xrdp/sesman.ini',
+    section => 'Chansrv',
+    setting => 'FuseMountName',
+    value   => 'rdp_drives',
+  }
+  ->file { '/etc/X11/Xwrapper.config':
+    ensure => present,
     owner  => 0,
     group  => 'root',
     mode   => '0644',
-    notify => Service['xrdp'],
   }
-  ->file { '/etc/xrdp/sesman.ini':
-    ensure => file,
-    source => 'puppet:///modules/private/sesman.ini',
-    backup => true,
-    owner  => 0,
-    group  => 'root',
-    mode   => '0644',
-    notify => Service['xrdp-sesman'],
+  ->file_line { 'allow anybody to start Xorg':
+    path  => '/etc/X11/Xwrapper.config',
+    line  => 'allowed_users = anybody',
+    match => '^allowed_users[ ]*=',
   }
   ->service { ['xrdp', 'xrdp-sesman']:
     enable => true,
+  }
+
+  [
+    [ 'name', 'Xorg' ],
+    [ 'lib', 'libxup.so' ],
+    [ 'username', 'vagrant' ],
+    [ 'password', 'ask' ],
+    [ 'ip', '127.0.0.1' ],
+    [ 'port', '-1' ],
+    [ 'code', '20' ],
+    [ 'channel.rdpdr', 'true' ],
+    [ 'channel.rdpsnd', 'true' ],
+    [ 'channel.drdynvc', 'true' ],
+    [ 'channel.cliprdr', 'true' ],
+    [ 'channel.rail', 'true' ],
+    [ 'channel.xrdpvr', 'true' ],
+  ].each |$kv| {
+    ini_setting { "Xorg session config ${kv[0]}":
+      path    => '/etc/xrdp/xrdp.ini',
+      section => 'Xorg',
+      setting => $kv[0],
+      value   => $kv[1],
+      require => [ Package['xrdp'], Package['xorgxrdp'] ],
+      before  => [ Service['xrdp'], Service['xrdp-sesman'] ],
+    }
+  }
+
+  [
+    [ 'name', 'Xvnc' ],
+    [ 'lib', 'libvnc.so' ],
+    [ 'username', 'vagrant' ],
+    [ 'password', 'ask' ],
+    [ 'ip', '127.0.0.1' ],
+    [ 'port', '-1' ],
+    [ 'channel.rdpdr', 'true' ],
+    [ 'channel.rdpsnd', 'true' ],
+    [ 'channel.drdynvc', 'true' ],
+    [ 'channel.cliprdr', 'true' ],
+    [ 'channel.rail', 'true' ],
+    [ 'channel.xrdpvr', 'true' ],
+  ].each |$kv| {
+    ini_setting { "Xvnc session config ${kv[0]}":
+      path    => '/etc/xrdp/xrdp.ini',
+      section => 'Xvnc',
+      setting => $kv[0],
+      value   => $kv[1],
+      require => [ Package['xrdp'], Package['xorgxrdp'] ],
+      before  => [ Service['xrdp'], Service['xrdp-sesman'] ],
+    }
   }
 
   file { '/usr/sbin/aws-vagrant-auth.sh':
@@ -81,5 +137,22 @@ WantedBy=multi-user.target
     content => '#!/bin/sh
 exec xfce4-session
 ',
+  }
+
+  if $::virtual == 'docker' {
+    file { '/etc/supervisord.d/xrdp.conf': 
+      ensure => file,
+      owner  => 0,
+      group  => 'root',
+      mode   => '0644',
+      source => 'puppet:///modules/private/supervisord-xrdp.conf',
+    }
+    file { '/etc/supervisord.d/xrdp-sesman.conf': 
+      ensure => file,
+      owner  => 0,
+      group  => 'root',
+      mode   => '0644',
+      source => 'puppet:///modules/private/supervisord-sesman.conf',
+    }
   }
 }

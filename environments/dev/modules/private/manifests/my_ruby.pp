@@ -17,7 +17,7 @@ class private::my_ruby {
     latest      => false,
     #owner       => 'vagrant',
     group       => 'vagrant',
-    require     => Class['private::git_from_source'],
+    require     => Package['git-all'],
   }
   ->Rbenv::Build<| |>
 

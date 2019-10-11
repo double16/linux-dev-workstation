@@ -29,10 +29,10 @@ net.ipv6.conf.default.disable_ipv6=1
 
   file_line { 'Yum force ipv4':
     ensure => str2bool($::ipv4only) ? { true => present, default => absent },
-    path   => '/etc/yum.conf',
+    path   => '/etc/dnf/dnf.conf',
     line   => 'ip_resolve=4',
   }
-  -> Package<| provider == 'yum' |>
+  -> Package<| provider == 'yum' or provider == 'dnf' |>
 
   $proxy_presence = $::proxy_url ? {
     /.+/    => present,
@@ -93,29 +93,14 @@ net.ipv6.conf.default.disable_ipv6=1
     match_for_absence => true,
     multiple          => true,
   }
-  file_line { 'Yum proxy':
+  file_line { 'DNF proxy':
     ensure            => $yum_proxy_presence,
-    path              => '/etc/yum.conf',
+    path              => '/etc/dnf/dnf.conf',
     line              => "proxy=${final_yum_proxy}",
     match             => '^proxy\=',
     match_for_absence => true,
   }
-  ->file_line { 'Yum metadata_expire':
-    path  => '/etc/yum.conf',
-    line  => 'metadata_expire=90m',
-    match => '^metadata_expire\=',
-  }
-  ->file_line { 'Yum mirrorlist_expire':
-    path  => '/etc/yum.conf',
-    line  => 'mirrorlist_expire=90m',
-    match => '^mirrorlist_expire\=',
-  }
-  ->file_line { 'Yum metadata_expire_filter':
-    path  => '/etc/yum.conf',
-    line  => 'metadata_expire_filter=never',
-    match => '^metadata_expire_filter\=',
-  }
-  -> Package<| provider == 'yum' |>
+  -> Package<| provider == 'yum' or provider == 'dnf' |>
 
   ini_setting { 'pip proxy':
     ensure  => $proxy_presence,
@@ -177,7 +162,7 @@ net.ipv6.conf.default.disable_ipv6=1
       user    => 'root',
       scope   => 'system',
       before  => [ Class['nodenv'], Class['rbenv'] ],
-      require => Class['Private::Git_from_source'],
+      require => Package['git-all'],
     }
   } else {
     # TODO: remove git proxy

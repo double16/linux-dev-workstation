@@ -58,7 +58,7 @@ class private::my_vcsrepos {
     ensure  => present,
     user    => 'vagrant',
     group   => 'vagrant',
-    require => [ Class['::private::proxy'], Class['::private::git_from_source'], ],
+    require => [ Class['::private::proxy'], Package['git-all'], ],
   })
 }
 

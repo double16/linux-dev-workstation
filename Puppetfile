@@ -1,7 +1,7 @@
 forge "https://forge.puppet.com"
 
 mod 'stahnma-epel'
-mod 'puppet-yum', '>= 2.2 < 3.0.0'
+mod 'puppet-yum', '>= 4.0.0 < 5.0.0'
 mod 'treydock-yum_cron', '4.0.0'
 mod 'puppet-archive', '>= 3.0.0 < 4.0.0'
 mod 'unibet-vagrant'

@@ -4,7 +4,9 @@ Fork this repo, create a branch, and submit a PR. CI is done using CircleCI by u
 
 ## Update Puppet Modules
 
-Update puppet modules from the `Puppetfile`:
+If you want to update the Puppet modules from the Forge, use the following procedure. This is not always needed, but keeping up to date is generally a good idea. The modules are installed from the forge and checked into this repository. There have been problems pulling from the Forge for every build.
+
+Review `Puppetfile` for appropriate versions, then update the modules from the `Puppetfile`:
 ```shell
 $ librarian-puppet install --path=environments/dev/modules --strip-dot-git
 ```
@@ -33,14 +35,14 @@ Packer builds are available for the following providers:
 
 The VMs are large, 10-12GB uncompressed. You'll likely need to build them individually.
 
-* packer build -only=virtualbox-iso -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false centos.json
-* packer build -only=vmware-iso     -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false centos.json
+* packer build -only=virtualbox-iso -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false packer.json
+* packer build -only=vmware-iso     -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false packer.json
 * packer-build-hyperv.ps1           (Hyper-V needs setup external to packer)
-* packer build -only=parallels-iso  -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false centos.json
-* packer build -only=amazon-ebs     -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false centos.json
-* packer build -only=qemu           -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false centos.json
-* packer build -only=azure-arm      -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false centos.json
-* packer build -only=docker         -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false centos.json
+* packer build -only=parallels-iso  -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false packer.json
+* packer build -only=amazon-ebs     -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false packer.json
+* packer build -only=qemu           -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false packer.json
+* packer build -only=azure-arm      -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false packer.json
+* packer build -only=docker         -var-file custom-vars.json -var version=YYYYMM.N -var no_release=false packer.json
 
 There are environment variables needed for building. If you aren't using a specific build, the variable is required, but a dummy value will do.
 

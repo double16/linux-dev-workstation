@@ -20,4 +20,6 @@ id_rsa_insecure
 rdhcpd.pid
 *.exe
 *.zip
+*.tar
 iso/
+.DS_Store
