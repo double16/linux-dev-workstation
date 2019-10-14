@@ -69,7 +69,7 @@
         "sed -i 's/repo_gpgcheck=1/repo_gpgcheck=0/' /etc/yum.repos.d/*",
         "dnf upgrade -y",
         "dnf group install -y 'Development Tools'",
-        "dnf install -y kernel-devel kernel-devel-$(uname -r) unzip git screen tmux htop qemu qemu-kvm awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel apt-cacher-ng coreutils which",
+        "dnf install -y kernel-devel kernel-devel-$(uname -r) unzip git screen tmux htop qemu qemu-kvm ruby awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel apt-cacher-ng coreutils which",
         "dnf install -y VirtualBox-6.0",
         "test -n \"${yum_proxy}\" && mkdir -p /etc/systemd/system/docker.service.d && echo -e \"[Service]\nEnvironment=\\\"HTTP_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"HTTPS_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"NO_PROXY=127.0.0.1,localhost\\\"\" > /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload",
         "systemctl enable docker",

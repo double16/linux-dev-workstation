@@ -93,8 +93,8 @@ rstudio:
   version: 1.1.463
   checksum: 0dbdbbc5dc346e19c9f310ac9fd66333b15ea71d824599f9e114ddac4819a6dd
 slack:
-  version: 4.0.1-0.1
-  checksum: 615ae7321d284da1f02e721f0ba6ee59abb7c31b37342196584dd675e1ed5b12
+  version: 4.1.1-0.1
+  checksum: 21123465bd4be96b9e24b0b23643da30933b5d7e537eca3a893ab0d21ce13e4f
 node:
   versions:
   - version: 10.16.3
@@ -110,9 +110,8 @@ ruby:
   versions:
   - version: 2.5.7
     global: true
-  - version: 1.9.3-p551
-  - version: 2.1.10
-  - version: 2.3.8
+  - version: 2.4.9
+  - version: jruby-9.2.8.0
   - version: jruby-9.1.17.0
 netbeans:
   version: 8.2
