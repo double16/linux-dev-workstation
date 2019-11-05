@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
   end
 
   if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.no_install = true
+    config.vbguest.no_install = false
   end
   if Vagrant.has_plugin?("vagrant-disksize")
     config.disksize.size = '200GB'
@@ -35,6 +35,9 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--paravirtprovider", "default"]
     override.vm.box = "roboxes/fedora30"
     override.vm.synced_folder "..", "/vagrant"
+    override.vm.provision "hostname_fix", type: "shell", inline: <<-SHELL
+      grep -q "${HOSTNAME}" /etc/hosts || echo "127.0.0.1  ${HOSTNAME}" >> /etc/hosts
+    SHELL
     override.vm.provision "builder", type: "shell",
       env: { yum_proxy: ENV['YUM_PROXY'] || ENV['yum_proxy'] },
       inline: "#!#{builder_json.fetch("inline_shebang","/bin/sh")}\n\n"+(builder_json["provisioners"].collect { |e| e['inline'] }.flatten.join("\n"))

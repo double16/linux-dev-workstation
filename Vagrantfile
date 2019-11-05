@@ -165,7 +165,11 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # swap is required for propery memory management
+  config.vm.provision "hostname_fix", type: "shell", inline: <<-SHELL
+    grep -q "${HOSTNAME}" /etc/hosts || echo "127.0.0.1  ${HOSTNAME}" >> /etc/hosts
+  SHELL
+
+    # swap is required for propery memory management
   # if the provider doesn't allocate swap add a small swapfile
   config.vm.provision "swapfile", type: "shell", inline: <<-SHELL
     is_running_in_container() {

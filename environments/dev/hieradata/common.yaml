@@ -3,7 +3,8 @@ theme::default: light
 shell::default: bash
 zsh:
   theme: agnoster
-  plugins: git gradle docker docker-compose vagrant aws helm mvn nmap node npm rsync sudo tmux vscode
+  plugins: git gradle docker docker-compose vagrant aws helm mvn nmap node npm rsync
+    sudo tmux vscode
 hashistack:
   packer:
     version: 1.4.4
@@ -18,14 +19,14 @@ hashistack:
     version: 0.12.13
     checksum: 63f765a3f83987b67b046a9c31acff1ec9ee618990d0eab4db34eca6c0d861ec
   nomad:
-    version: 0.10.0
-    checksum: dd9dbe334e36e15c6f659c52d2722743f6632674fc9ffb42774378eb8ee1747f
+    version: 0.10.1
+    checksum: 4547bb7d6f701e2d9dc02f5643fd25ac89cc715b52867d339c3c1b2481b5cbda
 sdkman:
 - package: groovy
-  version: 2.4.16
+  version: 2.4.17
   default: true
 - package: groovy
-  version: 2.5.6
+  version: 2.5.8
   default: false
 - package: groovyserv
   version: 1.2.0
@@ -34,7 +35,7 @@ sdkman:
   version: 4.10.3
   default: true
 - package: gradle
-  version: 5.6.2
+  version: 5.6.4
   default: false
 - package: kotlin
   version: 1.3.50
@@ -43,7 +44,7 @@ sdkman:
   version: 2.8.0
   default: true
 - package: micronaut
-  version: 1.2.3
+  version: 1.2.5
   default: true
 - package: springboot
   version: 2.1.9.RELEASE
@@ -64,17 +65,17 @@ sdkman:
   version: 0.8.3
   default: true
 - package: visualvm
-  version: 1.4.3
+  version: 1.4.4
   default: true
 pdk:
-  version: 1.14.0.0
-  checksum: 510c450d3312c097ecbca3fcfd8d980dcae81914109406845f8792a21da2ded1
+  version: 1.14.1.0
+  checksum: 430c70da704714d4971f7f7c886f5e682382be7b155163400b66701cf612de8f
 docker:
   version: 19.03.4
 k8s:
   version: 1.12
 k3s:
-  version: 0.10.1
+  version: 0.10.2
 minikube:
   version: 0.28.2
   pin: true
@@ -115,8 +116,9 @@ ruby:
   - version: 2.5.7
     global: true
   - version: 2.4.9
-  # - version: jruby-9.2.9.0
-  # - version: jruby-9.1.17.0
+  x_versions:
+  - version: jruby-9.2.9.0
+  - version: jruby-9.1.17.0
 netbeans:
   version: 8.2
   build: 201609300101

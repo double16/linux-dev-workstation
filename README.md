@@ -8,6 +8,7 @@ This Vagrant image contains a developer workspace with the following software:
 * [Visual Studio Code](https://code.visualstudio.com)
 * vim 8, gvim, sundry vim plugins
 * emacs with [spacemacs](https://github.com/syl20bnr/spacemacs)
+* ZSH + [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
 * [Editor Config](http://editorconfig.org) support in most IDEs and editors
 * git
 * svn

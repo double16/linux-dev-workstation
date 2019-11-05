@@ -69,7 +69,7 @@
         "sed -i 's/repo_gpgcheck=1/repo_gpgcheck=0/' /etc/yum.repos.d/*",
         "dnf upgrade -y",
         "dnf group install -y 'Development Tools'",
-        "dnf install -y kernel-devel kernel-devel-$(uname -r) unzip git screen tmux htop qemu qemu-kvm ruby awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel apt-cacher-ng coreutils which",
+        "dnf install -y kernel-devel kernel-devel-$(uname -r) unzip git screen tmux htop qemu qemu-kvm ruby awscli iftop jq php curl device-mapper-persistent-data lvm2 docker-ce libvirt-devel apt-cacher-ng coreutils which zsh zsh-syntax-highlighting",
         "dnf install -y VirtualBox-6.0",
         "test -n \"${yum_proxy}\" && mkdir -p /etc/systemd/system/docker.service.d && echo -e \"[Service]\nEnvironment=\\\"HTTP_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"HTTPS_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"NO_PROXY=127.0.0.1,localhost\\\"\" > /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload",
         "systemctl enable docker",
@@ -78,18 +78,24 @@
         "/bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel",
         "/bin/grep -q '^vagrant:' /etc/passwd || /usr/sbin/useradd vagrant -m -g vagrant -G wheel,kvm,docker,vboxusers",
         "/bin/grep -q '^docker:.*vagrant' /etc/group || /usr/sbin/usermod vagrant -G wheel,kvm,docker,vboxusers",
+        "sed -i 's|/home/vagrant:/bin/bash|/home/vagrant:/bin/zsh|' /etc/passwd",
 
-        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.4.4/packer_1.4.4_linux_amd64.zip",
+        "test -d /home/vagrant/.oh-my-zsh || su -c 'git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh' - vagrant",
+        "grep -q ZSH_THEME /home/vagrant/.zshrc || su -c 'cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc' - vagrant",
+        "/usr/bin/sed -i 's/ZSH_THEME=.*/ZSH_THEME=\"agnoster\"/' /home/vagrant/.zshrc",
+        "/usr/bin/sed -i 's/plugins=.*/plugins=(git vagrant tmux docker docker-compose go golang)/' /home/vagrant/.zshrc",
+
+        "curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.4.5/packer_1.4.5_linux_amd64.zip",
         "cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer",
         "rm /tmp/packer.zip",
         "test -n \"${yum_proxy}\" && echo \"export yum_proxy=${yum_proxy}\" >> /home/vagrant/.bashrc && echo \"export YUM_PROXY=${yum_proxy}\" >> /home/vagrant/.bashrc && echo \"export VAGRANT_CLOUD_TOKEN=\" >> /home/vagrant/.bashrc && chown vagrant:vagrant /home/vagrant/.bashrc",
 
-        "curl -sL -o /tmp/vagrant_2.2.5_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.rpm",
-        "rpm -i /tmp/vagrant_2.2.5_x86_64.rpm",
-        "rm /tmp/vagrant_2.2.5_x86_64.rpm",
+        "curl -sL -o /tmp/vagrant_2.2.6_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.rpm",
+        "rpm -i /tmp/vagrant_2.2.6_x86_64.rpm",
+        "rm /tmp/vagrant_2.2.6_x86_64.rpm",
         "su -c 'vagrant plugin install vagrant-cachier vagrant-vbguest vagrant-azure vagrant-aws' - vagrant",
 
-        "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash' - vagrant",
+        "su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | zsh' - vagrant",
 
         "test -f /tmp/vagrant-upload.sh && mv /tmp/vagrant-upload.sh /home/vagrant/vagrant-upload.sh",
         "test -f /vagrant/vagrant-upload.sh && cp /vagrant/vagrant-upload.sh /home/vagrant/vagrant-upload.sh",

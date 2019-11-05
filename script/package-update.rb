@@ -321,7 +321,7 @@ def sdkman(yaml)
         candidate_file = File.join(TMPDIR, "sdkman-#{candidate}.txt")
         if !File.exist?(candidate_file) or Time.now - File.mtime(candidate_file) > (12*3600) # seconds
             File.open(candidate_file, 'w') { |file|
-                file.write(Net::HTTP.get(URI("https://api.sdkman.io/1/candidates/#{candidate}/list?platform=Linux")))
+                file.write(Net::HTTP.get(URI("https://api.sdkman.io/2/candidates/#{candidate}/Linux/versions/list?installed=0")))
             }
         end
         (x, prefix, suffix) = version.match(/^([0-9.]+)(.*)$/).to_a
