@@ -10,12 +10,6 @@ class private::idea {
   $checksum = $config['checksum']
   $checksumce = $config['checksum-ce']
 
-  $version_parts = split($version, '[.]')
-  $prefsdir = "/home/vagrant/.IntelliJIdea${version_parts[0]}.${version_parts[1]}"
-  $configdir = "${prefsdir}/config"
-  $plugindir = "${configdir}/plugins"
-  $colorsdir = "${configdir}/colors"
-
   file { '/etc/sysctl.d/idea.conf':
     ensure  => file,
     owner   => 'root',
@@ -103,12 +97,6 @@ StartupNotify=true
 ',
   }
 
-  file { [ $prefsdir, $configdir, $colorsdir, $plugindir, "${configdir}/options" ] :
-    ensure => directory,
-    owner  => 'vagrant',
-    group  => 'vagrant',
-  }
-
   file { '/tmp/vagrant-cache/idea-plugins':
     ensure => directory,
     mode   => '0755',
@@ -119,20 +107,21 @@ StartupNotify=true
   # Find plugin at https://plugins.jetbrains.com/idea
   # Copy direct download link
   # To get the sha256 sum: curl -L ${url} | shasum -a 256
-  define plugin_zip($version, $updateid, $sha256sum = undef) {
+  define plugin_zip($plugindir, $version, $updateid, $plugin_fact_name, $plugin_name = $title, $sha256sum = undef) {
     $checksum_type = $sha256sum ? {
       undef   => undef,
       default => 'sha256',
     }
-    unless $::facts['ideaplugins'].dig($title, 'version') == "${version}" {
-      archive { "/tmp/vagrant-cache/idea-plugins/${title}-${version}.zip":
+    unless $::facts[$plugin_fact_name].dig($plugin_name, 'version') == "${version}" {
+      archive { "${plugin_name}-${version} in ${plugindir}":
         ensure        => present,
+        path          => "/tmp/vagrant-cache/idea-plugins/${plugin_name}-${version}.zip",
         extract       => true,
-        extract_path  => $::private::idea::plugindir,
+        extract_path  => $plugindir,
         source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
         checksum      => $sha256sum,
         checksum_type => $checksum_type,
-        creates       => "${::private::idea::plugindir}/${title}",
+        creates       => "${plugindir}/${plugin_name}",
         cleanup       => false,
         user          => 'vagrant',
         group         => 'vagrant',
@@ -141,109 +130,136 @@ StartupNotify=true
     }
   }
 
-  define plugin_jar($version, $updateid, $sha256sum = undef) {
+  define plugin_jar($plugindir, $version, $updateid, $plugin_fact_name, $plugin_name = $title, $sha256sum = undef) {
     $checksum_type = $sha256sum ? {
       undef   => undef,
       default => 'sha256',
     }
-    unless $::facts['ideaplugins'].dig($title, 'version') == "${version}" {
-      private::cached_remote_file { "${::private::idea::plugindir}/${title}.jar":
-        cache_name    => "idea-plugins/${title}-${version}.jar",
+    unless $::facts[$plugin_fact_name].dig($plugin_name, 'version') == "${version}" {
+      private::cached_remote_file { "${plugindir}/${plugin_name}.jar":
+        cache_name    => "idea-plugins/${plugin_name}-${version}.jar",
         source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
         checksum      => $sha256sum,
         checksum_type => $checksum_type,
         owner         => 'vagrant',
         group         => 'vagrant',
-        require       => File[$::private::idea::plugindir],
+        require       => File[$plugindir],
       }
     }
   }
 
-  $config['plugins'].each |$item| {
-      $plugin_name = $item['name']
-      $plugin_type = $item['type']
-      $plugin_version = $item['version']
-      $plugin_updateid = $item['updateid']
+  $version_parts = split($version, '[.]')
+  [
+    [ "/home/vagrant/.IntelliJIdea${version_parts[0]}.${version_parts[1]}", 'ideaplugins' ],
+    [ "/home/vagrant/.IdeaIC${version_parts[0]}.${version_parts[1]}", 'ideaceplugins' ],
+  ].each |$idea_edition_args| {
 
-      if $plugin_type == 'jar' {
-        private::idea::plugin_jar { $plugin_name:
-          version  => $plugin_version,
-          updateid => $plugin_updateid,
+    $prefsdir         = $idea_edition_args[0]
+    $plugin_fact_name = $idea_edition_args[1]
+    $configdir        = "${prefsdir}/config"
+    $plugindir        = "${configdir}/plugins"
+    $colorsdir        = "${configdir}/colors"
+
+    file { [ $prefsdir, $configdir, $colorsdir, $plugindir, "${configdir}/options" ] :
+      ensure => directory,
+      owner  => 'vagrant',
+      group  => 'vagrant',
+      mode   => '0775',
+    }
+
+    $config['plugins'].each |$item| {
+        $plugin_name = $item['name']
+        $plugin_type = $item['type']
+        $plugin_version = $item['version']
+        $plugin_updateid = $item['updateid']
+
+        if $plugin_type == 'jar' {
+          private::idea::plugin_jar { "${plugin_name} in ${plugindir}":
+            plugindir        => $plugindir,
+            plugin_name      => $plugin_name,
+            version          => $plugin_version,
+            updateid         => $plugin_updateid,
+            plugin_fact_name => $plugin_fact_name,
+          }
+        } else {
+          private::idea::plugin_zip { "${plugin_name} in ${plugindir}":
+            plugindir        => $plugindir,
+            plugin_name      => $plugin_name,
+            version          => $plugin_version,
+            updateid         => $plugin_updateid,
+            plugin_fact_name => $plugin_fact_name,
+          }
         }
-      } else {
-        private::idea::plugin_zip { $plugin_name:
-          version  => $plugin_version,
-          updateid => $plugin_updateid,
-        }
+    }
+
+    remote_file { "${colorsdir}/Solarized Dark.icls":
+      ensure  => present,
+      source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Dark.icls',
+      owner   => 'vagrant',
+      group   => 'vagrant',
+      require => File[$colorsdir],
+    }
+
+    remote_file { "${colorsdir}/Solarized Light.icls":
+      ensure  => present,
+      source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Light.icls',
+      owner   => 'vagrant',
+      group   => 'vagrant',
+      require => File[$colorsdir],
+    }
+
+    $global_color_scheme = pick($::theme, lookup('theme::default')) ? {
+      /light/ => 'Solarized Light',
+      /dark/  => 'Solarized Dark',
+      /none/  => '',
+      default => undef,
+    }
+    if empty($::theme) {
+      file { "${configdir}/options/colors.scheme.xml":
+        ensure  => file,
+        mode    => '0664',
+        owner   => 'vagrant',
+        group   => 'vagrant',
+        replace => false,
+        content => "
+    <application>
+      <component name=\"EditorColorsManagerImpl\">
+        <global_color_scheme name=\"${global_color_scheme}\" />
+      </component>
+    </application>",
       }
-  }
+    } else {
+      if empty($global_color_scheme) {
+        $global_color_scheme_changes = [
+            "rm component[#attribute/name=\"EditorColorsManagerImpl\"]/global_color_scheme",
+        ]
+      } else {
+        $global_color_scheme_changes = [
+            "set component[#attribute/name=\"EditorColorsManagerImpl\"]/global_color_scheme/#attribute/name \"${global_color_scheme}\"",
+        ]
+      }
+      augeas { 'idea theme':
+        incl    => "${configdir}/options/colors.scheme.xml",
+        lens    => "Xml.lns",
+        context => "/files/${configdir}/options/colors.scheme.xml/application",
+        changes => $global_color_scheme_changes,
+      }
+    }
 
-  remote_file { "${colorsdir}/Solarized Dark.icls":
-    ensure  => present,
-    source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Dark.icls',
-    owner   => 'vagrant',
-    group   => 'vagrant',
-    require => File[$colorsdir],
-  }
-
-  remote_file { "${colorsdir}/Solarized Light.icls":
-    ensure  => present,
-    source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Light.icls',
-    owner   => 'vagrant',
-    group   => 'vagrant',
-    require => File[$colorsdir],
-  }
-
-  $global_color_scheme = pick($::theme, lookup('theme::default')) ? {
-    /light/ => 'Solarized Light',
-    /dark/  => 'Solarized Dark',
-    /none/  => '',
-    default => undef,
-  }
-  if empty($::theme) {
-    file { "${configdir}/options/colors.scheme.xml":
+    file { "${configdir}/options/git.xml":
       ensure  => file,
       mode    => '0664',
       owner   => 'vagrant',
       group   => 'vagrant',
       replace => false,
-      content => "
+      content => '
   <application>
-    <component name=\"EditorColorsManagerImpl\">
-      <global_color_scheme name=\"${global_color_scheme}\" />
+    <component name="Git.Application.Settings">
+      <option name="myPathToGit" value="/usr/bin/git" />
+      <option name="SSH_EXECUTABLE" value="NATIVE_SSH" />
     </component>
-  </application>",
+  </application>',
     }
-  } else {
-    if empty($global_color_scheme) {
-      $global_color_scheme_changes = [
-          "rm component[#attribute/name=\"EditorColorsManagerImpl\"]/global_color_scheme",
-      ]
-    } else {
-      $global_color_scheme_changes = [
-          "set component[#attribute/name=\"EditorColorsManagerImpl\"]/global_color_scheme/#attribute/name \"${global_color_scheme}\"",
-      ]
-    }
-    augeas { 'idea theme':
-      incl    => "${configdir}/options/colors.scheme.xml",
-      lens    => "Xml.lns",
-      context => "/files/${configdir}/options/colors.scheme.xml/application",
-      changes => $global_color_scheme_changes,
-    }
-  }
 
-  file { "${configdir}/options/git.xml":
-    ensure  => file,
-    mode    => '0664',
-    owner   => 'vagrant',
-    group   => 'vagrant',
-    replace => false,
-    content => '
-<application>
-  <component name="Git.Application.Settings">
-    <option name="myPathToGit" value="/usr/bin/git" />
-    <option name="SSH_EXECUTABLE" value="NATIVE_SSH" />
-  </component>
-</application>',
   }
 }

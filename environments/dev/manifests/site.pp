@@ -262,6 +262,7 @@ include ::private::rust
 include ::private::fb
 include ::private::my_emacs
 include ::private::zeal
+include ::private::zsh
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
@@ -352,3 +353,10 @@ file { '/home/vagrant/Workspace':
   group  => 'vagrant',
 }
 
+$user_shell = pick($::shell, lookup('shell::default'), 'bash')
+user { 'root':
+  shell => "/bin/${user_shell}",
+}
+User<| title == 'vagrant' |> {
+  shell => "/bin/${user_shell}",
+}

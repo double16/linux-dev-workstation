@@ -3,11 +3,36 @@
 #
 class private::iterm2 {
   package { [ 'php', 'coreutils' ]: }
-  ->exec { 'iterm2 integration':
-    path        => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
-    command     => 'su -c "/usr/bin/curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | /bin/bash" vagrant',
-    creates     => '/home/vagrant/.iterm2_shell_integration.bash',
-    cwd         => '/home/vagrant',
-    environment => ['HOME=/home/vagrant'],
+
+  private::cached_remote_file { '/usr/local/lib/iterm2_shell_integration.bash':
+    cache_name => "iterm2_shell_integration.bash",
+    source     => "https://iterm2.com/shell_integration/bash",
+    owner      => 0,
+    group      => 'root',
+  }
+
+  private::cached_remote_file { '/usr/local/lib/iterm2_shell_integration.zsh':
+    cache_name => "iterm2_shell_integration.zsh",
+    source     => "https://iterm2.com/shell_integration/zsh",
+    owner      => 0,
+    group      => 'root',
+  }
+
+  file { '/etc/profile.d/iterm2.sh':
+    ensure => file,
+    owner  => 0,
+    group  => 'root',
+    mode   => '0644',
+    content => '
+case "$SHELL" in
+  */zsh)
+    test -e "/usr/local/lib/iterm2_shell_integration.zsh" && source "/usr/local/lib/iterm2_shell_integration.zsh"
+  ;;
+  */bash|*/sh)
+    test -e "/usr/local/lib/iterm2_shell_integration.bash" && source "/usr/local/lib/iterm2_shell_integration.bash"
+  ;;
+
+esac
+',
   }
 }

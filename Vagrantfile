@@ -66,6 +66,7 @@ Vagrant.configure("2") do |config|
   config.vagrant.plugins = ["vagrant-cachier"]
 
   config.vm.box = "roboxes/fedora30"
+  config.vm.box_version = "1.9.38"
   config.vm.synced_folder ".", "/vagrant"
 
   configure_rdp_tunnel(config)
@@ -97,7 +98,10 @@ Vagrant.configure("2") do |config|
   end
 
   if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.no_install = true
+    config.vbguest.no_install = false
+  end
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.enabled = false
   end
   if Vagrant.has_plugin?("vagrant-disksize")
     config.disksize.size = '80GB'
@@ -260,6 +264,7 @@ Vagrant.configure("2") do |config|
       "user_email" => vagrant_config['user_email'] || `git config --get user.email 2>/dev/null`.chomp,
       "timezone" => vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600),
       "theme" => vagrant_config['theme'],
+      "shell" => vagrant_config['shell'],
       "native_gui" => vagrant_config['native_gui'],
       "resolution" => vagrant_config['resolution'],
     }

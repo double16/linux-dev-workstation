@@ -27,3 +27,5 @@ configs:
         # native_gui: false
         # Configure display resolution on startup, useful for providers that do not automatically resize
         #resolution: 1280x1024
+        # default shell: bash, zsh
+        shell: zsh

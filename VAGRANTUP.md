@@ -47,6 +47,8 @@ configs:
         # Solarized theme selection: 'light', 'dark', 'none' or not specified. Not specifying will
         # initialize to 'light' but not change it afterwards.
         theme: light
+        # default shell: bash, zsh
+        shell: bash
 ```
 
 ## Proxies

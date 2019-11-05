@@ -1,5 +1,9 @@
 ---
 theme::default: light
+shell::default: bash
+zsh:
+  theme: agnoster
+  plugins: git gradle docker docker-compose vagrant aws helm mvn nmap node npm rsync sudo tmux vscode
 hashistack:
   packer:
     version: 1.4.4
@@ -11,11 +15,11 @@ hashistack:
     version: 1.5.3
     checksum: b402e1a0db26adb9638a9e85c6c672acd137df233e8c69f26180f2e2fd6f4cbc
   terraform:
-    version: 0.12.10
-    checksum: 2215208822f1a183fb57e24289de417c9b3157affbe8a5e520b768edbcb420b4
+    version: 0.12.13
+    checksum: 63f765a3f83987b67b046a9c31acff1ec9ee618990d0eab4db34eca6c0d861ec
   nomad:
-    version: 0.9.6
-    checksum: 063047c245442674d2e9287fc37a5a369312a3f5ca4c6954036a64039c7adde1
+    version: 0.10.0
+    checksum: dd9dbe334e36e15c6f659c52d2722743f6632674fc9ffb42774378eb8ee1747f
 sdkman:
 - package: groovy
   version: 2.4.16
@@ -45,7 +49,7 @@ sdkman:
   version: 2.1.9.RELEASE
   default: true
 - package: java
-  version: 8.0.222-zulu
+  version: 8.0.232-zulu
   default: true
 - package: java
   version: 9.0.4-open
@@ -54,7 +58,7 @@ sdkman:
   version: 10.0.2-open
   default: false
 - package: java
-  version: 11.0.2-open
+  version: 11.0.5-open
   default: false
 - package: lazybones
   version: 0.8.3
@@ -66,18 +70,18 @@ pdk:
   version: 1.14.0.0
   checksum: 510c450d3312c097ecbca3fcfd8d980dcae81914109406845f8792a21da2ded1
 docker:
-  version: 19.03.3
+  version: 19.03.4
 k8s:
   version: 1.12
 k3s:
-  version: 0.9.1
+  version: 0.10.1
 minikube:
   version: 0.28.2
   pin: true
   checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
 helm:
-  version: 2.14.3
-  checksum: 38614a665859c0f01c9c1d84fa9a5027364f936814d1e47839b05327e400bf55
+  version: 2.15.2
+  checksum: a9d2db920bd4b3d824729bbe1ff3fa57ad27760487581af6e5d3156d1b3c2511
 kustomize:
   version: 3.2.0
   checksum: 7db89e32575d81393d5d84f0dc6cbe444457e61ce71af06c6e6b7b6718299c22
@@ -111,14 +115,14 @@ ruby:
   - version: 2.5.7
     global: true
   - version: 2.4.9
-  - version: jruby-9.2.8.0
-  - version: jruby-9.1.17.0
+  # - version: jruby-9.2.9.0
+  # - version: jruby-9.1.17.0
 netbeans:
   version: 8.2
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2019.2.3
+  version: 2019.2.4
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -126,12 +130,12 @@ idea:
     updateid: '66958'
   - name: AngularJS
     type: zip
-    version: 192.6817.25
-    updateid: '69994'
+    version: 192.7142.31
+    updateid: '71118'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 2019.2.20190917
-    updateid: '68873'
+    version: 2019.2.20191029
+    updateid: '71299'
   - name: com.intellij.lang.puppet
     type: zip
     version: 192.6262.9
@@ -170,8 +174,8 @@ idea:
     updateid: '66955'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.30.7
-    updateid: '69165'
+    version: 0.30.16
+    updateid: '71544'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.3.50-release-IJ2019.2-1
@@ -230,16 +234,16 @@ idea:
     version: 1.0.119
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '68496'
-    version: 192.6817.4
+    updateid: '70598'
+    version: 192.7142.17
   - name: color.scheme.Monokai Pro Spectrum
     type: jar
     updateid: '69319'
     version: '1.2'
   - name: com.chrisrm.idea.MaterialThemeUI
     type: zip
-    updateid: '68462'
-    version: 4.5.1
-  checksum: a14fb570dd5b1264bea9463dc211800bc3f789202f27b7926eac5600b983b992
-  build: 192.6817.14
-  checksum-ce: d1a292c16e5fd701ba6f50046afb16bc3722d8ea8510a327b9b6419f4817c43f
+    updateid: '70630'
+    version: 4.5.2
+  checksum: 102a925396f2edd5d67b823fe14f3547e3d109c2a63a313c81fa2185cf8b98a1
+  build: 192.7142.36
+  checksum-ce: f871d4b9b23e0676a653bb9fdf80e8cfb970ddc835b1e7dc2be84dd329ab5b04
