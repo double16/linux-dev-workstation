@@ -242,7 +242,7 @@ Vagrant.configure("2") do |config|
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
       rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-30.noarch.rpm
-      dnf install -y puppet-agent-6.8.1-1.fc30.x86_64
+      dnf install -y puppet-agent-6.10.1-1.fc30.x86_64
       mkdir -p /etc/puppetlabs/facter/facts.d
     )
   SHELL

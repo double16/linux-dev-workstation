@@ -355,8 +355,10 @@ file { '/home/vagrant/Workspace':
 
 $user_shell = pick($::shell, lookup('shell::default'), 'bash')
 user { 'root':
-  shell => "/bin/${user_shell}",
+  shell => "/usr/bin/${user_shell}",
 }
 User<| title == 'vagrant' |> {
-  shell => "/bin/${user_shell}",
+  shell => "/usr/bin/${user_shell}",
 }
+Package['zsh']
+->User<| |>

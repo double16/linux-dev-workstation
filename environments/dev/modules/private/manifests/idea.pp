@@ -115,7 +115,7 @@ StartupNotify=true
     unless $::facts[$plugin_fact_name].dig($plugin_name, 'version') == "${version}" {
       archive { "${plugin_name}-${version} in ${plugindir}":
         ensure        => present,
-        path          => "/tmp/vagrant-cache/idea-plugins/${plugin_name}-${version}.zip",
+        path          => "/tmp/vagrant-cache/idea-plugins/${plugin_fact_name}-${plugin_name}-${version}.zip",
         extract       => true,
         extract_path  => $plugindir,
         source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
@@ -137,7 +137,7 @@ StartupNotify=true
     }
     unless $::facts[$plugin_fact_name].dig($plugin_name, 'version') == "${version}" {
       private::cached_remote_file { "${plugindir}/${plugin_name}.jar":
-        cache_name    => "idea-plugins/${plugin_name}-${version}.jar",
+        cache_name    => "idea-plugins/${plugin_fact_name}-${plugin_name}-${version}.jar",
         source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
         checksum      => $sha256sum,
         checksum_type => $checksum_type,

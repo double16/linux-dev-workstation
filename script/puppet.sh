@@ -3,7 +3,7 @@
 set +H
 
 rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-30.noarch.rpm
-dnf install -y puppet-agent-6.8.1-1.fc30.x86_64
+dnf install -y puppet-agent-6.10.1-1.fc30.x86_64
 for X in $(ls /opt/puppetlabs/bin); do
 	ln -sf /opt/puppetlabs/bin/$X /usr/bin/$X
 done
