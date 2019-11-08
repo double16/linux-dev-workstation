@@ -1,6 +1,6 @@
 # zsh and friends
 class private::zsh {
-  package { ['zsh', 'zsh-lovers', 'zsh-syntax-highlighting', 'powerline-fonts']:
+  package { ['zsh', 'zsh-lovers', 'zsh-syntax-highlighting', 'powerline-fonts', 'fortune-mod']:
   }
 
   $zsh_theme = pick(lookup('zsh')['theme'], 'agnoster')
