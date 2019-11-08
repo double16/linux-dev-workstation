@@ -20,7 +20,7 @@ hashistack:
     checksum: 63f765a3f83987b67b046a9c31acff1ec9ee618990d0eab4db34eca6c0d861ec
   nomad:
     version: 0.10.1
-    checksum: 4547bb7d6f701e2d9dc02f5643fd25ac89cc715b52867d339c3c1b2481b5cbda
+    checksum: d1eecf0880a456cc9c171f90076f286d8b785b13b96cb49602ac5f760c559b2a
 sdkman:
 - package: groovy
   version: 2.4.17
@@ -132,8 +132,8 @@ idea:
     updateid: '66958'
   - name: AngularJS
     type: zip
-    version: 192.7142.31
-    updateid: '71118'
+    version: 192.7142.47
+    updateid: '71931'
   - name: org.jetbrains.plugins.ruby
     type: zip
     version: 2019.2.20191029
