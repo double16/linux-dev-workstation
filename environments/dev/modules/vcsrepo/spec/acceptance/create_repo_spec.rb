@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-tmpdir = default.tmpdir('vcsrepo')
+tmpdir = '/tmp/vcsrepo'
 
 describe 'create a repo' do
   context 'with without a source' do
@@ -12,13 +12,12 @@ describe 'create a repo' do
     MANIFEST
     it 'creates a blank repo' do
       # Run it twice and test for idempotency
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(pp)
     end
 
     describe file("#{tmpdir}/testrepo_blank_repo/") do
       it 'has zero files' do
-        shell("ls -1 #{tmpdir}/testrepo_blank_repo | wc -l") do |r|
+        run_shell("ls -1 #{tmpdir}/testrepo_blank_repo | wc -l") do |r|
           expect(r.stdout).to match(%r{^0\n$})
         end
       end
@@ -39,8 +38,7 @@ describe 'create a repo' do
     MANIFEST
     it 'does not fail (MODULES-2125)' do
       # Run it twice and test for idempotency
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(pp)
     end
   end
 
@@ -53,8 +51,7 @@ describe 'create a repo' do
     MANIFEST
     it 'creates a bare repo' do
       # Run it twice and test for idempotency
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      idempotent_apply(pp)
     end
 
     describe file("#{tmpdir}/testrepo_bare_repo/config") do

@@ -6,10 +6,10 @@ class private::rlang {
   $version = $config['version']
   $checksum = $config['checksum']
 
-  package { [ 'R', 'gstreamer', 'gstreamer-plugins-base' ]: }
+  package { [ 'R', 'gstreamer1', 'gstreamer1-plugins-base' ]: }
   ->archive { "/tmp/vagrant-cache/rstudio-${version}-x86_64.rpm":
     ensure          => present,
-    source          => "https://download1.rstudio.org/rstudio-${version}-x86_64.rpm",
+    source          => "https://download1.rstudio.org/desktop/fedora28/x86_64/rstudio-${version}-x86_64.rpm",
     extract         => true,
     cleanup         => false,
     extract_path    => '/tmp',

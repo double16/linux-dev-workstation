@@ -2,7 +2,7 @@
 class yum::clean {
 
   exec{'yum_clean_all':
-    command     => '/usr/bin/dnf clean all',
+    command     => '/usr/bin/yum clean all',
     refreshonly => true,
   }
 

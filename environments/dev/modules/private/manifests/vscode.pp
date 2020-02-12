@@ -56,6 +56,10 @@ class private::vscode {
     ensure => present,
     source => 'https://packages.microsoft.com/keys/microsoft.asc',
   }
+  ->yum::gpgkey { '/etc/pki/rpm-gpg/RPM-GPG-KEY-msopentech':
+    ensure => present,
+    source => 'https://packages.microsoft.com/keys/msopentech.asc',
+  }
   ->file { '/etc/yum.repos.d/vscode.repo':
     mode    => '0644',
     owner   => 0,

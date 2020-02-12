@@ -65,8 +65,8 @@ Vagrant.configure("2") do |config|
 
   config.vagrant.plugins = ["vagrant-cachier"]
 
-  config.vm.box = "roboxes/fedora30"
-  config.vm.box_version = "1.9.38"
+  config.vm.box = "roboxes/fedora31"
+  config.vm.box_version = "2.0.4"
   config.vm.synced_folder ".", "/vagrant"
 
   configure_rdp_tunnel(config)
@@ -74,7 +74,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
-    docker.image = "pdouble16/fedora-ssh:30"
+    docker.image = "pdouble16/fedora-ssh:31"
     docker.name = "linux-dev-workstation"
     docker.remains_running = true
     docker.has_ssh = true
@@ -119,9 +119,10 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
 #    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
     vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
-    vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+    vb.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
     vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     vb.customize ["modifyvm", :id, "--paravirtprovider", "default"]
     if monitor_count
       vb.customize ["modifyvm", :id, "--monitorcount", monitor_count]
@@ -169,7 +170,15 @@ Vagrant.configure("2") do |config|
     grep -q "${HOSTNAME}" /etc/hosts || echo "127.0.0.1  ${HOSTNAME}" >> /etc/hosts
   SHELL
 
-    # swap is required for propery memory management
+  # cgroup1 for k3s v1.0.0
+  config.vm.provision "cgroup1", type: "shell", inline: <<-SHELL
+    if [ -f /boot/grub2/grub.cfg ]; then
+      command -v grubby >/dev/null || dnf install -y grubby
+      grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+    fi
+  SHELL
+
+  # swap is required for propery memory management
   # if the provider doesn't allocate swap add a small swapfile
   config.vm.provision "swapfile", type: "shell", inline: <<-SHELL
     is_running_in_container() {

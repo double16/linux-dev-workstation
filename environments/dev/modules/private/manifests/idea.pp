@@ -192,18 +192,20 @@ StartupNotify=true
         }
     }
 
-    remote_file { "${colorsdir}/Solarized Dark.icls":
+    archive { "${colorsdir}/Solarized Dark.icls":
       ensure  => present,
+      extract => false,
       source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Dark.icls',
-      owner   => 'vagrant',
+      user    => 'vagrant',
       group   => 'vagrant',
       require => File[$colorsdir],
     }
 
-    remote_file { "${colorsdir}/Solarized Light.icls":
+    archive { "${colorsdir}/Solarized Light.icls":
       ensure  => present,
+      extract => false,
       source  => 'https://raw.githubusercontent.com/jkaving/intellij-colors-solarized/master/Solarized%20Light.icls',
-      owner   => 'vagrant',
+      user    => 'vagrant',
       group   => 'vagrant',
       require => File[$colorsdir],
     }
@@ -238,7 +240,7 @@ StartupNotify=true
             "set component[#attribute/name=\"EditorColorsManagerImpl\"]/global_color_scheme/#attribute/name \"${global_color_scheme}\"",
         ]
       }
-      augeas { 'idea theme':
+      augeas { "${configdir} theme":
         incl    => "${configdir}/options/colors.scheme.xml",
         lens    => "Xml.lns",
         context => "/files/${configdir}/options/colors.scheme.xml/application",

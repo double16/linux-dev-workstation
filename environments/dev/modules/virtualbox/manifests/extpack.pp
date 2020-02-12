@@ -1,32 +1,28 @@
-# == Class: virtualbox::extpack
+# @summary  This class (un)installs Oracle's VirtualBox extension pack.
 #
-# This class (un)installs Oracle's VirtualBox extension pack.
-#
-# === Parameters
-#
-# [*source*]
+# @param source
 #   Download extension pack from the given URL. Required string.
-# [*ensure*]
+# @param ensure
 #   Set to 'present' to install extension pack. Set to 'absent' to uninstall.
 #   Defaults to 'present'
-# [*verify_checksum*]
+# @param verify_checksum
 #   Whether to verify the checksum of the downloaded file. Optional boolean.
 #   Defaults to true.
-# [*checksum_string*]
+# @param checksum_string
 #   If $verify_checksum is true, this is the checksum to use to validate the
 #   downloaded file against.
-# [*checksum_type*]
+# @param checksum_type
 #   If $verify_checksum is true, this is the algorithm to use to validate the
 #   checksum. Can be md5, sha1, sha224, sha256, sha384, or sha512. Defaults to
 #   'md5'
-# [*follow_redirects*]
+# @param follow_redirects
 #   If we should follow HTTP redirects. Ignored when using `puppet/archive`.
 #   Defaults to false.
-# [*extpack_path*]
+# @param extpack_path
 #   This is the path where VirtualBox looks for extension packs. Defaults to
 #   '/usr/lib/virtualbox/ExtensionPacks'
-# [*archive_provider*]
-#   This parameter is used to tell the module which `archive` module to expect.
+# @param archive_provider
+#   This param eter is used to tell the module which `archive` module to expect.
 #   This can be set to the Puppet Forge username of the developer of the
 #   `archive` module you wish to use. If a falsey value is passed, this module
 #   will try and determine the module author by using the `load_module_metadata`
@@ -42,7 +38,6 @@ define virtualbox::extpack (
   Stdlib::Absolutepath $extpack_path                                                      = '/usr/lib/virtualbox/ExtensionPacks',
   Optional[Enum['puppet','puppet-community','voxpupuli','camptocamp']] $archive_provider  = undef,
 ) {
-
   if $verify_checksum {
     $_checksum_type   = $checksum_type
     $_checksum_string = $checksum_string
@@ -53,16 +48,20 @@ define virtualbox::extpack (
 
   $dest = "${extpack_path}/${name}"
 
-  unless $archive_provider {
+  if $archive_provider {
+    $valid_archive_provider = $archive_provider
+  } else {
     $metadata = load_module_metadata('archive')
-    $archive_provider = $metadata['source'] ? {
+    $valid_archive_provider = $metadata['source'] ? {
       /github\.com\/camptocamp/                   => 'camptocamp',
       /github\.com\/(puppet-community|voxpupuli)/ => 'voxpupuli',
     }
   }
 
-  case $archive_provider {
+  case $valid_archive_provider {
     'camptocamp': {
+
+      warning 'Support for module camptocamp/archive is deprecated. Futur version of this module will only support puppet/archive.'
       archive::download { "${name}.tgz":
         ensure           => $ensure,
         url              => $source,

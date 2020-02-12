@@ -27,7 +27,7 @@ end
 def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/, filter = lambda { |v| true })
     uri_str = "https://api.github.com/repos/#{owner}/#{repo}/releases"
     tags = JSON.parse(Net::HTTP.get(URI(uri_str)))
-    
+
     if tags.is_a?(Hash) and tags.has_key?('message')
         STDERR.puts "Error contacting #{uri_str}: #{tags['message']}"
         return nil
@@ -109,7 +109,7 @@ def idea(yaml)
             if available_version and available_version.to_s != existing_plugin['version'].to_s
                 puts "Getting new version of #{existing_plugin['name']}, #{available_version}"
                 resp = Net::HTTP.get_response(URI("https://plugins.jetbrains.com/pluginManager?action=download&id=#{existing_plugin['name']}&build=#{idea_build}"))
-                if resp.is_a?(Net::HTTPFound)
+                if resp.is_a?(Net::HTTPFound) or resp.is_a?(Net::HTTPSeeOther)
                     location = URI(resp.header['location'])
                     params = CGI.parse(location.query)
                     new_type = location.path.split('.').last
@@ -167,11 +167,11 @@ end
 def pdk(yaml)
     resp = Net::HTTP.get_response(URI("https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=latest"))
     if resp.is_a?(Net::HTTPFound)
-        location = resp.header['location'] # https://yum.puppet.com/puppet/el/7/x86_64/pdk-1.8.0.0-1.fc30.x86_64.rpm
+        location = resp.header['location'] # https://yum.puppet.com/puppet/el/7/x86_64/pdk-1.8.0.0-1.fc31.x86_64.rpm
         latest = location.match(/pdk-([0-9a-z.]+)/)[1]
         if latest != yaml['pdk']['version']
             puts "Found newer version PDK #{latest}"
-            download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.fc30.x86_64.rpm"
+            download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.fc31.x86_64.rpm"
             update_single_archive(latest, location, download_file, yaml['pdk'])
         end
     else
@@ -214,15 +214,14 @@ def k3s(yaml)
 end
 
 def rstudio(yaml)
-    # Only version 1.1.* has packages
-    latest = latest_github_tag('rstudio', 'rstudio', /^v1[.]1[.][0-9.]+$/)
+    latest = latest_github_tag('rstudio', 'rstudio', /^v1[.]2[.][0-9.]+$/)
     return if latest.nil?
     if yaml['rstudio']['pin']
         latest = yaml['rstudio']['version']
     end
     if latest != yaml['rstudio']['version'] or !yaml['rstudio'].has_key?('checksum')
         puts "Found newer version rstudio #{latest}"
-        download_url = "https://download1.rstudio.org/rstudio-#{latest}-x86_64.rpm"
+        download_url = "https://download1.rstudio.org/desktop/fedora28/x86_64/rstudio-#{latest}-x86_64.rpm"
         download_file = ".vagrant/machines/default/cache/rstudio-#{latest}-x86_64.rpm"
         update_single_archive(latest, download_url, download_file, yaml['rstudio'])
     end
@@ -278,7 +277,7 @@ def helm(yaml)
     end
     if latest != yaml['helm']['version'] or !yaml['helm'].has_key?('checksum')
         puts "Found newer version helm #{latest}"
-        download_url = "https://storage.googleapis.com/kubernetes-helm/helm-v#{latest}-linux-amd64.tar.gz"
+        download_url = "https://get.helm.sh/helm-v#{latest}-linux-amd64.tar.gz"
         download_file = ".vagrant/machines/default/cache/helm-#{latest}.tar.gz"
         update_single_archive(latest, download_url, download_file, yaml['helm'])
     end

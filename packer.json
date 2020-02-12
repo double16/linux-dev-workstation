@@ -177,7 +177,7 @@
       "os_type": "Linux",
       "image_publisher": "tunnelbiz.com",
       "image_offer": "fedora linux",
-      "image_sku": "30",
+      "image_sku": "31",
       "azure_tags": {
         "dept": "engineering",
         "task": "developer workstation"
@@ -222,7 +222,7 @@
       "volumes": {
         "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
       },
-      "image": "pdouble16/fedora-ssh:30.0.1",
+      "image": "pdouble16/fedora-ssh:31.1.0",
       "commit": true,
       "changes": [
         "LABEL maintainer='Patrick Double <pat@patdouble.com>' org.label-schema.license='MPL-2.0' org.label-schema.vendor='https://bitbucket.org/double16' org.label-schema.name='Developer Workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation.git'",
@@ -240,23 +240,11 @@
         "only": [ "docker" ]
       },
       {
-        "type": "docker-push",
-        "only": [ "docker" ]
-      },
-      {
         "keep_input_artifact": false,
         "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `version`}}.box",
         "type": "vagrant",
         "vagrantfile_template": "{{ user `vagrantfile_template` }}",
         "include": [ "VAGRANTUP.md", "rdhcpd.rb", "script/create-natswitch.ps1" ]
-      },
-      {
-        "keep_input_artifact": true,
-        "type": "vagrant-cloud",
-        "box_tag": "double16/{{user `vm_name`}}",
-        "access_token": "{{user `cloud_token`}}",
-        "version": "{{user `version`}}",
-        "no_release": "{{ user `no_release` }}"
       }
     ]
   ],
@@ -286,6 +274,7 @@
         "script/fix-slow-dns.sh",
         "script/dnf-config.sh",
         "script/docker-systemd.sh",
+        "script/cgroupv1.sh",
         "script/vagrant.sh",
         "script/sshd.sh",
         
@@ -380,10 +369,10 @@
     "install_vagrant_key": "true",
     "iso_checksum_type": "sha256",
     "iso_path": "iso",
-    "iso_checksum": "bb0622b78449298e24a96b90b561b429edec71aae72b8f7a8c3da4d81e4df5b7",
-    "iso_name": "Fedora-Server-dvd-x86_64-30-1.2.iso",
-    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/30/Server/x86_64/iso/Fedora-Server-dvd-x86_64-30-1.2.iso",
-    "aws_ami_name": "Fedora-Cloud-Base-30-1.2.x86_64-hvm-us-east-1-standard-0",
+    "iso_checksum": "225ebc160e40bb43c5de28bad9680e3a78a9db40c9e3f4f42f3ee3f10f95dbeb",
+    "iso_name": "Fedora-Server-dvd-x86_64-31-1.2.iso",
+    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/31/Server/x86_64/iso/Fedora-Server-dvd-x86_64-31-1.9.iso",
+    "aws_ami_name": "Fedora-Cloud-Base-31-1.9.x86_64-hvm-us-east-1-standard-0",
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",

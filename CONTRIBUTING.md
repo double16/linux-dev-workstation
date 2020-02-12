@@ -11,11 +11,15 @@ Review `Puppetfile` for appropriate versions, then update the modules from the `
 $ librarian-puppet install --path=environments/dev/modules --strip-dot-git
 ```
 
-If the `zanloy-vim` module is updated, the URL to vim-pathogen needs to be changed to a github.com URL to make it past some filtering proxies. Change `https://tpo.pe/pathogen.vim` to `https://raw.githubusercontent.com/tpope/vim-pathogen/v2.4/autoload/pathogen.vim` in the file `environments/dev/modules/vim/manifests/pathogen.pp`.
+### Puppet Module Patches
 
-If the `paulosuzart-sdkman` module is updated, the `su` commands in the file `environments/dev/modules/sdkman/manifests/package.pp` need to be fixed to have a space after the ` - ` to enable a login shell.
+Apply the `puppet_modules.patch` file, which performs the following:
 
-If the `virtualbox` module is updated, the `environments/dev/modules/virtualbox/manifests/kernel.pp` file needs to specify `environment => 'KERN_VER=``uname -r``',` instead of `KERN_DIR`.
+* If the `zanloy-vim` module is updated, the URL to vim-pathogen needs to be changed to a github.com URL to make it past some filtering proxies. Change `https://tpo.pe/pathogen.vim` to `https://raw.githubusercontent.com/tpope/vim-pathogen/v2.4/autoload/pathogen.vim` in the file `environments/dev/modules/vim/manifests/pathogen.pp`.
+
+* If the `paulosuzart-sdkman` module is updated, the `su` commands in the file `environments/dev/modules/sdkman/manifests/package.pp` need to be fixed to have a space after the ` - ` to enable a login shell.
+
+* If the `virtualbox` module is updated, the `environments/dev/modules/virtualbox/manifests/kernel.pp` file needs to specify `environment => 'KERN_VER=``uname -r``',` instead of `KERN_DIR`.
 
 ## Update Packages
 

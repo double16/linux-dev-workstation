@@ -1,5 +1,5 @@
 #
-# remote_file variant that is cached in /tmp/vagrant_cache, if it is mounted.
+# archive variant that is cached in /tmp/vagrant_cache, if it is mounted.
 #
 define private::cached_remote_file(
   $source,
@@ -24,12 +24,13 @@ define private::cached_remote_file(
       $real_cache_name = "${cache_dir}${cache_name}"
     }
 
-    remote_file { $real_cache_name:
-      ensure        => present,
-      source        => $source,
-      verify_peer   => $verify_peer,
-      checksum      => $checksum,
-      checksum_type => $checksum_type,
+    archive { $real_cache_name:
+      ensure         => present,
+      extract        => false,
+      source         => $source,
+      allow_insecure => !$verify_peer,
+      checksum       => $checksum,
+      checksum_type  => $checksum_type,
     }
     ->file { $target:
       ensure => file,
@@ -41,15 +42,16 @@ define private::cached_remote_file(
 
   } else {
 
-    remote_file { $target:
-      ensure        => present,
-      source        => $source,
-      verify_peer   => $verify_peer,
-      owner         => $owner,
-      group         => $group,
-      mode          => $mode,
-      checksum      => $checksum,
-      checksum_type => $checksum_type,
+    file { $target:
+      ensure         => present,
+      extract        => false,
+      source         => $source,
+      allow_insecure => !$verify_peer,
+      owner          => $owner,
+      group          => $group,
+      mode           => $mode,
+      checksum       => $checksum,
+      checksum_type  => $checksum_type,
     }
 
   }

@@ -1,8 +1,22 @@
-# == Class: virtualbox::install
+# @summary installs the VirtualBox package
 #
 # This is a private class meant to be called from virtualbox
 # This class installs the VirtualBox package. Based on the parameters it will
 # also install a package repository.
+#
+# @param version The major version of the package to install.
+# @param package_ensure
+#   This gets passed to the package resource as the value of the 'ensure'
+#   parameter. This can be used to specify a package version.
+# @param package_name
+#   The name of the package to install. This must be the full packge name when
+#   not the default. When the default is in use, it gets compounded with the
+#   major.minor components of the version number.
+# @param manage_repo Should this module manage the package repository?
+# @param repo_proxy proxy used by yum
+# @param manage_package Should this module manage the package?
+#
+# @api private
 #
 class virtualbox::install (
   String $version               = $virtualbox::version,
@@ -13,47 +27,30 @@ class virtualbox::install (
   Boolean $manage_package       = $virtualbox::manage_package
 ) {
 
-  if $package_name == $::virtualbox::params::package_name {
+  if $package_name == $virtualbox::params::package_name {
     $validated_package_name = "${package_name}-${version}"
   } else {
     $validated_package_name = $package_name
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       if $manage_repo {
-        $apt_repos = $::lsbdistcodename ? {
-          /(lucid|squeeze)/ => 'contrib non-free',
-          default           => 'contrib',
-        }
 
-        include ::apt
+        include apt
 
         if $repo_proxy {
           warning('The $repo_proxy parameter is not implemented on Debian-like systems. Please use the $proxy parameter on the apt class. Ignoring.')
         }
 
-        case $::lsbdistcodename {
-          /^(jessie|stretch|xenial)$/: {
-            $apt_key_thumb  = 'B9F8D658297AF3EFC18D5CDFA2F683C52980AECF'
-            $apt_key_source = 'https://www.virtualbox.org/download/oracle_vbox_2016.asc'
-          }
-          default: {
-            $apt_key_thumb  = '7B0FAB3A13B907435925D9C954422A4B98AB5139'
-            $apt_key_source = 'https://www.virtualbox.org/download/oracle_vbox.asc'
-          }
-        }
-
-        apt::key { $apt_key_thumb:
-          ensure => present,
-          source => $apt_key_source,
-        }
-
         apt::source { 'virtualbox':
-          location => 'http://download.virtualbox.org/virtualbox/debian',
-          release  => $::lsbdistcodename,
-          repos    => $apt_repos,
-          require  => Apt::Key[ $apt_key_thumb ],
+          architecture => $facts['os']['architecture'],
+          location     => 'http://download.virtualbox.org/virtualbox/debian',
+          repos        => 'contrib',
+          key          => {
+            'id'     => 'B9F8D658297AF3EFC18D5CDFA2F683C52980AECF',
+            'source' => 'https://www.virtualbox.org/download/oracle_vbox_2016.asc',
+          },
         }
 
         if $manage_package {
@@ -63,7 +60,7 @@ class virtualbox::install (
     }
     'RedHat': {
       if $manage_repo {
-        $platform = $::operatingsystem ? {
+        $platform = $facts['os']['name'] ? {
           'Fedora' => 'fedora',
           default  => 'el',
         }
@@ -83,15 +80,15 @@ class virtualbox::install (
       }
     }
     'Suse': {
-      case $::operatingsystem {
+      case $facts['os']['name'] {
         'OpenSuSE': {
           if $manage_repo {
-            if $::operatingsystemrelease !~ /^(12.3|11)/ {
+            if $facts['os']['release']['full'] !~ /^(12.3|11)/ {
               fail('Oracle only supports OpenSuSE 11 and 12.3! You need to manage your own repo.')
             }
 
             zypprepo { 'virtualbox':
-              baseurl     => "http://download.virtualbox.org/virtualbox/rpm/opensuse/${::operatingsystemrelease}",
+              baseurl     => "http://download.virtualbox.org/virtualbox/rpm/opensuse/${facts['os']['release']['full']}",
               enabled     => 1,
               autorefresh => 1,
               name        => 'Oracle Virtual Box',
@@ -102,13 +99,30 @@ class virtualbox::install (
             }
           }
         }
-        default: { fail("${::osfamily}/${::operatingsystem} is not supported by ${::module_name}.") }
+        default: { fail("${facts['os']['family']}/${facts['os']['name']} is not supported.") }
       }
     }
-    default: { fail("${::osfamily} is not supported by ${::module_name}.") }
+    default: { fail("${facts['os']['family']} is not supported.") }
   }
 
   if $manage_package {
+    $_install_status = $facts['virtualbox_version'] ? {
+      Pattern["^${version}"] => 'already-installed',
+      Pattern['^5']          => 'upgrade',
+      default                => 'not-yet-installed',
+    }
+
+    if $_install_status == 'upgrade' {
+      # The version returned by fact is complete, like 5.2.27r129424.
+      # Bellow, we try to match only the firsts two digits, like 5.2.
+      $_current_version = $facts['virtualbox_version'].match(/^[0-9][^0-9]{1}[0-9]{1}/)
+
+      package { "${package_name}-${_current_version[0]}":
+        ensure => absent,
+      }
+
+      Package["${package_name}-${_current_version[0]}"] -> Package['virtualbox']
+    }
     package { 'virtualbox':
       ensure => $package_ensure,
       name   => $validated_package_name,

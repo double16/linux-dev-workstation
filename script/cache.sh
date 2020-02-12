@@ -8,6 +8,9 @@ SSH_USER_HOME=${SSH_USER_HOME:-/home/${SSH_USER}}
 
 if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]] && ! mountpoint "/tmp/vagrant-cache" 2>/dev/null; then
     echo "==> Mounting shared folder vagrant-cache to /tmp/vagrant-cache"
+    uname -r
+    find /lib/modules/$(uname -r) | grep vbox
+    modinfo vboxsf && modprobe vboxsf
     mkdir -p /tmp/vagrant-cache
     mount -t vboxsf -o rw,nodev,uid=${SSH_USER},gid=${SSH_USER} vagrant-cache /tmp/vagrant-cache || true
 fi

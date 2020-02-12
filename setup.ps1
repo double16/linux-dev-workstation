@@ -9,7 +9,8 @@ choco install -y git
 choco install -y vagrant
 choco install -y ruby
 choco install -y vnc-viewer
-choco install -y docker-desktop
+choco install -y docker-desktop docker-machine
 choco install -y virtualbox
 choco install -y packer
+choco install -y firefox
 choco install -y vscode vscode-gitignore vscode-vsliveshare vscode-puppet vscode-ruby vscode-yaml vscode-gitlens vscode-markdownlint vscode-docker vscode-powershell vscode-settingssync vscode-icons

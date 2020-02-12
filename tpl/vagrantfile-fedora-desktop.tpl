@@ -80,9 +80,10 @@ Find this file at #{readme}
      v.customize ["modifyvm", :id, "--rtcuseutc", "on"]
 #     v.customize ["modifyvm", :id, "--accelerate3d", "on"]
      v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
-     v.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+     v.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
      v.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
      v.customize ["modifyvm", :id, "--hwvirtex", "on"]
+     v.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
      v.customize ["modifyvm", :id, "--paravirtprovider", "default"]
      if monitor_count
        v.customize ["modifyvm", :id, "--monitorcount", monitor_count]

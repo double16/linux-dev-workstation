@@ -73,9 +73,10 @@ class private::my_docker {
   net.ipv6.conf.all.forwarding = 1
   ',
       }
-      ->remote_file { '/etc/yum.repos.d/docker-ce.repo':
+      ->archive { '/etc/yum.repos.d/docker-ce.repo':
+        extract => false,
         source => 'https://download.docker.com/linux/fedora/docker-ce.repo',
-        owner  => 0,
+        user   => 0,
         group  => 'root',
         mode   => '0644',
       }
@@ -202,7 +203,7 @@ class private::my_docker {
     ensure        => present,
     extract       => true,
     extract_path  => '/usr/local/share/helm',
-    source        => "https://storage.googleapis.com/kubernetes-helm/helm-v${helm_version}-linux-amd64.tar.gz",
+    source        => "https://get.helm.sh/helm-v${helm_version}-linux-amd64.tar.gz",
     checksum      => $helm_checksum,
     checksum_type => 'sha256',
     creates       => '/usr/local/share/helm/linux-amd64/helm',
@@ -222,31 +223,5 @@ class private::my_docker {
     target => '/usr/local/share/helm/linux-amd64/tiller',
     owner  => 0,
     group  => 'root',
-  }
-
-  unless $::virtual == 'docker' {
-    file { '/opt/helm-init.sh':
-      ensure  => file,
-      mode    => '0755',
-      owner   => 'vagrant',
-      group   => 'vagrant',
-      content => '
-#!/usr/bin/env bash
-helm init
-helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
-kubectl --namespace kube-system  get serviceaccount tiller >/dev/null 2>&1 || \
-    kubectl create serviceaccount --namespace kube-system tiller
-kubectl get clusterrolebinding tiller-cluster-rule >/dev/null 2>&1 || \
-    kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-kubectl patch deploy --namespace kube-system tiller-deploy -p \'{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}\'
-',
-    }
-    ->exec { '/opt/helm-init.sh':
-      path        => ['/bin','/sbin','/usr/bin','/usr/bin','/usr/local/bin','/usr/local/sbin'],
-      environment => ['HOME=/home/vagrant','USER=vagrant'],
-      user        => 'vagrant',
-      unless      => '/usr/local/bin/helm version',
-      require     => Class['private::k3s'],
-    }
   }
 }

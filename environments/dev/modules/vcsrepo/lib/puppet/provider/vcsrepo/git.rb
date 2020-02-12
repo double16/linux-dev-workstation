@@ -398,6 +398,8 @@ Puppet::Type.type(:vcsrepo).provide(:git, parent: Puppet::Provider::Vcsrepo) do
   # handle upstream branch changes
   # @!visibility private
   def checkout(revision = @resource.value(:revision))
+    keep_local_changes = @resource.value(:keep_local_changes)
+    stash if keep_local_changes == :true
     if !local_branch_revision?(revision) && remote_branch_revision?(revision)
       # non-locally existant branches (perhaps switching to a branch that has never been checked out)
       at_path { git_with_identity('checkout', '--force', '-b', revision, '--track', "#{@resource.value(:remote)}/#{revision}") }
@@ -405,6 +407,7 @@ Puppet::Type.type(:vcsrepo).provide(:git, parent: Puppet::Provider::Vcsrepo) do
       # tags, locally existant branches (perhaps outdated), and shas
       at_path { git_with_identity('checkout', '--force', revision) }
     end
+    unstash if keep_local_changes == :true
   end
 
   # @!visibility private
@@ -475,6 +478,16 @@ Puppet::Type.type(:vcsrepo).provide(:git, parent: Puppet::Provider::Vcsrepo) do
     end
   end
 
+  # @!visibility private
+  def stash
+    at_path { git_with_identity('stash', 'save') }
+  end
+
+  # @!visibility private
+  def unstash
+    at_path { git_with_identity('stash', 'pop') }
+  end
+
   # Finds the latest revision or sha of the current branch if on a branch, or
   # of HEAD otherwise.
   # @note Calls create which can forcibly destroy and re-clone the repo if
@@ -503,11 +516,9 @@ Puppet::Type.type(:vcsrepo).provide(:git, parent: Puppet::Provider::Vcsrepo) do
   # @return [String] Returns the tag/branch of the current repo if it's up to
   #                  date; otherwise returns the sha of the requested revision.
   def get_revision(rev = 'HEAD')
-    if @resource.value(:source)
-      update_references
-    else
+    unless @resource.value(:source)
       status = at_path { git_with_identity('status') }
-      is_it_new = status =~ %r{Initial commit}
+      is_it_new = status =~ %r{Initial commit|No commits yet}
       if is_it_new
         status =~ %r{On branch (.*)}
         branch = Regexp.last_match(1)
@@ -515,6 +526,13 @@ Puppet::Type.type(:vcsrepo).provide(:git, parent: Puppet::Provider::Vcsrepo) do
       end
     end
     current = at_path { git_with_identity('rev-parse', rev).strip }
+    if @resource.value(:revision) == current
+      # if already pointed at desired revision, it must be a SHA, so just return it
+      return current
+    end
+    if @resource.value(:source)
+      update_references
+    end
     if @resource.value(:revision)
       canonical = if tag_revision?
                     # git-rev-parse will give you the hash of the tag object itself rather

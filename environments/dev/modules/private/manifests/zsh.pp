@@ -17,7 +17,7 @@ class private::zsh {
     vcsrepo { $omz_home:
       ensure   => present,
       provider => git,
-      source   => 'https://github.com/robbyrussell/oh-my-zsh.git',
+      source   => 'https://github.com/ohmyzsh/ohmyzsh.git',
       user     => $user,
       require  => [ Package['zsh'], Package['powerline-fonts'] ],
     }

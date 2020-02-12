@@ -9,7 +9,7 @@ class private::my_vagrant {
     'vagrant-aws',
     'vagrant-azure',
     #'vagrant-google', # deps need Ruby >= 2.5.0, vagrant 2.2.x uses Ruby 2.4.x
-    'vagrant-joyent',
+    #'vagrant-joyent',
     'vagrant-sshfs',
   ]
 

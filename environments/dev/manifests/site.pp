@@ -14,10 +14,13 @@ Package<| provider == 'yum' or provider == 'dnf' |> {
 }
 
 exec { 'RPM Fusion Free':
-  command => '/usr/bin/rpm -i --force --nodeps http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-30.noarch.rpm && /usr/bin/rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-30',
+  command => '/usr/bin/rpm -i --force --nodeps http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-31.noarch.rpm && /usr/bin/rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-31',
   creates => '/etc/yum.repos.d/rpmfusion-free.repo',
 }
 -> Package<| |>
+
+package { ['cronie', 'cronie-anacron', 'crontabs']: }
+->Cron<| |>
 
 # Initial setup prompts for license acceptance
 service { ['initial-setup', 'initial-setup-text', 'initial-setup-graphical']:
@@ -55,7 +58,7 @@ yum::group { 'Development Tools':
 
 yum::group { 'Xfce Desktop':
   ensure  => present,
-  timeout => 1800,
+  timeout => 3600,
 }
 ->package { [
   'xfce4-clipman-plugin',
@@ -106,12 +109,8 @@ exec { 'graphical runlevel':
   require => Yum::Group['Xfce Desktop'],
 }
 
-package { ['python3']:
+package { ['python3', 'python3-pip']:
   ensure => present,
-}
-->file { '/usr/bin/pip':
-  ensure => link,
-  target => '/usr/bin/pip3.7',
 }
 ->file { '/etc/xdg':
   ensure => directory,
@@ -177,6 +176,8 @@ package { [
     'cifs-utils',
     'samba',
     'puppet-bolt',
+    'backintime-qt',
+    'cool-retro-term',
 
     # For recording the screen via 'ffmpeg x11grab'
     'ffmpeg',
@@ -220,7 +221,7 @@ unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
     unless  => '/usr/bin/test -f /etc/yum.repos.d/virtualbox.repo',
   }
   ->class { '::virtualbox':
-    version => '6.0',
+    version => '6.1',
   }
   ->User<| title == 'vagrant' |> { groups +> 'vboxusers' }
 

@@ -1,8 +1,13 @@
-# == Class: virtualbox::kernel
+# @summary compiles and installs the VirtualBox kernel modules
 #
-# This is a private class meant to be called from virtualbox
-# This class compiles and installs the VirtualBox kernel modules and
-# dependencies.
+# compiles and installs the VirtualBox kernel modules and dependencies.
+#
+# @param manage_repo
+#   Should this module manage the package repository?
+# @param vboxdrv_dependencies
+#   Dependencies for building the VirtualBox kernel modules.
+#
+# @api private
 #
 class virtualbox::kernel (
   Boolean $manage_repo        = $virtualbox::manage_repo,
@@ -15,7 +20,7 @@ class virtualbox::kernel (
   exec { 'vboxdrv':
     command     => "${vboxdrv_command} setup",
     unless      => '/sbin/lsmod | grep vboxdrv',
-    environment => 'KERN_VER=/usr/src/kernels/`uname -r`',
+    environment => 'KERN_VER=`uname -r`',
     require     => Package[$vboxdrv_dependencies],
   }
 

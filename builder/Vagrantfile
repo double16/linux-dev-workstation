@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'tempfile'
+
 Vagrant.configure("2") do |config|
   # Must be compatible with an UbuntuServer from `az vm image list --output table`
   config.vm.box = "ubuntu/disco64"
@@ -25,12 +27,12 @@ Vagrant.configure("2") do |config|
     end
     azure.data_disks = [
         {
-          name: "boxes", 
+          name: "boxes",
           size_gb: 200
         }
     ]
     override.vm.provision "data_volume", type: "shell", inline: <<-SHELL
-      
+
     SHELL
   end
 
@@ -54,7 +56,13 @@ Vagrant.configure("2") do |config|
     config.vm.provision "disksize", type: "shell", path: "../environments/dev/modules/private/files/disksize.sh"
   end
   config.vm.provider :virtualbox do |vb, override|
+    vb.memory = 4096
+    vb.cpus = 2
+    # 2020-01 ubuntu/* boxes use serial output for grub, which causes extreme slow booting because the serial port is disconnected. This connects to a file to avoid the issue.
+    vb.customize ["modifyvm", :id, "--uartmode1", "file", Tempfile.create().path]
+    vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     vb.customize ["modifyvm", :id, "--paravirtprovider", "default"]
     override.vm.synced_folder "..", "/vagrant"
     override.vm.provision "hostname_fix", type: "shell", inline: <<-SHELL
@@ -64,7 +72,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "builder", type: "shell",
     env: { yum_proxy: ENV['YUM_PROXY'] || ENV['yum_proxy'], DEBIAN_FRONTEND: 'noninteractive' },
     inline: <<-SHELL
-      set -x -e      
+      set -x -e
 
       if [ -n "$yum_proxy" ] && ! grep -qF "${yum_proxy}" /etc/apt/apt.conf.d/01proxy && wget -t 1 -O /dev/null "${yum_proxy}acng-report.html"; then
           cat >/etc/apt/apt.conf.d/01proxy <<EOF
@@ -93,15 +101,15 @@ EOF
       add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
       apt-get update
       apt-get install -y build-essential linux-headers-$(uname -r) unzip git screen tmux htop qemu qemu-kvm ruby awscli iftop jq php curl docker-ce docker-compose coreutils zsh zsh-syntax-highlighting
-      apt-get install -y virtualbox-6.0
-      test -f /etc/apt/apt.conf.d/01proxy && mkdir -p /etc/systemd/system/docker.service.d && echo -e \"[Service]\nEnvironment=\\\"HTTP_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"HTTPS_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"NO_PROXY=127.0.0.1,localhost\\\"\" > /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload      
+      apt-get install -y virtualbox-6.1
+      test -f /etc/apt/apt.conf.d/01proxy && mkdir -p /etc/systemd/system/docker.service.d && echo -e \"[Service]\nEnvironment=\\\"HTTP_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"HTTPS_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"NO_PROXY=127.0.0.1,localhost\\\"\" > /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload
       systemctl enable docker
 
-      /bin/grep -q '^vagrant:' /etc/group || /usr/sbin/groupadd vagrant      
-      /bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel      
-      /bin/grep -q '^vagrant:' /etc/passwd || /usr/sbin/useradd vagrant -m -g vagrant -G wheel,kvm,docker,vboxusers      
-      /bin/grep -q '^docker:.*vagrant' /etc/group || /usr/sbin/usermod vagrant -G wheel,kvm,docker,vboxusers      
-      sed -i 's|/home/vagrant:/bin/bash|/home/vagrant:/bin/zsh|' /etc/passwd      
+      /bin/grep -q '^vagrant:' /etc/group || /usr/sbin/groupadd vagrant
+      /bin/grep -q '^wheel:' /etc/group || /usr/sbin/groupadd wheel
+      /bin/grep -q '^vagrant:' /etc/passwd || /usr/sbin/useradd vagrant -m -g vagrant -G wheel,kvm,docker,vboxusers
+      /bin/grep -q '^docker:.*vagrant' /etc/group || /usr/sbin/usermod vagrant -G wheel,kvm,docker,vboxusers
+      sed -i 's|/home/vagrant:/bin/bash|/home/vagrant:/bin/zsh|' /etc/passwd
 
       if [ ! -f /etc/apt/apt.conf.d/01proxy ]; then
         pick_copy aptcache-compose.yml /home/vagrant/aptcache-compose.yml
@@ -111,45 +119,45 @@ EOF
 Acquire::HTTP::Proxy "${yum_proxy}";
 Acquire::HTTPS::Proxy false;
 EOF
-        mkdir -p /etc/systemd/system/docker.service.d && echo -e \"[Service]\nEnvironment=\\\"HTTP_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"HTTPS_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"NO_PROXY=127.0.0.1,localhost\\\"\" > /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload      
+        mkdir -p /etc/systemd/system/docker.service.d && echo -e \"[Service]\nEnvironment=\\\"HTTP_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"HTTPS_PROXY=${yum_proxy}\\\"\nEnvironment=\\\"NO_PROXY=127.0.0.1,localhost\\\"\" > /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload
         systemctl reload docker
       fi
 
       test -f /etc/apt/apt.conf.d/01proxy && \
         echo \"--proxy ${yum_proxy}\" >> /root/.curlrc && \
-        echo \"--proxy ${yum_proxy}\" >> /home/vagrant/.curlrc      
+        echo \"--proxy ${yum_proxy}\" >> /home/vagrant/.curlrc
 
-      test -d /home/vagrant/.oh-my-zsh || su -c 'git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh' - vagrant      
-      grep -q ZSH_THEME /home/vagrant/.zshrc || su -c 'cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc' - vagrant      
-      /usr/bin/sed -i 's/ZSH_THEME=.*/ZSH_THEME=\"agnoster\"/' /home/vagrant/.zshrc      
+      test -d /home/vagrant/.oh-my-zsh || su -c 'git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh' - vagrant
+      grep -q ZSH_THEME /home/vagrant/.zshrc || su -c 'cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc' - vagrant
+      /usr/bin/sed -i 's/ZSH_THEME=.*/ZSH_THEME=\"agnoster\"/' /home/vagrant/.zshrc
       /usr/bin/sed -i 's/plugins=.*/plugins=(git vagrant tmux docker docker-compose go golang)/' /home/vagrant/.zshrc
       test -f /etc/apt/apt.conf.d/01proxy && \
         echo \"export yum_proxy=${yum_proxy}\" >> /home/vagrant/.zshrc && \
         echo \"export YUM_PROXY=${yum_proxy}\" >> /home/vagrant/.zshrc && \
         echo \"export VAGRANT_CLOUD_TOKEN=\" >> /home/vagrant/.zshrc && \
-        chown vagrant:vagrant /home/vagrant/.zshrc      
+        chown vagrant:vagrant /home/vagrant/.zshrc
 
       test -d "/data" && \
         sh -c "mkdir /data/virtualbox && vboxmanage setproperty machinefolder /data/virtualbox" - vagrant
 
-      packer version | grep -qF '1.4.5' || (
-        curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.4.5/packer_1.4.5_linux_amd64.zip      
-        cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer      
+      packer version 2>/dev/null | grep -qF '1.5.1' || (
+        curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.5.1/packer_1.5.1_linux_amd64.zip
+        cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer
         rm /tmp/packer.zip
       )
 
-      vagrant version | grep -qF '2.2.6' || (
-        curl -sL -o /tmp/vagrant_2.2.6_x86_64.deb https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.deb      
-        dpkg -i /tmp/vagrant_2.2.6_x86_64.deb      
-        rm /tmp/vagrant_2.2.6_x86_64.deb
+      vagrant version 2>/dev/null | grep -qF '2.2.7' || (
+        curl -sL -o /tmp/vagrant_2.2.7_x86_64.deb https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
+        dpkg -i /tmp/vagrant_2.2.7_x86_64.deb
+        rm /tmp/vagrant_2.2.7_x86_64.deb
       )
-      su -c 'vagrant plugin install vagrant-cachier vagrant-vbguest vagrant-azure vagrant-aws' - vagrant      
+      su -c 'vagrant plugin install vagrant-cachier vagrant-vbguest vagrant-azure vagrant-aws' - vagrant
 
-      su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | zsh' - vagrant      
+      su -c 'curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | zsh' - vagrant
 
       pick_copy vagrant-upload.sh /home/vagrant/vagrant-upload.sh
-      chown vagrant:vagrant /home/vagrant/vagrant-upload.sh      
-      chmod +x /home/vagrant/vagrant-upload.sh      
+      chown vagrant:vagrant /home/vagrant/vagrant-upload.sh
+      chmod +x /home/vagrant/vagrant-upload.sh
     SHELL
 
   config.vm.provision "vagrant-dotfiles", type: "shell", inline: <<-SHELL

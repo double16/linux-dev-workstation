@@ -23,7 +23,7 @@ TIME="$(date '+%l:%M%p')"
 echo "tooltip:${TIME} Scanning for changes..." > ${PIPE}
 rm "${CHANGED}" 2>/dev/null
 
-find ${ROOT} -name .git -type d -not -ipath '*/.tmp/*' -not -ipath '*/pkg/*' -prune | while read D; do
+find ${ROOT} -xdev -name .git -type d -not -ipath '*/.tmp/*' -not -ipath '*/pkg/*' -prune | while read D; do
   cd "${D}/.." >/dev/null
   git status --porcelain --branch > "${STATUS}"
   if pending "${STATUS}"; then
@@ -34,7 +34,7 @@ find ${ROOT} -name .git -type d -not -ipath '*/.tmp/*' -not -ipath '*/pkg/*' -pr
   cd - >/dev/null
 done
 
-find ${ROOT} -name .svn -type d -not -ipath '*/.tmp/*' -prune | while read D; do
+find ${ROOT} -xdev -name .svn -type d -not -ipath '*/.tmp/*' -prune | while read D; do
   cd "${D}/.." >/dev/null
   svn status > "${STATUS}"
   if [ -s "${STATUS}" ]; then

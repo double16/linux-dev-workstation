@@ -39,7 +39,7 @@ timeout 30 sh -c "until nc -zv localhost 6443 >/dev/null 2>&1; do echo .; sleep 
 
   unless $::virtual == 'docker' {
     exec { '/opt/k3s/install.sh':
-      environment => ["INSTALL_K3S_VERSION=v${k3s_version}", 'INSTALL_K3S_EXEC=--bind-address localhost --node-name localhost'],
+      environment => ["INSTALL_K3S_VERSION=v${k3s_version}"],
       creates     => '/etc/systemd/system/k3s.service',
       require     => [
         Private::Cached_remote_file['/opt/k3s/install.sh'],
@@ -49,10 +49,8 @@ timeout 30 sh -c "until nc -zv localhost 6443 >/dev/null 2>&1; do echo .; sleep 
     ~>exec { '/usr/bin/chown -R vagrant:vagrant /etc/rancher':
       refreshonly => true,
     }
-    ->exec { 'k3s local-path storage':
-      command => '/opt/k3s/until-ready.sh && (/usr/local/bin/k3s kubectl apply -f /opt/k3s/local-path-storage.yaml ; /usr/local/bin/k3s kubectl patch storageclass local-path -p \'{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}\')',
-      unless  => '/opt/k3s/until-ready.sh ; /usr/local/bin/k3s kubectl get storageclass local-path',
-      require => File['/opt/k3s/until-ready.sh'],
+    ~>exec { '/opt/k3s/start-k3s.sh':
+      refreshonly => true,
     }
   } else {
     private::cached_remote_file { '/usr/bin/k3s':
