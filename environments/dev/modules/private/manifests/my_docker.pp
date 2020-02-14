@@ -75,10 +75,9 @@ class private::my_docker {
       }
       ->archive { '/etc/yum.repos.d/docker-ce.repo':
         extract => false,
-        source => 'https://download.docker.com/linux/fedora/docker-ce.repo',
-        user   => 0,
-        group  => 'root',
-        mode   => '0644',
+        source  => 'https://download.docker.com/linux/fedora/docker-ce.repo',
+        user    => 0,
+        group   => 'root',
       }
       ~>exec { 'Docker gpg key':
         command     => '/usr/bin/rpm --import https://download.docker.com/linux/fedora/gpg',
