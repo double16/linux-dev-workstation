@@ -68,10 +68,10 @@ sdkman:
   version: 1.4.4
   default: true
 pdk:
-  version: 1.15.0.0
-  checksum: 1ef3d794cd2307c72b86a37eaeecc19c9f477157a41bc294e15e95b579f94b37
+  version: 1.16.0.2
+  checksum: 22afd8b8161d032ec4232b95f6ccded691d7d3820e30efe579ac96ef07b11267
 docker:
-  version: 19.03.5
+  version: 19.03.6
 k8s:
   version: 1.12
 k3s:
@@ -81,8 +81,8 @@ minikube:
   pin: true
   checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
 helm:
-  version: 3.0.3
-  checksum: fc75d62bafec2c3addc87b715ce2512820375ab812e6647dc724123b616586d6
+  version: 3.1.0
+  checksum: f0fd9fe2b0e09dc9ed190239fce892a468cbb0a2a8fffb9fe846f893c8fd09de
 kustomize:
   version: 3.2.0
   checksum: 7db89e32575d81393d5d84f0dc6cbe444457e61ce71af06c6e6b7b6718299c22
@@ -124,7 +124,7 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2019.3.2
+  version: 2019.3.3
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -132,28 +132,28 @@ idea:
     updateid: '76799'
   - name: AngularJS
     type: zip
-    version: 193.6015.53
-    updateid: '76804'
+    version: 193.6494.17
+    updateid: '77552'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 193.6015.39
-    updateid: '76261'
+    version: 193.6494.35
+    updateid: '77893'
   - name: com.intellij.lang.puppet
     type: zip
-    version: 193.6015.53
-    updateid: '76829'
+    version: 193.6494.47
+    updateid: '77991'
   - name: NodeJS
     type: zip
-    version: 193.6015.53
-    updateid: '76838'
+    version: 193.6494.7
+    updateid: '77043'
   - name: BashSupport
     type: zip
     version: 1.7.15.192
     updateid: '72819'
   - name: Docker
     type: zip
-    version: 193.6015.39
-    updateid: '76262'
+    version: 193.6494.1
+    updateid: '76689'
   - name: mobi.hsz.idea.gitignore
     type: zip
     version: 3.2.3.193
@@ -176,8 +176,8 @@ idea:
     updateid: '76828'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.30.31
-    updateid: '76002'
+    version: 0.30.34
+    updateid: '77772'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.3.61-release-IJ2019.3-1
@@ -192,12 +192,12 @@ idea:
     updateid: '75041'
   - name: R4Intellij
     type: zip
-    version: 193.5233.498
-    updateid: '77238'
+    version: 193.5223.529
+    updateid: '78154'
   - name: Karma
     type: zip
-    version: 193.6015.53
-    updateid: '76807'
+    version: 193.6494.9
+    updateid: '77289'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.2
@@ -216,8 +216,8 @@ idea:
     updateid: 45070
   - name: com.intellij.ideolog
     type: zip
-    version: 193.0.18.0
-    updateid: '74050'
+    version: 201.0.19.0
+    updateid: '77963'
   - name: org.jetbrains.plugins.vagrant
     type: zip
     version: 193.6015.53
@@ -236,8 +236,8 @@ idea:
     version: 1.0.120
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '76811'
-    version: 193.6015.53
+    updateid: '77989'
+    version: 193.6494.47
   - name: color.scheme.Monokai Pro Spectrum
     type: jar
     updateid: '74881'
@@ -250,6 +250,6 @@ idea:
     type: zip
     updateid: '77320'
     version: 193.6015.58
-  checksum: c2a99497d230faed967b8c5635ec6fcc9c6f7c128d2e39c7696b1c511b21b8b7
-  build: 193.6015.39
-  checksum-ce: c38f18a2b2246b9a53fd62d454ccf67996bf59adc0b7e3843be0a9cf44637127
+  checksum: a71b367f36e528bed8be170a7676372b58b2df1bc572f611194efa4104c4b0d6
+  build: 193.6494.35
+  checksum-ce: 2f3f054192856c312e4854971afc84d93566cf5bd68d301bd69992eb8c413a97
