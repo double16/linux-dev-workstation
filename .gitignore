@@ -23,3 +23,4 @@ rdhcpd.pid
 *.tar
 iso/
 .DS_Store
+output-*/

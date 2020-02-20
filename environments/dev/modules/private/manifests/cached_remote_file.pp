@@ -42,16 +42,19 @@ define private::cached_remote_file(
 
   } else {
 
-    file { $target:
+    archive { $target:
       ensure         => present,
       extract        => false,
       source         => $source,
       allow_insecure => !$verify_peer,
-      owner          => $owner,
-      group          => $group,
-      mode           => $mode,
       checksum       => $checksum,
       checksum_type  => $checksum_type,
+    }
+    ->file { $target:
+      ensure => present,
+      owner  => $owner,
+      group  => $group,
+      mode   => $mode,
     }
 
   }

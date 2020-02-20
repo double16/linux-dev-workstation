@@ -126,12 +126,22 @@
       "type": "qemu",
       "vm_name": "{{ user `vm_name` }}",
       "accelerator": "kvm",
+      "display": "none",
+      "cpus": "{{ user `cpus` }}",
+      "memory": "{{ user `memory` }}",
       "disk_cache": "unsafe",
       "disk_discard": "unmap",
+      "disk_detect_zeroes": "unmap",
       "disk_interface": "virtio-scsi",
       "qemuargs": [
-        [ "-m", "{{ user `memory` }}M" ],
-        [ "-smp", "cpus={{ user `cpus` }}" ]
+        [
+          "-netdev",
+          "user,id=mynet0,smb={{ user `pwd`}}/.vagrant/machines/default/cache"
+        ],
+        [
+          "-device",
+          "virtio-net,netdev=mynet0"
+        ]
       ]
     },
     {

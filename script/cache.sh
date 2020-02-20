@@ -15,6 +15,12 @@ if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]] && ! mountpoint "/tmp/vagrant-cache"
     mount -t vboxsf -o rw,nodev,uid=${SSH_USER},gid=${SSH_USER} vagrant-cache /tmp/vagrant-cache || true
 fi
 
+if [[ $PACKER_BUILDER_TYPE =~ qemu ]] && ! mountpoint "/tmp/vagrant-cache" 2>/dev/null; then
+    echo "==> Mounting virtfs folder qemu to /tmp/vagrant-cache"
+    mkdir -p /tmp/vagrant-cache
+    mount -t cifs -o rw,nodev,uid=${SSH_USER},gid=${SSH_USER} //10.0.2.4/qemu /tmp/vagrant-cache
+fi
+
 if mountpoint "/tmp/vagrant-cache"; then
     echo "==> Configuring cache"
     mkdir -p /tmp/vagrant-cache/dnf
