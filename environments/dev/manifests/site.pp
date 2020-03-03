@@ -177,6 +177,8 @@ package { [
     'samba',
     'puppet-bolt',
     'backintime-qt',
+    'duplicity',
+    'deja-dup',
     'cool-retro-term',
 
     # For recording the screen via 'ffmpeg x11grab'

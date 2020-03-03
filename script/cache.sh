@@ -16,9 +16,9 @@ if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]] && ! mountpoint "/tmp/vagrant-cache"
 fi
 
 if [[ $PACKER_BUILDER_TYPE =~ qemu ]] && ! mountpoint "/tmp/vagrant-cache" 2>/dev/null; then
-    echo "==> Mounting virtfs folder qemu to /tmp/vagrant-cache"
+    echo "==> Mounting smb folder qemu to /tmp/vagrant-cache"
     mkdir -p /tmp/vagrant-cache
-    mount -t cifs -o rw,nodev,uid=${SSH_USER},gid=${SSH_USER} //10.0.2.4/qemu /tmp/vagrant-cache
+    mount -t cifs -o rw,nodev,uid=${SSH_USER},gid=${SSH_USER},guest //10.0.2.4/qemu /tmp/vagrant-cache
 fi
 
 if mountpoint "/tmp/vagrant-cache"; then

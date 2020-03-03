@@ -132,11 +132,13 @@
       "disk_cache": "unsafe",
       "disk_discard": "unmap",
       "disk_detect_zeroes": "unmap",
-      "disk_interface": "virtio-scsi",
+      "disk_interface": "virtio",
       "qemuargs": [
         [
           "-netdev",
-          "user,id=mynet0,smb={{ user `pwd`}}/.vagrant/machines/default/cache"
+          "user,id=mynet0,hostfwd=tcp::{{ .SSHHostPort }}-:22,",
+          "smb={{ user `pwd`}}/.vagrant/machines/default/cache,",
+          "smbserver=10.0.2.4"
         ],
         [
           "-device",
