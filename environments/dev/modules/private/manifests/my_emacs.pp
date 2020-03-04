@@ -24,7 +24,7 @@ class private::my_emacs {
 
   exec { 'spacemacs install':
     path        => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
-    command     => 'pkill emacs ; emacs --daemon ; pkill emacs; true',
+    command     => 'pkill emacs ; emacs --daemon ; pkill emacs; pkill gpg-agent; sleep 5s; true',
     provider    => 'shell',
     environment => [ 'HOME=/home/vagrant' ],
     user        => 'vagrant',
