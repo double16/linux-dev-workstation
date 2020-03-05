@@ -253,6 +253,7 @@
       },
       {
         "type": "docker-push",
+        "keep_input_artifact": true,
         "only": [ "docker" ]
       },
       {
