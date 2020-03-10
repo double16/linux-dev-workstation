@@ -6,4 +6,4 @@ set -eux
 # to add some additional commands for your environment
 #
 # For example:
-# yum install -y curl wget git tmux firefox xvfb
+# dnf install -y curl wget git tmux firefox xvfb

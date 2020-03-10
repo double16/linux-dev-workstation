@@ -214,7 +214,7 @@ export EDITOR="vim"',
     logoutput => true,
   }
   ~>exec { 'save cache for youcompleteme':
-    command     => "/bin/rm -f \"${ycm_cache_file}\" ; /bin/ls \"${plugin_path}\" | grep -iF \"${plugin_name}\" | xargs -r /usr/bin/tar czf \"${ycm_cache_file}\" -C \"${plugin_path}\"",
+    command     => "/bin/rm -f \"${ycm_cache_file}\" ; /bin/ls \"${plugin_path}\" | grep -iF \"youcompleteme\" | xargs -r /usr/bin/tar czf \"${ycm_cache_file}\" -C \"${plugin_path}\"",
     refreshonly => true,
     require     => File[$plugin_cache_path],
     onlyif      => '/usr/bin/mountpoint /tmp/vagrant-cache',

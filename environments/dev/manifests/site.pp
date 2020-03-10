@@ -222,8 +222,10 @@ unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
     command => '/usr/bin/rpm --import https://www.virtualbox.org/download/oracle_vbox.asc',
     unless  => '/usr/bin/test -f /etc/yum.repos.d/virtualbox.repo',
   }
+  # Fedora packages depend on VirtualBox-X.Y, probably when it is the hypervisor, for X.org drivers. We need to use
+  # the same version as Fedora deps.
   ->class { '::virtualbox':
-    version => '6.1',
+    version => '5.2',
   }
   ->User<| title == 'vagrant' |> { groups +> 'vboxusers' }
 
