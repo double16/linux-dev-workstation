@@ -7,8 +7,8 @@ zsh:
     sudo tmux vscode
 hashistack:
   packer:
-    version: 1.4.5
-    checksum: 30da8dab9c526a6d15b037e2234f6f12cf3accfad77eb2c130738ec1a54cab6d
+    version: 1.5.5
+    checksum: 07f28a1a033f4bcd378a109ec1df6742ac604e7b122d0316d2cddb3c2f6c24d1
   vault:
     version: 1.2.2
     checksum: 7725b35d9ca8be3668abe63481f0731ca4730509419b4eb29fa0b0baa4798458
@@ -16,17 +16,17 @@ hashistack:
     version: 1.5.3
     checksum: b402e1a0db26adb9638a9e85c6c672acd137df233e8c69f26180f2e2fd6f4cbc
   terraform:
-    version: 0.12.21
-    checksum: ca0d0796c79d14ee73a3d45649dab5e531f0768ee98da71b31e423e3278e9aa9
+    version: 0.12.24
+    checksum: 602d2529aafdaa0f605c06adb7c72cfb585d8aa19b3f4d8d189b42589e27bf11
   nomad:
-    version: 0.10.4
-    checksum: 7b12ff24c9ff592978d4c5b5ea06f60bb0aa679055a356b7898e480f0ba63d63
+    version: 0.10.5
+    checksum: 970eae241a1fec77002baccfa768bab4b7b4a352000b9615d4246498cd830838
 sdkman:
 - package: groovy
   version: 2.4.19
   default: true
 - package: groovy
-  version: 2.5.9
+  version: 2.5.10
   default: false
 - package: groovyserv
   version: 1.2.0
@@ -38,16 +38,16 @@ sdkman:
   version: 5.6.4
   default: false
 - package: kotlin
-  version: 1.3.70
+  version: 1.3.71
   default: true
 - package: kscript
   version: 2.8.0
   default: true
 - package: micronaut
-  version: 1.2.10
+  version: 1.2.11
   default: true
 - package: springboot
-  version: 2.2.5.RELEASE
+  version: 2.2.6.RELEASE
   default: true
 - package: java
   version: 8.0.242-zulu
@@ -71,7 +71,7 @@ pdk:
   version: 1.17.0.0
   checksum: e7f8019a8fabb74e1187a4db4fd98121271c5412bf43ae0d47b6774e4a238503
 docker:
-  version: 19.03.7
+  version: 19.03.8
 k8s:
   version: 1.12
 k3s:
@@ -81,8 +81,8 @@ minikube:
   pin: true
   checksum: 3c84872ffa5ddbce472062fb548f9b3a25af72587d35243e12f18d86aaa6a085
 helm:
-  version: 3.1.1
-  checksum: cdd7ad304e2615c583dde0ffb0cb38fc1336cd7ce8ff3b5f237434dcadb28c98
+  version: 3.1.2
+  checksum: e6be589df85076108c33e12e60cfb85dcd82c5d756a6f6ebc8de0ee505c9fd4c
 kustomize:
   version: 3.2.0
   checksum: 7db89e32575d81393d5d84f0dc6cbe444457e61ce71af06c6e6b7b6718299c22
@@ -94,9 +94,6 @@ vagrant:
 dockstation:
   version: 1.5.1
   checksum: a2624cddc0a99c3c025a4a852f476774a65416b99d095bc06b554f51dd635deb
-rstudio:
-  version: 1.2.5019
-  checksum: 06ed9379dca669d41bdb95de881465846fcd45504c09b6fac688413a15201af4
 slack:
   version: 4.1.1-0.1
   checksum: 21123465bd4be96b9e24b0b23643da30933b5d7e537eca3a893ab0d21ce13e4f
@@ -113,9 +110,9 @@ node:
   - tern
 ruby:
   versions:
-  - version: 2.5.7
+  - version: 2.5.8
     global: true
-  - version: 2.4.9
+  - version: 2.4.10
   x_versions:
   - version: jruby-9.2.9.0
   - version: jruby-9.1.17.0
@@ -124,44 +121,44 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2019.3.3
+  version: 2019.3.4
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
-    version: 193.6015.53
-    updateid: '76799'
+    version: 193.6911.14
+    updateid: '80545'
   - name: AngularJS
     type: zip
-    version: 193.6494.17
-    updateid: '77552'
+    version: 193.6911.12
+    updateid: '80426'
   - name: org.jetbrains.plugins.ruby
     type: zip
     version: 193.6494.35
     updateid: '77893'
   - name: com.intellij.lang.puppet
     type: zip
-    version: 193.6494.47
-    updateid: '77991'
+    version: 193.6911.14
+    updateid: '80572'
   - name: NodeJS
     type: zip
-    version: 193.6494.7
-    updateid: '77043'
+    version: 193.6911.14
+    updateid: '80548'
   - name: BashSupport
     type: zip
     version: 1.7.16.192
     updateid: '79198'
   - name: Docker
     type: zip
-    version: 193.6494.1
-    updateid: '76689'
+    version: 193.6911.14
+    updateid: '80566'
   - name: mobi.hsz.idea.gitignore
     type: zip
     version: 3.2.3.193
     updateid: '73294'
   - name: com.jetbrains.plugins.ini4idea
     type: zip
-    version: 193.6015.53
-    updateid: '76810'
+    version: 193.6911.14
+    updateid: '80569'
   - name: org.intellij.plugins.hcl
     type: zip
     version: 0.7.7
@@ -172,16 +169,16 @@ idea:
     updateid: '79857'
   - name: com.jetbrains.plugins.jade
     type: zip
-    version: 193.6015.53
-    updateid: '76828'
+    version: 193.6911.14
+    updateid: '80542'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.30.40
-    updateid: '79599'
+    version: 0.30.50
+    updateid: '82300'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.3.70-release-IJ2019.3-1
-    updateid: '79796'
+    version: 1.3.71-release-IJ2019.3-1
+    updateid: '81505'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: 8.1.115
@@ -192,12 +189,12 @@ idea:
     updateid: '75041'
   - name: R4Intellij
     type: zip
-    version: 193.5233.555
-    updateid: '79821'
+    version: 193.5233.652
+    updateid: '82595'
   - name: Karma
     type: zip
-    version: 193.6494.9
-    updateid: '77289'
+    version: 193.6911.14
+    updateid: '80543'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.2
@@ -216,8 +213,8 @@ idea:
     updateid: 45070
   - name: com.intellij.ideolog
     type: zip
-    version: 201.0.20.0
-    updateid: '79763'
+    version: 201.0.22.0
+    updateid: '82330'
   - name: org.jetbrains.plugins.vagrant
     type: zip
     version: 193.6015.53
@@ -236,8 +233,8 @@ idea:
     version: 1.0.120
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '77989'
-    version: 193.6494.47
+    updateid: '81788'
+    version: 193.6911.31
   - name: color.scheme.Monokai Pro Spectrum
     type: jar
     updateid: '74881'
@@ -248,8 +245,8 @@ idea:
     version: 4.11.5
   - name: org.jetbrains.plugins.sass
     type: zip
-    updateid: '79847'
-    version: 193.6494.61
-  checksum: a71b367f36e528bed8be170a7676372b58b2df1bc572f611194efa4104c4b0d6
-  build: 193.6494.35
-  checksum-ce: 2f3f054192856c312e4854971afc84d93566cf5bd68d301bd69992eb8c413a97
+    updateid: '81623'
+    version: 193.6911.30
+  checksum: 6f50e47059632beace5ab2c17d505a458570347fa8c3df5f143b01e8bf55bc7a
+  build: 193.6911.18
+  checksum-ce: a7710081cc95de3d57856eb2b3a5f1478fe201dbd4b7eef263559b9f549157cf

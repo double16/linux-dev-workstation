@@ -213,20 +213,6 @@ def k3s(yaml)
     end
 end
 
-def rstudio(yaml)
-    latest = latest_github_tag('rstudio', 'rstudio', /^v1[.]2[.][0-9.]+$/)
-    return if latest.nil?
-    if yaml['rstudio']['pin']
-        latest = yaml['rstudio']['version']
-    end
-    if latest != yaml['rstudio']['version'] or !yaml['rstudio'].has_key?('checksum')
-        puts "Found newer version rstudio #{latest}"
-        download_url = "https://download1.rstudio.org/desktop/fedora28/x86_64/rstudio-#{latest}-x86_64.rpm"
-        download_file = ".vagrant/machines/default/cache/rstudio-#{latest}-x86_64.rpm"
-        update_single_archive(latest, download_url, download_file, yaml['rstudio'])
-    end
-end
-
 def containerdiff(yaml)
     latest = latest_github_tag('GoogleContainerTools', 'container-diff')
     return if latest.nil?
@@ -389,7 +375,6 @@ pdk(yaml)
 slack(yaml)
 docker(yaml)
 k3s(yaml)
-rstudio(yaml)
 containerdiff(yaml)
 kustomize(yaml)
 minikube(yaml)

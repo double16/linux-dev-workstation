@@ -109,7 +109,7 @@ exec { 'graphical runlevel':
   require => Yum::Group['Xfce Desktop'],
 }
 
-package { ['python3', 'python3-pip']:
+package { ['python3', 'python3-pip', 'python3-virtualenv']:
   ensure => present,
 }
 ->file { '/etc/xdg':
@@ -180,6 +180,7 @@ package { [
     'duplicity',
     'deja-dup',
     'cool-retro-term',
+    'snapd',
 
     # For recording the screen via 'ffmpeg x11grab'
     'ffmpeg',
