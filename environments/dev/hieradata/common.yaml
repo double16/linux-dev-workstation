@@ -51,7 +51,7 @@ sdkman:
   default: true
 - package: java
   version: 8.0.242-zulu
-  default: true
+  default: false
 - package: java
   version: 9.0.4-open
   default: false
@@ -60,7 +60,7 @@ sdkman:
   default: false
 - package: java
   version: 11.0.6-open
-  default: false
+  default: true
 - package: lazybones
   version: 0.8.3
   default: true
