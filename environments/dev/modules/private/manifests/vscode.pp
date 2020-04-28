@@ -117,7 +117,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'octref.vetur',
     'formulahendry.auto-close-tag',
     'rbbit.typescript-hero',
-    'jpogran.puppet-vscode',
+    'puppet.puppet-vscode',
     'mrmlnc.vscode-json5',
     'wholroyd.HCL',
     'mauve.terraform',

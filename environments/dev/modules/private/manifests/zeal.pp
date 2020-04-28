@@ -105,7 +105,7 @@ class private::zeal {
   ].each |$e| {
     $feed = $e[0]
     $target_dirname = $e[1]
-    $filename = split($feed, '/')[-1]
+    $filename = "${strftime('%Y-%m')}-${split($feed, '/')[-1]}"
     archive { "/tmp/vagrant-cache/zeal-docsets/${filename}":
         ensure        => present,
         extract       => true,

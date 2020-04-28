@@ -24,7 +24,7 @@ def sha256(file)
     end
 end
 
-def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/, filter = lambda { |v| true })
+def latest_github_tag(owner, repo, version_match = /^v([0-9.]+)$/, filter = lambda { |v| true })
     uri_str = "https://api.github.com/repos/#{owner}/#{repo}/releases"
     tags = JSON.parse(Net::HTTP.get(URI(uri_str)))
 
@@ -35,7 +35,7 @@ def latest_github_tag(owner, repo, version_match = /^v[0-9.]+$/, filter = lambda
 
     tags.collect { |e| e['tag_name'] }
         .select { |e| e.match(version_match) }
-        .collect { |e| e[1..-1] }
+        .collect { |e| e.match(version_match)[1] }
         .sort { |a,b| Gem::Version.new(a) <=> Gem::Version.new(b) }
         .reverse
         .select { |v| filter.call(v) }
@@ -191,7 +191,7 @@ end
 
 def docker(yaml)
     unless yaml['docker']['pin']
-        latest = latest_github_tag('docker', 'docker-ce', /^v[0-9.]+$/, lambda { |v|
+        latest = latest_github_tag('docker', 'docker-ce', /^v([0-9.]+)$/, lambda { |v|
             docker_uri = URI("https://download.docker.com/linux/static/stable/x86_64/docker-#{v}.tgz")
             resp = Net::HTTP.start(docker_uri.host, docker_uri.port, :use_ssl => true) { |http|
                 http.head(docker_uri.path)
@@ -228,15 +228,15 @@ def containerdiff(yaml)
 end
 
 def kustomize(yaml)
-    latest = latest_github_tag('kubernetes-sigs', 'kustomize')
+    latest = latest_github_tag('kubernetes-sigs', 'kustomize', /^kustomize\/v([0-9.]+)$/)
     return if latest.nil?
     if yaml['kustomize']['pin']
         latest = yaml['kustomize']['version']
     end
     if latest != yaml['kustomize']['version'] or !yaml['kustomize'].has_key?('checksum')
         puts "Found newer version kustomize #{latest}"
-        download_url = "https://github.com/kubernetes-sigs/kustomize/releases/download/v#{latest}/kustomize_#{latest}_linux_amd64"
-        download_file = ".vagrant/machines/default/cache/kustomize-#{latest}"
+        download_url = "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv#{latest}/kustomize_v#{latest}_linux_amd64.tar.gz"
+        download_file = ".vagrant/machines/default/cache/kustomize_v#{latest}_linux_amd64.tar.gz"
         update_single_archive(latest, download_url, download_file, yaml['kustomize'])
     end
 end
