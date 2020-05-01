@@ -6,7 +6,7 @@ class private::my_vagrant {
 
   $vagrant_plugins = [
     'vagrant-cachier',
-    'vagrant-aws',
+    # 'vagrant-aws', # dep ovirt-engine-sdk needs Ruby >= 2.5.0, vagrant 2.2.x uses Ruby 2.4.x
     'vagrant-azure',
     #'vagrant-google', # deps need Ruby >= 2.5.0, vagrant 2.2.x uses Ruby 2.4.x
     #'vagrant-joyent',

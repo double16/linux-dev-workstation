@@ -38,7 +38,19 @@ timeout 30 sh -c "until nc -zv localhost 6443 >/dev/null 2>&1; do echo .; sleep 
   }
 
   unless $::virtual == 'docker' {
-    exec { '/opt/k3s/install.sh':
+
+    package { 'container-selinux':
+      ensure => present,
+    }
+    # ?? Error: /Stage[main]/Private::K3s/Package[selinux-policy-base]: Could not evaluate: no implicit conversion of Array into Hash
+    # ->package { 'selinux-policy-base':
+    #   ensure => present,
+    # }
+    ->package { 'k3s-selinux':
+      provider => 'rpm',
+      source   => 'https://rpm.rancher.io/k3s-selinux-0.1.1-rc1.el7.noarch.rpm',
+    }
+    ->exec { '/opt/k3s/install.sh':
       environment => ["INSTALL_K3S_VERSION=v${k3s_version}"],
       creates     => '/etc/systemd/system/k3s.service',
       require     => [
