@@ -15,14 +15,12 @@ jobs:
       # `docker save` to cache our images.
       - restore_cache:
           keys:
-            - v5-dockerimage-{{ .Branch }}-{{ checksum "packer.json" }}}
-            - v5-dockerimage-{{ .Branch }}-
+            - v5-dockerimage-{{ checksum "packer.json" }}}
             - v5-dockerimage-
 
       - restore_cache:
           keys:
-            - v4-vagrant-{{ .Branch }}-{{ .Revision }}
-            - v4-vagrant-{{ .Branch }}-
+            - v4-vagrant-{{ checksum "environments/dev/hieradata/common.yaml" }}}
             - v4-vagrant-
 
       - run:
@@ -31,6 +29,17 @@ jobs:
             set -x
             if [[ -s /home/linux-dev-workstation/cache/docker/image.tar.gz ]]; then
               zcat /home/linux-dev-workstation/cache/docker/image.tar.gz | docker load
+            fi
+
+      - run:
+          name: Restore vagrant-cache
+          no_output_timeout: 30m
+          command: |
+            docker create --name vagrant-cache -v /home/linux-dev-workstation/.vagrant/machines/default/cache:/cache alpine:latest
+            if [[ -d /home/linux-dev-workstation/.vagrant/machines/default/cache ]]; then
+              # Keep the cache from growing without bound
+              find /home/linux-dev-workstation/.vagrant/machines/default/cache -type f -mtime +60 -delete
+              docker cp /home/linux-dev-workstation/.vagrant/machines/default/cache/. vagrant-cache:/cache
             fi
 
       - run:
@@ -52,6 +61,14 @@ jobs:
             /usr/bin/packer build -color=false -only=docker -var version=${CIRCLE_TAG:-latest} ${CIRCLE_TAG:+-var no_release=false} packer-circleci.json
 
       - run:
+          name: Retrieve vagrant-cache
+          no_output_timeout: 30m
+          command: |
+            mkdir -p /home/linux-dev-workstation/.vagrant/machines/default/cache
+            docker cp vagrant-cache:/cache/. /home/linux-dev-workstation/.vagrant/machines/default/cache
+            docker rm vagrant-cache
+
+      - run:
           name: Build Docker Public Image Cache
           no_output_timeout: 30m
           command: |
@@ -60,12 +77,12 @@ jobs:
             docker images --format '{{.Repository}}:{{.Tag}}' | grep -v "linux-dev-workstation\|:<none>" | xargs -r docker save | gzip -9 > /home/linux-dev-workstation/cache/docker/image.tar.gz
 
       - save_cache:
-          key: v5-dockerimage-{{ .Branch }}-{{ checksum "packer.json" }}
+          key: v5-dockerimage-{{ checksum "packer.json" }}
           paths:
             - /home/linux-dev-workstation/cache/docker
 
       - save_cache:
-          key: v4-vagrant-{{ .Branch }}-{{ .Revision }}
+          key: v4-vagrant-{{ checksum "environments/dev/hieradata/common.yaml" }}}
           paths:
             - /home/linux-dev-workstation/.vagrant/machines/default/cache
 
