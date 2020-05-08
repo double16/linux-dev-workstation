@@ -129,24 +129,24 @@ idea:
     updateid: '83937'
   - name: AngularJS
     type: zip
-    version: 201.7223.94
-    updateid: '85273'
+    version: 201.7223.97
+    updateid: '85507'
   - name: org.jetbrains.plugins.ruby
     type: zip
     version: 201.7223.91
     updateid: '85261'
   - name: com.intellij.lang.puppet
     type: zip
-    version: 201.7223.58
-    updateid: '84904'
+    version: 201.7223.97
+    updateid: '85502'
   - name: NodeJS
     type: zip
-    version: 201.7223.64
-    updateid: '85003'
+    version: 201.7223.97
+    updateid: '85501'
   - name: BashSupport
     type: zip
-    version: 1.7.17.201
-    updateid: '83805'
+    version: 1.7.18.201
+    updateid: '85527'
   - name: Docker
     type: zip
     version: 201.7223.58
@@ -169,12 +169,12 @@ idea:
     updateid: '84218'
   - name: com.jetbrains.plugins.jade
     type: zip
-    version: 201.7223.58
-    updateid: '84895'
+    version: 201.7223.97
+    updateid: '85497'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.30.59.1
-    updateid: '84608'
+    version: 0.30.70
+    updateid: '85425'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.3.72-release-IJ2020.1-1
@@ -217,8 +217,8 @@ idea:
     updateid: '82330'
   - name: org.jetbrains.plugins.vagrant
     type: zip
-    version: 201.7223.58
-    updateid: '84896'
+    version: 201.7223.97
+    updateid: '85503'
   - name: VisualVMLauncher
     type: jar
     updateid: '76975'

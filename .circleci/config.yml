@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /home/linux-dev-workstation
     docker:
-      - image: pdouble16/packer-build-base:201906.1
+      - image: pdouble16/packer-build-base:202005.1
         user: root
 
     steps:
@@ -68,3 +68,15 @@ jobs:
           key: v4-vagrant-{{ .Branch }}-{{ .Revision }}
           paths:
             - /home/linux-dev-workstation/.vagrant/machines/default/cache
+
+workflows:
+  version: 2
+  untagged-build:
+    jobs:
+      - build
+  tagged-build:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /^[0-9][0-9][0-9][0-9][0-9][0-9][.].*/

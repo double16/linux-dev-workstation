@@ -219,23 +219,8 @@ class { '::git':
 ->Exec<| title == 'vboxdrv' |>
 
 unless $::virtual == 'docker' or $::virtual =~ /xen.*/ {
-  exec { 'VirtualBox gpg key':
-    command => '/usr/bin/rpm --import https://www.virtualbox.org/download/oracle_vbox.asc',
-    unless  => '/usr/bin/test -f /etc/yum.repos.d/virtualbox.repo',
-  }
-  # Fedora packages depend on VirtualBox-X.Y, probably when it is the hypervisor, for X.org drivers. We need to use
-  # the same version as Fedora deps.
-  ->class { '::virtualbox':
-    version => '5.2',
-  }
+  package { 'VirtualBox': }
   ->User<| title == 'vagrant' |> { groups +> 'vboxusers' }
-
-  exec { 'vboxdrv.sh incorrect egrep':
-    command => "/usr/bin/sed -i 's:/bin/false[)]:/bin/false[)]:' /usr/lib/virtualbox/vboxdrv.sh",
-    onlyif  => '/usr/bin/grep -qF "/bin/false)" /usr/lib/virtualbox/vboxdrv.sh',
-    require => Class['::virtualbox'],
-  }
-  ->Exec<| title == 'vboxdrv' |>
 }
 
 include ::private::my_vim
