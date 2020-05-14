@@ -16,8 +16,8 @@ hashistack:
     version: 1.5.3
     checksum: b402e1a0db26adb9638a9e85c6c672acd137df233e8c69f26180f2e2fd6f4cbc
   terraform:
-    version: 0.12.24
-    checksum: 602d2529aafdaa0f605c06adb7c72cfb585d8aa19b3f4d8d189b42589e27bf11
+    version: 0.12.25
+    checksum: e95daabd1985329f87e6d40ffe7b9b973ff0abc07a403f767e8658d64d733fb0
   nomad:
     version: 0.11.1
     checksum: 711e98b89ac4f5540bf3d6273379999f6c4141529531c262222e63ce491f5176
@@ -68,8 +68,8 @@ sdkman:
   version: 1.4.4
   default: true
 pdk:
-  version: 1.17.0.0
-  checksum: e7f8019a8fabb74e1187a4db4fd98121271c5412bf43ae0d47b6774e4a238503
+  version: 1.18.0.0
+  checksum: ac2d63f79ef6d1a377b57053e7232fa706efe679eb0973b1c4ce2e91dd082baa
 docker:
   version: 19.03.8
 k8s:
@@ -84,13 +84,13 @@ helm:
   version: 3.2.1
   checksum: '018f9908cb950701a5d59e757653a790c66d8eda288625dbb185354ca6f41f6b'
 kustomize:
-  version: 3.5.4
-  checksum: 5cdeb2af81090ad428e3a94b39779b3e477e2bc946be1fe28714d1ca28502f6a
+  version: 3.5.5
+  checksum: 23306e0c0fb24f5a9fea4c3b794bef39211c580e4cbaee9e21b9891cb52e73e7
 container-diff:
   version: 0.15.0
   checksum: 65b10a92ca1eb575037c012c6ab24ae6fe4a913ed86b38048781b17d7cf8021b
 vagrant:
-  version: 2.2.7
+  version: 2.2.9
 dockstation:
   version: 1.5.1
   checksum: a2624cddc0a99c3c025a4a852f476774a65416b99d095bc06b554f51dd635deb
@@ -129,8 +129,8 @@ idea:
     updateid: '83937'
   - name: AngularJS
     type: zip
-    version: 201.7223.97
-    updateid: '85507'
+    version: 201.7223.105
+    updateid: '86088'
   - name: org.jetbrains.plugins.ruby
     type: zip
     version: 201.7223.91
@@ -217,8 +217,8 @@ idea:
     updateid: '82330'
   - name: org.jetbrains.plugins.vagrant
     type: zip
-    version: 201.7223.97
-    updateid: '85503'
+    version: 201.7223.105
+    updateid: '86087'
   - name: VisualVMLauncher
     type: jar
     updateid: '76975'
