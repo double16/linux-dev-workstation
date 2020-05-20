@@ -40,6 +40,13 @@ class private::zeal {
     group  => 'vagrant',
   }
 
+  file { $conf:
+    ensure => present,
+    mode   => '0644',
+    owner  => 'vagrant',
+    group  => 'vagrant',
+  }
+
   ini_setting { 'Zeal dark mode':
     ensure  => $darkmode_ensure,
     path    => $conf,

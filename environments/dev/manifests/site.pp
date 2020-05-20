@@ -183,9 +183,6 @@ package { [
     'cifs-utils',
     'samba',
     'puppet-bolt',
-    'backintime-qt',
-    'duplicity',
-    'deja-dup',
     'cool-retro-term',
     'snapd',
 
@@ -261,6 +258,7 @@ include ::private::fb
 include ::private::my_emacs
 include ::private::zeal
 include ::private::zsh
+include ::private::backup
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,
@@ -338,17 +336,24 @@ file { '/home/vagrant/.config':
 
 file { '/home/vagrant/.config/git':
   ensure => directory,
+  owner  => 'vagrant',
+  group  => 'vagrant',
+  mode   => '0755',
 }
 
 file { '/home/vagrant/.config/git/ignore':
   ensure => file,
   source => 'puppet:///modules/private/gitignore',
+  owner  => 'vagrant',
+  group  => 'vagrant',
+  mode   => '0644',
 }
 
 file { '/home/vagrant/Workspace':
   ensure => directory,
   owner  => 'vagrant',
   group  => 'vagrant',
+  mode   => '0755',
 }
 
 $user_shell = pick($::shell, lookup('shell::default'), 'bash')

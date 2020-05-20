@@ -200,6 +200,12 @@ StartupNotify=true
       group   => 'vagrant',
       require => File[$colorsdir],
     }
+    ->file { "${colorsdir}/Solarized Dark.icls":
+      ensure => present,
+      owner  => 'vagrant',
+      group  => 'vagrant',
+      mode   => '0644',
+    }
 
     archive { "${colorsdir}/Solarized Light.icls":
       ensure  => present,
@@ -208,6 +214,12 @@ StartupNotify=true
       user    => 'vagrant',
       group   => 'vagrant',
       require => File[$colorsdir],
+    }
+    ->file { "${colorsdir}/Solarized Light.icls":
+      ensure => present,
+      owner  => 'vagrant',
+      group  => 'vagrant',
+      mode   => '0644',
     }
 
     $global_color_scheme = pick($::theme, lookup('theme::default')) ? {
