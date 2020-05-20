@@ -12,6 +12,7 @@ configs        = YAML.load_file("#{current_dir}/config.yaml")
 default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'][ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use']])
 monitor_count  = vagrant_config['monitors']
+timezone       = vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600)
 
 def server_port
   server = TCPServer.new('127.0.0.1', 0)
@@ -72,10 +73,19 @@ Vagrant.configure("2") do |config|
   configure_rdp_tunnel(config)
 
   config.vm.provider :docker do |docker, override|
+    unique_id_dir = '.vagrant/linux-dev-workstation/default/docker'
+    FileUtils.mkdir_p unique_id_dir
+    unique_id_file = "#{unique_id_dir}/unique_id"
+    unique_id = File.read(unique_id_file).chomp if File.exist? unique_id_file
+    unless unique_id
+      unique_id = (1000 + Random.rand(8999)).to_s
+      write_bytes = File.write(unique_id_file, unique_id)
+    end
+
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
-    docker.image = "pdouble16/fedora-ssh:31"
-    docker.name = "linux-dev-workstation"
+    docker.image = "pdouble16/fedora-ssh:31.1.0"
+    docker.name = "linux-dev-workstation#{unique_id}"
     docker.remains_running = true
     docker.has_ssh = true
     docker.env = {
@@ -85,8 +95,9 @@ Vagrant.configure("2") do |config|
       :LANGUAGE => 'en_US:en',
       :LC_ALL   => 'en_US.utf8',
       :SSH_INHERIT_ENVIRONMENT => 'true',
+      :SYSTEM_TIMEZONE => timezone,
     }
-    override.ssh.proxy_command = "docker run -i --rm --name linux-dev-workstation-tunnel --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
+    override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation#{unique_id} alpine/socat - TCP:linux-dev-workstation#{unique_id}:22,retry=3,interval=2"
   end
 
   if Vagrant.has_plugin?("vagrant-cachier")
@@ -203,6 +214,18 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "bootstrap", type: "shell", env: {"HTTP_PROXY" => vagrant_config['proxy_url'] || ENV["HTTP_PROXY"], "HTTPS_PROXY" => vagrant_config['proxy_url'] || ENV["HTTPS_PROXY"], "NO_PROXY" => vagrant_config['proxy_excludes'] || ENV["NO_PROXY"], "YUM_PROXY" => ENV["YUM_PROXY"] }, inline: <<-SHELL
 
+    [[ -f "/etc/supervisord.conf" ]] && grep -q 'rpcinterface' "/etc/supervisord.conf" || (
+        cat >> "/etc/supervisord.conf" <<EOF
+[unix_http_server]
+file=/run/supervisord.sock
+[supervisorctl]
+serverurl=unix:///run/supervisord.sock
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+EOF
+        pkill -HUP supervisord
+    )
+
     if mountpoint /tmp/vagrant-cache 2>&1; then
       mkdir -p /tmp/vagrant-cache/dnf
       touch /tmp/vagrant-cache/dnf/works
@@ -238,10 +261,13 @@ Vagrant.configure("2") do |config|
     # VB 5: grep -q "exclude=kernel" /etc/dnf/dnf.conf || echo "exclude=kernel*" >> /etc/dnf/dnf.conf
 
     locale -a | grep -qi en_US || (
-        dnf install -y glibc-langpack-en
-        localedef -i en_US -f utf8 en_US.utf8
+        dnf reinstall -y glibc-common
+        dnf install -y glibc-locale-source glibc-all-langpacks
+        localedef -f UTF-8 -i en_US en_US.utf8
         echo "LANG=en_US.utf8" > /etc/locale.conf
-        echo "LANG=en_US.utf8" > /etc/sysconfig/i18n
+        echo "LANGUAGE=en_US:en" >> /etc/locale.conf
+        echo "LC_ALL=en_US.utf8" >> /etc/locale.conf
+        cp /etc/locale.conf /etc/sysconfig/i18n
     )
 
     [ -f /var/lib/vagrant-dnf-update ] || (
@@ -251,7 +277,7 @@ Vagrant.configure("2") do |config|
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
       rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-30.noarch.rpm
-      dnf install -y puppet-agent-6.10.1-1.fc30.x86_64
+      dnf install -y puppet-agent-6.15.0-1.fc30.x86_64
       mkdir -p /etc/puppetlabs/facter/facts.d
     )
   SHELL
@@ -275,7 +301,7 @@ Vagrant.configure("2") do |config|
       "host_username" => vagrant_config['username'] || ENV['USER'] || ENV['USERNAME'] || 'vagrant',
       "user_name" => vagrant_config['user_name'] || `git config --get user.name 2>/dev/null`.chomp,
       "user_email" => vagrant_config['user_email'] || `git config --get user.email 2>/dev/null`.chomp,
-      "timezone" => vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600),
+      "timezone" => timezone,
       "theme" => vagrant_config['theme'],
       "shell" => vagrant_config['shell'],
       "native_gui" => vagrant_config['native_gui'],

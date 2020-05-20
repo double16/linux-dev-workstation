@@ -6,6 +6,12 @@ class { '::private::security':
   stage => 'pre',
 }
 
+if $::virtual == 'docker' {
+  Service {
+    provider => 'supervisor',
+  }
+}
+
 include ::augeas
 include ::private::proxy
 
@@ -23,8 +29,10 @@ package { ['cronie', 'cronie-anacron', 'crontabs']: }
 ->Cron<| |>
 
 # Initial setup prompts for license acceptance
-service { ['initial-setup', 'initial-setup-text', 'initial-setup-graphical']:
-  enable => false,
+if $::virtual != 'docker' {
+  service { ['initial-setup', 'initial-setup-text', 'initial-setup-graphical']:
+    enable => false,
+  }
 }
 
 if $::timezone {
@@ -156,7 +164,6 @@ package { [
     'java-1.8.0-openjdk-devel',
     'mlocate',
     'rsync',
-    'gparted',
     'lsof',
     'nmap-ncat',
     'socat',

@@ -15,16 +15,19 @@ if [ "$INSTALL_VAGRANT_KEY" = "true" ] || [ "$INSTALL_VAGRANT_KEY" = "1" ]; then
   if ! id -u $SSH_USER >/dev/null 2>&1; then
       echo "==> Creating ${SSH_USER}"
       /usr/sbin/groupadd $SSH_USER
-      /usr/sbin/groupadd docker
-      /usr/sbin/useradd $SSH_USER -g $SSH_USER -G wheel,docker
-      if [ -n "$SUDO_USER" -a "$SSH_USER" != "$SUDO_USER" -a "$SUDO_USER" != "root" ]; then
-        echo "==> Adding $SUDO_USER to group ${SSH_USER}"
-        /usr/sbin/usermod -a -G $SSH_USER $SUDO_USER
-      fi
+      /usr/sbin/useradd $SSH_USER -g $SSH_USER
+  fi
+  chown -R "${SSH_USER}:${SSH_USER}" "${SSH_USER_HOME}"
+
+  /usr/sbin/usermod -a -G wheel $SSH_USER
+
+  if [ -n "$SUDO_USER" -a "$SSH_USER" != "$SUDO_USER" -a "$SUDO_USER" != "root" ]; then
+    echo "==> Adding $SUDO_USER to group ${SSH_USER}"
+    /usr/sbin/usermod -a -G $SSH_USER $SUDO_USER
   fi
 
   echo "==> Giving ${SSH_USER} sudo powers"
-  echo "${SSH_USER}"|passwd --stdin $SSH_USER
+  echo "${SSH_USER}"|passwd --stdin $SSH_USER || true
   echo "${SSH_USER}        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 
   echo "==> Installing Vagrant SSH key into ${SSH_USER_HOME}/.ssh/authorized_keys"

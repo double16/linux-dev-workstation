@@ -33,10 +33,13 @@ sdkman:
   default: true
 - package: gradle
   version: 4.10.3
-  default: true
+  default: false
 - package: gradle
   version: 5.6.4
   default: false
+- package: gradle
+  version: 6.4.1
+  default: true
 - package: kotlin
   version: 1.3.72
   default: true

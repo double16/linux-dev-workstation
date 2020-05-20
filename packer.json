@@ -298,7 +298,7 @@
       "scripts": [
         "script/fix-slow-dns.sh",
         "script/dnf-config.sh",
-        "script/docker-systemd.sh",
+        "script/docker.sh",
         "script/cgroupv1.sh",
         "script/vagrant.sh",
         "script/sshd.sh",
@@ -369,7 +369,6 @@
       ],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
-        "script/docker-systemd.sh",
         "script/rdp.sh",
         "script/post-perm.sh",
         "script/cleanup.sh"

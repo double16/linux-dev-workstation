@@ -5,6 +5,7 @@ require 'yaml'
 require 'json'
 require 'socket'
 require 'base64'
+require 'fileutils'
 
 Vagrant.require_version ">= 2.1.3"
 
@@ -15,6 +16,7 @@ default_config = configs['configs'].fetch('default', Hash.new)
 vagrant_config = default_config.merge(configs['configs'].fetch(ENV['DEV_PROFILE'] ? ENV['DEV_PROFILE'] : configs['configs']['use'], Hash.new))
 monitor_count  = vagrant_config['monitors']
 readme         = "#{box_dir}/VAGRANTUP.md"
+timezone       = vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600)
 
 def server_port
   server = TCPServer.new('127.0.0.1', 0)
@@ -139,16 +141,26 @@ Find this file at #{readme}
   end
 
   config.vm.provider :docker do |docker, override|
-    docker.name = "linux-dev-workstation"
+    unique_id_dir = '.vagrant/linux-dev-workstation/default/docker'
+    FileUtils.mkdir_p unique_id_dir
+    unique_id_file = "#{unique_id_dir}/unique_id"
+    unique_id = File.read(unique_id_file).chomp if File.exist? unique_id_file
+    unless unique_id
+      unique_id = (1000 + Random.rand(8999)).to_s
+      write_bytes = File.write(unique_id_file, unique_id)
+    end
+
+    docker.name = "linux-dev-workstation#{unique_id}"
     docker.remains_running = true
     docker.has_ssh = true
     docker.env = {
       :SSH_USER => 'vagrant',
       :SSH_SUDO => 'ALL=(ALL) NOPASSWD:ALL',
-      :LANG     => 'en_US.UTF-8',
+      :LANG     => 'en_US.utf8',
       :LANGUAGE => 'en_US:en',
-      :LC_ALL   => 'en_US.UTF-8',
+      :LC_ALL   => 'en_US.utf8',
       :SSH_INHERIT_ENVIRONMENT => 'true',
+      :SYSTEM_TIMEZONE => timezone,
     }
 
     if Gem.win_platform?
@@ -159,7 +171,7 @@ Find this file at #{readme}
     end
 
     override.vm.network :forwarded_port, guest: 22, host: 2222, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-    override.ssh.proxy_command = "docker run -i --rm --name linux-dev-workstation-tunnel --link linux-dev-workstation alpine/socat - TCP:linux-dev-workstation:22,retry=3,interval=2"
+    override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation#{unique_id} alpine/socat - TCP:linux-dev-workstation#{unique_id}:22,retry=3,interval=2"
   end
 
   config.vm.provider :aws do |aws, override|
@@ -212,7 +224,7 @@ search_domain=#{vagrant_config['search_domain']}
 host_username=#{vagrant_config['username'] || ENV['USER'] || ENV['USERNAME'] || 'vagrant'}
 user_name=#{vagrant_config['user_name'] || `git config --get user.name 2>/dev/null`.chomp}
 user_email=#{vagrant_config['user_email'] || `git config --get user.email 2>/dev/null`.chomp}
-timezone=#{vagrant_config['timezone'] || sprintf("Etc/GMT%+d", Time.now.utc_offset / -3600)}
+timezone=#{timezone}
 theme=#{vagrant_config['theme']}
 shell=#{vagrant_config['shell']}
 native_gui=#{vagrant_config['native_gui']}

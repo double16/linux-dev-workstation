@@ -44,6 +44,13 @@ class private::rdp {
     enable => true,
   }
 
+  # Force Xorg section before Xvnc
+  file_line { 'Xorg over Xvnc':
+    path  => '/etc/xrdp/xrdp.ini',
+    line  => '[Xorg]',
+    match => '^\#\[Xorg\]',
+  }
+
   [
     [ 'name', 'Xorg' ],
     [ 'lib', 'libxup.so' ],
@@ -64,7 +71,7 @@ class private::rdp {
       section => 'Xorg',
       setting => $kv[0],
       value   => $kv[1],
-      require => [ Package['xrdp'], Package['xorgxrdp'] ],
+      require => [ Package['xrdp'], Package['xorgxrdp'], File_line['Xorg over Xvnc'] ],
       before  => [ Service['xrdp'], Service['xrdp-sesman'] ],
     }
   }
@@ -99,8 +106,8 @@ class private::rdp {
     group   => 'root',
     mode    => '0755',
     content => '#!/bin/sh
-if [[ -f ~centos/.ssh/authorized_keys ]]; then
-  cat ~vagrant/.ssh/authorized_keys ~centos/.ssh/authorized_keys | sort | uniq >> ~vagrant/.ssh/authorized_keys.next
+if [[ -f ~fedora/.ssh/authorized_keys ]]; then
+  cat ~vagrant/.ssh/authorized_keys ~fedora/.ssh/authorized_keys | sort | uniq >> ~vagrant/.ssh/authorized_keys.next
   chown vagrant:vagrant ~vagrant/.ssh/authorized_keys.next
   chmod 0600 ~vagrant/.ssh/authorized_keys.next
   mv ~vagrant/.ssh/authorized_keys.next ~vagrant/.ssh/authorized_keys
@@ -125,9 +132,6 @@ ExecStart=/usr/sbin/aws-vagrant-auth.sh
 WantedBy=multi-user.target
 ',
   }
-  ->service { 'aws-vagrant-auth':
-    enable => true,
-  }
 
   file { '/home/vagrant/.Xclients':
     ensure  => file,
@@ -146,6 +150,7 @@ exec xfce4-session
       group  => 'root',
       mode   => '0644',
       source => 'puppet:///modules/private/supervisord-xrdp.conf',
+      before => Service['xrdp'],
     }
     file { '/etc/supervisord.d/xrdp-sesman.conf': 
       ensure => file,
@@ -153,6 +158,12 @@ exec xfce4-session
       group  => 'root',
       mode   => '0644',
       source => 'puppet:///modules/private/supervisord-sesman.conf',
+      before => Service['xrdp-sesman'],
+    }
+  } else {
+    service { 'aws-vagrant-auth':
+      enable  => true,
+      require => File['/usr/lib/systemd/system/aws-vagrant-auth.service'],
     }
   }
 }

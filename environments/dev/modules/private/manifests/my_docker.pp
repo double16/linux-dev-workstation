@@ -117,7 +117,9 @@ class private::my_docker {
       source => 'https://raw.githubusercontent.com/moby/moby/52379fa76dee07ca038624d639d9e14f4fb719ff/hack/dind',
       mode   => '0755',
     }
-    group { 'docker': }
+    group { 'docker':
+      members => [ 'vagrant' ],
+    }
     user { 'docker':
       gid        => 'docker',
       managehome => false,

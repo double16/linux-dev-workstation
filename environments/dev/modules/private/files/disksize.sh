@@ -14,13 +14,13 @@ DEV=$(mount | grep ' on / ' | cut -f 1 -d ' ')
 FSTYPE=$(mount | grep ' on / ' | cut -f 5 -d ' ')
 
 if [ -z "$DEV" ] || [ ! -b "$DEV" ]; then
-    echo "Can't find device for root filesystem" >&2
-    exit 1
+    echo "Can't find device for root filesystem (you may need to resize the root filesystem yourself)" >&2
+    exit 0
 fi
 
 if [ -z "$FSTYPE" ] || ! grep -q "$FSTYPE" /proc/filesystems; then
-    echo "Can't find filesystem type for root filesystem" >&2
-    exit 1
+    echo "Can't find filesystem type for root filesystem (you may need to resize the root filesystem yourself)" >&2
+    exit 0
 fi
 case $FSTYPE in
   xfs)
