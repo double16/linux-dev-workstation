@@ -97,6 +97,7 @@ Vagrant.configure("2") do |config|
       :SSH_INHERIT_ENVIRONMENT => 'true',
       :SYSTEM_TIMEZONE => timezone,
     }
+    override.vm.network :forwarded_port, guest: 3389, host: 13389, host_ip: "localhost", id: "rdp", auto_correct: true
     override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation#{unique_id} alpine/socat - TCP:linux-dev-workstation#{unique_id}:22,retry=3,interval=2"
   end
 

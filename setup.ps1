@@ -6,6 +6,7 @@ if ($ChocoInstalled -eq $false) {
 }
 
 choco install -y git
+choco install -y rsync
 choco install -y vagrant
 choco install -y ruby
 choco install -y vnc-viewer

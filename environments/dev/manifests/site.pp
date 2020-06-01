@@ -6,12 +6,6 @@ class { '::private::security':
   stage => 'pre',
 }
 
-if $::virtual == 'docker' {
-  Service {
-    provider => 'supervisor',
-  }
-}
-
 include ::augeas
 include ::private::proxy
 
@@ -259,6 +253,10 @@ include ::private::my_emacs
 include ::private::zeal
 include ::private::zsh
 include ::private::backup
+
+if $::virtual == 'docker' {
+  include ::private::supervisord
+}
 
 file { '/etc/profile.d/java.sh':
   ensure  => file,

@@ -163,9 +163,13 @@ Find this file at #{readme}
       :SYSTEM_TIMEZONE => timezone,
     }
 
+    override.vm.network :forwarded_port, guest: 3389, host: 13389, host_ip: "localhost", id: "rdp", auto_correct: true
+
     if Gem.win_platform?
       # "Docker for Windows" translates volumes[] paths into Windows style paths
       docker.create_args = ['--privileged', '-v', '/var/run/docker.sock:/var/run/docker.sock']
+      # Docker Desktop 2.3.0.2 mounted volumes are not working
+      override.vm.allowed_synced_folder_types = [:rsync]
     else #if File.exist?('/var/run/docker.sock')
       docker.volumes = ['/var/run/docker.sock:/var/run/docker.sock']
     end

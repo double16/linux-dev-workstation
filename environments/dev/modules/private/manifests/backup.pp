@@ -18,4 +18,9 @@ class private::backup {
 
   package { [ 'duplicity', 'deja-dup' ]:
   }
+
+  # backintime needs this to mount via sshfs
+  exec { '/bin/chgrp vagrant /dev/fuse':
+    onlyif => '/bin/test -e /dev/fuse',
+  }
 }
