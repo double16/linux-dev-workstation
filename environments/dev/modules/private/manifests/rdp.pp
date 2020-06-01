@@ -10,6 +10,11 @@ class private::rdp {
     setting => 'autorun',
     value   => 'Xorg',
   }
+  ->file_line { 'Xorg over Xvnc':
+    path  => '/etc/xrdp/xrdp.ini',
+    line  => '[Xorg]',
+    match => '^\#\[Xorg\]',
+  }
   ->file_line { 'sesman fix Xorg path':
     path               => '/etc/xrdp/sesman.ini',
     line               => 'param=/usr/libexec/Xorg',
@@ -42,13 +47,6 @@ class private::rdp {
   }
   ->service { ['xrdp', 'xrdp-sesman']:
     enable => true,
-  }
-
-  # Force Xorg section before Xvnc
-  file_line { 'Xorg over Xvnc':
-    path  => '/etc/xrdp/xrdp.ini',
-    line  => '[Xorg]',
-    match => '^\#\[Xorg\]',
   }
 
   [
