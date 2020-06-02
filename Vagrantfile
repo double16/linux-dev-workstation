@@ -277,8 +277,8 @@ EOF
     )
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
-      rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-30.noarch.rpm
-      dnf install -y puppet-agent-6.15.0-1.fc30.x86_64
+      rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-31.noarch.rpm
+      dnf install -y puppet-agent-6.15.0-1.fc31.x86_64
       mkdir -p /etc/puppetlabs/facter/facts.d
     )
   SHELL

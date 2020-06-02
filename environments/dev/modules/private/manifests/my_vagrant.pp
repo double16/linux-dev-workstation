@@ -6,9 +6,9 @@ class private::my_vagrant {
 
   $vagrant_plugins = [
     'vagrant-cachier',
-    # 'vagrant-aws', # dep ovirt-engine-sdk needs Ruby >= 2.5.0, vagrant 2.2.x uses Ruby 2.4.x
+    'vagrant-aws',
     'vagrant-azure',
-    #'vagrant-google', # deps need Ruby >= 2.5.0, vagrant 2.2.x uses Ruby 2.4.x
+    'vagrant-google',
     #'vagrant-joyent',
     'vagrant-sshfs',
   ]
@@ -22,7 +22,7 @@ class private::my_vagrant {
 
   $vagrant_plugins_sum = sha256(join($vagrant_plugins + $vagrant_plugins_hypervisor, ','))
   $cache_file = "/tmp/vagrant-cache/vagrant-plugins-${vagrant_plugins_sum}.tgz"
-  $cache_dir = '/home/vagrant/.vagrant.d/gems/2.4.9'
+  $cache_dir = '/home/vagrant/.vagrant.d/gems/2.6.6'
 
   file { ['/home/vagrant/.vagrant.d', '/home/vagrant/.vagrant.d/gems', $cache_dir]:
     ensure  => directory,
