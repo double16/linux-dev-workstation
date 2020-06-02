@@ -46,7 +46,9 @@ jobs:
           name: docker.io login
           command: |
             set -e
-            docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}" docker.io
+            if [[ -n "${DOCKER_USERNAME}" ]]; then
+              docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}" docker.io
+            fi
 
       - run:
           name: Packer Build

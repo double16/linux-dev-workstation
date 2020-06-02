@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-set +H
+set +H -eu
 
 if [[ ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
   echo "==> Configuring supervisord for Docker"
@@ -16,6 +16,10 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 EOF
   fi
 
-  export ENABLE_SSHD_BOOTSTRAP=false ENABLE_SSHD_WRAPPER=false
-  pkill -HUP supervisord || (/usr/bin/supervisord --configuration=/etc/supervisord.conf &)
+  echo "==> Reloading supervisord"
+  if ! pkill -HUP supervisord; then
+    echo "==> Starting supervisord"
+    export ENABLE_SSHD_BOOTSTRAP=false ENABLE_SSHD_WRAPPER=false ENABLE_SUPERVISOR_STDOUT=false
+    nohup /usr/bin/supervisord --configuration=/etc/supervisord.conf &>/dev/null &
+  fi
 fi
