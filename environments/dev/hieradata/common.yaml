@@ -7,8 +7,8 @@ zsh:
     sudo tmux vscode
 hashistack:
   packer:
-    version: 1.5.5
-    checksum: 07f28a1a033f4bcd378a109ec1df6742ac604e7b122d0316d2cddb3c2f6c24d1
+    version: 1.5.6
+    checksum: 2abb95dc3a5fcfb9bf10ced8e0dd51d2a9e6582a1de1cab8ccec650101c1f9df
   vault:
     version: 1.2.2
     checksum: 7725b35d9ca8be3668abe63481f0731ca4730509419b4eb29fa0b0baa4798458
@@ -16,17 +16,17 @@ hashistack:
     version: 1.5.3
     checksum: b402e1a0db26adb9638a9e85c6c672acd137df233e8c69f26180f2e2fd6f4cbc
   terraform:
-    version: 0.12.25
-    checksum: e95daabd1985329f87e6d40ffe7b9b973ff0abc07a403f767e8658d64d733fb0
+    version: 0.12.26
+    checksum: 607bc802b1c6c2a5e62cc48640f38aaa64bef1501b46f0ae4829feb51594b257
   nomad:
-    version: 0.11.1
-    checksum: 711e98b89ac4f5540bf3d6273379999f6c4141529531c262222e63ce491f5176
+    version: 0.11.2
+    checksum: 0c190d3cca12b75645e946e49207bf62bff8e0d8f52eee43dc059dbb8814da99
 sdkman:
 - package: groovy
   version: 2.4.19
   default: true
 - package: groovy
-  version: 2.5.11
+  version: 2.5.12
   default: false
 - package: groovyserv
   version: 1.2.0
@@ -74,7 +74,7 @@ pdk:
   version: 1.18.0.0
   checksum: ac2d63f79ef6d1a377b57053e7232fa706efe679eb0973b1c4ce2e91dd082baa
 docker:
-  version: 19.03.8
+  version: 19.03.11
 k8s:
   version: 1.12
 k3s:
@@ -87,8 +87,8 @@ helm:
   version: 3.2.1
   checksum: '018f9908cb950701a5d59e757653a790c66d8eda288625dbb185354ca6f41f6b'
 kustomize:
-  version: 3.5.5
-  checksum: 23306e0c0fb24f5a9fea4c3b794bef39211c580e4cbaee9e21b9891cb52e73e7
+  version: 3.6.1
+  checksum: 0aeca6a054183bd8e7c29307875c8162aba6d2d4e170d3e7751aa78660237126
 container-diff:
   version: 0.15.0
   checksum: 65b10a92ca1eb575037c012c6ab24ae6fe4a913ed86b38048781b17d7cf8021b
@@ -124,7 +124,7 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2020.1.1
+  version: 2020.1.2
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -132,28 +132,28 @@ idea:
     updateid: '83937'
   - name: AngularJS
     type: zip
-    version: 201.7223.105
-    updateid: '86088'
+    version: 201.7846.80
+    updateid: '87842'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 201.7223.91
-    updateid: '85261'
+    version: 201.7846.76
+    updateid: '87782'
   - name: com.intellij.lang.puppet
     type: zip
-    version: 201.7223.99
-    updateid: '85748'
+    version: 201.7846.90
+    updateid: '87971'
   - name: NodeJS
     type: zip
-    version: 201.7223.99
-    updateid: '85728'
+    version: 201.7846.80
+    updateid: '87866'
   - name: BashSupport
     type: zip
     version: 1.7.18.201
     updateid: '85527'
   - name: Docker
     type: zip
-    version: 201.7223.58
-    updateid: '84907'
+    version: 201.7846.6
+    updateid: '86237'
   - name: mobi.hsz.idea.gitignore
     type: zip
     version: 3.2.3.201
@@ -164,24 +164,24 @@ idea:
     updateid: '82401'
   - name: org.intellij.plugins.hcl
     type: zip
-    version: 0.7.8
-    updateid: '85759'
+    version: 0.7.9
+    updateid: '86450'
   - name: org.jetbrains.plugins.go
     type: zip
-    version: 201.7223.82.165
-    updateid: '85721'
+    version: 201.7846.76.189
+    updateid: '87978'
   - name: com.jetbrains.plugins.jade
     type: zip
-    version: 201.7223.99
-    updateid: '85730'
+    version: 201.7846.90
+    updateid: '87964'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.30.70
-    updateid: '85425'
+    version: 0.30.73
+    updateid: '86351'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.3.72-release-IJ2020.1-1
-    updateid: '83616'
+    version: 1.3.72-release-IJ2020.1-3
+    updateid: '86248'
   - name: com.atlassian.bitbucket.references
     type: zip
     version: 2020.1.127
@@ -192,8 +192,8 @@ idea:
     updateid: '78338'
   - name: R4Intellij
     type: zip
-    version: 201.5985.204
-    updateid: '85253'
+    version: 201.5985.232
+    updateid: '86250'
   - name: Karma
     type: zip
     version: 201.6668.60
@@ -220,8 +220,8 @@ idea:
     updateid: '82330'
   - name: org.jetbrains.plugins.vagrant
     type: zip
-    version: 201.7223.105
-    updateid: '86087'
+    version: 201.7846.80
+    updateid: '87862'
   - name: VisualVMLauncher
     type: jar
     updateid: '76975'
@@ -236,8 +236,8 @@ idea:
     version: 1.3.3.150-IDEA201
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '84922'
-    version: 201.7223.68
+    updateid: '86226'
+    version: 201.7846.6
   - name: color.scheme.Monokai Pro Spectrum
     type: jar
     updateid: '74881'
@@ -248,8 +248,8 @@ idea:
     version: 5.3.2.1
   - name: org.jetbrains.plugins.sass
     type: zip
-    updateid: '82469'
-    version: 201.6668.63
-  checksum: ca485decf8b91549a1c8e20309a7a7b6a7e032ff96e10fde2ff5dbae9e0108e3
-  build: 201.7223.91
-  checksum-ce: b340a1cfdd77d52325b3b775fa880ded62e0826c72ad126d8cb2a6e7b8460461
+    updateid: '87845'
+    version: 201.7846.80
+  checksum: 183d9f1c01122b3cc6ec1c0ae4367f519f48c4314a23c5e46edf18cff8977af4
+  build: 201.7846.76
+  checksum-ce: 8d1e0b359cff49f17c0122422519a5e01676f07dd68070d13e6ed165aec7ee1d
