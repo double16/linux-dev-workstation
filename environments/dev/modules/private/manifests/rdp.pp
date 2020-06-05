@@ -45,8 +45,13 @@ class private::rdp {
     line  => 'allowed_users = anybody',
     match => '^allowed_users[ ]*=',
   }
-  ->service { ['xrdp', 'xrdp-sesman']:
-    enable => true,
+
+  if $::virtual != 'docker' {
+    # In docker, tries to use chkconfig and fails. This isn't necessary for supervisord.
+    service { ['xrdp', 'xrdp-sesman']:
+      enable  => true,
+      require => File_line['allow anybody to start Xorg'],
+    }
   }
 
   [
