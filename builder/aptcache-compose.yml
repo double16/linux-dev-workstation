@@ -5,14 +5,9 @@ volumes:
 
 services:
   aptcache:
-    image: pdouble16/docker-apt-cacher-ng:3.2-1
+    image: pdouble16/docker-apt-cacher-ng:3.3.1-1
     restart: always
     ports:
       - "3142:3142"
     volumes:
       - aptcache:/var/cache/apt-cacher-ng
-    healthcheck:
-      test: ["CMD", "curl", "-s", "-f", "-o", "/dev/null", "http://localhost:3142/acng-report.html"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
