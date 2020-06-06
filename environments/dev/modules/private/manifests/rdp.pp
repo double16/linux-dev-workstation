@@ -2,6 +2,12 @@
 # Configure RDP server for vagrant user to run on start on localhost port 3389
 #
 class private::rdp {
+
+  $xrdp_enable = $::virtual ? {
+    /docker/ => undef,
+    default  => true,
+  }
+
   package { 'xorgxrdp':}
   ->package { 'xrdp': }
   ->ini_setting { 'xrdp default to Xorg':
@@ -45,13 +51,8 @@ class private::rdp {
     line  => 'allowed_users = anybody',
     match => '^allowed_users[ ]*=',
   }
-
-  if $::virtual != 'docker' {
-    # In docker, tries to use chkconfig and fails. This isn't necessary for supervisord.
-    service { ['xrdp', 'xrdp-sesman']:
-      enable  => true,
-      require => File_line['allow anybody to start Xorg'],
-    }
+  ->service { ['xrdp', 'xrdp-sesman']:
+    enable => $xrdp_enable,
   }
 
   [
