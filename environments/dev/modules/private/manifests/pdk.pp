@@ -2,20 +2,9 @@
 # Install Puppet Development Kit
 #
 class private::pdk {
-  $pdk_config = lookup('pdk', Hash)
-  $pdk_version = $pdk_config['version']
-  $pdk_checksum = $pdk_config['checksum']
-
-  archive { "/tmp/vagrant-cache/pdk-${pdk_version}-1.fc31.x86_64.rpm":
-    ensure          => present,
-    source          => "https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=${pdk_version}",
-    extract         => true,
-    cleanup         => false,
-    extract_path    => '/tmp',
-    extract_command => 'rpm -ivh %s',
-    creates         => '/usr/local/bin/pdk',
-    checksum        => $pdk_checksum,
-    checksum_type   => 'sha256',
-    require         => File['/tmp/vagrant-cache'],
+  package { 'puppet-tools-release':
+    provider => 'rpm',
+    source   => 'https://yum.puppet.com/puppet-tools-release-fedora-31.noarch.rpm',
   }
+  ->package { 'pdk': }
 }

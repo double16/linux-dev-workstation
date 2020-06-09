@@ -163,7 +163,7 @@ Find this file at #{readme}
       :SYSTEM_TIMEZONE => timezone,
     }
 
-    override.vm.network :forwarded_port, guest: 3389, host: 13389, host_ip: "localhost", id: "rdp", auto_correct: true
+    override.vm.network :forwarded_port, guest: 3389, host: 13389, host_ip: "0.0.0.0", id: "rdp", auto_correct: true
 
     if Gem.win_platform?
       # "Docker for Windows" translates volumes[] paths into Windows style paths

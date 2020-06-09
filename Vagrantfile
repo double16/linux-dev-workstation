@@ -66,8 +66,8 @@ Vagrant.configure("2") do |config|
 
   config.vagrant.plugins = ["vagrant-cachier"]
 
-  config.vm.box = "roboxes/fedora31"
-  config.vm.box_version = "2.0.4"
+  config.vm.box = "roboxes/fedora32"
+  config.vm.box_version = "3.0.8"
   config.vm.synced_folder ".", "/vagrant"
 
   configure_rdp_tunnel(config)
@@ -84,7 +84,7 @@ Vagrant.configure("2") do |config|
 
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
-    docker.image = "pdouble16/fedora-ssh:31.1.0"
+    docker.image = "pdouble16/fedora-ssh:32"
     docker.name = "linux-dev-workstation#{unique_id}"
     docker.remains_running = true
     docker.has_ssh = true
@@ -97,7 +97,7 @@ Vagrant.configure("2") do |config|
       :SSH_INHERIT_ENVIRONMENT => 'true',
       :SYSTEM_TIMEZONE => timezone,
     }
-    override.vm.network :forwarded_port, guest: 3389, host: 13389, host_ip: "localhost", id: "rdp", auto_correct: true
+    override.vm.network :forwarded_port, guest: 3389, host: 13389, host_ip: "0.0.0.0", id: "rdp", auto_correct: true
     override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation#{unique_id} alpine/socat - TCP:linux-dev-workstation#{unique_id}:22,retry=3,interval=2"
   end
 
@@ -262,13 +262,13 @@ EOF
     # VB 5: grep -q "exclude=kernel" /etc/dnf/dnf.conf || echo "exclude=kernel*" >> /etc/dnf/dnf.conf
 
     locale -a | grep -qi en_US || (
-        dnf reinstall -y glibc-common
-        dnf install -y glibc-locale-source glibc-all-langpacks
-        localedef -f UTF-8 -i en_US en_US.utf8
+        dnf reinstall -y glibc glibc-common
+        dnf install -y glibc-locale-source glibc-all-langpacks cracklib-dicts
         echo "LANG=en_US.utf8" > /etc/locale.conf
         echo "LANGUAGE=en_US:en" >> /etc/locale.conf
         echo "LC_ALL=en_US.utf8" >> /etc/locale.conf
         cp /etc/locale.conf /etc/sysconfig/i18n
+        source /etc/locale.conf
     )
 
     [ -f /var/lib/vagrant-dnf-update ] || (
