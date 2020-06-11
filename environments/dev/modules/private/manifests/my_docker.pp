@@ -84,7 +84,7 @@ class private::my_docker {
         refreshonly => true,
       }
       ->package { ['device-mapper-persistent-data', 'lvm2']: }
-      ->package { "docker-ce-${docker_base_version}*": }
+      ->package { 'docker-ce': }
       ->class { '::docker':
         manage_package              => false,
         use_upstream_package_source => false,
