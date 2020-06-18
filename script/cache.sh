@@ -26,10 +26,16 @@ if mountpoint "/tmp/vagrant-cache"; then
     mkdir -p /tmp/vagrant-cache/dnf
     touch /tmp/vagrant-cache/dnf/works
     if ln -sf /tmp/vagrant-cache/dnf/works /tmp/vagrant-cache/dnf/works.lnk; then
-        rsync -r /var/cache/dnf/ /tmp/vagrant-cache/dnf/
-        rm -rf /var/cache/dnf
-        ln -sf /tmp/vagrant-cache/dnf /var/cache/dnf
-        sed -i 's/keepcache=0/keepcache=1/g' /etc/dnf/dnf.conf
+        rm -rf /tmp/vagrant-cache/dnf/dirmove /tmp/vagrant-cache/dnf/moveme
+        mkdir -p /tmp/vagrant-cache/dnf/dirmove/moveme
+        if mv /tmp/vagrant-cache/dnf/dirmove/moveme /tmp/vagrant-cache/dnf/moveme; then
+            rsync -r /var/cache/dnf/ /tmp/vagrant-cache/dnf/
+            rm -rf /var/cache/dnf
+            ln -sf /tmp/vagrant-cache/dnf /var/cache/dnf
+            sed -i 's/keepcache=0/keepcache=1/g' /etc/dnf/dnf.conf
+        else
+            echo "==> Directory move not supported, skipping DNF cache"
+        fi
     else
         echo "==> Symlinks not supported, skipping DNF cache"
     fi
