@@ -92,6 +92,15 @@ class private::my_docker {
         service_overrides_template  => 'private/docker-service-overrides.erb',
       }
 
+      if $::docker_available_fedora_major {
+        exec { 'Docker Fedora downgrade':
+          command => "/bin/sed -i -e 's/\$releasever/${::docker_available_fedora_major}/g' /etc/yum.repos.d/docker-ce.repo",
+          onlyif  => "/bin/grep -qF '\$releasever' /etc/yum.repos.d/docker-ce.repo",
+          require => Archive['/etc/yum.repos.d/docker-ce.repo'],
+          before  => Package['docker-ce'],
+        }
+      }
+
       include private::k3s
     }
 
