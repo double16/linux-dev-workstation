@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /home/linux-dev-workstation
     docker:
-      - image: pdouble16/packer-build-base:202005.1
+      - image: pdouble16/packer-build-base:202006.1
         user: root
 
     steps:
