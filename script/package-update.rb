@@ -164,21 +164,6 @@ def hashistack(yaml)
     end
 end
 
-def pdk(yaml)
-    resp = Net::HTTP.get_response(URI("https://pm.puppetlabs.com/cgi-bin/pdk_download.cgi?dist=el&rel=7&arch=x86_64&ver=latest"))
-    if resp.is_a?(Net::HTTPFound)
-        location = resp.header['location'] # https://yum.puppet.com/puppet/el/7/x86_64/pdk-1.8.0.0-1.fc31.x86_64.rpm
-        latest = location.match(/pdk-([0-9a-z.]+)/)[1]
-        if latest != yaml['pdk']['version']
-            puts "Found newer version PDK #{latest}"
-            download_file = ".vagrant/machines/default/cache/pdk-#{latest}-1.fc31.x86_64.rpm"
-            update_single_archive(latest, location, download_file, yaml['pdk'])
-        end
-    else
-        STDERR.puts "Error getting checking for newer PDK version: #{resp.to_s}"
-    end
-end
-
 def slack(yaml)
     latest = yaml['slack']['version']
     unless yaml['slack'].has_key?('checksum')
@@ -371,7 +356,6 @@ yaml = File.open(YAML_FILE) { |file| YAML.load(file) }
 
 idea(yaml)
 hashistack(yaml)
-pdk(yaml)
 slack(yaml)
 docker(yaml)
 k3s(yaml)

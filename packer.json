@@ -1,6 +1,7 @@
 {
   "_comment": "Build with `packer build packer.json`",
   "_comment2": "Provision with Puppet twice to account for transient failures",
+  "min_packer_version": "1.6.0",
   "builders": [
     {
       "boot_command": [
@@ -10,8 +11,7 @@
       "guest_os_type": "{{ user `vmware_guest_os_type` }}",
       "headless": "{{ user `headless` }}",
       "http_directory": "{{ user `http_directory` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_urls": [
         "{{ user `iso_path` }}/{{ user `iso_name` }}",
         "{{ user `iso_url` }}"
@@ -19,8 +19,8 @@
       "output_directory": "output-{{ user `vm_name` }}-vmware-iso",
       "shutdown_command": "{{ user `shutdown_command` }}",
       "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_timeout": "10000s",
       "ssh_username": "{{ user `ssh_username` }}",
-      "ssh_wait_timeout": "10000s",
       "tools_upload_flavor": "linux",
       "type": "vmware-iso",
       "vm_name": "{{ user `vm_name` }}",
@@ -41,8 +41,7 @@
       "hard_drive_interface": "sata",
       "headless": "{{ user `headless` }}",
       "http_directory": "{{ user `http_directory` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_urls": [
         "{{ user `iso_path` }}/{{ user `iso_name` }}",
         "{{ user `iso_url` }}"
@@ -50,24 +49,42 @@
       "output_directory": "output-{{ user `vm_name` }}-virtualbox-iso",
       "shutdown_command": "{{ user `shutdown_command` }}",
       "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_timeout": "10000s",
       "ssh_username": "{{ user `ssh_username` }}",
-      "ssh_wait_timeout": "10000s",
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
-          "modifyvm", "{{.Name}}", "--memory", "{{ user `memory` }}"
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{ user `memory` }}"
         ],
         [
-          "modifyvm", "{{.Name}}", "--cpus", "{{ user `cpus` }}"
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "{{ user `cpus` }}"
         ],
         [
-          "modifyvm", "{{.Name}}", "--paravirtprovider", "{{ user `virtualbox_paravirtprovider` }}"
+          "modifyvm",
+          "{{.Name}}",
+          "--paravirtprovider",
+          "{{ user `virtualbox_paravirtprovider` }}"
         ],
         [
-          "modifyvm", "{{.Name}}", "--nictype1", "{{ user `virtualbox_nictype` }}"
+          "modifyvm",
+          "{{.Name}}",
+          "--nictype1",
+          "{{ user `virtualbox_nictype` }}"
         ],
         [
-          "sharedfolder", "add", "{{.Name}}", "--name", "vagrant-cache", "--hostpath", "{{ user `pwd`}}/.vagrant/machines/default/cache"
+          "sharedfolder",
+          "add",
+          "{{.Name}}",
+          "--name",
+          "vagrant-cache",
+          "--hostpath",
+          "{{ user `pwd`}}/.vagrant/machines/default/cache"
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
@@ -80,8 +97,7 @@
       "disk_size": "{{ user `disk_size` }}",
       "guest_os_type": "{{ user `parallels_guest_os_type` }}",
       "http_directory": "{{ user `http_directory` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_urls": [
         "{{ user `iso_path` }}/{{ user `iso_name` }}",
         "{{ user `iso_url` }}"
@@ -90,49 +106,48 @@
       "parallels_tools_flavor": "lin",
       "prlctl": [
         [
-          "set", "{{.Name}}", "--memsize", "{{ user `memory` }}"
+          "set",
+          "{{.Name}}",
+          "--memsize",
+          "{{ user `memory` }}"
         ],
         [
-          "set", "{{.Name}}", "--cpus", "{{ user `cpus` }}"
+          "set",
+          "{{.Name}}",
+          "--cpus",
+          "{{ user `cpus` }}"
         ]
       ],
       "shutdown_command": "{{ user `shutdown_command` }}",
       "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_timeout": "10000s",
       "ssh_username": "{{ user `ssh_username` }}",
-      "ssh_wait_timeout": "10000s",
       "type": "parallels-iso",
       "vm_name": "{{ user `vm_name` }}"
     },
     {
+      "accelerator": "kvm",
       "boot_command": [
         "<tab> linux text biosdevname=0 ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter><enter>"
       ],
-      "disk_size": "{{ user `disk_size` }}",
-      "format" : "qcow2",
+      "cpus": "{{ user `cpus` }}",
+      "disk_cache": "unsafe",
       "disk_compression": true,
+      "disk_detect_zeroes": "unmap",
+      "disk_discard": "unmap",
+      "disk_interface": "virtio",
+      "disk_size": "{{ user `disk_size` }}",
+      "display": "none",
+      "format": "qcow2",
       "headless": "{{ user `headless` }}",
       "http_directory": "{{ user `http_directory` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_urls": [
         "{{ user `iso_path` }}/{{ user `iso_name` }}",
         "{{ user `iso_url` }}"
       ],
-      "output_directory": "output-{{ user `vm_name` }}-qemu",
-      "shutdown_command": "{{ user `shutdown_command` }}",
-      "ssh_password": "{{ user `ssh_password` }}",
-      "ssh_username": "{{ user `ssh_username` }}",
-      "ssh_wait_timeout": "10000s",
-      "type": "qemu",
-      "vm_name": "{{ user `vm_name` }}",
-      "accelerator": "kvm",
-      "display": "none",
-      "cpus": "{{ user `cpus` }}",
       "memory": "{{ user `memory` }}",
-      "disk_cache": "unsafe",
-      "disk_discard": "unmap",
-      "disk_detect_zeroes": "unmap",
-      "disk_interface": "virtio",
+      "output_directory": "output-{{ user `vm_name` }}-qemu",
       "qemuargs": [
         [
           "-netdev",
@@ -144,132 +159,149 @@
           "-device",
           "virtio-net,netdev=mynet0"
         ]
-      ]
+      ],
+      "shutdown_command": "{{ user `shutdown_command` }}",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_timeout": "10000s",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "type": "qemu",
+      "vm_name": "{{ user `vm_name` }}"
     },
     {
-      "type": "amazon-ebs",
       "access_key": "{{ user `aws_access_key` }}",
-      "secret_key": "{{ user `aws_secret_key` }}",
-      "region": "us-east-1",
-      "source_ami_filter": {
-        "filters": {
-          "virtualization-type": "hvm",
-          "name": "{{ user `aws_ami_name` }}",
-          "root-device-type": "ebs"
-        },
-        "owners": ["125523088429"],
-        "most_recent": true
-      },
-      "instance_type": "t2.medium",
-      "ssh_username": "fedora",
       "ami_name": "{{ user `vm_name`}} {{ user `version` }} {{timestamp}}",
+      "instance_type": "t2.medium",
       "launch_block_device_mappings": [
         {
+          "delete_on_termination": true,
           "device_name": "/dev/sda1",
           "volume_size": "{{user `disk_size_gb` }}",
-          "volume_type": "gp2",
-          "delete_on_termination": true
+          "volume_type": "gp2"
         }
       ],
+      "region": "us-east-1",
+      "secret_key": "{{ user `aws_secret_key` }}",
+      "source_ami_filter": {
+        "filters": {
+          "name": "{{ user `aws_ami_name` }}",
+          "root-device-type": "ebs",
+          "virtualization-type": "hvm"
+        },
+        "most_recent": true,
+        "owners": [
+          "125523088429"
+        ]
+      },
+      "ssh_username": "fedora",
       "tags": {
         "Application": "{{ user `vm_name`}}",
         "Environment": "dev",
-        "Version": "{{ user `version` }}",
-        "OS": "{{ user `aws_ami_name`}}"
-      }
+        "OS": "{{ user `aws_ami_name`}}",
+        "Version": "{{ user `version` }}"
+      },
+      "type": "amazon-ebs"
     },
     {
-      "type": "azure-arm",
-      "client_id": "{{ user `azure_client_id` }}",
-      "client_secret": "{{ user `azure_client_secret` }}",
-      "subscription_id": "{{ user `azure_subscription_id` }}",
-      "tenant_id": "{{ user `azure_tenant_id` }}",
-      "managed_image_resource_group_name": "{{ user `vm_name` }}",
-      "managed_image_name": "{{ user `vm_name`}}-{{ user `version` }}-{{timestamp}}",
-      "os_type": "Linux",
-      "image_publisher": "tunnelbiz.com",
-      "image_offer": "fedora linux",
-      "image_sku": "31",
       "azure_tags": {
         "dept": "engineering",
         "task": "developer workstation"
       },
-      "ssh_pty": "true",
+      "client_id": "{{ user `azure_client_id` }}",
+      "client_secret": "{{ user `azure_client_secret` }}",
+      "image_offer": "fedora linux",
+      "image_publisher": "tunnelbiz.com",
+      "image_sku": "32",
       "location": "West US",
-      "vm_size": "Standard_D2S_v3",
-      "os_disk_size_gb": "{{ user `disk_size_gb` }}"
+      "managed_image_name": "{{ user `vm_name`}}-{{ user `version` }}-{{timestamp}}",
+      "managed_image_resource_group_name": "{{ user `vm_name` }}",
+      "os_disk_size_gb": "{{ user `disk_size_gb` }}",
+      "os_type": "Linux",
+      "ssh_pty": "true",
+      "subscription_id": "{{ user `azure_subscription_id` }}",
+      "tenant_id": "{{ user `azure_tenant_id` }}",
+      "type": "azure-arm",
+      "vm_size": "Standard_D2S_v3"
     },
     {
       "boot_command": [
         "<tab> linux text biosdevname=0 ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter><enter>"
       ],
       "boot_wait": "20s",
-      "disk_size": "{{ user `disk_size` }}",
+      "communicator": "ssh",
+      "cpus": "{{ user `cpus` }}",
       "disk_block_size": "1",
+      "disk_size": "{{ user `disk_size` }}",
+      "enable_secure_boot": false,
+      "generation": 2,
+      "guest_additions_mode": "none",
       "headless": "{{ user `headless` }}",
       "http_directory": "{{ user `http_directory` }}",
-      "iso_checksum": "{{ user `iso_checksum` }}",
-      "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
       "iso_urls": [
         "{{ user `iso_path` }}/{{ user `iso_name` }}",
         "{{ user `iso_url` }}"
       ],
+      "memory": "{{ user `memory`  }}",
       "output_directory": "output-{{ user `vm_name` }}-hyperv-iso",
-      "communicator": "ssh",
-      "ssh_timeout": "10000s",
       "shutdown_command": "{{ user `shutdown_command` }}",
       "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_timeout": "10000s",
       "ssh_username": "{{ user `ssh_username` }}",
-      "type": "hyperv-iso",
-      "vm_name": "{{ user `vm_name` }}",
-      "cpus": "{{ user `cpus` }}",
-      "memory": "{{ user `memory`  }}",
       "switch_name": "VagrantSwitch",
-      "enable_secure_boot": false,
-      "guest_additions_mode": "none",
-      "generation": 2
+      "type": "hyperv-iso",
+      "vm_name": "{{ user `vm_name` }}"
     },
     {
-      "type": "docker",
-      "volumes": {
-        "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
-      },
-      "image": "pdouble16/fedora-ssh:31.1.0",
-      "commit": true,
       "changes": [
         "LABEL maintainer='Patrick Double <pat@patdouble.com>' org.label-schema.license='MPL-2.0' org.label-schema.vendor='https://bitbucket.org/double16' org.label-schema.name='Developer Workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation' org.label-schema.url='https://bitbucket.org/double16/linux-dev-workstation.git'",
         "ENV SSH_USER=vagrant",
         "ENTRYPOINT [\"/usr/bin/supervisord\", \"--configuration=/etc/supervisord.conf\"]"
-      ]
+      ],
+      "commit": true,
+      "image": "pdouble16/fedora-ssh:32.0.0",
+      "type": "docker",
+      "volumes": {
+        "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
+      }
     }
   ],
   "post-processors": [
     [
       {
-        "type": "docker-tag",
+        "only": [
+          "docker"
+        ],
         "repository": "{{ user `docker_registry` }}pdouble16/linux-dev-workstation",
-        "tag": "{{user `version`}}",
-        "only": [ "docker" ]
+        "tags": [
+          "{{user `version`}}"
+        ],
+        "type": "docker-tag"
       },
       {
-        "type": "docker-push",
         "keep_input_artifact": true,
-        "only": [ "docker" ]
+        "only": [
+          "docker"
+        ],
+        "type": "docker-push"
       },
       {
+        "include": [
+          "VAGRANTUP.md",
+          "rdhcpd.rb",
+          "script/create-natswitch.ps1"
+        ],
         "keep_input_artifact": false,
         "output": "box/{{.Provider}}/{{user `vm_name`}}-{{user `version`}}.box",
         "type": "vagrant",
-        "vagrantfile_template": "{{ user `vagrantfile_template` }}",
-        "include": [ "VAGRANTUP.md", "rdhcpd.rb", "script/create-natswitch.ps1" ]
+        "vagrantfile_template": "{{ user `vagrantfile_template` }}"
       },
       {
-        "keep_input_artifact": true,
-        "type": "vagrant-cloud",
-        "box_tag": "double16/{{user `vm_name`}}",
         "access_token": "{{user `cloud_token`}}",
-        "version": "{{user `version`}}",
-        "no_release": "{{ user `no_release` }}"
+        "box_tag": "double16/{{user `vm_name`}}",
+        "keep_input_artifact": true,
+        "no_release": "{{ user `no_release` }}",
+        "type": "vagrant-cloud",
+        "version": "{{user `version`}}"
       }
     ]
   ],
@@ -302,15 +334,12 @@
         "script/cgroupv1.sh",
         "script/vagrant.sh",
         "script/sshd.sh",
-        
         "script/hyperv.sh",
         "script/vmware.sh",
         "script/virtualbox.sh",
         "script/parallels.sh",
-
         "script/cache.sh",
         "script/update.sh",
-
         "script/cache.sh",
         "script/dind.sh",
         "script/motd.sh",
@@ -320,56 +349,40 @@
       "type": "shell"
     },
     {
-      "type": "shell",
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "inline": [
         "echo version={{ user `version` }} > /etc/{{ user `vm_name`}}_release",
         "echo build_time=`date` >> /etc/{{ user `vm_name`}}_release"
-      ]
+      ],
+      "type": "shell"
     },
     {
-      "type": "file",
+      "destination": "/etc/puppetlabs/code/environments/dev",
       "source": "environments/dev",
-      "destination": "/etc/puppetlabs/code/environments/dev"
+      "type": "file"
     },
     {
-      "type": "puppet-masterless",
-      "manifest_file": "environments/dev/manifests/site.pp",
-      "module_paths": ["environments/dev/modules"],
       "extra_arguments": [
         "--hiera_config",
         "/etc/puppetlabs/code/environments/dev/hiera.yaml"
       ],
-      "puppet_bin_dir": "/opt/puppetlabs/bin",
       "facter": {
-        "proxy_url": "{{user `http_proxy`}}",
         "http_proxy": "{{user `http_proxy`}}",
         "https_proxy": "{{user `https_proxy`}}",
-        "proxy_excludes": "{{user `no_proxy`}}",
-        "yum_proxy": "{{user `yum_proxy`}}",
+        "ipv4only": "true",
         "packer": "true",
-        "ipv4only": "true"
+        "proxy_excludes": "{{user `no_proxy`}}",
+        "proxy_url": "{{user `http_proxy`}}",
+        "yum_proxy": "{{user `yum_proxy`}}"
       },
-      "ignore_exit_codes": true
-    },
-    {
-      "type": "puppet-masterless",
+      "ignore_exit_codes": true,
       "manifest_file": "environments/dev/manifests/site.pp",
-      "module_paths": ["environments/dev/modules"],
-      "extra_arguments": [
-        "--hiera_config",
-        "/etc/puppetlabs/code/environments/dev/hiera.yaml"
+      "module_paths": [
+        "environments/dev/modules"
       ],
       "puppet_bin_dir": "/opt/puppetlabs/bin",
-      "facter": {
-        "proxy_url": "{{user `http_proxy`}}",
-        "http_proxy": "{{user `http_proxy`}}",
-        "https_proxy": "{{user `https_proxy`}}",
-        "proxy_excludes": "{{user `no_proxy`}}",
-        "yum_proxy": "{{user `yum_proxy`}}",
-        "packer": "true",
-        "ipv4only": "true"
-      }
+      "type": "puppet-masterless",
+      "max_retries": 1
     },
     {
       "environment_vars": [
@@ -397,53 +410,54 @@
     }
   ],
   "variables": {
-    "cleanup_build_tools": "false",
-    "cpus": "2",
-    "desktop": "true",
-    "disk_size": "80000",
-    "disk_size_gb": "80",
-    "headless": "true",
-    "ftp_proxy": "{{env `ftp_proxy`}}",
-    "http_directory": "kickstart/fedora",
-    "http_proxy": "{{env `http_proxy`}}",
-    "https_proxy": "{{env `https_proxy`}}",
-    "no_proxy": "{{env `no_proxy`}}",
-    "rsync_proxy": "{{env `rsync_proxy`}}",
-    "yum_proxy": "{{env `yum_proxy`}}",
-    "install_vagrant_key": "true",
-    "iso_checksum_type": "sha256",
-    "iso_path": "iso",
-    "iso_checksum": "225ebc160e40bb43c5de28bad9680e3a78a9db40c9e3f4f42f3ee3f10f95dbeb",
-    "iso_name": "Fedora-Server-dvd-x86_64-31-1.2.iso",
-    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/31/Server/x86_64/iso/Fedora-Server-dvd-x86_64-31-1.9.iso",
-    "aws_ami_name": "Fedora-Cloud-Base-31-1.9.x86_64-hvm-us-east-1-standard-0",
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
+    "aws_ami_name": "Fedora-Cloud-Base-32-1.6.x86_64-hvm-us-east-1-standard-0",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",
     "azure_client_secret": "{{ env `AZURE_CLIENT_SECRET` }}",
     "azure_subscription_id": "{{ env `AZURE_SUBSCRIPTION_ID` }}",
     "azure_tenant_id": "{{ env `AZURE_TENANT_ID` }}",
+    "cleanup_build_tools": "false",
+    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
+    "cpus": "2",
+    "desktop": "true",
+    "disk_size": "80000",
+    "disk_size_gb": "80",
     "docker_registry": "",
     "docker_registry_example": "gatekeeper:5001/",
+    "ftp_proxy": "{{env `ftp_proxy`}}",
+    "headless": "true",
+    "http_directory": "kickstart/fedora",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "install_vagrant_key": "true",
+    "iso_checksum": "cd2aefdbe1b5042865a39c49d32f5d21a9537c719aa87dde34d08ca06bc6681c",
+    "iso_checksum_type": "sha256",
+    "iso_name": "Fedora-Server-dvd-x86_64-32-1.6.iso",
+    "iso_path": "iso",
+    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/32/Server/x86_64/iso/Fedora-Server-dvd-x86_64-32-1.6.iso",
     "kickstart": "ks.cfg",
     "memory": "3072",
+    "no_proxy": "{{env `no_proxy`}}",
+    "no_release": "true",
+    "packer_hostname": "{{ env `HOSTNAME` }}",
+    "packer_password": "",
+    "packer_user": "{{ env `USER` }}",
     "parallels_guest_os_type": "fedora",
+    "pwd": "{{ env `PWD` }}",
+    "rsync_proxy": "{{env `rsync_proxy`}}",
     "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "update": "true",
     "vagrantfile_template": "tpl/vagrantfile-fedora-desktop.tpl",
     "version": "latest",
-    "no_release": "true",
     "virtualbox_guest_os_type": "Fedora_64",
-    "virtualbox_paravirtprovider": "default",
     "virtualbox_nictype": "virtio",
+    "virtualbox_paravirtprovider": "default",
     "vm_name": "linux-dev-workstation",
     "vmware_guest_os_type": "fedora-64",
-    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
-    "pwd": "{{ env `PWD` }}",
-    "packer_hostname": "{{ env `HOSTNAME` }}",
-    "packer_user": "{{ env `USER` }}",
-    "packer_password": ""
+    "yum_proxy": "{{env `yum_proxy`}}"
   }
 }
+

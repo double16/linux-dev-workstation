@@ -103,7 +103,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
     'vscode-icons-team.vscode-icons',
     'formulahendry.code-runner',
     'redhat.java',
-    'ms-vscode.go',
+    'golang.go',
     'rebornix.Ruby',
     'ms-azuretools.vscode-docker',
     'humao.rest-client',

@@ -115,7 +115,7 @@ $ vagrant ssh
 ==> default: Running trigger: Tunnel RDP connection through SSH...
 ==> default: Connect to desktop via RDP using `localhost:50841`
 ----------------------------------------------------------------
-  Fedora 31                                     built 2019-11-13
+  Fedora 32                                     built 2020-06-08
 ----------------------------------------------------------------
 [fedora@xxxxx ~]$
 ```

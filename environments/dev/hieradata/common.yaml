@@ -70,9 +70,6 @@ sdkman:
 - package: visualvm
   version: 1.4.4
   default: true
-pdk:
-  version: 1.18.0.0
-  checksum: ac2d63f79ef6d1a377b57053e7232fa706efe679eb0973b1c4ce2e91dd082baa
 docker:
   version: 19.03.11
 k8s:
