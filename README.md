@@ -3,7 +3,7 @@
 This Vagrant image contains a developer workspace with the following software:
 
 * Fedora 32
-* Java 8-11
+* Java 8-14
 * [IntelliJ IDEA Ultimate, Community Edition and sundry plugins](https://www.jetbrains.com/idea/)
 * [Visual Studio Code](https://code.visualstudio.com)
 * vim 8, gvim, sundry vim plugins
@@ -52,16 +52,6 @@ It also features configuration options:
 See [VAGRANTUP.md](VAGRANTUP.md) for configuration details. This file is also included in the box built by Packer and output after the `vagrant up`.
 
 ## Installation
-
-It is recommended to enable caching of OS packages using the `vagrant-cachier` plugin.
-```shell
-$ vagrant plugin install vagrant-cachier
-```
-
-If you are using VirtualBox, the `vagrant-vbguest` plugin is recommended to maintain the guest additions at the same level as your VirtualBox install.
-```shell
-$ vagrant plugin install vagrant-vbguest
-```
 
 You can choose either to build the box by checking out this repo or creating a Vagrantfile based on the box published at vagrantcloud.com. If you choose to checkout this repo you will be able to update it as the repo changes.
 
