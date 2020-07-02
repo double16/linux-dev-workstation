@@ -18,4 +18,11 @@ class private::supervisord {
     enable => true,
   }
 
+  file { '/etc/supervisord.d/fuse.conf': 
+    ensure => file,
+    owner  => 0,
+    group  => 'root',
+    mode   => '0644',
+    source => 'puppet:///modules/private/supervisord-fuse.conf',
+  }
 }
