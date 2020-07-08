@@ -258,7 +258,7 @@
         "ENTRYPOINT [\"/usr/bin/supervisord\", \"--configuration=/etc/supervisord.conf\"]"
       ],
       "commit": true,
-      "image": "pdouble16/fedora-ssh:32.0.0",
+      "image": "pdouble16/fedora-ssh:32.0.1",
       "type": "docker",
       "volumes": {
         "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"

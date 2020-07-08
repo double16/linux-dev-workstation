@@ -174,10 +174,24 @@ If you want to run Docker in the container without using the host Docker daemon,
 $ docker run --privileged -d -p 2020:22 pdouble16/linux-dev-workstation
 ```
 
+### Home Directory on Persistent Volume
+
+The home directory `/home/vagrant` can be stored on a Docker volume and eases upgrading. You will need to use `docker volume create` before bringing up the box. Add the following to your Vagrantfile to mount the volume to `/home/vagrant`. The initial run will populate the volume with `/home/vagrant`.
+
+```shell
+$ docker create volume ldv_home
+```
+
+```ruby
+  config.vm.provider :docker do |docker, override|
+    docker.create_args = ['-v', 'ldv_home:/home/vagrant']
+  end
+```
+
 ## Kubernetes
 
 [k3s](https://k3s.io) is installed in the recommended way. The Docker container has the `k3s` binary installed but no attempt has been made to have it running out of the box.
 
-### Display Resolution
+## Display Resolution
 
 Display resolution is fixed in the VM at boot time. It can be set by configuring the `resolution` property in `config.yaml`. This isn't necessary when connecting using RDP, the connection will use the resolution specified in the RDP configuration.
