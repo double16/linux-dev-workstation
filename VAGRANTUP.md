@@ -188,7 +188,10 @@ $ docker create volume ldv_home
       trigger.info = "Create home volume"
       trigger.run = { inline: "docker create volume ldv_home" }
     end
-    docker.create_args = ['-v', 'ldv_home:/home/vagrant']
+    docker.create_args = [
+      '--privileged', '-v', '/var/run/docker.sock:/var/run/docker.sock', # maintain access to docker
+      '-v', 'ldv_home:/home/vagrant' # mount vagrant home to persistent volume
+    ]
   end
 ```
 
