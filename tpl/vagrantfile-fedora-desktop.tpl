@@ -168,8 +168,6 @@ Find this file at #{readme}
     if Gem.win_platform?
       # "Docker for Windows" translates volumes[] paths into Windows style paths
       docker.create_args = ['--privileged', '-v', '/var/run/docker.sock:/var/run/docker.sock']
-      # Docker Desktop 2.3.0.2 mounted volumes are not working
-      override.vm.allowed_synced_folder_types = [:rsync]
     else #if File.exist?('/var/run/docker.sock')
       docker.volumes = ['/var/run/docker.sock:/var/run/docker.sock']
     end
