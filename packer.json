@@ -375,14 +375,14 @@
         "proxy_url": "{{user `http_proxy`}}",
         "yum_proxy": "{{user `yum_proxy`}}"
       },
-      "ignore_exit_codes": true,
+      "ignore_exit_codes": false,
       "manifest_file": "environments/dev/manifests/site.pp",
       "module_paths": [
         "environments/dev/modules"
       ],
       "puppet_bin_dir": "/opt/puppetlabs/bin",
       "type": "puppet-masterless",
-      "max_retries": 1
+      "max_retries": 2
     },
     {
       "environment_vars": [
