@@ -7,7 +7,7 @@ if [[ ${PACKER_BUILDER_TYPE} =~ 'docker' ]]; then
   cat >/etc/supervisord.d/dind.conf <<EOF
 [program:dockerd]
 priority = 15
-command = /bin/sh -c "if [ -S /var/run/docker.sock ] && /usr/bin/docker version >/dev/null 2>&1; then chgrp docker /var/run/docker.sock; else /usr/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver vfs; fi"
+command = /bin/sh -c "if [ -S /var/run/docker.sock ] && /usr/bin/docker version >/dev/null 2>&1; then chgrp docker /var/run/docker.sock; chmod g+rwx /var/run/docker.sock; else /usr/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver vfs; fi"
 autostart = true
 startsecs = 10
 startretries = 3

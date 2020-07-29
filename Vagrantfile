@@ -85,6 +85,7 @@ Vagrant.configure("2") do |config|
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
     docker.image = "pdouble16/fedora-ssh:32"
+    docker.pull = true
     docker.name = "linux-dev-workstation#{unique_id}"
     docker.remains_running = true
     docker.has_ssh = true
@@ -97,6 +98,31 @@ Vagrant.configure("2") do |config|
       :SSH_INHERIT_ENVIRONMENT => 'true',
       :SYSTEM_TIMEZONE => timezone,
     }
+
+    create_args = []
+    volumes = []
+    if Gem.win_platform?
+      # "Docker for Windows" translates volumes[] paths into Windows style paths
+      create_args << '--privileged' << '-v' << '/var/run/docker.sock:/var/run/docker.sock'
+    else #if File.exist?('/var/run/docker.sock')
+      volumes << '/var/run/docker.sock:/var/run/docker.sock'
+    end
+
+    if vagrant_config['persistent_home']
+      override.trigger.before :up do |trigger|
+        trigger.info = "Create home volume"
+        trigger.run = { inline: "docker volume create #{vagrant_config['persistent_home']}" }
+      end
+      unless create_args.empty?
+        create_args << '-v' << "#{vagrant_config['persistent_home']}:/home/vagrant"
+      else
+        volumes << "#{vagrant_config['persistent_home']}:/home/vagrant"
+      end
+    end
+
+    docker.create_args = create_args unless create_args.empty?
+    docker.volumes = volumes unless volumes.empty?
+
     override.vm.network :forwarded_port, guest: 3389, host: 13389, host_ip: "0.0.0.0", id: "rdp", auto_correct: true
     override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation#{unique_id} alpine/socat - TCP:linux-dev-workstation#{unique_id}:22,retry=3,interval=2"
   end

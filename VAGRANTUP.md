@@ -176,24 +176,13 @@ $ docker run --privileged -d -p 2020:22 pdouble16/linux-dev-workstation
 
 ### Home Directory on Persistent Volume
 
-The home directory `/home/vagrant` can be stored on a Docker volume and eases upgrading. You will need to use `docker volume create` before bringing up the box or add as a trigger in your `Vagrantfile`. Add the following to your Vagrantfile to mount the volume to `/home/vagrant`. The initial run will populate the volume with `/home/vagrant`.
+The home directory `/home/vagrant` can be stored on a Docker volume and eases upgrading. In `config.yaml`, add:
 
-```shell
-$ docker create volume ldv_home
+```yaml
+        persistent_home: vagrant_home
 ```
 
-```ruby
-  config.vm.provider :docker do |docker, override|
-    override.trigger.before :up |trigger|
-      trigger.info = "Create home volume"
-      trigger.run = { inline: "docker create volume ldv_home" }
-    end
-    docker.create_args = [
-      '--privileged', '-v', '/var/run/docker.sock:/var/run/docker.sock', # maintain access to docker
-      '-v', 'ldv_home:/home/vagrant' # mount vagrant home to persistent volume
-    ]
-  end
-```
+You really should change `vagrant_home` to something unique for the box you're creating. Otherwise multiple boxes will use the same home.
 
 ## Kubernetes
 

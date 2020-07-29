@@ -274,6 +274,13 @@ file { '/usr/local/sbin/disksize.sh':
   source  => 'puppet:///modules/private/disksize.sh',
 }
 
+file { '/home/vagrant':
+  ensure => directory,
+  owner  => 'vagrant',
+  group  => 'vagrant',
+  mode   => '0700',
+}
+
 file { '/home/vagrant/.ssh':
   ensure => directory,
   owner  => 'vagrant',

@@ -29,3 +29,4 @@ configs:
         #resolution: 1280x1024
         # default shell: bash, zsh
         shell: zsh
+        persistent_home: ldv_dev

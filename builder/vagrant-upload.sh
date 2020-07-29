@@ -75,7 +75,7 @@ UPLOAD_PATH=`${CURL} \
   https://app.vagrantup.com/api/v1/box/$ORG/$NAME/version/$VERSION/provider/$PROVIDER/upload | jq -r .upload_path`
 
 # Perform the upload
-${CURL} --fail --tlsv1.2 --include --max-time 7200 --expect100-timeout 7200 --request PUT --output "$FILE.upload.log.txt" --upload-file "$FILE" "$UPLOAD_PATH"
+${CURL} --fail --tlsv1.2 --include --max-time 28800 --expect100-timeout 28800 --request PUT --output "$FILE.upload.log.txt" --upload-file "$FILE" "$UPLOAD_PATH"
 
 printf "\n-----------------------------------------------------\n"
 tput setaf 5

@@ -53,7 +53,7 @@ sdkman:
   version: 2.2.8.RELEASE
   default: true
 - package: java
-  version: 8.0.252-zulu
+  version: 8.0.262-zulu
   default: false
 - package: java
   version: 9.0.4-open
