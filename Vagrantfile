@@ -60,11 +60,21 @@ def validate_pid_f(pid_f)
 end
 
 Vagrant.configure("2") do |config|
-  # This trick is used to prefer a VM box over docker
-  config.vm.provider "virtualbox"
-  config.vm.provider "vmware_fusion"
-
   config.vagrant.plugins = ["vagrant-cachier"]
+
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :machine
+  end
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.no_install = false
+  end
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.enabled = false
+  end
+  if Vagrant.has_plugin?("vagrant-disksize")
+    config.disksize.size = '80GB'
+    config.vm.provision "disksize", type: "shell", path: "environments/dev/modules/private/files/disksize.sh"
+  end
 
   config.vm.box = "roboxes/fedora32"
   config.vm.box_version = "3.0.8"
@@ -72,6 +82,8 @@ Vagrant.configure("2") do |config|
 
   configure_rdp_tunnel(config)
 
+  config.vm.define "docker", autostart: false do |machine|
+  end
   config.vm.provider :docker do |docker, override|
     unique_id_dir = '.vagrant/linux-dev-workstation/default/docker'
     FileUtils.mkdir_p unique_id_dir
@@ -127,23 +139,13 @@ Vagrant.configure("2") do |config|
     override.ssh.proxy_command = "docker run -i --rm --link linux-dev-workstation#{unique_id} alpine/socat - TCP:linux-dev-workstation#{unique_id}:22,retry=3,interval=2"
   end
 
-  if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.scope = :machine
+  config.vm.define "parallels", autostart: false do |machine|
   end
-
   config.vm.provider "parallels" do |p, o|
     p.memory = vagrant_config['memory']
   end
 
-  if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.no_install = false
-  end
-  if Vagrant.has_plugin?("vagrant-proxyconf")
-    config.proxy.enabled = false
-  end
-  if Vagrant.has_plugin?("vagrant-disksize")
-    config.disksize.size = '80GB'
-    config.vm.provision "disksize", type: "shell", path: "environments/dev/modules/private/files/disksize.sh"
+  config.vm.define "virtualbox", autostart: false do |machine|
   end
   config.vm.provider "virtualbox" do |vb|
     vb.gui = vagrant_config.fetch('native_gui', true)
@@ -167,6 +169,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "vmware", autostart: false do |machine|
+  end
   ["vmware_fusion", "vmware_workstation"].each do |p|
     config.vm.provider p do |v|
       v.gui = vagrant_config.fetch('native_gui', true)
@@ -180,6 +184,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "hyperv", autostart: false do |machine|
+  end
   config.vm.provider "hyperv" do |h, o|
     # yum breaks when using SMB mounts
     if Vagrant.has_plugin?("vagrant-cachier")
@@ -301,6 +307,8 @@ EOF
       touch /var/lib/vagrant-dnf-update
       dnf update -y
     )
+
+    [ -x /bin/unzip ] || dnf install -y unzip
 
     [ -f /opt/puppetlabs/puppet/bin/puppet ] || (
       rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-31.noarch.rpm

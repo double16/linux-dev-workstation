@@ -21,6 +21,10 @@ Apply the `puppet_modules.patch` file, which performs the following:
 
 * If the `virtualbox` module is updated, the `environments/dev/modules/virtualbox/manifests/kernel.pp` file needs to specify `environment => 'KERN_VER=``uname -r``',` instead of `KERN_DIR`.
 
+```shell
+$ patch -p1 < puppet_modules.patch
+```
+
 ## Update Packages
 
 Most versions of packages are kept in `environments/dev/hieradata/common.yaml`. The `script/package-update.rb` script will update most of them by querying the Internet. Run the script and do `git diff environments/dev/hieradata/common.yaml` to see the changes. The intent is that the box can be built or updated directly after running the script.

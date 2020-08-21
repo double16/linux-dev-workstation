@@ -194,9 +194,9 @@ Puppet::Type.type(:shellvar).provide(:augeas, :parent => Puppet::Type.type(:auge
       commented_values = []
       if ! commented.empty?
         if aug.get(commented.first).include?('=')
-          commented_values = aug.get(commented.first).split('=')[1].split(' ')
+          commented_values = unquoteit(aug.get(commented.first).split('=')[1]).split(' ')
         else
-          commented_values = aug.get(commented.first).split(' ')
+          commented_values = unquoteit(aug.get(commented.first)).split(' ')
         end
       end
       comment_ins = '$resource'
@@ -216,8 +216,17 @@ Puppet::Type.type(:shellvar).provide(:augeas, :parent => Puppet::Type.type(:auge
           aug.insert(commented.first, resource[:variable], false)
           aug.rm(commented.first) if resource[:uncomment] == :true
         end
-        if resource[:value].nil? && resource[:uncomment] == :true
-          values = commented_values
+        if resource[:uncomment] == :true
+          if resource[:value].nil?
+            # value is not provided
+            values = commented_values
+          elsif resource[:array_append]
+            # value is provided and merge requested
+            values = commented_values | resource[:value]
+          else
+            # value is provided and replacement requested
+            values = resource[:value]
+          end
         else
           values = resource[:value]
         end

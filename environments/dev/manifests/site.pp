@@ -137,6 +137,7 @@ package { ['python3', 'python3-pip', 'python3-virtualenv']:
 package { [
     'man-pages',
     'man-db',
+    'strace',
     'asciidoc',
     'dos2unix',
     'htop',

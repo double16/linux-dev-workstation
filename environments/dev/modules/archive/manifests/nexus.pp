@@ -46,7 +46,7 @@ define archive::nexus (
   Optional[Boolean] $allow_insecure  = undef,
 ) {
 
-  include ::archive::params
+  include archive::params
 
   $artifact_info = split($gav, ':')
 
@@ -77,7 +77,7 @@ define archive::nexus (
                             $version, $artifact_id, $version, $c, $packaging)
     $checksum_url = sprintf('%s.%s', $artifact_url, $checksum_type)
   } else {
-    $artifact_url = assemble_nexus_url($url, $query_params)
+    $artifact_url = archive::assemble_nexus_url($url, $query_params)
     $checksum_url = regsubst($artifact_url, "p=${packaging}", "p=${packaging}.${checksum_type}")
   }
   archive { $name:

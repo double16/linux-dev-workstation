@@ -49,10 +49,10 @@ For this it provides compatibility shims.
 ## Setup
 
 On Windows 7zip is required to extract all archives except zip files which will
-be extracted with PowerShell if 7zip is not available (requires 
+be extracted with PowerShell if 7zip is not available (requires
 `System.IO.Compression.FileSystem`/Windows 2012+). Windows clients can install
-7zip via `include '::archive'`. On posix systems, curl is the default provider. 
-The default provider can be overwritten by configuring resource defaults in 
+7zip via `include 'archive'`. On posix systems, curl is the default provider.
+The default provider can be overwritten by configuring resource defaults in
 site.pp:
 
 ```puppet
@@ -61,11 +61,11 @@ Archive {
 }
 ```
 
-Users of the module is responsbile for archive package dependencies for
+Users of the module are responsible for archive package dependencies, for
 alternative providers and all extraction utilities such as tar, gunzip, bunzip:
 
 ```puppet
-if $::facts['osfamily'] != 'windows' {
+if $facts['osfamily'] != 'windows' {
   package { 'wget':
     ensure => present,
   }
@@ -83,9 +83,9 @@ if $::facts['osfamily'] != 'windows' {
 
 ## Usage
 
-Archive module dependency is managed by the archive class. This is only
-required for windows platform. By default 7zip is installed via chocolatey, but
-can be adjusted to use the msi package instead:
+Archive module dependencies are managed by the `archive` class. This is only
+required on Windows. By default 7zip is installed via chocolatey, but
+the MSI package can be installed instead:
 
 ```puppet
 class { 'archive':
@@ -97,8 +97,21 @@ class { 'archive':
 
 ### Usage Example
 
+Simple example that donwloads from web server:
+
 ```puppet
-include '::archive' # NOTE: optional for posix platforms
+archive { '/tmp/vagrant.deb':
+  ensure => present,
+  source => 'https://releases.hashicorp.com/vagrant/2.2.3/vagrant_2.2.3_x86_64.deb',
+  user   => 0,
+  group  => 0,
+}
+```
+
+More complex example :
+
+```puppet
+include 'archive' # NOTE: optional for posix platforms
 
 archive { '/tmp/jta-1.1.jar':
   ensure        => present,
@@ -213,7 +226,7 @@ archive { $filename:
 
 exec { 'tomcat permission':
   command   => "chown tomcat:tomcat $install_path",
-  path      => $::path,
+  path      => $path,
   subscribe => Archive[$filename],
 }
 ```
@@ -263,13 +276,11 @@ archive { '/var/lib/example.zip':
 
 ### S3 bucket
 
-S3 support is implemented via the [AWS
-CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html).
-By default this dependency is only installed for Linux VMs running on AWS, or
-enabled via `aws_cli_install` option:
+S3 support is implemented via the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html).
+On non-Windows systems, the `archive` class will install this dependency when the `aws_cli_install` parameter is set to `true`:
 
 ```puppet
-class { '::archive':
+class { 'archive':
   aws_cli_install => true,
 }
 
@@ -320,7 +331,7 @@ beware of the order of defaults:
 
 This option can also be applied globally to address issues for specific OS:
 ```puppet
-if $::facts['osfamily'] != 'RedHat' {
+if $facts['osfamily'] != 'RedHat' {
   Archive {
     download_options => '--tlsv1',
   }

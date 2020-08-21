@@ -1,132 +1,105 @@
-## treydock-yum_cron changelog
+# Change log
 
-Release notes for the treydock-yum_cron module.
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-------------------------------------------
+## [v5.1.0](https://github.com/treydock/puppet-yum_cron/tree/v5.1.0) (2019-10-07)
 
-#### 4.0.0 - 2018-02-12
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/v5.0.0...v5.1.0)
 
-This release modernizes this module.
+### Added
 
-##### Backwards incompatible changes
+- Increase upper bound for supported stdlib [\#29](https://github.com/treydock/puppet-yum_cron/pull/29) ([treydock](https://github.com/treydock))
+- EL8 support [\#28](https://github.com/treydock/puppet-yum_cron/pull/28) ([treydock](https://github.com/treydock))
+- RHEL8 Support \(for dnf-automatic\) [\#26](https://github.com/treydock/puppet-yum_cron/pull/26) ([jadestorm](https://github.com/jadestorm))
 
-* Remove support for EL5
-* Drop support for Puppet 3.x.  Require Puppet >= 4.7.0
+### Fixed
 
-------------------------------------------
+- Fix spec tests from \#26 [\#27](https://github.com/treydock/puppet-yum_cron/pull/27) ([treydock](https://github.com/treydock))
 
-#### 3.0.0 - 2018-02-10
+## [v5.0.0](https://github.com/treydock/puppet-yum_cron/tree/v5.0.0) (2019-08-09)
 
-This releases addresses a bug that prevented automatic updates from working the same between EL6 and EL7 systems.  Because the module's handling of parameters is changed, this is being released as a non-backwards compatible release.
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/4.1.1...v5.0.0)
 
-##### Backwards incompatible changes
+### Changed
 
-* `apply_updates` now takes precedence over `download_updates`.  If `apply_updates` is `true` then `download_updates` has no effect.
+- Only support Puppet 5 and 6 and bump module dependencies [\#25](https://github.com/treydock/puppet-yum_cron/pull/25) ([treydock](https://github.com/treydock))
 
-------------------------------------------
+### Added
 
-#### 2.0.0 - 2015-11-12
+- Convert module to use PDK [\#24](https://github.com/treydock/puppet-yum_cron/pull/24) ([treydock](https://github.com/treydock))
+- Allow management of /etc/yum/yum-cron-hourly.conf [\#23](https://github.com/treydock/puppet-yum_cron/pull/23) ([treydock](https://github.com/treydock))
 
-This release introduces many backwards incompatible changes.  The goal of this release is to make the module's behavior consistent across EL5, EL6 and EL7 despite yum-cron being drastically different across those platforms.
+## [4.1.1](https://github.com/treydock/puppet-yum_cron/tree/4.1.1) (2019-04-29)
 
-##### Backwards incompatible changes
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/4.1.0...4.1.1)
 
-* Remove the following parameters
-    * `yum_parameter`
-    * `check_first`
-    * `error_level`
-    * `service_waits`
-    * `service_wait_time`
-    * `service_autorestart`
-    * `config_template`
-* Removed `check_only` parameter.  The value configured is now based on `apply_updates` value
-* Removed `download_only` and `download_updates` parameters.  The values configured are now based on `download_updates` value
-* Change default value for `service_ensure` and `service_enable` to `undef`.  The default behavior remains the same if `enable` is `true` and `ensure` is `present`
+### Added
 
-##### Features
+- Update inifile compatibility [\#20](https://github.com/treydock/puppet-yum_cron/pull/20) ([siebrand](https://github.com/siebrand))
 
-* Add parameter `ensure` that manages the presence of yum-cron
-* Add parameter `enable` that manages the state of yum-cron
-* Add parameter `download_updates` that determines if updates should be downloaded
-* Add parameter `apply_updates` that determines if updates should be applied
-* Add parameter `package_ensure`
-* Add custom type/provider to manage config values on EL7 systems
-* Use shellvar type to manage config values on EL6 and EL5
-* Add parameter `extra_configs` which can be used to define additional configuration values not directly set by other parameters
-* Add dependency `puppetlabs/inifile`: Used by `yum_cron_config` type to manage EL7 configuration values
-* Add dependency `herculesteam/augeasproviders_shellvar`: Used to manage EL5 and EL6 configuration values
+## [4.1.0](https://github.com/treydock/puppet-yum_cron/tree/4.1.0) (2019-01-30)
 
-------------------------------------------
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/4.0.0...4.1.0)
 
-#### 1.3.0 - 2015-10-02
+### Added
 
-This release adds new features to this module focused on better support for EL7.
+- raise upper version bounds for recent dependencies [\#17](https://github.com/treydock/puppet-yum_cron/pull/17) ([mmoll](https://github.com/mmoll))
+- update beaker to 4.x [\#16](https://github.com/treydock/puppet-yum_cron/pull/16) ([mmoll](https://github.com/mmoll))
+- Fix hiera example of update\_messages [\#15](https://github.com/treydock/puppet-yum_cron/pull/15) ([yorickps](https://github.com/yorickps))
 
-Changes:
+## [4.0.0](https://github.com/treydock/puppet-yum_cron/tree/4.0.0) (2018-02-13)
 
-* Added parameters that only apply to EL7
-    * update_cmd
-    * update_messages
-    * download_updates
-    * email_host
-* The following parameters now effect EL7 configurations
-    * debug_level
-    * randomwait
-* Updates to unit testing dependencies and Travis-CI test matrixes
-* Update acceptance tests to validate EL7
-* Update nodesets used for acceptance tests including docker nodesets
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/3.0.0...4.0.0)
 
-------------------------------------------
+## [3.0.0](https://github.com/treydock/puppet-yum_cron/tree/3.0.0) (2018-02-10)
 
-#### 1.2.0 - 2015-03-02
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/2.0.0...3.0.0)
 
-Changes:
+### Fixed
 
-* Add parameter `config_template` that defines which template to use for configuring yum-cron
-* Add basic EL7 support
-* Move system test gem dependencies to a separate group excluded during travis-ci tests
+- Fix typo [\#6](https://github.com/treydock/puppet-yum_cron/pull/6) ([siebrand](https://github.com/siebrand))
 
-------------------------------------------
+## [2.0.0](https://github.com/treydock/puppet-yum_cron/tree/2.0.0) (2015-11-12)
 
-#### 1.1.1 - 2014-11-07
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/1.3.0...2.0.0)
 
-Changes:
+## [1.3.0](https://github.com/treydock/puppet-yum_cron/tree/1.3.0) (2015-10-06)
 
-* Update beaker tests to not depend on augeasproviders
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/1.2.0...1.3.0)
 
-------------------------------------------
+### Added
 
-#### 1.1.0 - 2014-11-03
+- Support for CentOS 7 [\#5](https://github.com/treydock/puppet-yum_cron/pull/5) ([narbutas](https://github.com/narbutas))
+- Parametrize option email\_host. [\#4](https://github.com/treydock/puppet-yum_cron/pull/4) ([moonwolf-github](https://github.com/moonwolf-github))
 
-Features:
+## [1.2.0](https://github.com/treydock/puppet-yum_cron/tree/1.2.0) (2015-03-02)
 
-* Remove dependency on augeasproviders and use file_line to disable yum-autoupdates
-* Add support for EL5
-* Replace rspec-system tests with beaker acceptance tests
-* Update unit testing dependencies
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/1.1.1...1.2.0)
 
-------------------------------------------
+## [1.1.1](https://github.com/treydock/puppet-yum_cron/tree/1.1.1) (2014-11-07)
 
-#### 1.0.0 - 2013-12-12
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/1.1.0...1.1.1)
 
-Backwards incompatible changes:
+## [1.1.0](https://github.com/treydock/puppet-yum_cron/tree/1.1.0) (2014-11-03)
 
-* Replace disable\_yum\_autoupdate and remove\_yum\_autoupdate parameters with yum\_autoupdate\_ensure
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/1.0.0...1.1.0)
 
-Minor changes:
+## [1.0.0](https://github.com/treydock/puppet-yum_cron/tree/1.0.0) (2013-12-12)
 
-* Bring regression testing up-to-date
-* Remove Puppet-2.6 from travis-ci tests
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/0.1.1...1.0.0)
 
-------------------------------------------
+## [0.1.1](https://github.com/treydock/puppet-yum_cron/tree/0.1.1) (2013-12-09)
 
-#### 0.1.0 - 2013-09-18
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/0.1.0...0.1.1)
 
-* Replace augeas with shellvar provider for disabling yum-autoupdate 
-* Add remove\_yum\_autoupdate parameter to uninstall yum-autoupdate
+## [0.1.0](https://github.com/treydock/puppet-yum_cron/tree/0.1.0) (2013-09-18)
 
-------------------------------------------
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/v0.0.1...0.1.0)
 
-#### 0.0.1 - 2013-09-04
+## [v0.0.1](https://github.com/treydock/puppet-yum_cron/tree/v0.0.1) (2013-09-04)
 
-* Initial release
+[Full Changelog](https://github.com/treydock/puppet-yum_cron/compare/9aa4945e471387d8102ffa03f3f85d20a10d74f0...v0.0.1)
+
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*

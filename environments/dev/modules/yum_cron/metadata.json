@@ -1,59 +1,65 @@
 {
   "name": "treydock-yum_cron",
-  "version": "4.0.0",
+  "version": "5.1.0",
   "author": "treydock",
   "summary": "yum-cron module",
   "license": "Apache-2.0",
-  "source": "git://github.com/treydock/puppet-yum_cron.git",
+  "source": "https://github.com/treydock/puppet-yum_cron",
   "project_page": "http://github.com/treydock/puppet-yum_cron",
   "issues_url": "https://github.com/treydock/puppet-yum_cron/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.1 <5.0.0"
+      "version_requirement": ">= 4.13.1 <7.0.0"
     },
     {
       "name": "puppetlabs/inifile",
-      "version_requirement": ">= 1.0.0 <3.0.0"
+      "version_requirement": ">= 1.0.0 <4.0.0"
     },
     {
       "name": "herculesteam/augeasproviders_shellvar",
-      "version_requirement": ">= 2.0.0 <3.0.0"
+      "version_requirement": ">= 2.0.0 <5.0.0"
     }
   ],
   "data_provider": null,
-  "description": "yum-cron module",
-  "tags": [
-    "yum",
-    "yum-cron"
-  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.0 < 6.0.0"
+      "version_requirement": ">= 5.0.0 < 7.0.0"
     }
-  ]
+  ],
+  "description": "yum-cron module",
+  "tags": [
+    "yum",
+    "yum-cron"
+  ],
+  "pdk-version": "1.13.0",
+  "template-url": "https://github.com/treydock/pdk-templates.git#master",
+  "template-ref": "heads/master-0-gdf6e1ae"
 }

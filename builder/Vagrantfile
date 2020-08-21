@@ -142,8 +142,8 @@ EOF
       test -d "/data" && \
         sh -c "mkdir /data/virtualbox && vboxmanage setproperty machinefolder /data/virtualbox" - vagrant
 
-      packer version 2>/dev/null | grep -qF '1.6.0' || (
-        curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.6.0/packer_1.6.0_linux_amd64.zip
+      packer version 2>/dev/null | grep -qF '1.6.1' || (
+        curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.6.1/packer_1.6.1_linux_amd64.zip
         cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer
         rm /tmp/packer.zip
       )

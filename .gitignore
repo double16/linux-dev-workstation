@@ -24,3 +24,4 @@ rdhcpd.pid
 iso/
 .DS_Store
 output-*/
+vendor/
