@@ -11,7 +11,7 @@ if ($RubyInstalled -eq $false) {
 
 $PackerInstalled = Test-Path ".\packer.exe"
 if ($PackerInstalled -eq $false) {
-    Invoke-WebRequest -Uri "https://releases.hashicorp.com/packer/1.6.1/packer_1.6.1_windows_amd64.zip" -OutFile "packer.zip"
+    Invoke-WebRequest -Uri "https://releases.hashicorp.com/packer/1.6.4/packer_1.6.4_windows_amd64.zip" -OutFile "packer.zip"
     Expand-Archive ".\packer.zip" -DestinationPath .
 }
 

@@ -3,9 +3,12 @@
 
 require 'tempfile'
 
+packer_ver = '1.6.4'
+vagrant_ver = '2.2.10'
+
 Vagrant.configure("2") do |config|
   # Must be compatible with an UbuntuServer from `az vm image list --output table`
-  config.vm.box = "ubuntu/disco64"
+  config.vm.box = "ubuntu/focal64"
 
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
@@ -72,7 +75,7 @@ Vagrant.configure("2") do |config|
     SHELL
   end
   config.vm.provision "builder", type: "shell",
-    env: { yum_proxy: ENV['YUM_PROXY'] || ENV['yum_proxy'], DEBIAN_FRONTEND: 'noninteractive' },
+    env: { yum_proxy: ENV['YUM_PROXY'] || ENV['yum_proxy'], DEBIAN_FRONTEND: 'noninteractive', VAGRANT_VER: vagrant_ver, PACKER_VER: packer_ver },
     inline: <<-SHELL
       set -x -e
 
@@ -142,16 +145,16 @@ EOF
       test -d "/data" && \
         sh -c "mkdir /data/virtualbox && vboxmanage setproperty machinefolder /data/virtualbox" - vagrant
 
-      packer version 2>/dev/null | grep -qF '1.6.1' || (
-        curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/1.6.1/packer_1.6.1_linux_amd64.zip
+      packer version 2>/dev/null | grep -qF ${PACKER_VER} || (
+        curl -sL --fail -o /tmp/packer.zip https://releases.hashicorp.com/packer/${PACKER_VER}/packer_${PACKER_VER}_linux_amd64.zip
         cd /usr/bin && unzip -o /tmp/packer.zip && chmod +x /usr/bin/packer
         rm /tmp/packer.zip
       )
 
-      vagrant version 2>/dev/null | grep -qF '2.2.7' || (
-        curl -sL -o /tmp/vagrant_2.2.7_x86_64.deb https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
-        dpkg -i /tmp/vagrant_2.2.7_x86_64.deb
-        rm /tmp/vagrant_2.2.7_x86_64.deb
+      vagrant version 2>/dev/null | grep -qF ${VAGRANT_VER} || (
+        curl -sL -o /tmp/vagrant_${VAGRANT_VER}_x86_64.deb https://releases.hashicorp.com/vagrant/${VAGRANT_VER}/vagrant_${VAGRANT_VER}_x86_64.deb
+        dpkg -i /tmp/vagrant_${VAGRANT_VER}_x86_64.deb
+        rm /tmp/vagrant_${VAGRANT_VER}_x86_64.deb
       )
       su -c 'vagrant plugin install vagrant-cachier vagrant-vbguest vagrant-azure vagrant-aws' - vagrant
 

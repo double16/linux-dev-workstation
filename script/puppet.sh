@@ -2,8 +2,8 @@
 
 set +H -ux
 
-rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-31.noarch.rpm
-dnf --verbose install -y puppet-agent-6.15.0-1.fc31.x86_64
+rpm -Uvh https://yum.puppet.com/puppet6-release-fedora-32.noarch.rpm
+dnf --verbose install -y puppet-agent
 for X in $(ls /opt/puppetlabs/bin); do
 	ln -sf /opt/puppetlabs/bin/$X /usr/bin/$X
 done
