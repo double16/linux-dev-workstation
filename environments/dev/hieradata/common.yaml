@@ -53,7 +53,7 @@ sdkman:
   version: 8.0.265-zulu
   default: false
 - package: java
-  version: 11.0.8-open
+  version: 11.0.8-zulu
   default: true
 - package: lazybones
   version: 0.8.3
@@ -211,8 +211,8 @@ idea:
     updateid: '92101'
   - name: VisualVMLauncher
     type: jar
-    updateid: '99378'
-    version: 1.17.201.000.1
+    updateid: '99783'
+    version: 1.18.201.000.0
   - name: Lombook Plugin
     type: zip
     version: 0.32-2020.2
