@@ -148,10 +148,18 @@ StartupNotify=true
     }
   }
 
+  $jetbrainsdir = '/home/vagrant/.config/JetBrains'
+  file { $jetbrainsdir:
+      ensure => directory,
+      owner  => 'vagrant',
+      group  => 'vagrant',
+      mode   => '0775',
+  }
+
   $version_parts = split($version, '[.]')
   [
-    [ "/home/vagrant/.IntelliJIdea${version_parts[0]}.${version_parts[1]}", 'ideaplugins' ],
-    [ "/home/vagrant/.IdeaIC${version_parts[0]}.${version_parts[1]}", 'ideaceplugins' ],
+    [ "${jetbrainsdir}/IntelliJIdea${version_parts[0]}.${version_parts[1]}", 'ideaplugins' ],
+    [ "${jetbrainsdir}/IdeaIC${version_parts[0]}.${version_parts[1]}", 'ideaceplugins' ],
   ].each |$idea_edition_args| {
 
     $prefsdir         = $idea_edition_args[0]
