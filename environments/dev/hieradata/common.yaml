@@ -13,14 +13,14 @@ hashistack:
     version: 1.2.2
     checksum: 7725b35d9ca8be3668abe63481f0731ca4730509419b4eb29fa0b0baa4798458
   consul:
-    version: 1.8.4
-    checksum: 0d74525ee101254f1cca436356e8aee51247d460b56fc2b4f7faef8a6853141f
+    version: 1.8.5
+    checksum: 94ab38e6221d3da393d0bbdf19cc524051253a75db078c31e249dad2c497ad46
   terraform:
-    version: 0.13.4
-    checksum: a92df4a151d390144040de5d18351301e597d3fae3679a814ea57554f6aa9b24
+    version: 0.13.5
+    checksum: f7b7a7b1bfbf5d78151cfe3d1d463140b5fd6a354e71a7de2b5644e652ca5147
   nomad:
-    version: 0.12.5
-    checksum: dece264c86a5898a18d62d6ecca469fee71329e444b284416c57bd1e3d76f253
+    version: 0.12.7
+    checksum: 748e543118b9c802205316129ecfd2e2204bccb1193019add68685c56d0cae9b
 sdkman:
 - package: groovy
   version: 2.4.20
@@ -53,7 +53,7 @@ sdkman:
   version: 8.0.272-zulu
   default: false
 - package: java
-  version: 11.0.8-zulu
+  version: 11.0.9-zulu
   default: true
 - package: lazybones
   version: 0.8.3
@@ -68,11 +68,11 @@ k8s:
 k3s:
   version: 1.0.1
 minikube:
-  version: 1.14.0
-  checksum: 8727635489be895d9b9cfaa5cb599f45799a28fb07e0a2aac351a9aa1c4b46c1
+  version: 1.14.1
+  checksum: a7ad2b00389146a5b1833a35a96e50a224e7b382d072ee771b425eb6719bf109
 helm:
-  version: 3.3.4
-  checksum: b664632683c36446deeb85c406871590d879491e3de18978b426769e43a1e82c
+  version: 3.4.0
+  checksum: 270acb0f085b72ec28aee894c7443739271758010323d72ced0e92cd2c96ffdb
 kustomize:
   version: 3.8.5
   checksum: 7ff6218fdbf7ad5d90805ff9091f256ba6868e3116c2c05d3e50fe0a0595f50f
