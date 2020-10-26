@@ -50,7 +50,7 @@ sdkman:
   version: 2.2.9.RELEASE
   default: true
 - package: java
-  version: 8.0.265-zulu
+  version: 8.0.272-zulu
   default: false
 - package: java
   version: 11.0.8-zulu
