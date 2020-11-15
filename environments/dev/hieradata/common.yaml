@@ -7,20 +7,20 @@ zsh:
     sudo tmux vscode
 hashistack:
   packer:
-    version: 1.6.4
-    checksum: a20ec68e9eb6e1d6016481003f705babbecc28e234f8434f3a35f675cb200ea8
+    version: 1.6.5
+    checksum: a49f6408a50c220fe3f1a6192ea21134e2e8f31092c507614cd27ad4f913234b
   vault:
-    version: 1.2.2
-    checksum: 7725b35d9ca8be3668abe63481f0731ca4730509419b4eb29fa0b0baa4798458
+    version: 1.6.0
+    checksum: 83048e2d1ebfea212fead42e474e947c3a3bccc5056a5158ed33f530f8325e39
   consul:
-    version: 1.8.4
-    checksum: 0d74525ee101254f1cca436356e8aee51247d460b56fc2b4f7faef8a6853141f
+    version: 1.8.5
+    checksum: 94ab38e6221d3da393d0bbdf19cc524051253a75db078c31e249dad2c497ad46
   terraform:
-    version: 0.13.4
-    checksum: a92df4a151d390144040de5d18351301e597d3fae3679a814ea57554f6aa9b24
+    version: 0.13.5
+    checksum: f7b7a7b1bfbf5d78151cfe3d1d463140b5fd6a354e71a7de2b5644e652ca5147
   nomad:
-    version: 0.12.5
-    checksum: dece264c86a5898a18d62d6ecca469fee71329e444b284416c57bd1e3d76f253
+    version: 0.12.8
+    checksum: fc2371032c89b26b63cb0fef024fff6c2a032c6786cf5a6488171f70fbb76ff0
 sdkman:
 - package: groovy
   version: 2.4.20
@@ -47,13 +47,13 @@ sdkman:
   version: 1.2.11
   default: true
 - package: springboot
-  version: 2.2.9.RELEASE
+  version: 2.2.11.RELEASE
   default: true
 - package: java
-  version: 8.0.265-zulu
+  version: 8.0.272-zulu
   default: false
 - package: java
-  version: 11.0.8-zulu
+  version: 11.0.9-zulu
   default: true
 - package: lazybones
   version: 0.8.3
@@ -68,14 +68,14 @@ k8s:
 k3s:
   version: 1.0.1
 minikube:
-  version: 1.14.0
-  checksum: 8727635489be895d9b9cfaa5cb599f45799a28fb07e0a2aac351a9aa1c4b46c1
+  version: 1.15.0
+  checksum: 0b287e1cafc911ea6e39879f13ea302eeed5f6679bc77c719bfe21870056f3ca
 helm:
-  version: 3.3.4
-  checksum: b664632683c36446deeb85c406871590d879491e3de18978b426769e43a1e82c
+  version: 3.4.1
+  checksum: 538f85b4b73ac6160b30fd0ab4b510441aa3fa326593466e8bf7084a9c288420
 kustomize:
-  version: 3.8.5
-  checksum: 7ff6218fdbf7ad5d90805ff9091f256ba6868e3116c2c05d3e50fe0a0595f50f
+  version: 3.8.7
+  checksum: 4a3372d7bfdffe2eaf729e77f88bc94ce37dc84de55616bfe90aac089bf6fd02
 container-diff:
   version: 0.15.0
   checksum: 65b10a92ca1eb575037c012c6ab24ae6fe4a913ed86b38048781b17d7cf8021b
@@ -163,8 +163,8 @@ idea:
     updateid: '92427'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.31.33
-    updateid: '98631'
+    version: 0.31.38
+    updateid: '100958'
   - name: org.jetbrains.kotlin
     type: zip
     version: 1.4.10-release-IJ2020.2-1
@@ -215,8 +215,8 @@ idea:
     version: 1.18.201.000.0
   - name: Lombook Plugin
     type: zip
-    version: 0.32-2020.2
-    updateid: '97779'
+    version: 0.33-2020.2
+    updateid: '100776'
   - name: com.tang
     type: zip
     updateid: '93602'
