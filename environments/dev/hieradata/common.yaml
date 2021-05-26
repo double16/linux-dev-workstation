@@ -7,27 +7,27 @@ zsh:
     sudo tmux vscode
 hashistack:
   packer:
-    version: 1.6.4
-    checksum: a20ec68e9eb6e1d6016481003f705babbecc28e234f8434f3a35f675cb200ea8
+    version: 1.7.2
+    checksum: 9429c3a6f80b406dbddb9b30a4e468aeac59ab6ae4d09618c8d70c4f4188442e
   vault:
-    version: 1.2.2
-    checksum: 7725b35d9ca8be3668abe63481f0731ca4730509419b4eb29fa0b0baa4798458
+    version: 1.7.0
+    checksum: aad2f50635ef4e3f2495b0b6c855061c4047c795821fda886b326c1a71c71c35
   consul:
-    version: 1.8.5
-    checksum: 94ab38e6221d3da393d0bbdf19cc524051253a75db078c31e249dad2c497ad46
+    version: 1.9.4
+    checksum: da3919197ef33c4205bb7df3cc5992ccaae01d46753a72fe029778d7f52fb610
   terraform:
-    version: 0.13.5
-    checksum: f7b7a7b1bfbf5d78151cfe3d1d463140b5fd6a354e71a7de2b5644e652ca5147
+    version: 0.14.9
+    checksum: 47e097cfbfb64e97492934f50e646cb84df952eb76897182557811b45603dbf0
   nomad:
-    version: 0.12.7
-    checksum: 748e543118b9c802205316129ecfd2e2204bccb1193019add68685c56d0cae9b
+    version: 1.0.4
+    checksum: dbb8b8b1366c8ea9504cc396f2c00a254e043b1fc9f39f39d9ef3398e454e840
 sdkman:
 - package: groovy
-  version: 2.4.20
-  default: true
-- package: groovy
-  version: 2.5.13
+  version: 3.0.7
   default: false
+- package: groovy
+  version: 2.5.14
+  default: true
 - package: groovyserv
   version: 1.2.0
   default: true
@@ -47,38 +47,38 @@ sdkman:
   version: 1.2.11
   default: true
 - package: springboot
-  version: 2.2.9.RELEASE
+  version: 2.3.9.RELEASE
+  default: false
+- package: springboot
+  version: 2.4.4
   default: true
 - package: java
-  version: 8.0.272-zulu
+  version: 8.0.282-zulu
   default: false
 - package: java
-  version: 11.0.9-zulu
-  default: true
-- package: lazybones
-  version: 0.8.3
+  version: 11.0.10-zulu
   default: true
 - package: visualvm
   version: 1.4.4
   default: true
 docker:
-  version: 19.03.13
+  version: 19.03.14
 k8s:
   version: 1.12
 k3s:
   version: 1.0.1
 minikube:
-  version: 1.14.1
-  checksum: a7ad2b00389146a5b1833a35a96e50a224e7b382d072ee771b425eb6719bf109
+  version: 1.18.1
+  checksum: 86f65235361ebe4916350d988c756fcb2f27fc1bd3e2d84912462b39bb660dfe
 helm:
-  version: 3.4.0
-  checksum: 270acb0f085b72ec28aee894c7443739271758010323d72ced0e92cd2c96ffdb
+  version: 3.5.3
+  checksum: 2170a1a644a9e0b863f00c17b761ce33d4323da64fc74562a3a6df2abbf6cd70
 kustomize:
-  version: 3.8.5
-  checksum: 7ff6218fdbf7ad5d90805ff9091f256ba6868e3116c2c05d3e50fe0a0595f50f
+  version: 4.0.5
+  checksum: 3ef93195ede4b7664b7ec65284461dd8eeb9f5404e7db5eb5bf59003085a0c98
 container-diff:
-  version: 0.15.0
-  checksum: 65b10a92ca1eb575037c012c6ab24ae6fe4a913ed86b38048781b17d7cf8021b
+  version: 0.16.0
+  checksum: 717f0afafcc6df1abdc6b0a98f883c7e09a91f8d20399c9bb9e038488a3669e2
 vagrant:
   version: 2.2.9
 dockstation:
@@ -100,7 +100,7 @@ node:
   - tern
 ruby:
   versions:
-  - version: 2.5.8
+  - version: 2.5.9
     global: true
   - version: 2.4.10
   x_versions:
@@ -111,88 +111,88 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2020.2.3
+  version: 2020.3.3
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
-    version: 202.6397.47
-    updateid: '92430'
+    version: 203.6682.75
+    updateid: '105777'
   - name: AngularJS
     type: zip
-    version: 202.7660.18
-    updateid: '98268'
+    version: 203.5981.152
+    updateid: '104129'
   - name: org.jetbrains.plugins.ruby
     type: zip
-    version: 202.7660.26
-    updateid: '98787'
+    version: 203.7717.68
+    updateid: '114246'
   - name: com.intellij.lang.puppet
     type: zip
-    version: 202.6397.21
-    updateid: '92086'
+    version: 203.5981.155
+    updateid: '104059'
   - name: NodeJS
     type: zip
-    version: 202.6397.47
-    updateid: '92434'
+    version: 203.7717.47
+    updateid: '113574'
   - name: com.jetbrains.sh
     type: zip
-    updateid: '92094'
-    version: 202.6397.21
+    updateid: '102705'
+    version: 203.5981.37
   - name: Docker
     type: zip
-    version: 202.7660.3
-    updateid: '97643'
+    version: 203.7717.81
+    updateid: '114994'
   - name: mobi.hsz.idea.gitignore
     type: zip
-    version: 3.2.3.202
-    updateid: '93459'
+    version: 4.0.3
+    updateid: '107565'
   - name: com.jetbrains.plugins.ini4idea
     type: zip
-    version: 202.6397.21
-    updateid: '92075'
+    version: 203.5981.152
+    updateid: '104166'
   - name: org.intellij.plugins.hcl
     type: zip
     version: 0.7.10
     updateid: '92199'
   - name: org.jetbrains.plugins.go
     type: zip
-    version: 202.7660.3
-    updateid: '97635'
+    version: 203.7717.11
+    updateid: '112071'
   - name: com.jetbrains.plugins.jade
     type: zip
-    version: 202.6397.47
-    updateid: '92427'
+    version: 203.5981.152
+    updateid: '104134'
   - name: org.asciidoctor.intellij.asciidoc
     type: zip
-    version: 0.31.33
-    updateid: '98631'
+    version: 0.32.33
+    updateid: '115815'
   - name: org.jetbrains.kotlin
     type: zip
-    version: 1.4.10-release-IJ2020.2-1
-    updateid: '96647'
+    version: 203-1.4.32-release-IJ7148.5
+    updateid: '114574'
   - name: com.atlassian.bitbucket.references
     type: zip
-    version: 2020.2.135
-    updateid: '91128'
+    version: 2020.3.159
+    updateid: '114038'
   - name: GradleDependenciesHelper
     type: zip
     version: '1.16'
     updateid: '78338'
   - name: R4Intellij
     type: zip
-    version: '202.7754'
-    updateid: '98066'
+    version: 203.5981.83
+    updateid: '104499'
   - name: Karma
     type: zip
-    version: 202.6397.47
-    updateid: '92428'
+    version: 203.7717.11
+    updateid: '112079'
   - name: com.wix.sasslint
     type: zip
     version: 1.1.2
     updateid: '50110'
   - name: AWSCloudFormation
     type: zip
-    version: 202.6948.5
-    updateid: '94370'
+    version: 203.5981.152
+    updateid: '104184'
   - name: com.intellij.react.css.modules
     type: jar
     version: 1.0.1
@@ -203,40 +203,40 @@ idea:
     updateid: 45070
   - name: com.intellij.ideolog
     type: zip
-    version: 202.0.25.0
-    updateid: '91223'
+    version: 203.0.26.0
+    updateid: '106012'
   - name: org.jetbrains.plugins.vagrant
     type: zip
-    version: 202.6397.21
-    updateid: '92101'
+    version: 203.7148.89
+    updateid: '110316'
   - name: VisualVMLauncher
     type: jar
-    updateid: '99783'
-    version: 1.18.201.000.0
+    updateid: '114243'
+    version: 1.19.201.000.0
   - name: Lombook Plugin
     type: zip
-    version: 0.32-2020.2
-    updateid: '97779'
+    version: 0.32-EAP
+    updateid: '97780'
   - name: com.tang
     type: zip
-    updateid: '93602'
-    version: 1.3.4.157-IDEA202
+    updateid: '105341'
+    version: 1.3.5.194-IDEA203
   - name: com.intellij.kubernetes
     type: zip
-    updateid: '98269'
-    version: 202.7660.18
+    updateid: '107743'
+    version: 203.7148.15
   - name: color.scheme.Monokai Pro Spectrum
     type: jar
     updateid: '74881'
     version: '1.3'
   - name: com.chrisrm.idea.MaterialThemeUI
     type: zip
-    updateid: '91049'
-    version: 5.3.4
+    updateid: '106852'
+    version: 5.6.0.1
   - name: org.jetbrains.plugins.sass
     type: zip
-    updateid: '97064'
-    version: 202.7319.61
-  checksum: ca2c9ea47b18f49541020f2d0076066240a5cc6c98ddbcce2a643f47fdf7c260
-  build: 202.7660.26
-  checksum-ce: 5f2a407cc213a9c9db5534ffb7da3d501331a491dd1965b356e3067afee45a24
+    updateid: '105785'
+    version: 203.6682.75
+  checksum: e7dbca1cbc34da19da4f58df44f599c128317a692dea8ac3977e594b36760baf
+  build: 203.7717.56
+  checksum-ce: 60cabbab7e7f427c2b91e29f5c135ab99a043cc8e3dca835f1aa298031a24ed7

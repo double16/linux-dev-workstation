@@ -207,7 +207,7 @@ export EDITOR="vim"',
   -> exec { 'compile youcompleteme':
     path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin','/usr/local/sbin','/opt/nodenv/shims'],
     command   => '/bin/su -l -c "/usr/bin/go env GOCACHE | grep home/vagrant && /home/vagrant/.vim/bundle/youcompleteme/install.py --gocode-completer --tern-completer" vagrant',
-    creates   => '/home/vagrant/.vim/bundle/youcompleteme/third_party/ycmd/ycm_core.so',
+    creates   => '/home/vagrant/.vim/bundle/youcompleteme/third_party/ycmd/ycm_core.cpython-39-x86_64-linux-gnu.so',
     user      => 0,
     timeout   => 0,
     require   => [ Package['go'], Package['python-devel'], Package['python-requests'] ],

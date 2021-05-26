@@ -14,7 +14,7 @@ Package<| provider == 'yum' or provider == 'dnf' |> {
 }
 
 exec { 'RPM Fusion Free':
-  command => '/usr/bin/rpm -i --force --nodeps http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-32.noarch.rpm && /usr/bin/rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-32',
+  command => '/usr/bin/rpm -i --force --nodeps http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-33.noarch.rpm && /usr/bin/rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-33',
   creates => '/etc/yum.repos.d/rpmfusion-free.repo',
 }
 -> Package<| |>
@@ -185,6 +185,7 @@ package { [
     'ffmpeg',
     'libvdpau',
     'libavdevice',
+    'vlc',
 
   ]: ensure => present,
 }

@@ -2,7 +2,7 @@
 
 This Vagrant image contains a developer workspace with the following software:
 
-* Fedora 32
+* Fedora 33
 * Java 8-14
 * [IntelliJ IDEA Ultimate, Community Edition and sundry plugins](https://www.jetbrains.com/idea/)
 * [Visual Studio Code](https://code.visualstudio.com)

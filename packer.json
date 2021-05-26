@@ -210,7 +210,7 @@
       "client_secret": "{{ user `azure_client_secret` }}",
       "image_offer": "fedora linux",
       "image_publisher": "tunnelbiz.com",
-      "image_sku": "32",
+      "image_sku": "33",
       "location": "West US",
       "managed_image_name": "{{ user `vm_name`}}-{{ user `version` }}-{{timestamp}}",
       "managed_image_resource_group_name": "{{ user `vm_name` }}",
@@ -258,7 +258,7 @@
         "ENTRYPOINT [\"/usr/bin/supervisord\", \"--configuration=/etc/supervisord.conf\"]"
       ],
       "commit": true,
-      "image": "pdouble16/fedora-ssh:32.0.1",
+      "image": "pdouble16/fedora-ssh:33.0.0",
       "type": "docker",
       "volumes": {
         "{{ user `pwd` }}/.vagrant/machines/default/cache": "/tmp/vagrant-cache"
@@ -411,7 +411,7 @@
   ],
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY` }}",
-    "aws_ami_name": "Fedora-Cloud-Base-32-1.6.x86_64-hvm-us-east-1-standard-0",
+    "aws_ami_name": "Fedora-Cloud-Base-33-1.6.x86_64-hvm-us-east-1-standard-0",
     "aws_secret_key": "{{ env `AWS_SECRET_KEY` }}",
     "azure_client_id": "{{ env `AZURE_CLIENT_ID` }}",
     "azure_client_secret": "{{ env `AZURE_CLIENT_SECRET` }}",
@@ -431,11 +431,11 @@
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
-    "iso_checksum": "cd2aefdbe1b5042865a39c49d32f5d21a9537c719aa87dde34d08ca06bc6681c",
+    "iso_checksum": "4fe38b45a4c788927ddfdfb224c414f138226a75f27a287995d802cba3cb89d4",
     "iso_checksum_type": "sha256",
-    "iso_name": "Fedora-Server-dvd-x86_64-32-1.6.iso",
+    "iso_name": "Fedora-Server-dvd-x86_64-33-1.2.iso",
     "iso_path": "iso",
-    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/32/Server/x86_64/iso/Fedora-Server-dvd-x86_64-32-1.6.iso",
+    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/33/Server/x86_64/iso/Fedora-Server-dvd-x86_64-33-1.2.iso",
     "kickstart": "ks.cfg",
     "memory": "3072",
     "no_proxy": "{{env `no_proxy`}}",

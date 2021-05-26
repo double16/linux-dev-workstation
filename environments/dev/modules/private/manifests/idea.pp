@@ -112,6 +112,7 @@ StartupNotify=true
       undef   => undef,
       default => 'sha256',
     }
+    $plugin_marker = "${plugindir}/${plugin_name}-${version}.extracted.txt"
     unless $::facts[$plugin_fact_name].dig($plugin_name, 'version') == "${version}" {
       archive { "${plugin_name}-${version} in ${plugindir}":
         ensure        => present,
@@ -121,11 +122,17 @@ StartupNotify=true
         source        => "https://plugins.jetbrains.com/plugin/download?updateId=${updateid}",
         checksum      => $sha256sum,
         checksum_type => $checksum_type,
-        creates       => "${plugindir}/${plugin_name}",
+        creates       => $plugin_marker,
         cleanup       => false,
         user          => 'vagrant',
         group         => 'vagrant',
         require       => File['/tmp/vagrant-cache/idea-plugins'],
+      }
+      ->file { $plugin_marker:
+        ensure  => file,
+        content => $version,
+        owner   => 'vagrant',
+        group   => 'vagrant',
       }
     }
   }
@@ -164,11 +171,17 @@ StartupNotify=true
 
     $prefsdir         = $idea_edition_args[0]
     $plugin_fact_name = $idea_edition_args[1]
-    $configdir        = "${prefsdir}/config"
-    $plugindir        = "${configdir}/plugins"
+    $configdir        = $prefsdir
+    # $plugindir        = "${configdir}/plugins"
+    $plugindir        = regsubst($prefsdir, /[.]config/, '.local/share')
     $colorsdir        = "${configdir}/colors"
 
-    file { [ $prefsdir, $configdir, $colorsdir, $plugindir, "${configdir}/options" ] :
+    file { [
+      $prefsdir,
+      # $configdir,
+      $colorsdir,
+      $plugindir,
+      "${configdir}/options" ] :
       ensure => directory,
       owner  => 'vagrant',
       group  => 'vagrant',

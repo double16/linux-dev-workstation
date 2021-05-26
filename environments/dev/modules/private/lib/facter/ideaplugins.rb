@@ -12,11 +12,11 @@ def ideaplugins_fact(config_dir_prefix)
       end
   }
 
-  `find /home/vagrant/#{config_dir_prefix}*/config/plugins -name '*.jar' -print0 2>/dev/null | xargs -r -0 -L 1 -I{} sh -c "if unzip -v '{}' | grep -qF 'META-INF/plugin.xml'; then echo {}; fi"`.split(/\n/).each do |file|
+  `find /home/vagrant/.local/share/JetBrains/#{config_dir_prefix}* -name '*.jar' -print0 2>/dev/null | xargs -r -0 -L 1 -I{} sh -c "if unzip -v '{}' | grep -qF 'META-INF/plugin.xml'; then echo {}; fi"`.split(/\n/).each do |file|
       process_plugin_xml.call(`unzip -p '#{file}' META-INF/plugin.xml`)
   end
 
-  `find /home/vagrant/#{config_dir_prefix}*/config/plugins -path '*/META-INF/plugin.xml' -print 2>/dev/null`.split(/\n/).each do |file|
+  `find /home/vagrant/.local/share/JetBrains/#{config_dir_prefix}* -path '*/META-INF/plugin.xml' -print 2>/dev/null`.split(/\n/).each do |file|
       process_plugin_xml.call(File.read(file))
   end
 

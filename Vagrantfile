@@ -76,8 +76,8 @@ Vagrant.configure("2") do |config|
     config.vm.provision "disksize", type: "shell", path: "environments/dev/modules/private/files/disksize.sh"
   end
 
-  config.vm.box = "roboxes/fedora32"
-  config.vm.box_version = "3.0.8"
+  config.vm.box = "roboxes/fedora33"
+  config.vm.box_version = "3.2.14"
   config.vm.synced_folder ".", "/vagrant"
 
   configure_rdp_tunnel(config)
@@ -96,7 +96,7 @@ Vagrant.configure("2") do |config|
 
     override.vm.box = nil
     override.vm.allowed_synced_folder_types = :rsync if ENV.has_key?('CIRCLECI')
-    docker.image = "pdouble16/fedora-ssh:32"
+    docker.image = "pdouble16/fedora-ssh:33"
     docker.pull = true
     docker.name = "linux-dev-workstation#{unique_id}"
     docker.remains_running = true
