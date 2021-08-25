@@ -162,6 +162,12 @@ StartupNotify=true
       group  => 'vagrant',
       mode   => '0775',
   }
+  file { '/home/vagrant/.local/share/JetBrains':
+    ensure => directory,
+    owner  => 'vagrant',
+    group  => 'vagrant',
+    mode   => '0775',
+  }
 
   $version_parts = split($version, '[.]')
   [

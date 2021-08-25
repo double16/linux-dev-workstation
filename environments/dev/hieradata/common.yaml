@@ -7,23 +7,23 @@ zsh:
     sudo tmux vscode
 hashistack:
   packer:
-    version: 1.7.2
-    checksum: 9429c3a6f80b406dbddb9b30a4e468aeac59ab6ae4d09618c8d70c4f4188442e
+    version: 1.7.4
+    checksum: 3660064a56a174a6da5c37ee6b36107098c6b37e35cc84feb2f7f7519081b1b0
   vault:
-    version: 1.7.0
-    checksum: aad2f50635ef4e3f2495b0b6c855061c4047c795821fda886b326c1a71c71c35
+    version: 1.8.1
+    checksum: bb411f2bbad79c2e4f0640f1d3d5ef50e2bda7d4f40875a56917c95ff783c2db
   consul:
-    version: 1.9.4
-    checksum: da3919197ef33c4205bb7df3cc5992ccaae01d46753a72fe029778d7f52fb610
+    version: 1.10.1
+    checksum: abd9a7696e2eeed66fdb28965c220a2ba45ee5cd79ff263557f5392291aab730
   terraform:
-    version: 0.14.9
-    checksum: 47e097cfbfb64e97492934f50e646cb84df952eb76897182557811b45603dbf0
+    version: 1.0.5
+    checksum: 7ce24478859ab7ca0ba4d8c9c12bb345f52e8efdc42fa3ef9dd30033dbf4b561
   nomad:
-    version: 1.0.4
-    checksum: dbb8b8b1366c8ea9504cc396f2c00a254e043b1fc9f39f39d9ef3398e454e840
+    version: 1.1.3
+    checksum: e07ebf9ec81fb04ace94884d2c0b0e0bdee3510d5a203bcae96d8bee9463b418
 sdkman:
 - package: groovy
-  version: 3.0.7
+  version: 3.0.8
   default: false
 - package: groovy
   version: 2.5.14
@@ -47,16 +47,16 @@ sdkman:
   version: 1.2.11
   default: true
 - package: springboot
-  version: 2.3.9.RELEASE
+  version: 2.3.12.RELEASE
   default: false
 - package: springboot
-  version: 2.4.4
+  version: 2.4.10
   default: true
 - package: java
-  version: 8.0.282-zulu
+  version: 8.0.302-zulu
   default: false
 - package: java
-  version: 11.0.10-zulu
+  version: 11.0.12-zulu
   default: true
 - package: visualvm
   version: 1.4.4
@@ -68,17 +68,17 @@ k8s:
 k3s:
   version: 1.0.1
 minikube:
-  version: 1.18.1
-  checksum: 86f65235361ebe4916350d988c756fcb2f27fc1bd3e2d84912462b39bb660dfe
+  version: 1.22.0
+  checksum: 7579e5763a4e441500e5709eb058384c9cfe9c9dd888b39905b2cdf3d30fbf36
 helm:
-  version: 3.5.3
-  checksum: 2170a1a644a9e0b863f00c17b761ce33d4323da64fc74562a3a6df2abbf6cd70
+  version: 3.6.3
+  checksum: 07c100849925623dc1913209cd1a30f0a9b80a5b4d6ff2153c609d11b043e262
 kustomize:
-  version: 4.0.5
-  checksum: 3ef93195ede4b7664b7ec65284461dd8eeb9f5404e7db5eb5bf59003085a0c98
+  version: 4.2.0
+  checksum: 220dd03dcda8e45dc50e4e42b2d71882cbc4c05e0ed863513e67930ecad939eb
 container-diff:
-  version: 0.16.0
-  checksum: 717f0afafcc6df1abdc6b0a98f883c7e09a91f8d20399c9bb9e038488a3669e2
+  version: 0.17.0
+  checksum: 818c219ce9f9670cd5c766b9da5036cf75bbf98bc99eb258f5e8f90e80367c88
 vagrant:
   version: 2.2.9
 dockstation:
@@ -111,7 +111,7 @@ netbeans:
   build: 201609300101
   checksum: ad9888334b9a6c1f1138dcb2eccc8ce4921463e871e46def4ecc617538160948
 idea:
-  version: 2020.3.3
+  version: 2021.2.1
   plugins:
   - name: com.intellij.plugins.html.instantEditing
     type: zip
@@ -237,6 +237,6 @@ idea:
     type: zip
     updateid: '105785'
     version: 203.6682.75
-  checksum: e7dbca1cbc34da19da4f58df44f599c128317a692dea8ac3977e594b36760baf
-  build: 203.7717.56
-  checksum-ce: 60cabbab7e7f427c2b91e29f5c135ab99a043cc8e3dca835f1aa298031a24ed7
+  checksum: 4bbd3966c79c9e3d871d7b82668d6685f93deb143b675bca7ce4755b193777e4
+  build: 212.5080.55
+  checksum-ce: ff078524f38391d396747007de41f9db02698c107f8e9cd86178fb1c0a1bc4a9
